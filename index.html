@@ -167,6 +167,37 @@ function interpretHistory(points){
  }
  return {change,volatility,volumeChange,observations:points.length};
 }
+function simpleMovingAverage(points,period){
+ if(!Array.isArray(points)||points.length<period||period<1)return null;
+ const window=points.slice(-period).map(p=>p.close);
+ if(window.some(v=>!Number.isFinite(v)))return null;
+ return window.reduce((a,b)=>a+b,0)/period;
+}
+function relativeStrengthIndex(points,period=14){
+ if(!Array.isArray(points)||points.length<period+1)return null;
+ const closes=points.slice(-(period+1)).map(p=>p.close);
+ if(closes.some(v=>!Number.isFinite(v)||v<0))return null;
+ let gains=0,losses=0;
+ for(let i=1;i<closes.length;i++){const delta=closes[i]-closes[i-1];if(delta>0)gains+=delta;else losses-=delta;}
+ if(losses===0)return gains===0?50:100;
+ if(gains===0)return 0;
+ const rs=gains/losses;
+ return 100-100/(1+rs);
+}
+function appendTechnicalIndicators(points,container){
+ const panel=element('div','history-insights');
+ panel.append(element('h5','','Indicadores técnicos educativos'));
+ const sma7=simpleMovingAverage(points,7),sma14=simpleMovingAverage(points,14),rsi=relativeStrengthIndex(points,14);
+ panel.append(element('p','',sma7===null?'Media móvil simple (7 intervalos): se requieren al menos 7 cierres.':'Media móvil simple (7 intervalos): '+usd(sma7,8)+'.'));
+ panel.append(element('p','',sma14===null?'Media móvil simple (14 intervalos): se requieren al menos 14 cierres.':'Media móvil simple (14 intervalos): '+usd(sma14,8)+'.'));
+ if(rsi===null)panel.append(element('p','muted','RSI (14): se requieren al menos 15 cierres consecutivos.'));
+ else{
+  const context=rsi>70?'zona históricamente denominada sobrecompra':rsi<30?'zona históricamente denominada sobreventa':'zona intermedia';
+  panel.append(element('p','','RSI (14): '+rsi.toLocaleString('es-ES',{maximumFractionDigits:1})+' / 100, '+context+'. No implica un cambio de tendencia próximo.'));
+ }
+ panel.append(element('p','small muted','Las medias son promedios de cierres; RSI calculado con ganancias y pérdidas simples de los últimos 14 cambios (no suavizado de Wilder). Cada intervalo equivale a una hora en 24 h y a un día en los demás periodos. Son indicadores descriptivos, no recomendaciones de inversión.'));
+ container.append(panel);
+}
 function appendHistoryInterpretation(points,container){
  const insight=interpretHistory(points);
  if(!insight){container.append(element('p','muted','No hay suficientes datos para interpretar la evolución.'));return;}
@@ -243,6 +274,7 @@ async function appendHistoricalChart(pair,network,requestId){
   stats.append(metricCard('Volumen acumulado del pool',available.every(p=>p.volume!==null)?usd(totalVolume,0):'Incompleto','Suma de los intervalos disponibles; no es volumen global.'));
   box.append(stats);
   appendHistoryInterpretation(available,box);
+  appendTechnicalIndicators(available,box);
   const plots=element('div','history-comparison');
   if(historyMetric==='both'){
    const pricePlot=element('div');pricePlot.append(element('h5','','Precio de cierre · USD'));drawHistoricalChart(available,pricePlot,'close');plots.append(pricePlot);
