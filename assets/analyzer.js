@@ -397,7 +397,8 @@ async function appendHistoricalChart(pair,network,requestId){
   if(!response.ok)throw Error(nvraText('Histórico no disponible'));
   const points=historicalPoints(await response.json());
   if(requestId!==activeRequest||historyController!==controller)return;
-  const available=historyMetric==='volume'||historyMetric==='both'?points.filter(p=>p.volume!==null):points;
+  const available=points;
+  const volumePoints=points.filter(p=>p.volume!==null);
   if(available.length<2){box.append(element('p','muted',historyMetric==='volume'||historyMetric==='both'?nvraText('La fuente no proporciona suficientes precios y volúmenes históricos para este pool.'):nvraText('No hay suficientes precios históricos para mostrar el gráfico.')));return;}
   const first=available[0].close,last=available[available.length-1].close;
   const change=first>0?(last-first)/first*100:null;
@@ -414,8 +415,8 @@ async function appendHistoricalChart(pair,network,requestId){
   const plots=element('div','history-comparison');
   if(historyMetric==='both'){
    const pricePlot=element('div');pricePlot.append(element('h5','',nvraText('Precio de cierre · USD')));drawHistoricalChart(available,pricePlot,'close',true);plots.append(pricePlot);
-   const volumePlot=element('div');volumePlot.append(element('h5','',nvraText('Volumen del pool · USD')));drawHistoricalChart(available,volumePlot,'volume');plots.append(volumePlot);
-  }else drawHistoricalChart(available,plots,historyMetric==='volume'?'volume':'close',true);
+   const volumePlot=element('div');volumePlot.append(element('h5','',nvraText('Volumen del pool · USD')));if(volumePoints.length>=2)drawHistoricalChart(volumePoints,volumePlot,'volume');else volumePlot.append(element('p','muted',nvraText('No hay suficientes volúmenes comparables para evaluar su evolución.')));plots.append(volumePlot);
+  }else if(historyMetric==='volume'){if(volumePoints.length>=2)drawHistoricalChart(volumePoints,plots,'volume');else plots.append(element('p','muted',nvraText('No hay suficientes volúmenes comparables para evaluar su evolución.')));}else drawHistoricalChart(available,plots,'close',true);
   box.append(plots);
   if(historyMetric!=='volume')box.append(element('p','small muted',nvraText('Líneas del gráfico: precio (verde), media móvil SMA 7 (amarillo) y SMA 14 (azul discontinuo). Las medias solo aparecen cuando existen suficientes cierres.')));
   const inspector=element('div','history-inspector');
