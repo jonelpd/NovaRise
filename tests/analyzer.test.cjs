@@ -70,6 +70,9 @@ assert.ok(script.includes('appendAdvancedHistoryInterpretation(available,box)'))
 assert.ok(script.includes('appendDynamicHistoryNarrative(available,box)'));
 assert.ok(script.includes('appendSupportResistanceInterpretation(available,box)'));
 assert.match(translations,/Support, resistance and potential breakouts/);
+assert.ok(script.includes('const available=points;'));
+assert.ok(script.includes('const volumePoints=points.filter(p=>p.volume!==null);'));
+
 context.levelSample=[10,9,8,9,11,13,12,11,12,14,13,12,13].map(close=>({close,volume:100}));
 check('supportResistanceLevels(levelSample).support.price',11);
 check('supportResistanceLevels(levelSample).resistance.price',14);
