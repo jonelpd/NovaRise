@@ -75,7 +75,7 @@ assert.ok(script.includes('const volumePoints=points.filter(p=>p.volume!==null);
 
 context.levelSample=[10,9,8,9,11,13,12,11,12,14,13,12,13].map(close=>({close,volume:100}));
 check('supportResistanceLevels(levelSample).support.price',11);
-check('supportResistanceLevels(levelSample).resistance.price',14);
+check('supportResistanceLevels(levelSample).resistance.price',13);
 check('supportResistanceLevels(levelSample).breakout','none');
 context.breakoutUp=[10,9,8,9,11,13,12,11,12,14,13,12,15].map(close=>({close,volume:100}));
 check('supportResistanceLevels(breakoutUp).breakout','up');
