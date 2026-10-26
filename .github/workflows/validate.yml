@@ -1,5 +1,6 @@
 name: NovaRise - pruebas estáticas
 on:
+  workflow_dispatch:
   push:
     branches: [main]
   pull_request:
@@ -32,3 +33,20 @@ jobs:
           PY
           node --check /tmp/novarise.js
           node tests/analyzer.test.cjs
+      - name: Comprobar diseño adaptable y cancelación de consultas
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          html=Path('index.html').read_text(encoding='utf-8')
+          checks={
+            'viewport móvil':'name="viewport"' in html,
+            'diseño móvil':'@media(max-width:780px)' in html,
+            'menú móvil accesible':'.links{display:flex;order:3' in html,
+            'cancelación de solicitudes':'function cancelPending()' in html,
+            'limpieza de resultados':'function invalidateReport()' in html,
+            'resultado obsoleto descartado':'requestId!==activeRequest' in html,
+          }
+          for name,ok in checks.items():
+            print(('OK' if ok else 'ERROR')+' · '+name)
+          assert all(checks.values()), 'Falta alguna protección o regla responsive'
+          PY
