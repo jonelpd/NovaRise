@@ -67,6 +67,21 @@ check('advancedHistorySignals([{close:10,volume:100},{close:12,volume:null},{clo
 check('advancedHistorySignals([{close:0},{close:2},{close:3}])',null);
 check('advancedHistorySignals([{close:2},{close:3}])',null);
 assert.ok(script.includes('appendAdvancedHistoryInterpretation(available,box)'));
+assert.ok(script.includes('appendDynamicHistoryNarrative(available,box)'));
+assert.match(translations,/Data-driven chart assessment/);
+const rising=Array.from({length:20},(_,i)=>({close:100+i*3,volume:100+i*10}));
+const falling=Array.from({length:20},(_,i)=>({close:100-i*3,volume:300-i*10}));
+const sideways=Array.from({length:20},(_,i)=>({close:100+(i%2)*.1,volume:100}));
+context.rising=rising;context.falling=falling;context.sideways=sideways;
+check('dynamicHistoryNarrative(rising).trend','up');
+check('dynamicHistoryNarrative(rising).volume','rising');
+check('dynamicHistoryNarrative(rising).confluence','aligned-up');
+check('dynamicHistoryNarrative(falling).trend','down');
+check('dynamicHistoryNarrative(falling).volume','falling');
+check('dynamicHistoryNarrative(falling).confluence','aligned-down');
+check('dynamicHistoryNarrative(sideways).trend','sideways');
+check('dynamicHistoryNarrative(sideways).confluence','range');
+
 assert.match(translations,/Expanded analysis: how to read the chart/);
 
 assert.match(script,/https:\/\/api\.dexscreener\.com\/token-pairs\/v1\//);
