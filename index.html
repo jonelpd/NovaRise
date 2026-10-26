@@ -157,7 +157,7 @@ function drawHistoricalChart(points,container,metric){
  const y=v=>top+(max-v)/(max-min)*(height-top-bottom);
  const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
  svg.setAttribute('viewBox','0 0 '+width+' '+height);svg.setAttribute('class','history-chart');
- svg.setAttribute('role','img');svg.setAttribute('aria-label',metric==='volume'?'Histórico de volumen diario del pool en USD':'Histórico del precio de cierre diario del activo base en USD');
+ svg.setAttribute('role','img');svg.setAttribute('aria-label',metric==='volume'?'Histórico de volumen del pool en USD':'Histórico del precio de cierre del activo base en USD');
  function svgEl(tag,attrs,content){const n=document.createElementNS('http://www.w3.org/2000/svg',tag);for(const [k,v] of Object.entries(attrs))n.setAttribute(k,String(v));if(content!==undefined)n.textContent=content;svg.append(n);return n;}
  for(let i=0;i<3;i++){const v=min+(max-min)*i/2;const yy=y(v);svgEl('line',{x1:left,y1:yy,x2:width-right,y2:yy,class:'axis'});svgEl('text',{x:5,y:yy+4},usd(v,metric==='volume'?0:6));}
  if(metric==='volume'){
@@ -166,7 +166,7 @@ function drawHistoricalChart(points,container,metric){
  }else{
   svgEl('path',{d:points.map((p,i)=>(i?'L':'M')+x(i).toFixed(2)+','+y(p.close).toFixed(2)).join(' '),class:'line'});
  }
- for(const i of [0,points.length-1])svgEl('text',{x:x(i),y:height-12,'text-anchor':i?'end':'start'},new Date(points[i].time*1000).toLocaleDateString('es-ES',{day:'2-digit',month:'short'}));
+ for(const i of [0,points.length-1])svgEl('text',{x:x(i),y:height-12,'text-anchor':i?'end':'start'},historyPeriod===1?new Date(points[i].time*1000).toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'}):new Date(points[i].time*1000).toLocaleDateString('es-ES',{day:'2-digit',month:'short'}));
  container.append(svg);
 }
 async function appendHistoricalChart(pair,network,requestId){
@@ -179,12 +179,12 @@ async function appendHistoricalChart(pair,network,requestId){
  const controls=element('div','history-controls');
  const periodLabel=element('label','','Periodo');
  const periodSelect=element('select');periodSelect.setAttribute('aria-label','Periodo del gráfico');
- for(const days of [7,30,90]){const opt=element('option','',days+' días');opt.value=String(days);periodSelect.append(opt);}
+ for(const days of [1,7,30,90]){const opt=element('option','',days===1?'24 horas':days+' días');opt.value=String(days);periodSelect.append(opt);}
  periodSelect.value=String(historyPeriod);
  periodSelect.addEventListener('change',()=>{historyPeriod=Number(periodSelect.value);if(requestId===activeRequest)appendHistoricalChart(pair,network,requestId);});
  const metricLabel=element('label','','Mostrar');
  const metricSelect=element('select');metricSelect.setAttribute('aria-label','Métrica del gráfico');
- for(const [value,label] of [['price','Precio de cierre'],['volume','Volumen diario'],['both','Comparar precio y volumen']]){const opt=element('option','',label);opt.value=value;metricSelect.append(opt);}
+ for(const [value,label] of [['price','Precio de cierre'],['volume','Volumen por intervalo'],['both','Comparar precio y volumen']]){const opt=element('option','',label);opt.value=value;metricSelect.append(opt);}
  metricSelect.value=historyMetric;
  metricSelect.addEventListener('change',()=>{historyMetric=metricSelect.value;if(requestId===activeRequest)appendHistoricalChart(pair,network,requestId);});
  periodLabel.append(periodSelect);metricLabel.append(metricSelect);controls.append(periodLabel,metricLabel);box.append(controls);
@@ -194,7 +194,9 @@ async function appendHistoricalChart(pair,network,requestId){
  const controller=new AbortController();historyController=controller;
  const timeout=setTimeout(()=>controller.abort(),10000);
  try{
-  const url='https://api.geckoterminal.com/api/v2/networks/'+geckoChains[network]+'/pools/'+encodeURIComponent(pair.pairAddress)+'/ohlcv/day?aggregate=1&limit='+historyPeriod+'&currency=usd';
+  const interval=historyPeriod===1?'hour':'day';
+  const limit=historyPeriod===1?24:historyPeriod;
+  const url='https://api.geckoterminal.com/api/v2/networks/'+geckoChains[network]+'/pools/'+encodeURIComponent(pair.pairAddress)+'/ohlcv/'+interval+'?aggregate=1&limit='+limit+'&currency=usd';
   const response=await fetch(url,{signal:controller.signal,headers:{Accept:'application/json'}});
   if(!response.ok)throw Error('Histórico no disponible');
   const points=historicalPoints(await response.json());
@@ -206,7 +208,7 @@ async function appendHistoricalChart(pair,network,requestId){
   const stats=element('div','history-summary');
   stats.append(metricCard('Variación del precio en el periodo',change===null?'Sin datos':(change>0?'+':'')+change.toLocaleString('es-ES',{maximumFractionDigits:2})+' %','Comparación entre el primer y último cierre disponible.'));
   const totalVolume=available.reduce((sum,p)=>sum+(p.volume===null?0:p.volume),0);
-  stats.append(metricCard('Volumen acumulado del pool',available.every(p=>p.volume!==null)?usd(totalVolume,0):'Incompleto','Suma de los días disponibles; no es volumen global.'));
+  stats.append(metricCard('Volumen acumulado del pool',available.every(p=>p.volume!==null)?usd(totalVolume,0):'Incompleto','Suma de los intervalos disponibles; no es volumen global.'));
   box.append(stats);
   const plots=element('div','history-comparison');
   if(historyMetric==='both'){
@@ -220,13 +222,13 @@ async function appendHistoricalChart(pair,network,requestId){
   slider.setAttribute('aria-label','Seleccionar día del histórico');
   const updateReading=()=>{
    const point=available[Number(slider.value)];
-   reading.textContent=new Date(point.time*1000).toLocaleDateString('es-ES')+' · Precio: '+usd(point.close,8)+' · Volumen: '+usd(point.volume,0);
+   reading.textContent=new Date(point.time*1000).toLocaleString('es-ES',historyPeriod===1?{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}:{day:'2-digit',month:'2-digit',year:'numeric'})+' · Precio: '+usd(point.close,8)+' · Volumen: '+usd(point.volume,0);
   };
   slider.addEventListener('input',updateReading);updateReading();
-  inspector.append(element('strong','','Explorar valores diarios'),reading,slider);
-  inspector.append(element('p','small muted','Desliza o utiliza las flechas del teclado para consultar cada día.'));
+  inspector.append(element('strong','',historyPeriod===1?'Explorar valores horarios':'Explorar valores diarios'),reading,slider);
+  inspector.append(element('p','small muted',historyPeriod===1?'Desliza o utiliza las flechas del teclado para consultar cada hora.':'Desliza o utiliza las flechas del teclado para consultar cada día.'));
   box.append(inspector);
-  box.append(element('p','small muted','Datos disponibles: '+new Date(available[0].time*1000).toLocaleDateString('es-ES')+' a '+new Date(available[available.length-1].time*1000).toLocaleDateString('es-ES')+' · '+available.length+' observaciones. Los datos históricos no predicen resultados futuros.'));
+  box.append(element('p','small muted','Datos disponibles: '+new Date(available[0].time*1000).toLocaleDateString('es-ES')+' a '+new Date(available[available.length-1].time*1000).toLocaleDateString('es-ES')+' · '+available.length+(historyPeriod===1?' observaciones horarias.':' observaciones diarias.')+' Los datos históricos no predicen resultados futuros.'));
  }catch(e){if(requestId===activeRequest&&historyController===controller)box.append(element('p','muted','Histórico no disponible temporalmente para este pool. El informe de seguridad sigue siendo independiente.'));}
  finally{clearTimeout(timeout);if(historyController===controller)historyController=null;}
 }
