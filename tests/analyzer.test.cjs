@@ -75,6 +75,7 @@ async function scenario(name,api,expected){
 }
 (async()=>{
  await scenario('datos completos','ok',/Indicadores reales/);
+ await scenario('datos completos repetidos','ok',/Indicadores reales/);
  await scenario('sin cobertura GoPlus','empty-security',/Mercados DEX/);
  await scenario('GoPlus no disponible','fail-security',/Mercados DEX/);
  await scenario('DexScreener no disponible','fail-market',/Datos de mercado no disponibles/);
