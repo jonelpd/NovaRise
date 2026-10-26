@@ -21,7 +21,7 @@ for(const page of [html,english]){
  assert.doesNotMatch(page,/<script>/);
 }
 for(const name of ['historicalPoints','drawHistoricalChart','appendHistoricalChart','appendTechnicalIndicators','relativeStrengthIndex','simpleMovingAverage','appendMarketFromApi']){
- assert.match(script,new RegExp('function '+name+'\\\\('),'Shared analyzer missing '+name);
+ assert.ok(script.includes('function '+name+'('),'Shared analyzer missing '+name);
 }
 assert.match(translations,/Analyze live contract/);
 assert.match(translations,/Educational technical indicators/);
