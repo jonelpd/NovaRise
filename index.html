@@ -211,9 +211,10 @@ function appendHistoryInterpretation(points,container){
  panel.append(element('p','small muted','Interpretación automática basada únicamente en '+insight.observations+' observaciones del pool seleccionado. No es una predicción, señal de compra o venta ni evaluación de seguridad.'));
  container.append(panel);
 }
-function drawHistoricalChart(points,container,metric){
+function drawHistoricalChart(points,container,metric,showAverages=false){
  const width=640,height=245,left=75,right=20,top=20,bottom=43;
- const values=points.map(p=>p[metric]),lo=Math.min(...values),hi=Math.max(...values);
+ const averages=showAverages&&metric==='close'?[7,14].map(period=>({period,values:points.map((_,i)=>i+1>=period?simpleMovingAverage(points.slice(0,i+1),period):null)})):[];
+ const values=points.map(p=>p[metric]).concat(...averages.map(a=>a.values.filter(v=>v!==null))),lo=Math.min(...values),hi=Math.max(...values);
  const span=hi-lo||Math.max(hi*.02,0.00000001);
  const min=metric==='volume'?0:Math.max(0,lo-span*.1),max=hi+span*.1;
  const x=i=>left+i*(width-left-right)/Math.max(1,points.length-1);
@@ -228,6 +229,11 @@ function drawHistoricalChart(points,container,metric){
   points.forEach((p,i)=>svgEl('rect',{x:x(i)-barWidth/2,y:y(p.volume),width:barWidth,height:Math.max(1,height-bottom-y(p.volume)),fill:'#6ce9bb'}));
  }else{
   svgEl('path',{d:points.map((p,i)=>(i?'L':'M')+x(i).toFixed(2)+','+y(p.close).toFixed(2)).join(' '),class:'line'});
+  for(const average of averages){
+   const segments=average.values.map((v,i)=>v===null?null:{i,v}).filter(Boolean);
+   if(segments.length<2)continue;
+   svgEl('path',{d:segments.map((p,i)=>(i?'L':'M')+x(p.i).toFixed(2)+','+y(p.v).toFixed(2)).join(' '),fill:'none',stroke:average.period===7?'#ffd166':'#8ba7ff','stroke-width':2.4,'stroke-dasharray':average.period===14?'7 4':'none'});
+  }
  }
  for(const i of [0,points.length-1])svgEl('text',{x:x(i),y:height-12,'text-anchor':i?'end':'start'},historyPeriod===1?new Date(points[i].time*1000).toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'}):new Date(points[i].time*1000).toLocaleDateString('es-ES',{day:'2-digit',month:'short'}));
  container.append(svg);
@@ -277,10 +283,11 @@ async function appendHistoricalChart(pair,network,requestId){
   appendTechnicalIndicators(available,box);
   const plots=element('div','history-comparison');
   if(historyMetric==='both'){
-   const pricePlot=element('div');pricePlot.append(element('h5','','Precio de cierre · USD'));drawHistoricalChart(available,pricePlot,'close');plots.append(pricePlot);
+   const pricePlot=element('div');pricePlot.append(element('h5','','Precio de cierre · USD'));drawHistoricalChart(available,pricePlot,'close',true);plots.append(pricePlot);
    const volumePlot=element('div');volumePlot.append(element('h5','','Volumen del pool · USD'));drawHistoricalChart(available,volumePlot,'volume');plots.append(volumePlot);
-  }else drawHistoricalChart(available,plots,historyMetric==='volume'?'volume':'close');
+  }else drawHistoricalChart(available,plots,historyMetric==='volume'?'volume':'close',true);
   box.append(plots);
+  if(historyMetric!=='volume')box.append(element('p','small muted','Líneas del gráfico: precio (verde), media móvil SMA 7 (amarillo) y SMA 14 (azul discontinuo). Las medias solo aparecen cuando existen suficientes cierres.'));
   const inspector=element('div','history-inspector');
   const reading=element('p','small');reading.setAttribute('aria-live','polite');
   const slider=element('input');slider.type='range';slider.min='0';slider.max=String(available.length-1);slider.step='1';slider.value=String(available.length-1);
