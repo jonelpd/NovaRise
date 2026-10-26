@@ -195,6 +195,58 @@ function advancedHistorySignals(points){
  const volume=points.map(p=>p.volume).filter(v=>Number.isFinite(v)&&v>=0);
  return {first,last,high,low,maxDrawdown,sma7,sma14,rsi,volumeCoverage:volume.length/points.length*100,observations:points.length};
 }
+function dynamicHistoryNarrative(points){
+ const data=advancedHistorySignals(points),base=interpretHistory(points);
+ if(!data||!base)return null;
+ const priceChange=(data.last/data.first-1)*100;
+ const trend=priceChange>2?'up':priceChange< -2?'down':'sideways';
+ const volume=base.volumeChange===null?'missing':base.volumeChange>20?'rising':base.volumeChange< -20?'falling':'stable';
+ const momentum=data.rsi===null?'missing':data.rsi>70?'high':data.rsi<30?'low':'neutral';
+ const averages=data.sma7===null||data.sma14===null?'missing':data.sma7>data.sma14*1.001?'bullish':data.sma7<data.sma14*.999?'bearish':'flat';
+ const drawdown=data.maxDrawdown>=20?'deep':data.maxDrawdown>=5?'moderate':'limited';
+ const quality=data.volumeCoverage<80?'partial':'sufficient';
+ let confluence='mixed';
+ if(trend==='up'&&averages==='bullish'&&momentum!=='low')confluence='aligned-up';
+ else if(trend==='down'&&averages==='bearish'&&momentum!=='high')confluence='aligned-down';
+ else if(trend==='sideways')confluence='range';
+ const divergence=trend==='up'&&volume==='falling'?'price-up-volume-down':trend==='down'&&volume==='rising'?'price-down-volume-up':'none';
+ return {trend,volume,momentum,averages,drawdown,quality,confluence,divergence,priceChange,volumeChange:base.volumeChange,volatility:base.volatility};
+}
+function appendDynamicHistoryNarrative(points,container){
+ const signals=dynamicHistoryNarrative(points);
+ if(!signals)return;
+ const panel=element('div','history-insights');
+ panel.append(element('h5','',nvraText('Diagnóstico variable según los datos')));
+ const statements={
+ 'aligned-up':'El precio sube y la SMA rápida supera a la lenta: ambas medidas apuntan en la misma dirección, aunque no prueban que la subida continúe.',
+ 'aligned-down':'El precio cae y la SMA rápida está bajo la lenta: coinciden dos señales retrospectivas de debilidad, no una predicción.',
+ 'range':'El cambio neto es reducido: conviene observar el rango y los retrocesos, porque una aparente estabilidad puede ocultar oscilaciones amplias.',
+ 'mixed':'Las señales de precio, medias e impulso no coinciden claramente. Es preferible describir un escenario mixto que forzar una tendencia.',
+ 'price-up-volume-down':'El precio avanza mientras el volumen medio reciente cae: la participación de este pool no acompaña el movimiento con la misma intensidad. No demuestra agotamiento.',
+ 'price-down-volume-up':'El precio retrocede mientras el volumen medio reciente aumenta: hay más actividad en este pool, pero no podemos distinguir compras de ventas con estos datos.',
+ 'high':'El RSI está por encima de 70: el impulso alcista reciente domina el cálculo. Puede mantenerse elevado y no es una orden de venta.',
+ 'low':'El RSI está por debajo de 30: predominan las caídas recientes en el cálculo. No implica que exista un suelo.',
+ 'neutral':'El RSI está entre 30 y 70: no presenta una lectura extrema, pero eso no significa ausencia de riesgo.',
+ 'missing':'Faltan observaciones para calcular algunos indicadores; no se deben interpretar como señales neutrales.',
+ 'deep':'Se observó un retroceso de al menos el 20 % desde un máximo de cierre: la trayectoria tuvo caídas importantes, aunque después pudiera recuperarse.',
+ 'moderate':'Se observó un retroceso de entre el 5 % y el 20 % desde un máximo de cierre. Evalúa su magnitud junto con la variabilidad entre intervalos.',
+ 'limited':'El mayor retroceso observado entre cierres es inferior al 5 %. Este dato no excluye movimientos bruscos dentro de cada intervalo.',
+ 'partial':'Falta volumen válido en más del 20 % de los intervalos: las conclusiones sobre actividad tienen menor respaldo.',
+ 'sufficient':'La cobertura de volumen es de al menos el 80 %: permite comparar intervalos, pero sigue representando solo este pool.',
+ 'rising':'El volumen medio de la segunda mitad supera al de la primera en más del 20 %; hay mayor actividad registrada, sin que esto indique su dirección.',
+ 'falling':'El volumen medio de la segunda mitad es al menos un 20 % menor; la actividad registrada se redujo, sin explicar por qué.',
+ 'stable':'El volumen medio cambió menos del 20 % entre mitades: no se detecta una diferencia marcada con este criterio descriptivo.'
+ };
+ const add=(title,key)=>{panel.append(element('h6','',nvraText(title)));panel.append(element('p','',nvraText(statements[key])));};
+ add('Lectura conjunta de tendencia y medias',signals.confluence);
+ if(signals.divergence!=='none')add('Relación entre precio y volumen',signals.divergence);
+ else add('Evolución de la actividad',signals.volume);
+ add('Impulso reciente',signals.momentum);
+ add('Magnitud de las caídas',signals.drawdown);
+ add('Fiabilidad de la muestra',signals.quality);
+ panel.append(element('p','small muted',nvraText('Criterios descriptivos de este informe: tendencia ±2 %; cambio de volumen ±20 %; SMA separadas por 0,1 %; RSI 30/70; retroceso 5/20 % y cobertura 80 %. Son umbrales orientativos, no niveles universales ni recomendaciones de inversión.')));
+ container.append(panel);
+}
 function appendAdvancedHistoryInterpretation(points,container){
  const data=advancedHistorySignals(points);
  if(!data)return;
@@ -301,6 +353,7 @@ async function appendHistoricalChart(pair,network,requestId){
   box.append(stats);
   appendHistoryInterpretation(available,box);
  appendAdvancedHistoryInterpretation(available,box);
+  appendDynamicHistoryNarrative(available,box);
   appendTechnicalIndicators(available,box);
   const plots=element('div','history-comparison');
   if(historyMetric==='both'){
