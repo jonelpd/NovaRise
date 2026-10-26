@@ -68,6 +68,18 @@ check('advancedHistorySignals([{close:0},{close:2},{close:3}])',null);
 check('advancedHistorySignals([{close:2},{close:3}])',null);
 assert.ok(script.includes('appendAdvancedHistoryInterpretation(available,box)'));
 assert.ok(script.includes('appendDynamicHistoryNarrative(available,box)'));
+assert.ok(script.includes('appendSupportResistanceInterpretation(available,box)'));
+assert.match(translations,/Support, resistance and potential breakouts/);
+context.levelSample=[10,9,8,9,11,13,12,11,12,14,13,12,13].map(close=>({close,volume:100}));
+check('supportResistanceLevels(levelSample).support.price',11);
+check('supportResistanceLevels(levelSample).resistance.price',13.5);
+check('supportResistanceLevels(levelSample).breakout','none');
+context.breakoutUp=[10,9,8,9,11,13,12,11,12,14,13,12,15].map(close=>({close,volume:100}));
+check('supportResistanceLevels(breakoutUp).breakout','up');
+context.breakoutDown=[10,9,8,9,11,13,12,11,12,14,13,12,7].map(close=>({close,volume:100}));
+check('supportResistanceLevels(breakoutDown).breakout','down');
+check('supportResistanceLevels([{close:1},{close:2}])',null);
+
 assert.match(translations,/Data-driven chart assessment/);
 const rising=Array.from({length:20},(_,i)=>({close:100+i*3,volume:100+i*10}));
 const falling=Array.from({length:20},(_,i)=>({close:100-i*3,volume:300-i*10}));
