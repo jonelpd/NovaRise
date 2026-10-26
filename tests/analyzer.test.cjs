@@ -30,6 +30,12 @@ const report=nodes.get('report');
 function allText(n){return [n.text||'',...(n.children||[]).flatMap(allText)].join(' ')}
 assert.match(allText(report),/Sin datos/,'No atribuir el precio del activo base al secundario');
 assert.match(allText(report),/Liquidez del par/);
+// Las solicitudes anteriores deben cancelarse al cambiar el formulario.
+let securityAborted=false,marketAborted=false;
+vm.runInContext('securityController={abort(){this.aborted=true}};marketController={abort(){this.aborted=true}}',context);
+handlers.get('address:input')();
+assert.equal(vm.runInContext('securityController',context),null);
+assert.equal(vm.runInContext('marketController',context),null);
 // Cambiar la dirección o la red debe borrar el informe anterior.
 nodes.get('address').value='0x1111111111111111111111111111111111111111';
 handlers.get('address:input')();
