@@ -1,0 +1,33 @@
+name: NovaRise - pruebas estáticas
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validar estructura y JavaScript
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          from html.parser import HTMLParser
+          html=Path('index.html').read_text(encoding='utf-8')
+          class Parser(HTMLParser):
+              def __init__(self): super().__init__(); self.ids=set(); self.scripts=[]
+              def handle_starttag(self,tag,attrs):
+                  d=dict(attrs)
+                  if 'id' in d:
+                      assert d['id'] not in self.ids, f"ID duplicado: {d['id']}"
+                      self.ids.add(d['id'])
+          p=Parser(); p.feed(html)
+          for identifier in ('network','address','analyze','report','empty','year'):
+              assert identifier in p.ids, f"Falta ID: {identifier}"
+          assert 'api.gopluslabs.io' in html and 'api.dexscreener.com' in html
+          assert html.count('<script>')==1 and html.count('</script>')==1
+          js=html.split('<script>',1)[1].split('</script>',1)[0]
+          Path('/tmp/novarise.js').write_text(js,encoding='utf-8')
+          print('HTML, IDs y dependencias: OK')
+          PY
+          node --check /tmp/novarise.js
