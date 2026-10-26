@@ -159,7 +159,7 @@ analyzeButton.addEventListener('click',async()=>{
   const token=data.result?.[address.toLowerCase()];
   if(requestId!==activeRequest)return;
   if(!token||typeof token!=='object'||Object.keys(token).length===0){
-   showMessage('Sin datos disponibles','GoPlus no devolvió indicadores para este contrato en la red seleccionada. Esto no significa que sea seguro.');return;
+   showMessage('Sin datos de seguridad','GoPlus no devolvió indicadores para este contrato en la red seleccionada. Esto no significa que sea seguro. Consultando mercados DEX por separado…');await appendMarketFromApi(address,network,requestId);return;
   }
   report.replaceChildren();
   report.append(element('h3','', 'Indicadores reales · GoPlus'));
@@ -194,7 +194,7 @@ analyzeButton.addEventListener('click',async()=>{
   report.append(element('p','notice','Los resultados dependen de un proveedor externo y pueden ser incompletos o cambiar. “Sin alerta” no significa “seguro”. No es una auditoría ni asesoramiento financiero.'));
   await appendMarketFromApi(address,network,requestId);
  }catch(e){
-  if(requestId===activeRequest)showMessage('No se pudo completar la consulta','La API no respondió correctamente o el navegador bloqueó el acceso. Detalle: '+String(e.message||e)+'. No mostramos datos simulados como reales.');
+  if(requestId===activeRequest){showMessage('Datos de seguridad no disponibles','No fue posible consultar GoPlus. Detalle: '+String(e.message||e)+'. Esto no implica que el contrato sea seguro. Intentando consultar mercados DEX por separado…');await appendMarketFromApi(address,network,requestId);}
  }finally{
   clearTimeout(timeout);
   if(requestId===activeRequest){analyzeButton.disabled=false;analyzeButton.textContent='Analizar contrato real';}
