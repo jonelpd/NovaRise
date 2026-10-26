@@ -192,5 +192,21 @@ const nvraEnglish={
   "Impulso reciente": "Recent momentum",
   "Magnitud de las caídas": "Size of declines",
   "Fiabilidad de la muestra": "Data coverage",
-  "Criterios descriptivos de este informe: tendencia ±2 %; cambio de volumen ±20 %; SMA separadas por 0,1 %; RSI 30/70; retroceso 5/20 % y cobertura 80 %. Son umbrales orientativos, no niveles universales ni recomendaciones de inversión.": "Descriptive thresholds in this report: trend ±2%; volume change ±20%; SMA separation 0.1%; RSI 30/70; drawdown 5/20%; data coverage 80%. These are illustrative thresholds, not universal levels or investment advice."
+  "Criterios descriptivos de este informe: tendencia ±2 %; cambio de volumen ±20 %; SMA separadas por 0,1 %; RSI 30/70; retroceso 5/20 % y cobertura 80 %. Son umbrales orientativos, no niveles universales ni recomendaciones de inversión.": "Descriptive thresholds in this report: trend ±2%; volume change ±20%; SMA separation 0.1%; RSI 30/70; drawdown 5/20%; data coverage 80%. These are illustrative thresholds, not universal levels or investment advice.",
+  "Soportes, resistencias y posibles rupturas": "Support, resistance and potential breakouts",
+  "Se requieren al menos 7 cierres válidos para buscar zonas de soporte y resistencia.": "At least 7 valid closing prices are required to identify support and resistance zones.",
+  "Soporte observado cercano: ": "Nearby observed support: ",
+  " (": " (",
+  " mínimos locales agrupados; precio actual a ": " grouped local lows; latest price is ",
+  " % por encima). Es una zona histórica, no un suelo garantizado.": "% above). This is a historical zone, not a guaranteed floor.",
+  "No se detectó un mínimo local anterior suficientemente cercano por debajo del último cierre; no se inventa un soporte.": "No prior local low was identified below the latest close; no support level is invented.",
+  "Resistencia observada cercana: ": "Nearby observed resistance: ",
+  " máximos locales agrupados; a ": " grouped local highs; ",
+  " % por encima del precio actual). Es una zona histórica, no un techo garantizado.": "% above the latest price). This is a historical zone, not a guaranteed ceiling.",
+  "No se detectó un máximo local anterior por encima del último cierre; no se inventa una resistencia.": "No prior local high was identified above the latest close; no resistance level is invented.",
+  "El último cierre supera todos los cierres anteriores de esta muestra: posible ruptura alcista observada, todavía sin confirmación posterior. Comprueba volumen, liquidez y nuevos cierres.": "The latest close exceeds every previous close in this sample: a possible upward breakout, not yet confirmed by subsequent closes. Review volume, liquidity and future closes.",
+  "El último cierre cae por debajo de todos los cierres anteriores de esta muestra: posible ruptura bajista observada, todavía sin confirmación posterior. Comprueba volumen, liquidez y nuevos cierres.": "The latest close is below every previous close in this sample: a possible downward breakout, not yet confirmed by subsequent closes. Review volume, liquidity and future closes.",
+  "El último cierre permanece entre las zonas identificadas. Un acercamiento a una zona no equivale a una ruptura; observa cierres posteriores y actividad.": "The latest close remains between the identified zones. Approaching a zone is not a breakout; watch subsequent closes and activity.",
+  "La muestra no permite delimitar ambos lados de un rango. No se puede afirmar que el precio esté consolidando o rompiendo una zona.": "The sample does not establish both sides of a range. Consolidation or a breakout cannot be concluded.",
+  "Método reproducible: pivotes de cierre con dos intervalos a cada lado, agrupados si difieren como máximo un 1,5 %. Se muestra el nivel más próximo al último cierre en cada dirección. Una ruptura compara el último cierre con los anteriores de la muestra, no con el mercado completo. Los toques no son pruebas independientes ni garantías.": "Reproducible method: closing-price pivots with two intervals on either side, grouped when within 1.5%. The nearest level in each direction is shown. A breakout compares the latest close with earlier closes in this sample, not the entire market. Touch counts are not independent evidence or guarantees."
 };
