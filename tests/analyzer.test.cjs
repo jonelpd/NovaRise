@@ -110,6 +110,14 @@ assert.match(script,/https:\/\/api\.dexscreener\.com\/token-pairs\/v1\//);
 assert.match(script,/https:\/\/api\.gopluslabs\.io\/api\/v1\/token_security\//);
 assert.match(html,/aria-live="polite"/);
 assert.match(sharedCss,/:focus-visible/);
+assert.match(html,/<a class="skip-link" href="#contenido">Ir al contenido principal<\/a>/);
+assert.match(english,/<a class="skip-link" href="#contenido">Skip to main content<\/a>/);
+assert.match(html,/<main id="contenido">/);
+assert.match(english,/<main id="contenido">/);
+assert.match(sharedCss,/\.skip-link:focus\{transform:translateY\(0\)\}/);
+assert.match(sharedCss,/@media\(max-width:480px\)/);
+assert.match(sharedCss,/\.history-insights h6/);
+
 assert.match(sharedCss,/prefers-reduced-motion/);
 assert.match(script,/Comparar precio y volumen/);
 assert.match(script,/Seleccionar día del histórico/);
