@@ -31,6 +31,12 @@ check('historicalPoints({data:{attributes:{ohlcv_list:[[1720000000,1,2,1,1.5,500
 check('interpretHistory([{close:100,volume:100},{close:110,volume:120},{close:121,volume:140}]).change',21);
 check('interpretHistory([{close:100,volume:100},{close:110,volume:120}])',null);
 check('interpretHistory([{close:0,volume:100},{close:110,volume:120},{close:121,volume:140}])',null);
+check('simpleMovingAverage([{close:2},{close:4},{close:6}],3)',4);
+check('simpleMovingAverage([{close:2}],3)',null);
+check('relativeStrengthIndex(Array.from({length:15},(_,i)=>({close:i+1})),14)',100);
+check('relativeStrengthIndex(Array.from({length:15},(_,i)=>({close:15-i})),14)',0);
+check('relativeStrengthIndex(Array.from({length:15},()=>({close:5})),14)',50);
+check('relativeStrengthIndex([{close:1},{close:2}],14)',null);
 assert.match(html,/https:\/\/api\.dexscreener\.com\/token-pairs\/v1\//);
 assert.match(html,/https:\/\/api\.gopluslabs\.io\/api\/v1\/token_security\//);
 assert.match(html,/aria-live="polite"/);
