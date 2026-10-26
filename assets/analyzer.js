@@ -75,7 +75,7 @@ function appendDashboard(token){
    row.append(element('td','',address&&/^0x[a-fA-F0-9]{40}$/.test(address)?address.slice(0,8)+'…'+address.slice(-6):nvraText('Sin datos')));
    const pct=percentage(h.percent);
    row.append(element('td','',pct===null?nvraText('Sin datos'):pct.toLocaleString(nvraText('es-ES'),{maximumFractionDigits:3})+' %'));
-   row.append(element('td','',h.is_contract==='1'?nvraText('Sí'):h.is_contract==='0'?'No':nvraText('Sin datos')));
+   row.append(element('td','',h.is_contract==='1'?nvraText('Sí'):h.is_contract==='0'?nvraText('No'):nvraText('Sin datos')));
    tbody.append(row);
   });
   table.append(tbody);wrap.append(table);report.append(wrap);
@@ -87,7 +87,7 @@ function usd(value,digits=2){
  return n===null?nvraText('Sin datos'):new Intl.NumberFormat('es-ES',{style:'currency',currency:'USD',maximumFractionDigits:digits}).format(n);
 }
 function appendMarket(pairs,address,network){
- report.append(element('h4','section-title','Mercados DEX · DexScreener'));
+ report.append(element('h4','section-title',nvraText('Mercados DEX · DexScreener')));
  const selected=pairs.filter(p=>p&&typeof p==='object'&&!Array.isArray(p)&&p.chainId===dexChains[network]&&
    [p.baseToken?.address,p.quoteToken?.address].some(a=>typeof a==='string'&&a.toLowerCase()===address.toLowerCase()));
  if(!selected.length){report.append(element('p','muted',nvraText('No se encontraron pares DEX para este contrato en la red seleccionada. No significa que no se negocie en otros mercados.')));return;}
@@ -105,14 +105,14 @@ function appendMarket(pairs,address,network){
  const priceChangeNumber=priceChange===null||priceChange===undefined||priceChange===''?NaN:Number(priceChange);
  grid.append(metricCard(nvraText('Variación 24 h del token'),Number.isFinite(priceChangeNumber)?priceChangeNumber.toLocaleString(nvraText('es-ES'),{maximumFractionDigits:2})+' %':nvraText('Sin datos'),nvraText('Variación del activo base del mismo par utilizado para mostrar el precio.')));
  summary.append(grid);report.append(summary);
- report.append(element('h4','section-title','Pares DEX destacados'));
+ report.append(element('h4','section-title',nvraText('Pares DEX destacados')));
  for(const pair of selected.slice(0,5)){
   const block=element('div','market-pair');
   const title=element('strong','',(pair.baseToken?.symbol||'?')+' / '+(pair.quoteToken?.symbol||'?')+' · '+String(pair.dexId||'DEX'));
   block.append(title);
-  block.append(element('small','','Liquidez: '+usd(pair.liquidity?.usd)+nvraText(' · Volumen 24 h: ')+usd(pair.volume?.h24)));
+  block.append(element('small','',nvraText('Liquidez: ')+usd(pair.liquidity?.usd)+nvraText(' · Volumen 24 h: ')+usd(pair.volume?.h24)));
   if(typeof pair.url==='string'&&/^https:\/\/dexscreener\.com\//.test(pair.url)){
-   const link=element('a','','Ver par en DexScreener');link.href=pair.url;link.target='_blank';link.rel='noopener noreferrer';block.append(link);
+   const link=element('a','',nvraText('Ver par en DexScreener'));link.href=pair.url;link.target='_blank';link.rel='noopener noreferrer';block.append(link);
   }
   report.append(block);
  }
@@ -174,7 +174,7 @@ function appendTechnicalIndicators(points,container){
  panel.append(element('p','',sma14===null?nvraText('Media móvil simple (14 intervalos): se requieren al menos 14 cierres.'):nvraText('Media móvil simple (14 intervalos): ')+usd(sma14,8)+'.'));
  if(rsi===null)panel.append(element('p','muted','RSI (14): se requieren al menos 15 cierres consecutivos.'));
  else{
-  const context=rsi>70?nvraText('zona históricamente denominada sobrecompra'):rsi<30?nvraText('zona históricamente denominada sobreventa'):'zona intermedia';
+  const context=rsi>70?nvraText('zona históricamente denominada sobrecompra'):rsi<30?nvraText('zona históricamente denominada sobreventa'):nvraText('zona intermedia');
   panel.append(element('p','','RSI (14): '+rsi.toLocaleString(nvraText('es-ES'),{maximumFractionDigits:1})+' / 100, '+context+nvraText('. No implica un cambio de tendencia próximo.')));
  }
  panel.append(element('p','small muted',nvraText('Las medias son promedios de cierres; RSI calculado con ganancias y pérdidas simples de los últimos 14 cambios (no suavizado de Wilder). Cada intervalo equivale a una hora en 24 h y a un día en los demás periodos. Son indicadores descriptivos, no recomendaciones de inversión.')));
@@ -378,7 +378,7 @@ async function appendHistoricalChart(pair,network,requestId){
  for(const days of [1,7,30,90]){const opt=element('option','',days===1?nvraText('24 horas'):days+nvraText(' días'));opt.value=String(days);periodSelect.append(opt);}
  periodSelect.value=String(historyPeriod);
  periodSelect.addEventListener('change',()=>{historyPeriod=Number(periodSelect.value);if(requestId===activeRequest)appendHistoricalChart(pair,network,requestId);});
- const metricLabel=element('label','','Mostrar');
+ const metricLabel=element('label','',nvraText('Mostrar'));
  const metricSelect=element('select');metricSelect.setAttribute('aria-label',nvraText('Métrica del gráfico'));
  for(const [value,label] of [['price',nvraText('Precio de cierre')],['volume',nvraText('Volumen por intervalo')],['both',nvraText('Comparar precio y volumen')]]){const opt=element('option','',label);opt.value=value;metricSelect.append(opt);}
  metricSelect.value=historyMetric;
@@ -405,7 +405,7 @@ async function appendHistoricalChart(pair,network,requestId){
   const stats=element('div','history-summary');
   stats.append(metricCard(nvraText('Variación del precio en el periodo'),change===null?nvraText('Sin datos'):(change>0?'+':'')+change.toLocaleString(nvraText('es-ES'),{maximumFractionDigits:2})+' %',nvraText('Comparación entre el primer y último cierre disponible.')));
   const totalVolume=available.reduce((sum,p)=>sum+(p.volume===null?0:p.volume),0);
-  stats.append(metricCard(nvraText('Volumen acumulado del pool'),available.every(p=>p.volume!==null)?usd(totalVolume,0):'Incompleto',nvraText('Suma de los intervalos disponibles; no es volumen global.')));
+  stats.append(metricCard(nvraText('Volumen acumulado del pool'),available.every(p=>p.volume!==null)?usd(totalVolume,0):nvraText('Incompleto'),nvraText('Suma de los intervalos disponibles; no es volumen global.')));
   box.append(stats);
   appendHistoryInterpretation(available,box);
  appendAdvancedHistoryInterpretation(available,box);
@@ -446,7 +446,7 @@ async function appendMarketFromApi(address,network,requestId){
   const pairs=await response.json();
   if(requestId===activeRequest){if(!Array.isArray(pairs))throw new Error('Formato inesperado');appendMarket(pairs,address,network);const matching=pairs.filter(p=>p&&p.chainId===dexChains[network]&&[p.baseToken?.address,p.quoteToken?.address].some(a=>typeof a==='string'&&a.toLowerCase()===address.toLowerCase())).sort((a,b)=>(safeNumber(b.liquidity?.usd)||0)-(safeNumber(a.liquidity?.usd)||0));const compatible=matching.find(p=>typeof p.baseToken?.address==='string'&&p.baseToken.address.toLowerCase()===address.toLowerCase()&&typeof p.pairAddress==='string'&&/^0x[a-fA-F0-9]{40}$/.test(p.pairAddress));await appendHistoricalChart(compatible,network,requestId);}
  }catch(e){
-  if(requestId===activeRequest){report.append(element('h4','section-title','Mercados DEX · DexScreener'));report.append(element('p','muted',nvraText('Datos de mercado no disponibles en este momento. El análisis de seguridad anterior sigue siendo independiente.')));}
+  if(requestId===activeRequest){report.append(element('h4','section-title',nvraText('Mercados DEX · DexScreener')));report.append(element('p','muted',nvraText('Datos de mercado no disponibles en este momento. El análisis de seguridad anterior sigue siendo independiente.')));}
  }finally{clearTimeout(timeout);if(marketController===controller)marketController=null;}
 }
 function showMessage(title,message){report.replaceChildren();const h=document.createElement('h3');h.textContent=title;const p=document.createElement('p');p.className='muted';p.textContent=message;report.append(h,p);empty.classList.add('hidden');report.classList.remove('hidden');}
@@ -469,7 +469,7 @@ analyzeButton.addEventListener('click',async()=>{
   showMessage(nvraText('Dirección no válida'),nvraText('Introduce una dirección pública EVM de 42 caracteres que empiece por 0x. No introduzcas claves privadas.'));return;
  }
  analyzeButton.disabled=true;analyzeButton.textContent=nvraText('Consultando datos reales…');
- showMessage('Consultando GoPlus',nvraText('Esperando respuesta del proveedor de indicadores de seguridad.'));
+ showMessage(nvraText('Consultando GoPlus'),nvraText('Esperando respuesta del proveedor de indicadores de seguridad.'));
  const network=netInput.value;
  if(!endpointChains[network]||!dexChains[network]){showMessage(nvraText('Red no admitida'),nvraText('Selecciona una de las redes disponibles.'));analyzeButton.disabled=false;analyzeButton.textContent=nvraText('Analizar contrato real');return;}
  const controller=new AbortController();securityController=controller;const timeout=setTimeout(()=>controller.abort(),12000);
@@ -488,7 +488,7 @@ analyzeButton.addEventListener('click',async()=>{
    showMessage(nvraText('Sin datos de seguridad'),nvraText('GoPlus no devolvió indicadores para este contrato en la red seleccionada. Esto no significa que sea seguro. Consultando mercados DEX por separado…'));await appendMarketFromApi(address,network,requestId);return;
   }
   report.replaceChildren();
-  report.append(element('h3','', 'Indicadores reales · GoPlus'));
+  report.append(element('h3','', nvraText('Indicadores reales · GoPlus')));
   report.append(element('p','small muted break-address','Red: '+network+nvraText(' · Dirección: ')+address+' · Consulta: '+new Date().toLocaleString(nvraText('es-ES'))+' · Fuente: GoPlus Security API'));
   let known=0,alerts=0,unavailable=0;
   const results=fields.map(field=>{
