@@ -13,16 +13,59 @@
 <main><div class="wrap">
 <section id="inicio" class="hero"><div><div class="eyebrow">Crypto Companion · Prototipo inicial</div><h1>Más claridad.<br><span class="accent">Menos riesgos.</span></h1><p class="muted">Comprende los indicadores de riesgo de los tokens con explicaciones sencillas y aprende a tomar decisiones con más criterio.</p><div class="actions"><a class="btn" href="#analizador">Explorar analizador</a><a class="btn outline" href="#herramientas">Cómo funciona</a></div><p class="small muted">Nunca solicitamos claves privadas ni frases semilla. No ofrecemos asesoramiento financiero.</p></div><div class="panel"><div class="eyebrow">Vista ilustrativa · Datos simulados</div><h2>Resumen de riesgos</h2><div class="stat"><span>Contrato verificado</span><span class="tag">Ejemplo: Sí</span></div><div class="stat"><span>Permisos de emisión</span><span class="warn">Revisar</span></div><div class="stat"><span>Concentración de titulares</span><span class="warn">No evaluado</span></div><div class="stat"><span>Origen de datos</span><span class="tag">Simulación</span></div><p class="notice">Un indicador favorable no garantiza que un activo sea seguro.</p></div></section>
 <section id="herramientas"><div class="eyebrow">Nuestra visión</div><h2>Herramientas que explican, no confunden</h2><div class="grid"><article class="feature"><div class="num">01</div><h3>Analizador de tokens</h3><p>En futuras versiones, consulta indicadores técnicos de contratos públicos con fuentes verificables.</p></article><article class="feature"><div class="num">02</div><h3>Riesgos en lenguaje claro</h3><p>Comprende permisos de emisión, restricciones de transferencia y otras señales de riesgo.</p></article><article class="feature"><div class="num">03</div><h3>Guías prácticas</h3><p>Aprende sobre redes, comisiones y buenas prácticas de seguridad sin compartir credenciales.</p></article></div></section>
-<section id="analizador"><div class="eyebrow">Prueba interactiva</div><h2>Analizador de demostración</h2><p class="muted">Este prototipo <strong>no consulta la blockchain</strong>. Todos los resultados son ficticios y no corresponden a la dirección introducida.</p><div class="analyzer"><div class="panel"><label for="network">Red</label><select id="network"><option>Ethereum</option><option>Polygon</option><option>BNB Smart Chain</option></select><label for="address">Dirección pública del contrato (opcional)</label><input id="address" maxlength="120" autocomplete="off" placeholder="0x..."><p class="small muted">No introduzcas contraseñas, claves privadas ni frases semilla.</p><button id="analyze" class="btn full">Ver análisis simulado</button></div><div class="panel" aria-live="polite"><div id="empty"><h3>Tu informe de ejemplo</h3><p class="muted">Pulsa el botón para ver cómo se explicarían los indicadores.</p></div><div id="report" class="hidden"><strong class="warn">DEMOSTRACIÓN · DATOS FICTICIOS</strong><h3>Informe ilustrativo</h3><div class="risk"><b>Permisos de emisión: revisar</b><p class="muted small">Si el administrador puede crear nuevos tokens, la oferta podría aumentar. Se requiere un análisis adicional.</p></div><div class="stat"><span>Contrato verificado</span><span class="tag">Ejemplo: Sí</span></div><div class="stat"><span>Restricciones de transferencia</span><span class="warn">Desconocidas</span></div><p class="notice">No se ha inspeccionado ningún contrato real. No utilices esta demostración para invertir.</p></div></div></div></section>
+<section id="analizador"><div class="eyebrow">Prueba interactiva</div><h2>Analizador de demostración</h2><p class="muted">Esta versión consulta indicadores de contratos EVM a través de GoPlus. Los resultados dependen de la disponibilidad del proveedor y no garantizan seguridad.</p><div class="analyzer"><div class="panel"><label for="network">Red</label><select id="network"><option>Ethereum</option><option>Polygon</option><option>BNB Smart Chain</option></select><label for="address">Dirección pública del contrato (obligatoria)</label><input id="address" maxlength="120" autocomplete="off" placeholder="0x..."><p class="small muted">No introduzcas contraseñas, claves privadas ni frases semilla.</p><button id="analyze" class="btn full">Analizar contrato real</button></div><div class="panel" aria-live="polite"><div id="empty"><h3>Tu informe de ejemplo</h3><p class="muted">Introduce una dirección pública de contrato EVM para consultar los indicadores disponibles.</p></div><div id="report" class="hidden"><strong class="warn">DEMOSTRACIÓN · DATOS FICTICIOS</strong><h3>Informe ilustrativo</h3><div class="risk"><b>Permisos de emisión: revisar</b><p class="muted small">Si el administrador puede crear nuevos tokens, la oferta podría aumentar. Se requiere un análisis adicional.</p></div><div class="stat"><span>Contrato verificado</span><span class="tag">Ejemplo: Sí</span></div><div class="stat"><span>Restricciones de transferencia</span><span class="warn">Desconocidas</span></div><p class="notice">No se ha inspeccionado ningún contrato real. No utilices esta demostración para invertir.</p></div></div></div></section>
 <section id="planes"><div class="eyebrow">Modelo futuro</div><h2>Acceso sencillo, valor real</h2><div class="grid"><div class="feature"><h3>Gratuito</h3><p>Guías educativas y consultas básicas limitadas cuando el servicio esté operativo.</p></div><div class="feature"><h3>Prémium</h3><p>Historial, alertas e informes ampliados. Precio pendiente de validación.</p></div><div class="feature"><h3>Empresas</h3><p>Posibles integraciones y API, sujetas a demanda, viabilidad y costes.</p></div></div></section>
 <section id="nvr"><div class="panel"><div class="eyebrow">Token NVR · Concepto provisional</div><h2>Primero utilidad. Después, si procede, token.</h2><p class="muted">NVR es una idea en evaluación, no un token emitido ni una oferta de inversión. Su utilidad, tecnología y viabilidad jurídica se estudiarían después de validar el producto. No existe preventa, captación de fondos ni promesa de rentabilidad.</p></div></section>
 </div></main>
-<footer class="footer"><div class="wrap">© <span id="year"></span> NovaRise · Prototipo educativo · Datos simulados · No es asesoramiento financiero.</div></footer>
+<footer class="footer"><div class="wrap">© <span id="year"></span> NovaRise · Herramienta experimental con datos de terceros · La vista superior es ilustrativa · No es asesoramiento financiero.</div></footer>
 <script>
-document.getElementById('year').textContent=new Date().getFullYear();
-document.getElementById('analyze').addEventListener('click',()=>{
-  document.getElementById('empty').classList.add('hidden');
-  document.getElementById('report').classList.remove('hidden');
+const addrInput=document.getElementById('address');
+const netInput=document.getElementById('network');
+const report=document.getElementById('report');
+const empty=document.getElementById('empty');
+const analyzeButton=document.getElementById('analyze');
+const endpointChains={'Ethereum':'1','Polygon':'137','BNB Smart Chain':'56'};
+const fields=[
+ ['is_open_source','Código fuente verificado','1','Un código no verificado dificulta su revisión pública.'],
+ ['is_honeypot','Posible bloqueo de ventas','0','El proveedor detecta indicios de que podría impedirse la venta.'],
+ ['is_mintable','Emisión adicional de tokens','0','El contrato podría permitir crear nuevos tokens.'],
+ ['is_blacklisted','Lista negra de direcciones','0','El contrato podría restringir direcciones específicas.'],
+ ['can_take_back_ownership','Recuperación de propiedad','0','El propietario podría recuperar privilegios administrativos.'],
+ ['is_proxy','Contrato proxy','0','La lógica del contrato podría actualizarse.']
+];
+function showMessage(title,message){report.replaceChildren();const h=document.createElement('h3');h.textContent=title;const p=document.createElement('p');p.className='muted';p.textContent=message;report.append(h,p);empty.classList.add('hidden');report.classList.remove('hidden');}
+analyzeButton.addEventListener('click',async()=>{
+ const address=addrInput.value.trim();
+ if(!/^0x[a-fA-F0-9]{40}$/.test(address)){showMessage('Dirección no válida','Introduce una dirección pública EVM de 42 caracteres que empiece por 0x. No introduzcas claves privadas.');return;}
+ analyzeButton.disabled=true;analyzeButton.textContent='Consultando datos reales…';
+ showMessage('Consultando GoPlus','Esperando respuesta del proveedor de indicadores de seguridad.');
+ const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),12000);
+ try{
+  const chain=endpointChains[netInput.value];
+  const url='https://api.gopluslabs.io/api/v1/token_security/'+chain+'?contract_addresses='+encodeURIComponent(address.toLowerCase());
+  const response=await fetch(url,{signal:controller.signal,headers:{'Accept':'application/json'}});
+  if(!response.ok)throw new Error('HTTP '+response.status);
+  const data=await response.json();
+  if(data.code!==1)throw new Error(data.message||'Respuesta no válida');
+  const token=data.result?.[address.toLowerCase()];
+  if(!token||typeof token!=='object'||Object.keys(token).length===0){showMessage('Sin datos disponibles','GoPlus no devolvió indicadores para este contrato en la red seleccionada. No significa que sea seguro.');return;}
+  report.replaceChildren();
+  const heading=document.createElement('h3');heading.textContent='Indicadores reales · GoPlus';report.append(heading);
+  const source=document.createElement('p');source.className='small muted';source.textContent='Red: '+netInput.value+' · Consulta: '+new Date().toLocaleString('es-ES')+' · Fuente: GoPlus Security API';report.append(source);
+  let reviewed=0;
+  for(const [key,label,preferred,explanation] of fields){
+   const value=token[key];
+   const block=document.createElement('div');block.className='stat';
+   const name=document.createElement('span');name.textContent=label;
+   const status=document.createElement('span');
+   if(value==='0'||value==='1'){reviewed++;status.textContent=value===preferred?'Sin señal detectada':'Revisar';status.className=value===preferred?'tag':'warn';}
+   else{status.textContent='Sin datos';status.className='muted';}
+   block.append(name,status);report.append(block);
+   if(value==='0'||value==='1'&&value!==preferred){const detail=document.createElement('p');detail.className='small muted';detail.textContent=explanation;report.append(detail);}
+  }
+  const note=document.createElement('p');note.className='notice';note.textContent='Se recibieron '+reviewed+' de '+fields.length+' indicadores. La ausencia de alertas no demuestra seguridad. Los resultados pueden ser incompletos o cambiar. No es una auditoría ni consejo financiero.';report.append(note);
+ }catch(e){showMessage('No se pudo completar la consulta','La API no respondió correctamente o el navegador bloqueó el acceso (CORS). Detalle: '+String(e.message||e)+'. No mostramos datos simulados como si fueran reales.');}
+ finally{clearTimeout(timeout);analyzeButton.disabled=false;analyzeButton.textContent='Analizar contrato real';}
 });
 </script>
 </body></html>
