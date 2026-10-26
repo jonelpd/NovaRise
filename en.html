@@ -12,12 +12,12 @@
 <header><div class="wrap nav"><a class="brand" href="#inicio">NovaRise<span>Analitica</span></a><nav class="links" aria-label="Navigation"><a href="#herramientas">Tools</a><a href="#analizador">Analyzer</a><a href="#planes">Plans</a><a href="#nvr">NVRA</a></nav><a href="index.html" lang="es" class="lang-switch" aria-label="Ver versión en español">ES</a><a class="btn" href="#analizador">Analyze token</a></div></header>
 <main><div class="wrap">
 <section id="inicio" class="hero"><div><div class="eyebrow">Crypto Companion · Initial prototype</div><h1>More clarity.<br><span class="accent">Fewer risks.</span></h1><p class="muted">Review contract indicators and explore holder and supply data with clear explanations of their limitations.</p><div class="actions"><a class="btn" href="#analizador">Explore analyzer</a><a class="btn outline" href="#herramientas">How it works</a></div><p class="small muted">We never request private keys or seed phrases. We do not provide financial advice.</p></div><div class="panel"><div class="eyebrow">Illustrative preview · Simulated data</div><h2>Risk overview</h2><div class="stat"><span>Verified contract</span><span class="tag">Example: Yes</span></div><div class="stat"><span>Minting permissions</span><span class="warn">Review</span></div><div class="stat"><span>Holder concentration</span><span class="warn">Not assessed</span></div><div class="stat"><span>Data source</span><span class="tag">Simulation</span></div><p class="notice">A favorable indicator does not guarantee that an asset is safe.</p></div></section>
-<section id="herramientas"><div class="eyebrow">Our vision</div><h2>Tools que explican, no confunden</h2><div class="grid"><article class="feature"><div class="num">01</div><h3>Analyzer de tokens</h3><p>Review technical indicators, holders and supply of public contracts through GoPlus Security.</p></article><article class="feature"><div class="num">02</div><h3>Risks in plain language</h3><p>Understand minting permissions, transfer restrictions and other risk signals.</p></article><article class="feature"><div class="num">03</div><h3>Practical guides</h3><p>Learn about networks, fees and security best practices without sharing credentials.</p></article></div></section>
-<section id="analizador"><div class="eyebrow">Experimental tool</div><h2>Analyzer de contratos</h2><p class="muted">This version retrieves EVM contract indicators from GoPlus. Results depend on provider availability and do not guarantee safety.</p><div class="analyzer"><div class="panel"><label for="network">Network</label><select id="network"><option>Ethereum</option><option>Polygon</option><option>BNB Smart Chain</option></select><label for="address">Public contract address (required)</label><input id="address" maxlength="42" autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="text" aria-describedby="address-help" placeholder="0x..."><p id="address-help" class="small muted">Do not enter passwords, private keys or seed phrases.</p><button id="analyze" class="btn full">Analyze live contract</button></div><div class="panel"><div id="empty"><h3>Your security report</h3><p class="muted">Enter a public EVM contract address to review available indicators.</p></div><div id="report" class="hidden" role="status" aria-live="polite" aria-atomic="false"></div></div></div></section>
+<section id="herramientas"><div class="eyebrow">Our vision</div><h2>Tools que explican, no confunden</h2><div class="grid"><article class="feature"><div class="num">01</div><h3>Analyzer of tokens</h3><p>Review technical indicators, holders and supply of public contracts through GoPlus Security.</p></article><article class="feature"><div class="num">02</div><h3>Risks in plain language</h3><p>Understand minting permissions, transfer restrictions and other risk signals.</p></article><article class="feature"><div class="num">03</div><h3>Practical guides</h3><p>Learn about networks, fees and security best practices without sharing credentials.</p></article></div></section>
+<section id="analizador"><div class="eyebrow">Experimental tool</div><h2>Analyzer of contratos</h2><p class="muted">This version retrieves EVM contract indicators from GoPlus. Results depend on provider availability and do not guarantee safety.</p><div class="analyzer"><div class="panel"><label for="network">Network</label><select id="network"><option>Ethereum</option><option>Polygon</option><option>BNB Smart Chain</option></select><label for="address">Public contract address (required)</label><input id="address" maxlength="42" autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="text" aria-describedby="address-help" placeholder="0x..."><p id="address-help" class="small muted">Do not enter passwords, private keys or seed phrases.</p><button id="analyze" class="btn full">Analyze live contract</button></div><div class="panel"><div id="empty"><h3>Your security report</h3><p class="muted">Enter a public EVM contract address to review available indicators.</p></div><div id="report" class="hidden" role="status" aria-live="polite" aria-atomic="false"></div></div></div></section>
 <section id="planes"><div class="eyebrow">Future model</div><h2>Simple access, real value</h2><div class="grid"><div class="feature"><h3>Free</h3><p>Educational guides and limited basic queries once the service is operational.</p></div><div class="feature"><h3>Premium</h3><p>History, alerts and expanded reports. Pricing has not yet been validated.</p></div><div class="feature"><h3>Business</h3><p>Potential integrations and API, subject to demand, feasibility and costs.</p></div></div></section>
 <section id="nvr"><div class="panel"><div class="eyebrow">NVRA token · Preliminary concept</div><h2>Utility first. A token later, if appropriate.</h2><p class="muted">NVRA is an idea under evaluation, not an issued token or investment offer. Its utility, technology and legal feasibility would be assessed after product validation. There is no presale, fundraising or promise of returns.</p></div></section>
 </div></main>
-<footer class="footer"><div class="wrap">© <span id="year"></span> NovaRiseAnalitica · Experimental tool con datos de terceros · La vista superior es ilustrativa · No es asesoramiento financiero.</div></footer>
+<footer class="footer"><div class="wrap">© <span id="year"></span> NovaRiseAnalitica · Experimental tool con datos of terceros · La vista superior es ilustrativa · No es asesoramiento financiero.</div></footer>
 <script>
 const addrInput=document.getElementById('address');
 const netInput=document.getElementById('network');
@@ -27,12 +27,12 @@ const analyzeButton=document.getElementById('analyze');
 const endpointChains={'Ethereum':'1','Polygon':'137','BNB Smart Chain':'56'};
 const dexChains={'Ethereum':'ethereum','Polygon':'polygon','BNB Smart Chain':'bsc'};
 const fields=[
- {key:'is_open_source',label:'Verified source code',good:'1',positive:'El proveedor indica que el código está publicado para revisión. Esto no equivale a una auditoría.',negative:'El proveedor no identifica el código como abierto/verificado; revisar antes de confiar.'},
- {key:'is_honeypot',label:'Possible sell restriction',good:'0',positive:'GoPlus no señala un patrón de bloqueo de ventas en este indicador. No garantiza que puedas vender.',negative:'GoPlus señala posible restricción de venta. Investiga antes de operar.'},
- {key:'is_mintable',label:'Additional token minting',good:'0',positive:'No se señala capacidad de emisión adicional en este indicador.',negative:'Podría existir capacidad de crear nuevos tokens y alterar su oferta.'},
- {key:'is_blacklisted',label:'Address blacklist',good:'0',positive:'No se señala una función de bloqueo por direcciones en este indicador.',negative:'El contrato podría bloquear direcciones concretas.'},
- {key:'can_take_back_ownership',label:'Ownership reclaim',good:'0',positive:'No se señala capacidad de recuperar privilegios administrativos en este indicador.',negative:'Podría existir capacidad de recuperar el control administrativo.'},
- {key:'is_proxy',label:'Proxy contract',good:'0',positive:'No se señala estructura proxy en este indicador.',negative:'Se señala una estructura proxy; su lógica podría modificarse, según permisos.'}
+ {key:'is_open_source',label:'Verified source code',good:'1',positive:'The provider reports publicly available source code. This is not equivalent to an audit.',negative:'The provider does not identify the source as open or verified; review before relying on it.'},
+ {key:'is_honeypot',label:'Possible sell restriction',good:'0',positive:'GoPlus does not flag a sell-blocking pattern for this indicator. This does not guarantee you can sell.',negative:'GoPlus flags a possible selling restriction. Investigate before trading.'},
+ {key:'is_mintable',label:'Additional token minting',good:'0',positive:'No additional minting capability is flagged for this indicator.',negative:'The contract may be able to mint additional tokens and change supply.'},
+ {key:'is_blacklisted',label:'Address blacklist',good:'0',positive:'No address-blacklisting capability is flagged for this indicator.',negative:'The contract may be able to blacklist specific addresses.'},
+ {key:'can_take_back_ownership',label:'Ownership reclaim',good:'0',positive:'No administrative ownership-reclaim capability is flagged for this indicator.',negative:'Administrative control may be reclaimable.'},
+ {key:'is_proxy',label:'Proxy contract',good:'0',positive:'No proxy structure is flagged for this indicator.',negative:'A proxy structure is flagged; its logic may be changeable depending on permissions.'}
 ];
 document.getElementById('year').textContent=new Date().getFullYear();
 let activeRequest=0;
@@ -69,7 +69,7 @@ function appendDashboard(token){
  const symbol=typeof token.token_symbol==='string'&&token.token_symbol.trim()?token.token_symbol.trim().slice(0,35):'No data';
  const name=typeof token.token_name==='string'&&token.token_name.trim()?token.token_name.trim().slice(0,65):'No data';
  dashboard.append(metricCard('Token',symbol,name));
- dashboard.append(metricCard('Titulares reportados',formatCount(token.holder_count),'Figure supplied by GoPlus; may be unavailable.'));
+ dashboard.append(metricCard('Reported holders',formatCount(token.holder_count),'Figure supplied by GoPlus; may be unavailable.'));
  const supply=safeNumber(token.total_supply);
  dashboard.append(metricCard('Suministro reportado',supply===null?'No data':new Intl.NumberFormat('es-ES',{maximumSignificantDigits:7}).format(supply),'Provider data; token units.'));
  const holders=Array.isArray(token.holders)?token.holders:[];
@@ -79,9 +79,9 @@ function appendDashboard(token){
  dashboard.append(metricCard('Top 10 address concentration',concentration===null||concentration>100.00001?'No data':concentration.toLocaleString('en-US',{maximumFractionDigits:2})+' %','Only when GoPlus provides 10 valid percentages; contracts may be included.'));
  const liquidity=safeNumber(token.lp_total_supply);
  dashboard.append(metricCard('LP token supply',liquidity===null?'No data':new Intl.NumberFormat('es-ES',{maximumSignificantDigits:7}).format(liquidity),'Not equivalent to USD liquidity and does not prove it is locked.'));
- dashboard.append(metricCard('Titulares LP reportados',formatCount(token.lp_holder_count),'Count reported by GoPlus, when available.'));
+ dashboard.append(metricCard('Reported LP holders',formatCount(token.lp_holder_count),'Count reported by GoPlus, when available.'));
  report.append(dashboard);
- report.append(element('p','small muted','Los datos de titulares proceden de GoPlus. Los precios y volúmenes DEX, si están disponibles, se muestran en una sección independiente. Ninguna fuente demuestra que la liquidez esté bloqueada.'));
+ report.append(element('p','small muted','Holder data comes from GoPlus. DEX prices and volumes, when available, are shown separately. Neither source proves liquidity is locked.'));
  if(holders.length){
   report.append(element('h4','section-title','Top holders (provider data)'));
   const wrap=element('div','table-wrap'),table=element('table','holders-table'),thead=element('thead'),tr=element('tr');
@@ -93,7 +93,7 @@ function appendDashboard(token){
    row.append(element('td','',address&&/^0x[a-fA-F0-9]{40}$/.test(address)?address.slice(0,8)+'…'+address.slice(-6):'No data'));
    const pct=percentage(h.percent);
    row.append(element('td','',pct===null?'No data':pct.toLocaleString('en-US',{maximumFractionDigits:3})+' %'));
-   row.append(element('td','',h.is_contract==='1'?'Sí':h.is_contract==='0'?'No':'No data'));
+   row.append(element('td','',h.is_contract==='1'?'Yes':h.is_contract==='0'?'No':'No data'));
    tbody.append(row);
   });
   table.append(tbody);wrap.append(table);report.append(wrap);
@@ -117,7 +117,7 @@ function appendMarket(pairs,address,network){
  summary.append(element('p','small muted','Highest reported USD-liquidity pair among the '+selected.length+' returned pairs. Figures are approximate, not market-wide aggregates.'));
  const grid=element('div','market-grid');
  grid.append(metricCard('USD price (queried token)',pricePair?usd(pricePair.priceUsd,8):'No data','Price from the most liquid pair where the queried token is the base asset; may differ from the main pair.'));
- grid.append(metricCard('Pair liquidity',usd(top.liquidity?.usd),'Liquidez estimada por DexScreener; no equivale a fondos bloqueados.'));
+ grid.append(metricCard('Pair liquidity',usd(top.liquidity?.usd),'Liquidity estimated by DexScreener; this does not mean funds are locked.'));
  grid.append(metricCard('Pair 24h volume',usd(top.volume?.h24),'Trading volume of this pair, not global volume.'));
  const priceChange=pricePair?.priceChange?.h24;
  const priceChangeNumber=priceChange===null||priceChange===undefined||priceChange===''?NaN:Number(priceChange);
@@ -188,14 +188,14 @@ function appendTechnicalIndicators(points,container){
  const panel=element('div','history-insights');
  panel.append(element('h5','','Educational technical indicators'));
  const sma7=simpleMovingAverage(points,7),sma14=simpleMovingAverage(points,14),rsi=relativeStrengthIndex(points,14);
- panel.append(element('p','',sma7===null?'Media móvil simple (7 intervalos): se requieren al menos 7 cierres.':'Simple moving average (7 intervals): '+usd(sma7,8)+'.'));
- panel.append(element('p','',sma14===null?'Media móvil simple (14 intervalos): se requieren al menos 14 cierres.':'Simple moving average (14 intervals): '+usd(sma14,8)+'.'));
+ panel.append(element('p','',sma7===null?'Simple moving average (7 intervals): at least 7 closing prices required.':'Simple moving average (7 intervals): '+usd(sma7,8)+'.'));
+ panel.append(element('p','',sma14===null?'Simple moving average (14 intervals): at least 14 closing prices required.':'Simple moving average (14 intervals): '+usd(sma14,8)+'.'));
  if(rsi===null)panel.append(element('p','muted','RSI (14): se requieren al menos 15 cierres consecutivos.'));
  else{
   const context=rsi>70?'traditionally called overbought territory':rsi<30?'traditionally called oversold territory':'zona intermedia';
   panel.append(element('p','','RSI (14): '+rsi.toLocaleString('en-US',{maximumFractionDigits:1})+' / 100, '+context+'. This does not imply an imminent trend reversal.'));
  }
- panel.append(element('p','small muted','Las medias son promedios de cierres; RSI calculado con ganancias y pérdidas simples de los últimos 14 cambios (no suavizado de Wilder). Cada intervalo equivale a una hora en 24 h y a un día en los demás periodos. Son indicadores descriptivos, no recomendaciones de inversión.'));
+ panel.append(element('p','small muted','Averages use closing prices; RSI uses simple gains and losses over the last 14 changes (not Wilder smoothing). Each interval is one hour in the 24h view and one day in other periods. These are descriptive indicators, not investment advice.'));
  container.append(panel);
 }
 function appendHistoryInterpretation(points,container){
@@ -204,9 +204,9 @@ function appendHistoryInterpretation(points,container){
  const panel=element('div','history-insights');
  panel.append(element('h5','','Educational period interpretation'));
  const trend=Math.abs(insight.change)<.5?'nearly flat':insight.change>0?'upward':'downward';
- panel.append(element('p','','Tendencia observada: '+trend+' ('+(insight.change>0?'+':'')+insight.change.toLocaleString('en-US',{maximumFractionDigits:2})+' % entre el primer y último cierre).'));
+ panel.append(element('p','','Tendencia observada: '+trend+' ('+(insight.change>0?'+':'')+insight.change.toLocaleString('en-US',{maximumFractionDigits:2})+'% between the first and last closing prices).'));
  panel.append(element('p','','Variation in interval-to-interval returns: '+insight.volatility.toLocaleString('en-US',{maximumFractionDigits:2})+' percentage points (descriptive standard deviation, not annualized).'));
- if(insight.volumeChange!==null)panel.append(element('p','','Average volume in the second half versus the first: '+(insight.volumeChange>0?'+':'')+insight.volumeChange.toLocaleString('en-US',{maximumFractionDigits:1})+' %. Esto no demuestra por sí solo presión compradora o vendedora.'));
+ if(insight.volumeChange!==null)panel.append(element('p','','Average volume in the second half versus the first: '+(insight.volumeChange>0?'+':'')+insight.volumeChange.toLocaleString('en-US',{maximumFractionDigits:1})+'%. This alone does not establish buying or selling pressure.'));
  else panel.append(element('p','muted','Insufficient comparable volume data to assess its trend.'));
  panel.append(element('p','small muted','Automated interpretation based only on '+insight.observations+' observations from the selected pool. Not a prediction, buy/sell signal or security assessment.'));
  container.append(panel);
@@ -248,7 +248,7 @@ async function appendHistoricalChart(pair,network,requestId){
  const controls=element('div','history-controls');
  const periodLabel=element('label','','Period');
  const periodSelect=element('select');periodSelect.setAttribute('aria-label','Chart period');
- for(const days of [1,7,30,90]){const opt=element('option','',days===1?'24 horas':days+' días');opt.value=String(days);periodSelect.append(opt);}
+ for(const days of [1,7,30,90]){const opt=element('option','',days===1?'24 hours':days+' days');opt.value=String(days);periodSelect.append(opt);}
  periodSelect.value=String(historyPeriod);
  periodSelect.addEventListener('change',()=>{historyPeriod=Number(periodSelect.value);if(requestId===activeRequest)appendHistoricalChart(pair,network,requestId);});
  const metricLabel=element('label','','Mostrar');
@@ -297,10 +297,10 @@ async function appendHistoricalChart(pair,network,requestId){
    reading.textContent=new Date(point.time*1000).toLocaleString('en-US',historyPeriod===1?{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}:{day:'2-digit',month:'2-digit',year:'numeric'})+' · Price: '+usd(point.close,8)+' · Volume: '+usd(point.volume,0);
   };
   slider.addEventListener('input',updateReading);updateReading();
-  inspector.append(element('strong','',historyPeriod===1?'Explorar valores horarios':'Explorar valores diarios'),reading,slider);
+  inspector.append(element('strong','',historyPeriod===1?'Explore hourly values':'Explore daily values'),reading,slider);
   inspector.append(element('p','small muted',historyPeriod===1?'Slide or use the keyboard arrow keys to explore each hour.':'Slide or use the keyboard arrow keys to explore each day.'));
   box.append(inspector);
-  box.append(element('p','small muted','Available data: '+new Date(available[0].time*1000).toLocaleDateString('en-US')+' a '+new Date(available[available.length-1].time*1000).toLocaleDateString('en-US')+' · '+available.length+(historyPeriod===1?' observaciones horarias.':' observaciones diarias.')+' Historical data does not predict future results.'));
+  box.append(element('p','small muted','Available data: '+new Date(available[0].time*1000).toLocaleDateString('en-US')+' a '+new Date(available[available.length-1].time*1000).toLocaleDateString('en-US')+' · '+available.length+(historyPeriod===1?' hourly observations.':' daily observations.')+' Historical data does not predict future results.'));
  }catch(e){if(requestId===activeRequest&&historyController===controller)box.append(element('p','muted','Historical data is temporarily unavailable for this pool. The security report remains independent.'));}
  finally{clearTimeout(timeout);if(historyController===controller)historyController=null;}
 }
@@ -340,7 +340,7 @@ analyzeButton.addEventListener('click',async()=>{
  analyzeButton.disabled=true;analyzeButton.textContent='Fetching live data…';
  showMessage('Consultando GoPlus','Waiting for the security indicator provider.');
  const network=netInput.value;
- if(!endpointChains[network]||!dexChains[network]){showMessage('Red no admitida','Select an available network.');analyzeButton.disabled=false;analyzeButton.textContent='Analyze live contract';return;}
+ if(!endpointChains[network]||!dexChains[network]){showMessage('Unsupported network','Select an available network.');analyzeButton.disabled=false;analyzeButton.textContent='Analyze live contract';return;}
  const controller=new AbortController();securityController=controller;const timeout=setTimeout(()=>controller.abort(),12000);
  try{
   const chain=endpointChains[network];
@@ -349,7 +349,7 @@ analyzeButton.addEventListener('click',async()=>{
   if(!response.ok)throw new Error('HTTP '+response.status);
   const data=await response.json();
   if(!data||typeof data!=='object')throw new Error('Empty response');
-  if(data.code!==1&&data.code!=='1')throw new Error(data.message||'Respuesta no válida');
+  if(data.code!==1&&data.code!=='1')throw new Error(data.message||'Invalid response');
   const providerResults=data.result&&typeof data.result==='object'&&!Array.isArray(data.result)?data.result:{};
   const token=providerResults[address.toLowerCase()]||Object.entries(providerResults).find(([key])=>key.toLowerCase()===address.toLowerCase())?.[1];
   if(requestId!==activeRequest)return;
@@ -371,7 +371,7 @@ analyzeButton.addEventListener('click',async()=>{
   const summary=element('div','summary'+(alerts?' alert':''));
   const title=alerts?'Attention: '+alerts+' indicator(s) to review':known===0?'Insufficient information':'No alerts in available indicators';
   summary.append(element('h4','',title));
-  summary.append(element('p','small muted',known+' de '+fields.length+' indicadores disponibles · '+unavailable+' sin datos. No se calcula una puntuación de seguridad.'));
+  summary.append(element('p','small muted',known+' of '+fields.length+' indicadores disponibles · '+unavailable+' sin datos. No se calcula una puntuación of seguridad.'));
   report.append(summary);
   appendDashboard(token);
   report.append(element('h4','section-title','Contract indicators'));
@@ -382,14 +382,14 @@ analyzeButton.addEventListener('click',async()=>{
    const label=element('strong','',field.label);
    const status=element('span','status '+state,state==='ok'?'No alert detected':state==='alert'?'Needs review':'Information unavailable');
    head.append(label,status);block.append(head);
-   const explanation=state==='ok'?field.positive:state==='alert'?field.negative:'GoPlus no facilitó un valor interpretable para este indicador. No se puede concluir que exista o no un riesgo.';
+   const explanation=state==='ok'?field.positive:state==='alert'?field.negative:'GoPlus did not provide an interpretable value for this indicator. No conclusion about risk can be drawn.';
    block.append(element('p','muted',explanation));
    report.append(block);
   }
   report.append(element('p','notice','Results depend on an external provider and may be incomplete or change. “No alert” does not mean “safe”. This is neither an audit nor financial advice.'));
   await appendMarketFromApi(address,network,requestId);
  }catch(e){
-  if(requestId===activeRequest){showMessage('Security data unavailable','No fue posible obtener información de GoPlus. Puede tratarse de un fallo temporal o de falta de cobertura. Esto no implica que el contrato sea seguro. Intentando consultar mercados DEX por separado…');await appendMarketFromApi(address,network,requestId);}
+  if(requestId===activeRequest){showMessage('Security data unavailable','No fue posible obtener información of GoPlus. Puede tratarse of un fallo temporal o of falta of cobertura. Esto no implica que el contrato sea seguro. Intentando consultar mercados DEX por separado…');await appendMarketFromApi(address,network,requestId);}
  }finally{
   clearTimeout(timeout);
   if(securityController===controller)securityController=null;
