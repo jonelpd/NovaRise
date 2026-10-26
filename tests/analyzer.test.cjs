@@ -62,6 +62,13 @@ check('relativeStrengthIndex(Array.from({length:15},(_,i)=>({close:i+1})),14)',1
 check('relativeStrengthIndex(Array.from({length:15},(_,i)=>({close:15-i})),14)',0);
 check('relativeStrengthIndex(Array.from({length:15},()=>({close:5})),14)',50);
 check('relativeStrengthIndex([{close:1},{close:2}],14)',null);
+check('advancedHistorySignals([{close:10,volume:100},{close:12,volume:200},{close:9,volume:300}]).maxDrawdown',25);
+check('advancedHistorySignals([{close:10,volume:100},{close:12,volume:null},{close:9,volume:300}]).volumeCoverage',200/3);
+check('advancedHistorySignals([{close:0},{close:2},{close:3}])',null);
+check('advancedHistorySignals([{close:2},{close:3}])',null);
+assert.match(script,/appendAdvancedHistoryInterpretation\(available,box\)/);
+assert.match(translations,/Expanded analysis: how to read the chart/);
+
 assert.match(script,/https:\/\/api\.dexscreener\.com\/token-pairs\/v1\//);
 assert.match(script,/https:\/\/api\.gopluslabs\.io\/api\/v1\/token_security\//);
 assert.match(html,/aria-live="polite"/);
