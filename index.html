@@ -36,6 +36,12 @@ const fields=[
 ];
 document.getElementById('year').textContent=new Date().getFullYear();
 let activeRequest=0;
+let securityController=null;
+let marketController=null;
+function cancelPending(){
+ if(securityController){securityController.abort();securityController=null;}
+ if(marketController){marketController.abort();marketController=null;}
+}
 function element(tag,cls,content){const e=document.createElement(tag);if(cls)e.className=cls;if(content!==undefined)e.textContent=content;return e;}
 function safeNumber(value){
  if(value===null||value===undefined||value==='')return null;
@@ -124,6 +130,7 @@ function appendMarket(pairs,address,network){
 }
 async function appendMarketFromApi(address,network,requestId){
  const controller=new AbortController();
+ marketController=controller;
  const timeout=setTimeout(()=>controller.abort(),10000);
  try{
   const url='https://api.dexscreener.com/token-pairs/v1/'+dexChains[network]+'/'+encodeURIComponent(address);
@@ -133,11 +140,12 @@ async function appendMarketFromApi(address,network,requestId){
   if(requestId===activeRequest){if(!Array.isArray(pairs))throw new Error('Formato inesperado');appendMarket(pairs,address,network);}
  }catch(e){
   if(requestId===activeRequest){report.append(element('h4','section-title','Mercados DEX · DexScreener'));report.append(element('p','muted','Datos de mercado no disponibles en este momento. El análisis de seguridad anterior sigue siendo independiente.'));}
- }finally{clearTimeout(timeout);}
+ }finally{clearTimeout(timeout);if(marketController===controller)marketController=null;}
 }
 function showMessage(title,message){report.replaceChildren();const h=document.createElement('h3');h.textContent=title;const p=document.createElement('p');p.className='muted';p.textContent=message;report.append(h,p);empty.classList.add('hidden');report.classList.remove('hidden');}
 function invalidateReport(){
  activeRequest++;
+ cancelPending();
  report.replaceChildren();
  report.classList.add('hidden');
  empty.classList.remove('hidden');
@@ -148,6 +156,7 @@ addrInput.addEventListener('input',invalidateReport);
 netInput.addEventListener('change',invalidateReport);
 analyzeButton.addEventListener('click',async()=>{
  const requestId=++activeRequest;
+ cancelPending();
  const address=addrInput.value.trim();
  if(!/^0x[a-fA-F0-9]{40}$/.test(address)){
   showMessage('Dirección no válida','Introduce una dirección pública EVM de 42 caracteres que empiece por 0x. No introduzcas claves privadas.');return;
@@ -155,7 +164,7 @@ analyzeButton.addEventListener('click',async()=>{
  analyzeButton.disabled=true;analyzeButton.textContent='Consultando datos reales…';
  showMessage('Consultando GoPlus','Esperando respuesta del proveedor de indicadores de seguridad.');
  const network=netInput.value;
- const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),12000);
+ const controller=new AbortController();securityController=controller;const timeout=setTimeout(()=>controller.abort(),12000);
  try{
   const chain=endpointChains[network];
   const url='https://api.gopluslabs.io/api/v1/token_security/'+chain+'?contract_addresses='+encodeURIComponent(address.toLowerCase());
@@ -205,6 +214,7 @@ analyzeButton.addEventListener('click',async()=>{
   if(requestId===activeRequest){showMessage('Datos de seguridad no disponibles','No fue posible consultar GoPlus. Detalle: '+String(e.message||e)+'. Esto no implica que el contrato sea seguro. Intentando consultar mercados DEX por separado…');await appendMarketFromApi(address,network,requestId);}
  }finally{
   clearTimeout(timeout);
+  if(securityController===controller)securityController=null;
   if(requestId===activeRequest){analyzeButton.disabled=false;analyzeButton.textContent='Analizar contrato real';}
  }
 });
