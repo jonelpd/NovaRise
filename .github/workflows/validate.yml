@@ -30,7 +30,8 @@ jobs:
               assert 'href="assets/site.css"' in page
               for identifier in ('network','address','analyze','report','empty','year'):
                   assert identifier in p.ids, f"Falta ID {identifier} en {language}"
-          assert 'api.gopluslabs.io' in html and 'api.dexscreener.com' in html
+          analyzer=Path('assets/analyzer.js').read_text(encoding='utf-8')
+          assert 'api.gopluslabs.io' in analyzer and 'api.dexscreener.com' in analyzer
           for language,page in [('es',html),('en',english)]:
               assert 'src="assets/locale-en.js"' in page
               assert 'src="assets/analyzer.js"' in page
