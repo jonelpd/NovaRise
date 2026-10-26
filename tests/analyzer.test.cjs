@@ -66,7 +66,7 @@ check('advancedHistorySignals([{close:10,volume:100},{close:12,volume:200},{clos
 check('advancedHistorySignals([{close:10,volume:100},{close:12,volume:null},{close:9,volume:300}]).volumeCoverage',200/3);
 check('advancedHistorySignals([{close:0},{close:2},{close:3}])',null);
 check('advancedHistorySignals([{close:2},{close:3}])',null);
-assert.match(script,/appendAdvancedHistoryInterpretation\(available,box\)/);
+assert.ok(script.includes('appendAdvancedHistoryInterpretation(available,box)'));
 assert.match(translations,/Expanded analysis: how to read the chart/);
 
 assert.match(script,/https:\/\/api\.dexscreener\.com\/token-pairs\/v1\//);
