@@ -30,4 +30,30 @@ const report=nodes.get('report');
 function allText(n){return [n.text||'',...(n.children||[]).flatMap(allText)].join(' ')}
 assert.match(allText(report),/Sin datos/,'No atribuir el precio del activo base al secundario');
 assert.match(allText(report),/Liquidez del par/);
-console.log('Pruebas unitarias de conversiones y par DEX: OK');
+async function scenario(name,api,expected){
+ nodes.get('address').value='0x1111111111111111111111111111111111111111';
+ nodes.get('network').value='Ethereum';
+ const calls=[];
+ context.fetch=async url=>{
+  calls.push(url);
+  if(url.includes('gopluslabs.io')){
+   if(api==='fail-security')throw Error('GoPlus offline');
+   if(api==='empty-security')return {ok:true,json:async()=>({code:1,result:{}})};
+   return {ok:true,json:async()=>({code:1,result:{'0x1111111111111111111111111111111111111111':{is_open_source:'1',is_honeypot:'0',holder_count:'12',holders:[]}}})};
+  }
+  if(api==='fail-market')throw Error('DexScreener offline');
+  return {ok:true,json:async()=>[{chainId:'ethereum',baseToken:{address:'0x1111111111111111111111111111111111111111',symbol:'TEST'},quoteToken:{address:'0x2222222222222222222222222222222222222222',symbol:'USD'},liquidity:{usd:1000},volume:{h24:100},priceUsd:'1'}]};
+ };
+ await handlers.get('analyze:click')();
+ const output=allText(nodes.get('report'));
+ assert.match(output,expected,name);
+ assert.equal(calls.length,2,name+' consulta ambas fuentes');
+ assert.equal(nodes.get('analyze').disabled,false,name+' desbloquea botón');
+}
+(async()=>{
+ await scenario('datos completos','ok',/Indicadores reales/);
+ await scenario('sin cobertura GoPlus','empty-security',/Mercados DEX/);
+ await scenario('GoPlus no disponible','fail-security',/Mercados DEX/);
+ await scenario('DexScreener no disponible','fail-market',/Datos de mercado no disponibles/);
+ console.log('Pruebas unitarias y 4 escenarios simulados: OK');
+})().catch(error=>{console.error(error);process.exitCode=1;});
