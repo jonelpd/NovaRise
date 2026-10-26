@@ -31,3 +31,4 @@ jobs:
           print('HTML, IDs y dependencias: OK')
           PY
           node --check /tmp/novarise.js
+          node tests/analyzer.test.cjs
