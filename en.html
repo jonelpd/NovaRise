@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="NovaRiseAnalitica Crypto Companion: learn to interpret crypto risks. Educational prototype.">
+<title>NovaRiseAnalitica | Clear crypto analysis</title>
+<style>
+:root{font-family:Inter,system-ui,sans-serif;color:#eafff5;background:#071a17}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse at 80% 0,#174c40,transparent 45%),#071a17}a{color:inherit;text-decoration:none}button,input,select{font:inherit}.wrap{max-width:1120px;margin:auto;padding:0 24px}header{position:sticky;top:0;background:#081d19f0;border-bottom:1px solid #31554d;z-index:2}.nav{display:flex;align-items:center;justify-content:space-between;gap:24px;min-height:72px}.brand{font-size:clamp(17px,2.4vw,25px);font-weight:850;letter-spacing:-.8px;overflow-wrap:anywhere}.brand span,.accent{color:#6ce9bb}.links{display:flex;gap:22px;font-size:14px;color:#c4dfd5}.btn{display:inline-block;background:#6ce9bb;color:#06221a;padding:13px 21px;border-radius:999px;border:0;font-weight:750;cursor:pointer}.btn.outline{background:transparent;color:#eafff5;border:1px solid #4d8d7a}.hero{display:grid;grid-template-columns:1.15fr .85fr;align-items:center;gap:48px;padding:110px 0 70px}.eyebrow{color:#84e8c5;text-transform:uppercase;font-weight:800;letter-spacing:2px;font-size:12px}h1{font-size:clamp(42px,6vw,76px);line-height:1.05;letter-spacing:-3px;margin:20px 0}h2{font-size:clamp(30px,4vw,45px);letter-spacing:-1.5px}p{line-height:1.7}.muted{color:#b1ccc3}.actions{display:flex;gap:12px;flex-wrap:wrap;margin:26px 0}.panel,.feature{background:#102b25;border:1px solid #315c50;border-radius:22px;padding:26px}.panel{box-shadow:0 20px 65px #0004}.stat{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid #31564b;padding:16px 0}.stat:last-child{border:0}.market-card{background:#0a241e;border:1px solid #376456;border-radius:16px;padding:16px;margin:16px 0}.market-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.market-grid .metric{margin:0}.market-pair{padding:12px 0;border-bottom:1px solid #31564b}.market-pair:last-child{border-bottom:0}.market-pair a{color:#91eec7;text-decoration:underline}.market-pair small{display:block;color:#b1ccc3;margin-top:6px}@media(max-width:420px){.market-grid{grid-template-columns:1fr}}.dashboard{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:18px 0}.metric{border:1px solid #376456;background:#0a241e;border-radius:14px;padding:15px;min-width:0}.metric small{display:block;color:#b1ccc3;margin-bottom:9px}.metric strong{font-size:clamp(15px,3vw,22px);overflow-wrap:anywhere}.metric em{display:block;font-size:11px;color:#adc7bd;font-style:normal;margin-top:8px}.section-title{font-size:19px;margin:26px 0 10px}.table-wrap{overflow-x:auto}.holders-table{width:100%;border-collapse:collapse;font-size:12px}.holders-table th,.holders-table td{padding:10px 7px;border-bottom:1px solid #31564b;text-align:left}.holders-table td{overflow-wrap:anywhere}.holders-table th{color:#b1ccc3}.subtle-link{color:#91eec7;text-decoration:underline;text-underline-offset:3px}@media(max-width:380px){.dashboard{grid-template-columns:1fr}}.indicator{padding:15px 0;border-bottom:1px solid #31564b}.indicator-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}.indicator-head strong{min-width:0;overflow-wrap:anywhere}.status{display:inline-block;flex-shrink:0;max-width:46%;text-align:center;border-radius:13px;padding:7px 10px;font-size:12px;line-height:1.4;font-weight:700}.status.ok{background:#214a3b;color:#a5f2cb}.status.alert{background:#51382c;color:#ffd5a6}.status.unknown{background:#30413f;color:#d0dcd8}.indicator p{font-size:13px;line-height:1.55;margin:10px 0 0}.summary{border:1px solid #477b69;border-radius:15px;padding:16px;margin:18px 0;background:#173a30}.summary.alert{border-color:#93613b;background:#302b22}.summary h4{margin:0 0 6px}.summary p{margin:0}.break-address{overflow-wrap:anywhere}@media(max-width:480px){.indicator-head{flex-direction:column;gap:8px}.status{max-width:100%}}.tag{background:#25483c;border-radius:100px;padding:5px 11px;color:#9ff1cd;font-size:12px}.warn{color:#ffdb91}.small{font-size:13px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.feature p{color:#b1ccc3}.num{font-size:26px;color:#6ce9bb;font-weight:850}section{padding:62px 0}.analyzer{display:grid;grid-template-columns:1fr 1fr;gap:20px}label{display:block;margin:16px 0 8px}input,select{width:100%;background:#081c18;color:white;border:1px solid #4b7b6c;border-radius:12px;padding:14px}.full{width:100%;margin-top:20px}.hidden{display:none}.risk{border:1px solid #806e43;background:#2a3025;border-radius:13px;padding:14px}.notice{font-size:13px;color:#e1bd82}a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #a5f2cb;outline-offset:3px}button:disabled{opacity:.65;cursor:wait}section[id]{scroll-margin-top:130px}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}.history-chart{width:100%;height:auto;display:block;overflow:visible}.history-chart text{fill:#b1ccc3;font-size:12px}.history-chart .line{fill:none;stroke:#6ce9bb;stroke-width:3;stroke-linejoin:round;stroke-linecap:round}.history-chart .axis{stroke:#4b7b6c;stroke-width:1}.history-panel{margin-top:20px}.history-controls{display:flex;flex-wrap:wrap;gap:12px;margin:12px 0 20px}.history-controls label{flex:1 1 140px;margin:0;font-size:13px;color:#b1ccc3}.history-controls select{margin-top:6px}.history-summary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:14px 0}.history-insights{padding:15px;border:1px solid #376456;border-radius:14px;background:#102b25;margin:15px 0}.history-insights h5{margin:0 0 10px;font-size:17px}.history-insights p{margin:8px 0}.history-inspector{padding:12px 14px;border:1px solid #376456;border-radius:12px;margin:12px 0;background:#0a241e}.history-inspector input{width:100%;accent-color:#6ce9bb;margin-top:12px}.history-comparison{display:grid;gap:18px}.history-comparison h5{margin:10px 0;font-size:15px}@media(max-width:420px){.history-summary{grid-template-columns:1fr}}.footer{padding:35px 0;border-top:1px solid #31554d;color:#b1ccc3;font-size:13px}@media(max-width:780px){.hero,.analyzer,.grid{grid-template-columns:1fr}.hero{padding:60px 0 20px}.nav{flex-wrap:wrap;gap:8px;padding-top:12px;padding-bottom:12px}.links{display:flex;order:3;flex-basis:100%;overflow-x:auto;gap:18px;white-space:nowrap;padding:7px 0 3px;scrollbar-width:thin}.nav>.btn{padding:10px 14px;font-size:13px}.panel,.feature{padding:21px}section{padding:44px 0}}@media(min-width:781px){.analyzer{grid-template-columns:minmax(280px,.78fr) minmax(0,1.22fr)}}@media(max-width:480px){.wrap{padding:0 16px}.brand{font-size:19px}.hero{padding-top:36px}h1{letter-spacing:-1.5px}.stat{flex-wrap:wrap}.stat span{overflow-wrap:anywhere}}
+.lang-switch{font-size:13px;font-weight:700;color:#6ce9bb;border:1px solid #4d8d7a;padding:8px 11px;border-radius:10px;white-space:nowrap}</style>
+</head>
+<body>
+<header><div class="wrap nav"><a class="brand" href="#inicio">NovaRise<span>Analitica</span></a><nav class="links" aria-label="Navigation"><a href="#herramientas">Tools</a><a href="#analizador">Analyzer</a><a href="#planes">Plans</a><a href="#nvr">NVRA</a></nav><a href="index.html" lang="es" class="lang-switch" aria-label="Ver versión en español">ES</a><a class="btn" href="#analizador">Analyze token</a></div></header>
+<main><div class="wrap">
+<section id="inicio" class="hero"><div><div class="eyebrow">Crypto Companion · Initial prototype</div><h1>More clarity.<br><span class="accent">Fewer risks.</span></h1><p class="muted">Review contract indicators and explore holder and supply data with clear explanations of their limitations.</p><div class="actions"><a class="btn" href="#analizador">Explore analyzer</a><a class="btn outline" href="#herramientas">How it works</a></div><p class="small muted">We never request private keys or seed phrases. We do not provide financial advice.</p></div><div class="panel"><div class="eyebrow">Illustrative preview · Simulated data</div><h2>Risk overview</h2><div class="stat"><span>Verified contract</span><span class="tag">Example: Yes</span></div><div class="stat"><span>Minting permissions</span><span class="warn">Review</span></div><div class="stat"><span>Holder concentration</span><span class="warn">Not assessed</span></div><div class="stat"><span>Data source</span><span class="tag">Simulation</span></div><p class="notice">A favorable indicator does not guarantee that an asset is safe.</p></div></section>
+<section id="herramientas"><div class="eyebrow">Our vision</div><h2>Tools que explican, no confunden</h2><div class="grid"><article class="feature"><div class="num">01</div><h3>Analyzer de tokens</h3><p>Review technical indicators, holders and supply of public contracts through GoPlus Security.</p></article><article class="feature"><div class="num">02</div><h3>Risks in plain language</h3><p>Understand minting permissions, transfer restrictions and other risk signals.</p></article><article class="feature"><div class="num">03</div><h3>Practical guides</h3><p>Learn about networks, fees and security best practices without sharing credentials.</p></article></div></section>
+<section id="analizador"><div class="eyebrow">Experimental tool</div><h2>Analyzer de contratos</h2><p class="muted">This version retrieves EVM contract indicators from GoPlus. Results depend on provider availability and do not guarantee safety.</p><div class="analyzer"><div class="panel"><label for="network">Network</label><select id="network"><option>Ethereum</option><option>Polygon</option><option>BNB Smart Chain</option></select><label for="address">Public contract address (required)</label><input id="address" maxlength="42" autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="text" aria-describedby="address-help" placeholder="0x..."><p id="address-help" class="small muted">Do not enter passwords, private keys or seed phrases.</p><button id="analyze" class="btn full">Analyze live contract</button></div><div class="panel"><div id="empty"><h3>Your security report</h3><p class="muted">Enter a public EVM contract address to review available indicators.</p></div><div id="report" class="hidden" role="status" aria-live="polite" aria-atomic="false"></div></div></div></section>
+<section id="planes"><div class="eyebrow">Future model</div><h2>Simple access, real value</h2><div class="grid"><div class="feature"><h3>Free</h3><p>Educational guides and limited basic queries once the service is operational.</p></div><div class="feature"><h3>Premium</h3><p>History, alerts and expanded reports. Pricing has not yet been validated.</p></div><div class="feature"><h3>Business</h3><p>Potential integrations and API, subject to demand, feasibility and costs.</p></div></div></section>
+<section id="nvr"><div class="panel"><div class="eyebrow">NVRA token · Preliminary concept</div><h2>Utility first. A token later, if appropriate.</h2><p class="muted">NVRA is an idea under evaluation, not an issued token or investment offer. Its utility, technology and legal feasibility would be assessed after product validation. There is no presale, fundraising or promise of returns.</p></div></section>
+</div></main>
+<footer class="footer"><div class="wrap">© <span id="year"></span> NovaRiseAnalitica · Experimental tool con datos de terceros · La vista superior es ilustrativa · No es asesoramiento financiero.</div></footer>
+<script>
+const addrInput=document.getElementById('address');
+const netInput=document.getElementById('network');
+const report=document.getElementById('report');
+const empty=document.getElementById('empty');
+const analyzeButton=document.getElementById('analyze');
+const endpointChains={'Ethereum':'1','Polygon':'137','BNB Smart Chain':'56'};
+const dexChains={'Ethereum':'ethereum','Polygon':'polygon','BNB Smart Chain':'bsc'};
+const fields=[
+ {key:'is_open_source',label:'Verified source code',good:'1',positive:'El proveedor indica que el código está publicado para revisión. Esto no equivale a una auditoría.',negative:'El proveedor no identifica el código como abierto/verificado; revisar antes de confiar.'},
+ {key:'is_honeypot',label:'Possible sell restriction',good:'0',positive:'GoPlus no señala un patrón de bloqueo de ventas en este indicador. No garantiza que puedas vender.',negative:'GoPlus señala posible restricción de venta. Investiga antes de operar.'},
+ {key:'is_mintable',label:'Additional token minting',good:'0',positive:'No se señala capacidad de emisión adicional en este indicador.',negative:'Podría existir capacidad de crear nuevos tokens y alterar su oferta.'},
+ {key:'is_blacklisted',label:'Address blacklist',good:'0',positive:'No se señala una función de bloqueo por direcciones en este indicador.',negative:'El contrato podría bloquear direcciones concretas.'},
+ {key:'can_take_back_ownership',label:'Ownership reclaim',good:'0',positive:'No se señala capacidad de recuperar privilegios administrativos en este indicador.',negative:'Podría existir capacidad de recuperar el control administrativo.'},
+ {key:'is_proxy',label:'Proxy contract',good:'0',positive:'No se señala estructura proxy en este indicador.',negative:'Se señala una estructura proxy; su lógica podría modificarse, según permisos.'}
+];
+document.getElementById('year').textContent=new Date().getFullYear();
+let activeRequest=0;
+let securityController=null;
+let marketController=null;
+let historyController=null;
+const geckoChains={'Ethereum':'eth','Polygon':'polygon_pos','BNB Smart Chain':'bsc'};
+let historyPeriod=30;
+let historyMetric='price';
+let lastHistoricalPair=null;
+let lastHistoricalNetwork=null;
+let lastHistoricalRequest=null;
+function cancelPending(){
+ if(securityController){securityController.abort();securityController=null;}
+ if(marketController){marketController.abort();marketController=null;}
+ if(historyController){historyController.abort();historyController=null;}
+}
+function element(tag,cls,content){const e=document.createElement(tag);if(cls)e.className=cls;if(content!==undefined)e.textContent=content;return e;}
+function safeNumber(value){
+ if(value===null||value===undefined||value===''||typeof value==='boolean'||typeof value==='object')return null;
+ const n=Number(value);return Number.isFinite(n)&&n>=0?n:null;
+}
+function metricCard(label,value,note){
+ const card=element('div','metric');card.append(element('small','',label),element('strong','',value),element('em','',note));return card;
+}
+function formatCount(value){const n=safeNumber(value);return n===null?'No data':new Intl.NumberFormat('es-ES',{maximumFractionDigits:0}).format(n);}
+function percentage(value){
+ const n=safeNumber(value);
+ return n===null||n>1?null:n*100;
+}
+function appendDashboard(token){
+ report.append(element('h4','section-title','Market and holders dashboard'));
+ const dashboard=element('div','dashboard');
+ const symbol=typeof token.token_symbol==='string'&&token.token_symbol.trim()?token.token_symbol.trim().slice(0,35):'No data';
+ const name=typeof token.token_name==='string'&&token.token_name.trim()?token.token_name.trim().slice(0,65):'No data';
+ dashboard.append(metricCard('Token',symbol,name));
+ dashboard.append(metricCard('Titulares reportados',formatCount(token.holder_count),'Figure supplied by GoPlus; may be unavailable.'));
+ const supply=safeNumber(token.total_supply);
+ dashboard.append(metricCard('Suministro reportado',supply===null?'No data':new Intl.NumberFormat('es-ES',{maximumSignificantDigits:7}).format(supply),'Provider data; token units.'));
+ const holders=Array.isArray(token.holders)?token.holders:[];
+ const shares=holders.map(h=>percentage(h&&h.percent));
+ const completeTop10=holders.length>=10&&shares.slice(0,10).every(n=>n!==null);
+ const concentration=completeTop10?shares.slice(0,10).reduce((a,b)=>a+b,0):null;
+ dashboard.append(metricCard('Top 10 address concentration',concentration===null||concentration>100.00001?'No data':concentration.toLocaleString('en-US',{maximumFractionDigits:2})+' %','Only when GoPlus provides 10 valid percentages; contracts may be included.'));
+ const liquidity=safeNumber(token.lp_total_supply);
+ dashboard.append(metricCard('LP token supply',liquidity===null?'No data':new Intl.NumberFormat('es-ES',{maximumSignificantDigits:7}).format(liquidity),'Not equivalent to USD liquidity and does not prove it is locked.'));
+ dashboard.append(metricCard('Titulares LP reportados',formatCount(token.lp_holder_count),'Count reported by GoPlus, when available.'));
+ report.append(dashboard);
+ report.append(element('p','small muted','Los datos de titulares proceden de GoPlus. Los precios y volúmenes DEX, si están disponibles, se muestran en una sección independiente. Ninguna fuente demuestra que la liquidez esté bloqueada.'));
+ if(holders.length){
+  report.append(element('h4','section-title','Top holders (provider data)'));
+  const wrap=element('div','table-wrap'),table=element('table','holders-table'),thead=element('thead'),tr=element('tr');
+  ['Address','Share','Contract'].forEach(t=>tr.append(element('th','',t)));thead.append(tr);table.append(thead);
+  const tbody=element('tbody');
+  holders.slice(0,10).forEach(h=>{
+   if(!h||typeof h!=='object')return;
+   const row=element('tr'),address=typeof h.address==='string'?h.address:'';
+   row.append(element('td','',address&&/^0x[a-fA-F0-9]{40}$/.test(address)?address.slice(0,8)+'…'+address.slice(-6):'No data'));
+   const pct=percentage(h.percent);
+   row.append(element('td','',pct===null?'No data':pct.toLocaleString('en-US',{maximumFractionDigits:3})+' %'));
+   row.append(element('td','',h.is_contract==='1'?'Sí':h.is_contract==='0'?'No':'No data'));
+   tbody.append(row);
+  });
+  table.append(tbody);wrap.append(table);report.append(wrap);
+  report.append(element('p','small muted','Contract and pool addresses may hold large shares without representing one person. This is not a measure of unique owners.'));
+ }
+}
+function usd(value,digits=2){
+ const n=safeNumber(value);
+ return n===null?'No data':new Intl.NumberFormat('es-ES',{style:'currency',currency:'USD',maximumFractionDigits:digits}).format(n);
+}
+function appendMarket(pairs,address,network){
+ report.append(element('h4','section-title','Mercados DEX · DexScreener'));
+ const selected=pairs.filter(p=>p&&typeof p==='object'&&!Array.isArray(p)&&p.chainId===dexChains[network]&&
+   [p.baseToken?.address,p.quoteToken?.address].some(a=>typeof a==='string'&&a.toLowerCase()===address.toLowerCase()));
+ if(!selected.length){report.append(element('p','muted','No DEX pairs were found for this contract on the selected network. It may trade on other markets.'));return;}
+ selected.sort((a,b)=>(safeNumber(b.liquidity?.usd)||0)-(safeNumber(a.liquidity?.usd)||0));
+ const top=selected[0];
+ const basePairs=selected.filter(p=>typeof p.baseToken?.address==='string'&&p.baseToken.address.toLowerCase()===address.toLowerCase());
+ const pricePair=basePairs[0];
+ const summary=element('div','market-card');
+ summary.append(element('p','small muted','Highest reported USD-liquidity pair among the '+selected.length+' returned pairs. Figures are approximate, not market-wide aggregates.'));
+ const grid=element('div','market-grid');
+ grid.append(metricCard('USD price (queried token)',pricePair?usd(pricePair.priceUsd,8):'No data','Price from the most liquid pair where the queried token is the base asset; may differ from the main pair.'));
+ grid.append(metricCard('Pair liquidity',usd(top.liquidity?.usd),'Liquidez estimada por DexScreener; no equivale a fondos bloqueados.'));
+ grid.append(metricCard('Pair 24h volume',usd(top.volume?.h24),'Trading volume of this pair, not global volume.'));
+ const priceChange=pricePair?.priceChange?.h24;
+ const priceChangeNumber=priceChange===null||priceChange===undefined||priceChange===''?NaN:Number(priceChange);
+ grid.append(metricCard('Token 24h change',Number.isFinite(priceChangeNumber)?priceChangeNumber.toLocaleString('en-US',{maximumFractionDigits:2})+' %':'No data','Base asset change from the same pair used for the price.'));
+ summary.append(grid);report.append(summary);
+ report.append(element('h4','section-title','Pares DEX destacados'));
+ for(const pair of selected.slice(0,5)){
+  const block=element('div','market-pair');
+  const title=element('strong','',(pair.baseToken?.symbol||'?')+' / '+(pair.quoteToken?.symbol||'?')+' · '+String(pair.dexId||'DEX'));
+  block.append(title);
+  block.append(element('small','','Liquidez: '+usd(pair.liquidity?.usd)+' · 24h volume: '+usd(pair.volume?.h24)));
+  if(typeof pair.url==='string'&&/^https:\/\/dexscreener\.com\//.test(pair.url)){
+   const link=element('a','','Ver par en DexScreener');link.href=pair.url;link.target='_blank';link.rel='noopener noreferrer';block.append(link);
+  }
+  report.append(block);
+ }
+ report.append(element('p','notice','Third-party DEX data may be delayed or incomplete. Liquidity and volume can change rapidly. Pairs are not added together to avoid misleading conclusions.'));
+}
+function historicalPoints(payload){
+ const raw=payload?.data?.attributes?.ohlcv_list;
+ if(!Array.isArray(raw))return [];
+ const unique=new Map();
+ for(const row of raw){
+  if(!Array.isArray(row)||row.length<6)continue;
+  const time=Number(row[0]),close=safeNumber(row[4]),volume=safeNumber(row[5]);
+  if(!Number.isFinite(time)||time<=0||close===null)continue;
+  unique.set(time,{time,close,volume});
+ }
+ return [...unique.values()].sort((a,b)=>a.time-b.time);
+}
+function interpretHistory(points){
+ if(!Array.isArray(points)||points.length<3)return null;
+ const first=points[0].close,last=points[points.length-1].close;
+ if(!Number.isFinite(first)||first<=0||!Number.isFinite(last))return null;
+ const change=(last/first-1)*100;
+ const returns=[];
+ for(let i=1;i<points.length;i++)if(points[i-1].close>0&&points[i].close>=0)returns.push((points[i].close/points[i-1].close-1)*100);
+ const mean=returns.reduce((a,b)=>a+b,0)/returns.length;
+ const volatility=Math.sqrt(returns.reduce((a,b)=>a+(b-mean)**2,0)/returns.length);
+ const validVolumes=points.filter(p=>p.volume!==null);
+ const half=Math.floor(validVolumes.length/2);
+ let volumeChange=null;
+ if(half>=2){
+  const earlier=validVolumes.slice(0,half).reduce((a,p)=>a+p.volume,0)/half;
+  const later=validVolumes.slice(-half).reduce((a,p)=>a+p.volume,0)/half;
+  if(earlier>0)volumeChange=(later/earlier-1)*100;
+ }
+ return {change,volatility,volumeChange,observations:points.length};
+}
+function simpleMovingAverage(points,period){
+ if(!Array.isArray(points)||points.length<period||period<1)return null;
+ const window=points.slice(-period).map(p=>p.close);
+ if(window.some(v=>!Number.isFinite(v)))return null;
+ return window.reduce((a,b)=>a+b,0)/period;
+}
+function relativeStrengthIndex(points,period=14){
+ if(!Array.isArray(points)||points.length<period+1)return null;
+ const closes=points.slice(-(period+1)).map(p=>p.close);
+ if(closes.some(v=>!Number.isFinite(v)||v<0))return null;
+ let gains=0,losses=0;
+ for(let i=1;i<closes.length;i++){const delta=closes[i]-closes[i-1];if(delta>0)gains+=delta;else losses-=delta;}
+ if(losses===0)return gains===0?50:100;
+ if(gains===0)return 0;
+ const rs=gains/losses;
+ return 100-100/(1+rs);
+}
+function appendTechnicalIndicators(points,container){
+ const panel=element('div','history-insights');
+ panel.append(element('h5','','Educational technical indicators'));
+ const sma7=simpleMovingAverage(points,7),sma14=simpleMovingAverage(points,14),rsi=relativeStrengthIndex(points,14);
+ panel.append(element('p','',sma7===null?'Media móvil simple (7 intervalos): se requieren al menos 7 cierres.':'Simple moving average (7 intervals): '+usd(sma7,8)+'.'));
+ panel.append(element('p','',sma14===null?'Media móvil simple (14 intervalos): se requieren al menos 14 cierres.':'Simple moving average (14 intervals): '+usd(sma14,8)+'.'));
+ if(rsi===null)panel.append(element('p','muted','RSI (14): se requieren al menos 15 cierres consecutivos.'));
+ else{
+  const context=rsi>70?'traditionally called overbought territory':rsi<30?'traditionally called oversold territory':'zona intermedia';
+  panel.append(element('p','','RSI (14): '+rsi.toLocaleString('en-US',{maximumFractionDigits:1})+' / 100, '+context+'. This does not imply an imminent trend reversal.'));
+ }
+ panel.append(element('p','small muted','Las medias son promedios de cierres; RSI calculado con ganancias y pérdidas simples de los últimos 14 cambios (no suavizado de Wilder). Cada intervalo equivale a una hora en 24 h y a un día en los demás periodos. Son indicadores descriptivos, no recomendaciones de inversión.'));
+ container.append(panel);
+}
+function appendHistoryInterpretation(points,container){
+ const insight=interpretHistory(points);
+ if(!insight){container.append(element('p','muted','Insufficient data to interpret the trend.'));return;}
+ const panel=element('div','history-insights');
+ panel.append(element('h5','','Educational period interpretation'));
+ const trend=Math.abs(insight.change)<.5?'nearly flat':insight.change>0?'upward':'downward';
+ panel.append(element('p','','Tendencia observada: '+trend+' ('+(insight.change>0?'+':'')+insight.change.toLocaleString('en-US',{maximumFractionDigits:2})+' % entre el primer y último cierre).'));
+ panel.append(element('p','','Variation in interval-to-interval returns: '+insight.volatility.toLocaleString('en-US',{maximumFractionDigits:2})+' percentage points (descriptive standard deviation, not annualized).'));
+ if(insight.volumeChange!==null)panel.append(element('p','','Average volume in the second half versus the first: '+(insight.volumeChange>0?'+':'')+insight.volumeChange.toLocaleString('en-US',{maximumFractionDigits:1})+' %. Esto no demuestra por sí solo presión compradora o vendedora.'));
+ else panel.append(element('p','muted','Insufficient comparable volume data to assess its trend.'));
+ panel.append(element('p','small muted','Automated interpretation based only on '+insight.observations+' observations from the selected pool. Not a prediction, buy/sell signal or security assessment.'));
+ container.append(panel);
+}
+function drawHistoricalChart(points,container,metric,showAverages=false){
+ const width=640,height=245,left=75,right=20,top=20,bottom=43;
+ const averages=showAverages&&metric==='close'?[7,14].map(period=>({period,values:points.map((_,i)=>i+1>=period?simpleMovingAverage(points.slice(0,i+1),period):null)})):[];
+ const values=points.map(p=>p[metric]).concat(...averages.map(a=>a.values.filter(v=>v!==null))),lo=Math.min(...values),hi=Math.max(...values);
+ const span=hi-lo||Math.max(hi*.02,0.00000001);
+ const min=metric==='volume'?0:Math.max(0,lo-span*.1),max=hi+span*.1;
+ const x=i=>left+i*(width-left-right)/Math.max(1,points.length-1);
+ const y=v=>top+(max-v)/(max-min)*(height-top-bottom);
+ const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+ svg.setAttribute('viewBox','0 0 '+width+' '+height);svg.setAttribute('class','history-chart');
+ svg.setAttribute('role','img');svg.setAttribute('aria-label',metric==='volume'?'Historical pool volume in USD':'Historical base-asset closing price in USD');
+ function svgEl(tag,attrs,content){const n=document.createElementNS('http://www.w3.org/2000/svg',tag);for(const [k,v] of Object.entries(attrs))n.setAttribute(k,String(v));if(content!==undefined)n.textContent=content;svg.append(n);return n;}
+ for(let i=0;i<3;i++){const v=min+(max-min)*i/2;const yy=y(v);svgEl('line',{x1:left,y1:yy,x2:width-right,y2:yy,class:'axis'});svgEl('text',{x:5,y:yy+4},usd(v,metric==='volume'?0:6));}
+ if(metric==='volume'){
+  const barWidth=Math.max(2,(width-left-right)/points.length*.72);
+  points.forEach((p,i)=>svgEl('rect',{x:x(i)-barWidth/2,y:y(p.volume),width:barWidth,height:Math.max(1,height-bottom-y(p.volume)),fill:'#6ce9bb'}));
+ }else{
+  svgEl('path',{d:points.map((p,i)=>(i?'L':'M')+x(i).toFixed(2)+','+y(p.close).toFixed(2)).join(' '),class:'line'});
+  for(const average of averages){
+   const segments=average.values.map((v,i)=>v===null?null:{i,v}).filter(Boolean);
+   if(segments.length<2)continue;
+   svgEl('path',{d:segments.map((p,i)=>(i?'L':'M')+x(p.i).toFixed(2)+','+y(p.v).toFixed(2)).join(' '),fill:'none',stroke:average.period===7?'#ffd166':'#8ba7ff','stroke-width':2.4,'stroke-dasharray':average.period===14?'7 4':'none'});
+  }
+ }
+ for(const i of [0,points.length-1])svgEl('text',{x:x(i),y:height-12,'text-anchor':i?'end':'start'},historyPeriod===1?new Date(points[i].time*1000).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}):new Date(points[i].time*1000).toLocaleDateString('en-US',{day:'2-digit',month:'short'}));
+ container.append(svg);
+}
+async function appendHistoricalChart(pair,network,requestId){
+ lastHistoricalPair=pair;lastHistoricalNetwork=network;lastHistoricalRequest=requestId;
+ const previous=document.getElementById('historical-chart');
+ if(previous)previous.remove();
+ const box=element('div','market-card history-panel');box.id='historical-chart';
+ box.append(element('h4','section-title','DEX history · GeckoTerminal'));
+ report.append(box);
+ const controls=element('div','history-controls');
+ const periodLabel=element('label','','Period');
+ const periodSelect=element('select');periodSelect.setAttribute('aria-label','Chart period');
+ for(const days of [1,7,30,90]){const opt=element('option','',days===1?'24 horas':days+' días');opt.value=String(days);periodSelect.append(opt);}
+ periodSelect.value=String(historyPeriod);
+ periodSelect.addEventListener('change',()=>{historyPeriod=Number(periodSelect.value);if(requestId===activeRequest)appendHistoricalChart(pair,network,requestId);});
+ const metricLabel=element('label','','Mostrar');
+ const metricSelect=element('select');metricSelect.setAttribute('aria-label','Chart metric');
+ for(const [value,label] of [['price','Closing price'],['volume','Volume per interval'],['both','Compare price and volume']]){const opt=element('option','',label);opt.value=value;metricSelect.append(opt);}
+ metricSelect.value=historyMetric;
+ metricSelect.addEventListener('change',()=>{historyMetric=metricSelect.value;if(requestId===activeRequest)appendHistoricalChart(pair,network,requestId);});
+ periodLabel.append(periodSelect);metricLabel.append(metricSelect);controls.append(periodLabel,metricLabel);box.append(controls);
+ if(!pair||!/^0x[a-fA-F0-9]{40}$/.test(String(pair.pairAddress||''))){box.append(element('p','muted','No compatible EVM pool is available for historical data.'));return;}
+ box.append(element('p','small muted','Source: GeckoTerminal. Price refers to the pool base asset ('+String(pair.baseToken?.symbol||'unknown symbol')+'); volume refers to the entire pool. These are not market-wide aggregates.'));
+ if(historyController)historyController.abort();
+ const controller=new AbortController();historyController=controller;
+ const timeout=setTimeout(()=>controller.abort(),10000);
+ try{
+  const interval=historyPeriod===1?'hour':'day';
+  const limit=historyPeriod===1?24:historyPeriod;
+  const url='https://api.geckoterminal.com/api/v2/networks/'+geckoChains[network]+'/pools/'+encodeURIComponent(pair.pairAddress)+'/ohlcv/'+interval+'?aggregate=1&limit='+limit+'&currency=usd';
+  const response=await fetch(url,{signal:controller.signal,headers:{Accept:'application/json'}});
+  if(!response.ok)throw Error('History unavailable');
+  const points=historicalPoints(await response.json());
+  if(requestId!==activeRequest||historyController!==controller)return;
+  const available=historyMetric==='volume'||historyMetric==='both'?points.filter(p=>p.volume!==null):points;
+  if(available.length<2){box.append(element('p','muted',historyMetric==='volume'||historyMetric==='both'?'The source does not provide enough historical prices and volumes for this pool.':'Not enough historical prices to display the chart.'));return;}
+  const first=available[0].close,last=available[available.length-1].close;
+  const change=first>0?(last-first)/first*100:null;
+  const stats=element('div','history-summary');
+  stats.append(metricCard('Price change over the period',change===null?'No data':(change>0?'+':'')+change.toLocaleString('en-US',{maximumFractionDigits:2})+' %','Comparison of the first and last available closing prices.'));
+  const totalVolume=available.reduce((sum,p)=>sum+(p.volume===null?0:p.volume),0);
+  stats.append(metricCard('Cumulative pool volume',available.every(p=>p.volume!==null)?usd(totalVolume,0):'Incompleto','Sum of available intervals, not global volume.'));
+  box.append(stats);
+  appendHistoryInterpretation(available,box);
+  appendTechnicalIndicators(available,box);
+  const plots=element('div','history-comparison');
+  if(historyMetric==='both'){
+   const pricePlot=element('div');pricePlot.append(element('h5','','Closing price · USD'));drawHistoricalChart(available,pricePlot,'close',true);plots.append(pricePlot);
+   const volumePlot=element('div');volumePlot.append(element('h5','','Pool volume · USD'));drawHistoricalChart(available,volumePlot,'volume');plots.append(volumePlot);
+  }else drawHistoricalChart(available,plots,historyMetric==='volume'?'volume':'close',true);
+  box.append(plots);
+  if(historyMetric!=='volume')box.append(element('p','small muted','Chart lines: price (green), SMA 7 (yellow), SMA 14 (dashed blue). Averages appear only when enough closing prices are available.'));
+  const inspector=element('div','history-inspector');
+  const reading=element('p','small');reading.setAttribute('aria-live','polite');
+  const slider=element('input');slider.type='range';slider.min='0';slider.max=String(available.length-1);slider.step='1';slider.value=String(available.length-1);
+  slider.setAttribute('aria-label','Select historical interval');
+  const updateReading=()=>{
+   const point=available[Number(slider.value)];
+   reading.textContent=new Date(point.time*1000).toLocaleString('en-US',historyPeriod===1?{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}:{day:'2-digit',month:'2-digit',year:'numeric'})+' · Price: '+usd(point.close,8)+' · Volume: '+usd(point.volume,0);
+  };
+  slider.addEventListener('input',updateReading);updateReading();
+  inspector.append(element('strong','',historyPeriod===1?'Explorar valores horarios':'Explorar valores diarios'),reading,slider);
+  inspector.append(element('p','small muted',historyPeriod===1?'Slide or use the keyboard arrow keys to explore each hour.':'Slide or use the keyboard arrow keys to explore each day.'));
+  box.append(inspector);
+  box.append(element('p','small muted','Available data: '+new Date(available[0].time*1000).toLocaleDateString('en-US')+' a '+new Date(available[available.length-1].time*1000).toLocaleDateString('en-US')+' · '+available.length+(historyPeriod===1?' observaciones horarias.':' observaciones diarias.')+' Historical data does not predict future results.'));
+ }catch(e){if(requestId===activeRequest&&historyController===controller)box.append(element('p','muted','Historical data is temporarily unavailable for this pool. The security report remains independent.'));}
+ finally{clearTimeout(timeout);if(historyController===controller)historyController=null;}
+}
+async function appendMarketFromApi(address,network,requestId){
+ const controller=new AbortController();
+ marketController=controller;
+ const timeout=setTimeout(()=>controller.abort(),10000);
+ try{
+  const url='https://api.dexscreener.com/token-pairs/v1/'+dexChains[network]+'/'+encodeURIComponent(address);
+  const response=await fetch(url,{signal:controller.signal,headers:{Accept:'application/json'}});
+  if(!response.ok)throw new Error('HTTP '+response.status);
+  const pairs=await response.json();
+  if(requestId===activeRequest){if(!Array.isArray(pairs))throw new Error('Formato inesperado');appendMarket(pairs,address,network);const matching=pairs.filter(p=>p&&p.chainId===dexChains[network]&&[p.baseToken?.address,p.quoteToken?.address].some(a=>typeof a==='string'&&a.toLowerCase()===address.toLowerCase())).sort((a,b)=>(safeNumber(b.liquidity?.usd)||0)-(safeNumber(a.liquidity?.usd)||0));const compatible=matching.find(p=>typeof p.pairAddress==='string'&&/^0x[a-fA-F0-9]{40}$/.test(p.pairAddress));await appendHistoricalChart(compatible,network,requestId);}
+ }catch(e){
+  if(requestId===activeRequest){report.append(element('h4','section-title','Mercados DEX · DexScreener'));report.append(element('p','muted','Market data is currently unavailable. The preceding security analysis remains independent.'));}
+ }finally{clearTimeout(timeout);if(marketController===controller)marketController=null;}
+}
+function showMessage(title,message){report.replaceChildren();const h=document.createElement('h3');h.textContent=title;const p=document.createElement('p');p.className='muted';p.textContent=message;report.append(h,p);empty.classList.add('hidden');report.classList.remove('hidden');}
+function invalidateReport(){
+ activeRequest++;
+ cancelPending();
+ report.replaceChildren();
+ report.classList.add('hidden');
+ empty.classList.remove('hidden');
+ analyzeButton.disabled=false;
+ analyzeButton.textContent='Analyze live contract';
+}
+addrInput.addEventListener('input',invalidateReport);
+netInput.addEventListener('change',invalidateReport);
+analyzeButton.addEventListener('click',async()=>{
+ const requestId=++activeRequest;
+ cancelPending();
+ const address=addrInput.value.trim();
+ if(!/^0x[a-fA-F0-9]{40}$/.test(address)){
+  showMessage('Invalid address','Enter a 42-character public EVM address beginning with 0x. Do not enter private keys.');return;
+ }
+ analyzeButton.disabled=true;analyzeButton.textContent='Fetching live data…';
+ showMessage('Consultando GoPlus','Waiting for the security indicator provider.');
+ const network=netInput.value;
+ if(!endpointChains[network]||!dexChains[network]){showMessage('Red no admitida','Select an available network.');analyzeButton.disabled=false;analyzeButton.textContent='Analyze live contract';return;}
+ const controller=new AbortController();securityController=controller;const timeout=setTimeout(()=>controller.abort(),12000);
+ try{
+  const chain=endpointChains[network];
+  const url='https://api.gopluslabs.io/api/v1/token_security/'+chain+'?contract_addresses='+encodeURIComponent(address.toLowerCase());
+  const response=await fetch(url,{signal:controller.signal,headers:{Accept:'application/json'}});
+  if(!response.ok)throw new Error('HTTP '+response.status);
+  const data=await response.json();
+  if(!data||typeof data!=='object')throw new Error('Empty response');
+  if(data.code!==1&&data.code!=='1')throw new Error(data.message||'Respuesta no válida');
+  const providerResults=data.result&&typeof data.result==='object'&&!Array.isArray(data.result)?data.result:{};
+  const token=providerResults[address.toLowerCase()]||Object.entries(providerResults).find(([key])=>key.toLowerCase()===address.toLowerCase())?.[1];
+  if(requestId!==activeRequest)return;
+  if(!token||typeof token!=='object'||Array.isArray(token)||Object.keys(token).length===0){
+   showMessage('No security data','GoPlus returned no indicators for this contract on the selected network. This does not mean it is safe. Querying DEX markets separately…');await appendMarketFromApi(address,network,requestId);return;
+  }
+  report.replaceChildren();
+  report.append(element('h3','', 'Indicadores reales · GoPlus'));
+  report.append(element('p','small muted break-address','Red: '+network+' · Address: '+address+' · Consulta: '+new Date().toLocaleString('en-US')+' · Fuente: GoPlus Security API'));
+  let known=0,alerts=0,unavailable=0;
+  const results=fields.map(field=>{
+   const raw=token[field.key];
+   const valid=raw==='0'||raw==='1'||raw===0||raw===1;
+   if(!valid){unavailable++;return {field,state:'unknown'};}
+   known++;
+   if(String(raw)!==field.good){alerts++;return {field,state:'alert'};}
+   return {field,state:'ok'};
+  });
+  const summary=element('div','summary'+(alerts?' alert':''));
+  const title=alerts?'Attention: '+alerts+' indicator(s) to review':known===0?'Insufficient information':'No alerts in available indicators';
+  summary.append(element('h4','',title));
+  summary.append(element('p','small muted',known+' de '+fields.length+' indicadores disponibles · '+unavailable+' sin datos. No se calcula una puntuación de seguridad.'));
+  report.append(summary);
+  appendDashboard(token);
+  report.append(element('h4','section-title','Contract indicators'));
+  for(const item of results){
+   const {field,state}=item;
+   const block=element('div','indicator');
+   const head=element('div','indicator-head');
+   const label=element('strong','',field.label);
+   const status=element('span','status '+state,state==='ok'?'No alert detected':state==='alert'?'Needs review':'Information unavailable');
+   head.append(label,status);block.append(head);
+   const explanation=state==='ok'?field.positive:state==='alert'?field.negative:'GoPlus no facilitó un valor interpretable para este indicador. No se puede concluir que exista o no un riesgo.';
+   block.append(element('p','muted',explanation));
+   report.append(block);
+  }
+  report.append(element('p','notice','Results depend on an external provider and may be incomplete or change. “No alert” does not mean “safe”. This is neither an audit nor financial advice.'));
+  await appendMarketFromApi(address,network,requestId);
+ }catch(e){
+  if(requestId===activeRequest){showMessage('Security data unavailable','No fue posible obtener información de GoPlus. Puede tratarse de un fallo temporal o de falta de cobertura. Esto no implica que el contrato sea seguro. Intentando consultar mercados DEX por separado…');await appendMarketFromApi(address,network,requestId);}
+ }finally{
+  clearTimeout(timeout);
+  if(securityController===controller)securityController=null;
+  if(requestId===activeRequest){analyzeButton.disabled=false;analyzeButton.textContent='Analyze live contract';}
+ }
+});
+</script>
+</body></html>
