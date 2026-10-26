@@ -13,7 +13,7 @@
 <main><div class="wrap">
 <section id="inicio" class="hero"><div><div class="eyebrow">Crypto Companion · Prototipo inicial</div><h1>Más claridad.<br><span class="accent">Menos riesgos.</span></h1><p class="muted">Consulta indicadores de contratos y explora datos de titulares y suministro con explicaciones claras sobre sus límites.</p><div class="actions"><a class="btn" href="#analizador">Explorar analizador</a><a class="btn outline" href="#herramientas">Cómo funciona</a></div><p class="small muted">Nunca solicitamos claves privadas ni frases semilla. No ofrecemos asesoramiento financiero.</p></div><div class="panel"><div class="eyebrow">Vista ilustrativa · Datos simulados</div><h2>Resumen de riesgos</h2><div class="stat"><span>Contrato verificado</span><span class="tag">Ejemplo: Sí</span></div><div class="stat"><span>Permisos de emisión</span><span class="warn">Revisar</span></div><div class="stat"><span>Concentración de titulares</span><span class="warn">No evaluado</span></div><div class="stat"><span>Origen de datos</span><span class="tag">Simulación</span></div><p class="notice">Un indicador favorable no garantiza que un activo sea seguro.</p></div></section>
 <section id="herramientas"><div class="eyebrow">Nuestra visión</div><h2>Herramientas que explican, no confunden</h2><div class="grid"><article class="feature"><div class="num">01</div><h3>Analizador de tokens</h3><p>Consulta indicadores técnicos, titulares y suministro de contratos públicos mediante GoPlus Security.</p></article><article class="feature"><div class="num">02</div><h3>Riesgos en lenguaje claro</h3><p>Comprende permisos de emisión, restricciones de transferencia y otras señales de riesgo.</p></article><article class="feature"><div class="num">03</div><h3>Guías prácticas</h3><p>Aprende sobre redes, comisiones y buenas prácticas de seguridad sin compartir credenciales.</p></article></div></section>
-<section id="analizador"><div class="eyebrow">Herramienta experimental</div><h2>Analizador de contratos</h2><p class="muted">Esta versión consulta indicadores de contratos EVM a través de GoPlus. Los resultados dependen de la disponibilidad del proveedor y no garantizan seguridad.</p><div class="analyzer"><div class="panel"><label for="network">Red</label><select id="network"><option>Ethereum</option><option>Polygon</option><option>BNB Smart Chain</option></select><label for="address">Dirección pública del contrato (obligatoria)</label><input id="address" maxlength="120" autocomplete="off" placeholder="0x..."><p class="small muted">No introduzcas contraseñas, claves privadas ni frases semilla.</p><button id="analyze" class="btn full">Analizar contrato real</button></div><div class="panel" aria-live="polite"><div id="empty"><h3>Tu informe de seguridad</h3><p class="muted">Introduce una dirección pública de contrato EVM para consultar los indicadores disponibles.</p></div><div id="report" class="hidden"><strong class="warn">DEMOSTRACIÓN · DATOS FICTICIOS</strong><h3>Informe ilustrativo</h3><div class="risk"><b>Permisos de emisión: revisar</b><p class="muted small">Si el administrador puede crear nuevos tokens, la oferta podría aumentar. Se requiere un análisis adicional.</p></div><div class="stat"><span>Contrato verificado</span><span class="tag">Ejemplo: Sí</span></div><div class="stat"><span>Restricciones de transferencia</span><span class="warn">Desconocidas</span></div><p class="notice">No se ha inspeccionado ningún contrato real. No utilices esta demostración para invertir.</p></div></div></div></section>
+<section id="analizador"><div class="eyebrow">Herramienta experimental</div><h2>Analizador de contratos</h2><p class="muted">Esta versión consulta indicadores de contratos EVM a través de GoPlus. Los resultados dependen de la disponibilidad del proveedor y no garantizan seguridad.</p><div class="analyzer"><div class="panel"><label for="network">Red</label><select id="network"><option>Ethereum</option><option>Polygon</option><option>BNB Smart Chain</option></select><label for="address">Dirección pública del contrato (obligatoria)</label><input id="address" maxlength="120" autocomplete="off" placeholder="0x..."><p class="small muted">No introduzcas contraseñas, claves privadas ni frases semilla.</p><button id="analyze" class="btn full">Analizar contrato real</button></div><div class="panel" aria-live="polite"><div id="empty"><h3>Tu informe de seguridad</h3><p class="muted">Introduce una dirección pública de contrato EVM para consultar los indicadores disponibles.</p></div><div id="report" class="hidden"></div></div></div></section>
 <section id="planes"><div class="eyebrow">Modelo futuro</div><h2>Acceso sencillo, valor real</h2><div class="grid"><div class="feature"><h3>Gratuito</h3><p>Guías educativas y consultas básicas limitadas cuando el servicio esté operativo.</p></div><div class="feature"><h3>Prémium</h3><p>Historial, alertas e informes ampliados. Precio pendiente de validación.</p></div><div class="feature"><h3>Empresas</h3><p>Posibles integraciones y API, sujetas a demanda, viabilidad y costes.</p></div></div></section>
 <section id="nvr"><div class="panel"><div class="eyebrow">Token NVR · Concepto provisional</div><h2>Primero utilidad. Después, si procede, token.</h2><p class="muted">NVR es una idea en evaluación, no un token emitido ni una oferta de inversión. Su utilidad, tecnología y viabilidad jurídica se estudiarían después de validar el producto. No existe preventa, captación de fondos ni promesa de rentabilidad.</p></div></section>
 </div></main>
@@ -47,7 +47,7 @@ function metricCard(label,value,note){
 function formatCount(value){const n=safeNumber(value);return n===null?'Sin datos':new Intl.NumberFormat('es-ES',{maximumFractionDigits:0}).format(n);}
 function percentage(value){
  const n=safeNumber(value);
- return n===null||n>100?null:n;
+ return n===null||n>1?null:n*100;
 }
 function appendDashboard(token){
  report.append(element('h4','section-title','Panel de mercado y titulares'));
@@ -62,11 +62,10 @@ function appendDashboard(token){
  const shares=holders.map(h=>percentage(h&&h.percent));
  const completeTop10=holders.length>=10&&shares.slice(0,10).every(n=>n!==null);
  const concentration=completeTop10?shares.slice(0,10).reduce((a,b)=>a+b,0):null;
- dashboard.append(metricCard('Concentración de 10 direcciones',concentration===null?'Sin datos':concentration.toLocaleString('es-ES',{maximumFractionDigits:2})+' %','Solo si GoPlus aporta 10 porcentajes válidos; pueden incluir contratos.'));
+ dashboard.append(metricCard('Concentración de 10 direcciones',concentration===null||concentration>100.00001?'Sin datos':concentration.toLocaleString('es-ES',{maximumFractionDigits:2})+' %','Solo si GoPlus aporta 10 porcentajes válidos; pueden incluir contratos.'));
  const liquidity=safeNumber(token.lp_total_supply);
  dashboard.append(metricCard('Suministro de tokens LP',liquidity===null?'Sin datos':new Intl.NumberFormat('es-ES',{maximumSignificantDigits:7}).format(liquidity),'No equivale a liquidez en USD ni demuestra que esté bloqueada.'));
- const lpHolders=Array.isArray(token.lp_holders)?token.lp_holders:[];
- dashboard.append(metricCard('Titulares LP reportados',lpHolders.length?formatCount(lpHolders.length):'Sin datos','Lista de titulares LP, si está disponible; puede ser parcial.'));
+ dashboard.append(metricCard('Titulares LP reportados',formatCount(token.lp_holder_count),'Conteo declarado por GoPlus, si está disponible.'));
  report.append(dashboard);
  report.append(element('p','small muted','Los datos de titulares proceden de GoPlus. Los precios y volúmenes DEX, si están disponibles, se muestran en una sección independiente. Ninguna fuente demuestra que la liquidez esté bloqueada.'));
  if(holders.length){
@@ -98,14 +97,16 @@ function appendMarket(pairs,address,network){
  if(!selected.length){report.append(element('p','muted','No se encontraron pares DEX para este contrato en la red seleccionada. No significa que no se negocie en otros mercados.'));return;}
  selected.sort((a,b)=>(safeNumber(b.liquidity?.usd)||0)-(safeNumber(a.liquidity?.usd)||0));
  const top=selected[0];
+ const basePairs=selected.filter(p=>typeof p.baseToken?.address==='string'&&p.baseToken.address.toLowerCase()===address.toLowerCase());
+ const pricePair=basePairs[0];
  const summary=element('div','market-card');
  summary.append(element('p','small muted','Par con mayor liquidez USD reportada entre los '+selected.length+' pares devueltos. Los datos son aproximados, no agregados de todo el mercado.'));
  const grid=element('div','market-grid');
- grid.append(metricCard('Precio USD (token consultado)',typeof top.baseToken?.address==='string'&&top.baseToken.address.toLowerCase()===address.toLowerCase()?usd(top.priceUsd,8):'Sin datos','Precio del par principal solo si el token es el activo base.'));
+ grid.append(metricCard('Precio USD (token consultado)',pricePair?usd(pricePair.priceUsd,8):'Sin datos','Precio del par con más liquidez donde el token consultado es activo base; puede diferir del par principal.'));
  grid.append(metricCard('Liquidez del par',usd(top.liquidity?.usd),'Liquidez estimada por DexScreener; no equivale a fondos bloqueados.'));
  grid.append(metricCard('Volumen 24 h del par',usd(top.volume?.h24),'Volumen de operaciones del par; no es volumen global.'));
  const change=Number(top.priceChange?.h24);
- grid.append(metricCard('Variación 24 h del par',top.priceChange?.h24===undefined||!Number.isFinite(change)?'Sin datos':change.toLocaleString('es-ES',{maximumFractionDigits:2})+' %','No es una predicción ni una señal de inversión.'));
+ grid.append(metricCard('Variación 24 h del par',top.priceChange?.h24===undefined||top.priceChange?.h24===null||!Number.isFinite(change)?'Sin datos':change.toLocaleString('es-ES',{maximumFractionDigits:2})+' %','Variación del activo base del par principal; podría no ser el token consultado.'));
  summary.append(grid);report.append(summary);
  report.append(element('h4','section-title','Pares DEX destacados'));
  for(const pair of selected.slice(0,5)){
@@ -128,12 +129,14 @@ async function appendMarketFromApi(address,network,requestId){
   const response=await fetch(url,{signal:controller.signal,headers:{Accept:'application/json'}});
   if(!response.ok)throw new Error('HTTP '+response.status);
   const pairs=await response.json();
-  if(requestId===activeRequest)appendMarket(Array.isArray(pairs)?pairs:[],address,network);
+  if(requestId===activeRequest){if(!Array.isArray(pairs))throw new Error('Formato inesperado');appendMarket(pairs,address,network);}
  }catch(e){
   if(requestId===activeRequest){report.append(element('h4','section-title','Mercados DEX · DexScreener'));report.append(element('p','muted','Datos de mercado no disponibles en este momento. El análisis de seguridad anterior sigue siendo independiente.'));}
  }finally{clearTimeout(timeout);}
 }
 function showMessage(title,message){report.replaceChildren();const h=document.createElement('h3');h.textContent=title;const p=document.createElement('p');p.className='muted';p.textContent=message;report.append(h,p);empty.classList.add('hidden');report.classList.remove('hidden');}
+addrInput.addEventListener('input',()=>{activeRequest++;analyzeButton.disabled=false;analyzeButton.textContent='Analizar contrato real';});
+netInput.addEventListener('change',()=>{activeRequest++;analyzeButton.disabled=false;analyzeButton.textContent='Analizar contrato real';});
 analyzeButton.addEventListener('click',async()=>{
  const requestId=++activeRequest;
  const address=addrInput.value.trim();
@@ -162,10 +165,10 @@ analyzeButton.addEventListener('click',async()=>{
   let known=0,alerts=0,unavailable=0;
   const results=fields.map(field=>{
    const raw=token[field.key];
-   const valid=raw==='0'||raw==='1';
+   const valid=raw==='0'||raw==='1'||raw===0||raw===1;
    if(!valid){unavailable++;return {field,state:'unknown'};}
    known++;
-   if(raw!==field.good){alerts++;return {field,state:'alert'};}
+   if(String(raw)!==field.good){alerts++;return {field,state:'alert'};}
    return {field,state:'ok'};
   });
   const summary=element('div','summary'+(alerts?' alert':''));
