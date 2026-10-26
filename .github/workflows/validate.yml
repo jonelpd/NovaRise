@@ -32,13 +32,15 @@ jobs:
                   assert identifier in p.ids, f"Falta ID {identifier} en {language}"
           assert 'api.gopluslabs.io' in html and 'api.dexscreener.com' in html
           for language,page in [('es',html),('en',english)]:
-              assert page.count('<script>')==1 and page.count('</script>')==1
-              js=page.split('<script>',1)[1].split('</script>',1)[0]
-              Path('/tmp/novarise-'+language+'.js').write_text(js,encoding='utf-8')
+              assert 'src="assets/locale-en.js"' in page
+              assert 'src="assets/analyzer.js"' in page
+              assert '<script>' not in page
+          assert Path('assets/analyzer.js').is_file()
+          assert Path('assets/locale-en.js').is_file()
           print('HTML, IDs y dependencias: OK')
           PY
-          node --check /tmp/novarise-es.js
-          node --check /tmp/novarise-en.js
+          node --check assets/analyzer.js
+          node --check assets/locale-en.js
           node tests/analyzer.test.cjs
       - name: Comprobar diseño adaptable y cancelación de consultas
         run: |
@@ -51,9 +53,9 @@ jobs:
             'viewport móvil':'name="viewport"' in html,
             'diseño móvil':'@media(max-width:780px)' in css,
             'menú móvil accesible':'.links{display:flex;order:3' in css,
-            'cancelación de solicitudes':'function cancelPending()' in html,
-            'limpieza de resultados':'function invalidateReport()' in html,
-            'resultado obsoleto descartado':'requestId!==activeRequest' in html and 'requestId!==activeRequest' in english,
+            'cancelación de solicitudes':'function cancelPending()' in Path('assets/analyzer.js').read_text(encoding='utf-8'),
+            'limpieza de resultados':'function invalidateReport()' in Path('assets/analyzer.js').read_text(encoding='utf-8'),
+            'resultado obsoleto descartado':'requestId!==activeRequest' in Path('assets/analyzer.js').read_text(encoding='utf-8'),
             'hoja de estilos compartida':'href="assets/site.css"' in html and 'href="assets/site.css"' in english,
           }
           for name,ok in checks.items():
