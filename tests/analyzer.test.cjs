@@ -2,6 +2,19 @@ const fs=require('node:fs');
 const vm=require('node:vm');
 const assert=require('node:assert/strict');
 const html=fs.readFileSync('index.html','utf8');
+const english=fs.readFileSync('en.html','utf8');
+assert.match(html,/<html lang="es">/);
+assert.match(english,/<html lang="en">/);
+assert.match(html,/href="en\.html"/);
+assert.match(english,/href="index\.html"/);
+for(const name of ['historicalPoints','drawHistoricalChart','appendHistoricalChart','appendTechnicalIndicators','relativeStrengthIndex','simpleMovingAverage','appendMarketFromApi']){
+ assert.match(html,new RegExp('function '+name+'\\('),'Spanish version missing '+name);
+ assert.match(english,new RegExp('function '+name+'\\('),'English version missing '+name);
+}
+assert.match(english,/Analyze live contract/);
+assert.match(english,/Educational technical indicators/);
+assert.doesNotMatch(english,/El proveedor indica que el código|No fue posible obtener información de GoPlus|GoPlus no facilitó un valor interpretable/);
+
 const script=html.split('<script>')[1]?.split('</script>')[0];
 assert.ok(script,'Debe existir script');
 const nodes=new Map();
