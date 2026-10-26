@@ -24,6 +24,13 @@ for(const name of ['historicalPoints','drawHistoricalChart','appendHistoricalCha
  assert.ok(script.includes('function '+name+'('),'Shared analyzer missing '+name);
 }
 assert.match(translations,/Analyze live contract/);
+assert.doesNotMatch(english,/Tools que explican|Analyzer of contratos|Experimental tool con datos/);
+assert.match(english,/Tools that explain, not confuse/);
+assert.match(english,/Contract analyzer/);
+for(const phrase of ['Checking GoPlus','DEX markets · DexScreener','Featured DEX pairs','Incomplete']){
+ assert.ok(translations.includes(phrase),'Missing English translation: '+phrase);
+}
+
 assert.match(translations,/Educational technical indicators/);
 
 const nodes=new Map();
