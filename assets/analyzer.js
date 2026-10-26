@@ -247,6 +247,61 @@ function appendDynamicHistoryNarrative(points,container){
  panel.append(element('p','small muted',nvraText('Criterios descriptivos de este informe: tendencia ±2 %; cambio de volumen ±20 %; SMA separadas por 0,1 %; RSI 30/70; retroceso 5/20 % y cobertura 80 %. Son umbrales orientativos, no niveles universales ni recomendaciones de inversión.')));
  container.append(panel);
 }
+function supportResistanceLevels(points){
+ if(!Array.isArray(points)||points.length<7)return null;
+ const closes=points.map(p=>p.close);
+ if(closes.some(v=>!Number.isFinite(v)||v<=0))return null;
+ const last=closes.at(-1),prior=closes.slice(0,-1);
+ const pivots=[];
+ for(let i=2;i<closes.length-2;i++){
+  const window=closes.slice(i-2,i+3);
+  if(closes[i]===Math.min(...window)&&window.filter(v=>v===closes[i]).length===1)pivots.push({type:'support',price:closes[i]});
+  if(closes[i]===Math.max(...window)&&window.filter(v=>v===closes[i]).length===1)pivots.push({type:'resistance',price:closes[i]});
+ }
+ const tolerance=.015;
+ const group=(type)=>{const levels=[];
+  for(const pivot of pivots.filter(p=>p.type===type)){
+   const match=levels.find(l=>Math.abs(l.price-pivot.price)/l.price<=tolerance);
+   if(match){match.price=(match.price*match.touches+pivot.price)/(match.touches+1);match.touches++;}
+   else levels.push({price:pivot.price,touches:1});
+  }
+  return levels;
+ };
+ const supports=group('support'),resistances=group('resistance');
+ const choose=(levels,below)=>levels.filter(l=>below?l.price<=last:l.price>=last).sort((a,b)=>Math.abs(a.price-last)-Math.abs(b.price-last)||b.touches-a.touches)[0]||null;
+ const support=choose(supports,true),resistance=choose(resistances,false);
+ const previousHigh=Math.max(...prior),previousLow=Math.min(...prior);
+ const breakout=last>previousHigh?'up':last<previousLow?'down':'none';
+ return {support,resistance,last,breakout,previousHigh,previousLow,observations:closes.length,tolerance};
+}
+function appendSupportResistanceInterpretation(points,container){
+ const levels=supportResistanceLevels(points);
+ const panel=element('div','history-insights');
+ panel.append(element('h5','',nvraText('Soportes, resistencias y posibles rupturas')));
+ if(!levels){
+  panel.append(element('p','muted',nvraText('Se requieren al menos 7 cierres válidos para buscar zonas de soporte y resistencia.')));
+  container.append(panel);return;
+ }
+ const fmt=v=>v.toLocaleString(nvraText('es-ES'),{maximumFractionDigits:2});
+ if(levels.support){
+  const distance=(levels.last/levels.support.price-1)*100;
+  panel.append(element('p','',nvraText('Soporte observado cercano: ')+usd(levels.support.price,8)+nvraText(' (')+levels.support.touches+nvraText(' mínimos locales agrupados; precio actual a ')+fmt(distance)+nvraText(' % por encima). Es una zona histórica, no un suelo garantizado.')));
+ }else panel.append(element('p','muted',nvraText('No se detectó un mínimo local anterior suficientemente cercano por debajo del último cierre; no se inventa un soporte.')));
+ if(levels.resistance){
+  const distance=(levels.resistance.price/levels.last-1)*100;
+  panel.append(element('p','',nvraText('Resistencia observada cercana: ')+usd(levels.resistance.price,8)+nvraText(' (')+levels.resistance.touches+nvraText(' máximos locales agrupados; a ')+fmt(distance)+nvraText(' % por encima del precio actual). Es una zona histórica, no un techo garantizado.')));
+ }else panel.append(element('p','muted',nvraText('No se detectó un máximo local anterior por encima del último cierre; no se inventa una resistencia.')));
+ const commentary=levels.breakout==='up'
+  ?'El último cierre supera todos los cierres anteriores de esta muestra: posible ruptura alcista observada, todavía sin confirmación posterior. Comprueba volumen, liquidez y nuevos cierres.'
+  :levels.breakout==='down'
+  ?'El último cierre cae por debajo de todos los cierres anteriores de esta muestra: posible ruptura bajista observada, todavía sin confirmación posterior. Comprueba volumen, liquidez y nuevos cierres.'
+  :levels.support&&levels.resistance
+  ?'El último cierre permanece entre las zonas identificadas. Un acercamiento a una zona no equivale a una ruptura; observa cierres posteriores y actividad.'
+  :'La muestra no permite delimitar ambos lados de un rango. No se puede afirmar que el precio esté consolidando o rompiendo una zona.';
+ panel.append(element('p','',nvraText(commentary)));
+ panel.append(element('p','small muted',nvraText('Método reproducible: pivotes de cierre con dos intervalos a cada lado, agrupados si difieren como máximo un 1,5 %. Se muestra el nivel más próximo al último cierre en cada dirección. Una ruptura compara el último cierre con los anteriores de la muestra, no con el mercado completo. Los toques no son pruebas independientes ni garantías.')));
+ container.append(panel);
+}
 function appendAdvancedHistoryInterpretation(points,container){
  const data=advancedHistorySignals(points);
  if(!data)return;
@@ -354,6 +409,7 @@ async function appendHistoricalChart(pair,network,requestId){
   appendHistoryInterpretation(available,box);
  appendAdvancedHistoryInterpretation(available,box);
   appendDynamicHistoryNarrative(available,box);
+  appendSupportResistanceInterpretation(available,box);
   appendTechnicalIndicators(available,box);
   const plots=element('div','history-comparison');
   if(historyMetric==='both'){
