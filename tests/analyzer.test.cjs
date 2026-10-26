@@ -25,6 +25,8 @@ check('safeNumber({})',null);
 check('formatCount(null)','Sin datos');
 check('usd(null)','Sin datos');
 check('percentage("invalid")',null);
+check('historicalPoints({data:{attributes:{ohlcv_list:[[1720000000,1,2,1,1.5],[1720086400,1,2,1,1.7]]}}}).length',2);
+check('historicalPoints({data:{attributes:{ohlcv_list:[[1720000000,1,2,1,-1]]}}}).length',0);
 assert.match(html,/https:\/\/api\.dexscreener\.com\/token-pairs\/v1\//);
 assert.match(html,/https:\/\/api\.gopluslabs\.io\/api\/v1\/token_security\//);
 assert.match(html,/aria-live="polite"/);
