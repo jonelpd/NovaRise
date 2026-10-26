@@ -180,6 +180,44 @@ function appendTechnicalIndicators(points,container){
  panel.append(element('p','small muted',nvraText('Las medias son promedios de cierres; RSI calculado con ganancias y pérdidas simples de los últimos 14 cambios (no suavizado de Wilder). Cada intervalo equivale a una hora en 24 h y a un día en los demás periodos. Son indicadores descriptivos, no recomendaciones de inversión.')));
  container.append(panel);
 }
+function advancedHistorySignals(points){
+ if(!Array.isArray(points)||points.length<3)return null;
+ const closes=points.map(p=>p.close);
+ if(closes.some(v=>!Number.isFinite(v)||v<=0))return null;
+ const first=closes[0],last=closes[closes.length-1];
+ const high=Math.max(...closes),low=Math.min(...closes);
+ const maxDrawdown=closes.reduce((state,price)=>{
+  state.peak=Math.max(state.peak,price);
+  state.worst=Math.max(state.worst,(state.peak-price)/state.peak*100);
+  return state;
+ },{peak:first,worst:0}).worst;
+ const sma7=simpleMovingAverage(points,7),sma14=simpleMovingAverage(points,14),rsi=relativeStrengthIndex(points,14);
+ const volume=points.map(p=>p.volume).filter(v=>Number.isFinite(v)&&v>=0);
+ return {first,last,high,low,maxDrawdown,sma7,sma14,rsi,volumeCoverage:volume.length/points.length*100,observations:points.length};
+}
+function appendAdvancedHistoryInterpretation(points,container){
+ const data=advancedHistorySignals(points);
+ if(!data)return;
+ const panel=element('div','history-insights');
+ panel.append(element('h5','',nvraText('Análisis ampliado: cómo interpretar el gráfico')));
+ const add=(title,body)=>{panel.append(element('h6','',nvraText(title)));panel.append(element('p','',body));};
+ const fmt=v=>v.toLocaleString(nvraText('es-ES'),{maximumFractionDigits:2});
+ const range=(data.high/data.low-1)*100;
+ add('1. Rango y retrocesos',nvraText('Entre los cierres disponibles, el mínimo fue ')+usd(data.low,8)+nvraText(' y el máximo ')+usd(data.high,8)+nvraText('. La distancia entre ambos equivale al ')+fmt(range)+nvraText(' %. El mayor retroceso desde un máximo de cierre anterior fue del ')+fmt(data.maxDrawdown)+nvraText(' %. Un retroceso mide una caída observada, no la pérdida máxima futura.'));
+ if(data.sma7!==null&&data.sma14!==null){
+  const relative=(data.sma7/data.sma14-1)*100;
+  const relation=Math.abs(relative)<0.1?nvraText('muy próxima a'):relative>0?nvraText('por encima de'):nvraText('por debajo de');
+  const priceRelation=data.last>data.sma7&&data.last>data.sma14?nvraText('El último cierre está por encima de ambas medias.'):data.last<data.sma7&&data.last<data.sma14?nvraText('El último cierre está por debajo de ambas medias.'):nvraText('El último cierre está entre las dos medias o coincide con alguna.');
+  add('2. Tendencia frente a medias móviles',nvraText('La SMA 7 está ')+relation+nvraText(' la SMA 14 (diferencia relativa: ')+(relative>0?'+':'')+fmt(relative)+nvraText(' %). ')+priceRelation+nvraText(' Las medias resumen cierres pasados y reaccionan con retraso; un cruce aislado no confirma una tendencia.'));
+ }else add('2. Tendencia frente a medias móviles',nvraText('Se necesitan al menos 14 cierres para comparar SMA 7 y SMA 14. No es adecuado concluir que existe un cruce sin esos datos.'));
+ if(data.rsi!==null){
+  const zone=data.rsi>70?nvraText('zona alta (>70)'):data.rsi<30?nvraText('zona baja (<30)'):nvraText('zona intermedia (30–70)');
+  add('3. Impulso y RSI',nvraText('El RSI simple de 14 cambios marca ')+fmt(data.rsi)+nvraText('/100: ')+zone+nvraText('. Mide el equilibrio reciente entre subidas y bajadas; no indica por sí solo que el precio vaya a girar. Puede permanecer extremo durante tendencias fuertes.'));
+ }else add('3. Impulso y RSI',nvraText('Se necesitan 15 cierres para calcular el RSI de 14 cambios. No debe sustituirse la ausencia de datos por una señal neutral.'));
+ add('4. Calidad de los datos y confirmación',nvraText('Cobertura de volumen válido: ')+fmt(data.volumeCoverage)+nvraText(' % de los ')+data.observations+nvraText(' intervalos. Contrasta dirección del precio, actividad negociada y liquidez antes de interpretar un movimiento. El volumen pertenece a este pool, no a todo el mercado.'));
+ panel.append(element('p','small muted',nvraText('Lectura profesional: las SMA 7/14 y el RSI se calculan con cierres por intervalo; el RSI usa variaciones simples, no el suavizado de Wilder. El rango y el retroceso se basan en cierres, no en máximos y mínimos intraperiodo. La volatilidad anterior es descriptiva y no anualizada. Estos indicadores no miden riesgo de contrato, profundidad de órdenes ni deslizamiento y no constituyen señales operativas.')));
+ container.append(panel);
+}
 function appendHistoryInterpretation(points,container){
  const insight=interpretHistory(points);
  if(!insight){container.append(element('p','muted',nvraText('No hay suficientes datos para interpretar la evolución.')));return;}
@@ -262,6 +300,7 @@ async function appendHistoricalChart(pair,network,requestId){
   stats.append(metricCard(nvraText('Volumen acumulado del pool'),available.every(p=>p.volume!==null)?usd(totalVolume,0):'Incompleto',nvraText('Suma de los intervalos disponibles; no es volumen global.')));
   box.append(stats);
   appendHistoryInterpretation(available,box);
+ appendAdvancedHistoryInterpretation(available,box);
   appendTechnicalIndicators(available,box);
   const plots=element('div','history-comparison');
   if(historyMetric==='both'){
