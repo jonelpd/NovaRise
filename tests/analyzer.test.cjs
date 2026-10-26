@@ -31,9 +31,12 @@ function allText(n){return [n.text||'',...(n.children||[]).flatMap(allText)].joi
 assert.match(allText(report),/Sin datos/,'No atribuir el precio del activo base al secundario');
 assert.match(allText(report),/Liquidez del par/);
 // Las solicitudes anteriores deben cancelarse al cambiar el formulario.
-let securityAborted=false,marketAborted=false;
 vm.runInContext('securityController={abort(){this.aborted=true}};marketController={abort(){this.aborted=true}}',context);
+const securityBefore=vm.runInContext('securityController',context);
+const marketBefore=vm.runInContext('marketController',context);
 handlers.get('address:input')();
+assert.equal(securityBefore.aborted,true,'La consulta GoPlus debe abortarse');
+assert.equal(marketBefore.aborted,true,'La consulta DEX debe abortarse');
 assert.equal(vm.runInContext('securityController',context),null);
 assert.equal(vm.runInContext('marketController',context),null);
 // Cambiar la dirección o la red debe borrar el informe anterior.
