@@ -208,5 +208,15 @@ const nvraEnglish={
   "El último cierre cae por debajo de todos los cierres anteriores de esta muestra: posible ruptura bajista observada, todavía sin confirmación posterior. Comprueba volumen, liquidez y nuevos cierres.": "The latest close is below every previous close in this sample: a possible downward breakout, not yet confirmed by subsequent closes. Review volume, liquidity and future closes.",
   "El último cierre permanece entre las zonas identificadas. Un acercamiento a una zona no equivale a una ruptura; observa cierres posteriores y actividad.": "The latest close remains between the identified zones. Approaching a zone is not a breakout; watch subsequent closes and activity.",
   "La muestra no permite delimitar ambos lados de un rango. No se puede afirmar que el precio esté consolidando o rompiendo una zona.": "The sample does not establish both sides of a range. Consolidation or a breakout cannot be concluded.",
-  "Método reproducible: pivotes de cierre con dos intervalos a cada lado, agrupados si difieren como máximo un 1,5 %. Se muestra el nivel más próximo al último cierre en cada dirección. Una ruptura compara el último cierre con los anteriores de la muestra, no con el mercado completo. Los toques no son pruebas independientes ni garantías.": "Reproducible method: closing-price pivots with two intervals on either side, grouped when within 1.5%. The nearest level in each direction is shown. A breakout compares the latest close with earlier closes in this sample, not the entire market. Touch counts are not independent evidence or guarantees."
+  "Método reproducible: pivotes de cierre con dos intervalos a cada lado, agrupados si difieren como máximo un 1,5 %. Se muestra el nivel más próximo al último cierre en cada dirección. Una ruptura compara el último cierre con los anteriores de la muestra, no con el mercado completo. Los toques no son pruebas independientes ni garantías.": "Reproducible method: closing-price pivots with two intervals on either side, grouped when within 1.5%. The nearest level in each direction is shown. A breakout compares the latest close with earlier closes in this sample, not the entire market. Touch counts are not independent evidence or guarantees.",
+  "Mostrar": "Display",
+  "Incompleto": "Incomplete",
+  "Consultando GoPlus": "Checking GoPlus",
+  "Indicadores reales · GoPlus": "Live indicators · GoPlus",
+  "Mercados DEX · DexScreener": "DEX markets · DexScreener",
+  "Pares DEX destacados": "Featured DEX pairs",
+  "Ver par en DexScreener": "View pair on DexScreener",
+  "Liquidez: ": "Liquidity: ",
+  "zona intermedia": "middle range",
+  "No": "No"
 };
