@@ -30,6 +30,14 @@ const report=nodes.get('report');
 function allText(n){return [n.text||'',...(n.children||[]).flatMap(allText)].join(' ')}
 assert.match(allText(report),/Sin datos/,'No atribuir el precio del activo base al secundario');
 assert.match(allText(report),/Liquidez del par/);
+// Cambiar la dirección o la red debe borrar el informe anterior.
+nodes.get('address').value='0x1111111111111111111111111111111111111111';
+handlers.get('address:input')();
+assert.equal(nodes.get('report').children.length,0,'El cambio de dirección limpia resultados');
+assert.equal(nodes.get('analyze').disabled,false,'Permite nueva consulta');
+vm.runInContext('showMessage("Informe anterior","Contrato anterior")',context);
+handlers.get('network:change')();
+assert.equal(nodes.get('report').children.length,0,'El cambio de red limpia resultados');
 async function scenario(name,api,expected){
  nodes.get('address').value='0x1111111111111111111111111111111111111111';
  nodes.get('network').value='Ethereum';
