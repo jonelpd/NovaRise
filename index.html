@@ -105,8 +105,9 @@ function appendMarket(pairs,address,network){
  grid.append(metricCard('Precio USD (token consultado)',pricePair?usd(pricePair.priceUsd,8):'Sin datos','Precio del par con más liquidez donde el token consultado es activo base; puede diferir del par principal.'));
  grid.append(metricCard('Liquidez del par',usd(top.liquidity?.usd),'Liquidez estimada por DexScreener; no equivale a fondos bloqueados.'));
  grid.append(metricCard('Volumen 24 h del par',usd(top.volume?.h24),'Volumen de operaciones del par; no es volumen global.'));
- const change=Number(top.priceChange?.h24);
- grid.append(metricCard('Variación 24 h del par',top.priceChange?.h24===undefined||top.priceChange?.h24===null||!Number.isFinite(change)?'Sin datos':change.toLocaleString('es-ES',{maximumFractionDigits:2})+' %','Variación del activo base del par principal; podría no ser el token consultado.'));
+ const priceChange=pricePair?.priceChange?.h24;
+ const priceChangeNumber=priceChange===null||priceChange===undefined||priceChange===''?NaN:Number(priceChange);
+ grid.append(metricCard('Variación 24 h del token',Number.isFinite(priceChangeNumber)?priceChangeNumber.toLocaleString('es-ES',{maximumFractionDigits:2})+' %':'Sin datos','Variación del activo base del mismo par utilizado para mostrar el precio.'));
  summary.append(grid);report.append(summary);
  report.append(element('h4','section-title','Pares DEX destacados'));
  for(const pair of selected.slice(0,5)){
@@ -153,6 +154,7 @@ analyzeButton.addEventListener('click',async()=>{
   const response=await fetch(url,{signal:controller.signal,headers:{Accept:'application/json'}});
   if(!response.ok)throw new Error('HTTP '+response.status);
   const data=await response.json();
+  if(!data||typeof data!=='object')throw new Error('Respuesta sin datos');
   if(data.code!==1&&data.code!=='1')throw new Error(data.message||'Respuesta no válida');
   const token=data.result?.[address.toLowerCase()];
   if(requestId!==activeRequest)return;
