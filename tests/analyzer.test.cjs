@@ -13,23 +13,26 @@ assert.match(html,/<html lang="es">/);
 assert.match(english,/<html lang="en">/);
 assert.match(html,/href="en\.html"/);
 assert.match(english,/href="index\.html"/);
-for(const name of ['historicalPoints','drawHistoricalChart','appendHistoricalChart','appendTechnicalIndicators','relativeStrengthIndex','simpleMovingAverage','appendMarketFromApi']){
- assert.match(html,new RegExp('function '+name+'\\('),'Spanish version missing '+name);
- assert.match(english,new RegExp('function '+name+'\\('),'English version missing '+name);
+const script=fs.readFileSync('assets/analyzer.js','utf8');
+const translations=fs.readFileSync('assets/locale-en.js','utf8');
+for(const page of [html,english]){
+ assert.match(page,/src="assets\/locale-en\.js"/);
+ assert.match(page,/src="assets\/analyzer\.js"/);
+ assert.doesNotMatch(page,/<script>/);
 }
-assert.match(english,/Analyze live contract/);
-assert.match(english,/Educational technical indicators/);
-assert.doesNotMatch(english,/El proveedor indica que el código|No fue posible obtener información de GoPlus|GoPlus no facilitó un valor interpretable/);
+for(const name of ['historicalPoints','drawHistoricalChart','appendHistoricalChart','appendTechnicalIndicators','relativeStrengthIndex','simpleMovingAverage','appendMarketFromApi']){
+ assert.match(script,new RegExp('function '+name+'\\\\('),'Shared analyzer missing '+name);
+}
+assert.match(translations,/Analyze live contract/);
+assert.match(translations,/Educational technical indicators/);
 
-const script=html.split('<script>')[1]?.split('</script>')[0];
-assert.ok(script,'Debe existir script');
 const nodes=new Map();
 const handlers=new Map();
 function node(tag='div'){
  return {tagName:tag,children:[],classList:{add(){},remove(){}},append(...items){this.children.push(...items)},replaceChildren(){this.children=[]},addEventListener(type,handler){handlers.set((this.id||'')+':'+type,handler)},set textContent(v){this.text=v},get textContent(){return this.text},value:'',disabled:false};
 }
 const context={document:{getElementById(id){if(!nodes.has(id)){const e=node();e.id=id;nodes.set(id,e)}return nodes.get(id)},createElement:node},console,Intl,Number,String,Array,Object,Date,RegExp,AbortController,setTimeout,clearTimeout,fetch:async()=>{throw Error('network disabled in unit tests')}};
-vm.createContext(context);vm.runInContext(script,context);
+vm.createContext(context);vm.runInContext(translations,context);vm.runInContext(script,context);
 function check(expression,expected){assert.equal(vm.runInContext(expression,context),expected,expression);}
 check('percentage("0.125")',12.5);
 check('percentage("1")',100);
