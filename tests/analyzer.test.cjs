@@ -62,7 +62,7 @@ async function scenario(name,api,expected){
   if(url.includes('gopluslabs.io')){
    if(api==='fail-security')throw Error('GoPlus offline');
    if(api==='empty-security')return {ok:true,json:async()=>({code:1,result:{}})};
-   if(api==='uppercase-key')return {ok:true,json:async()=>({code:1,result:{'0x1111111111111111111111111111111111111111'.toUpperCase():{is_open_source:'1',is_honeypot:'0',holders:[]}}})};
+   if(api==='uppercase-key')return {ok:true,json:async()=>({code:1,result:{['0x1111111111111111111111111111111111111111'.toUpperCase()]:{is_open_source:'1',is_honeypot:'0',holders:[]}}})};
    return {ok:true,json:async()=>({code:1,result:{'0x1111111111111111111111111111111111111111':{is_open_source:'1',is_honeypot:'0',holder_count:'12',holders:[]}}})};
   }
   if(api==='fail-market')throw Error('DexScreener offline');
