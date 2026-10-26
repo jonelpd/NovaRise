@@ -15,6 +15,8 @@ jobs:
           from pathlib import Path
           from html.parser import HTMLParser
           html=Path('index.html').read_text(encoding='utf-8')
+          english=Path('en.html').read_text(encoding='utf-8')
+          css=Path('assets/site.css').read_text(encoding='utf-8')
           class Parser(HTMLParser):
               def __init__(self): super().__init__(); self.ids=set(); self.scripts=[]
               def handle_starttag(self,tag,attrs):
@@ -22,29 +24,37 @@ jobs:
                   if 'id' in d:
                       assert d['id'] not in self.ids, f"ID duplicado: {d['id']}"
                       self.ids.add(d['id'])
-          p=Parser(); p.feed(html)
-          for identifier in ('network','address','analyze','report','empty','year'):
-              assert identifier in p.ids, f"Falta ID: {identifier}"
+          for language,page in [('es',html),('en',english)]:
+              p=Parser(); p.feed(page)
+              assert f'<html lang="{language}">' in page
+              assert 'href="assets/site.css"' in page
+              for identifier in ('network','address','analyze','report','empty','year'):
+                  assert identifier in p.ids, f"Falta ID {identifier} en {language}"
           assert 'api.gopluslabs.io' in html and 'api.dexscreener.com' in html
-          assert html.count('<script>')==1 and html.count('</script>')==1
-          js=html.split('<script>',1)[1].split('</script>',1)[0]
-          Path('/tmp/novarise.js').write_text(js,encoding='utf-8')
+          for language,page in [('es',html),('en',english)]:
+              assert page.count('<script>')==1 and page.count('</script>')==1
+              js=page.split('<script>',1)[1].split('</script>',1)[0]
+              Path('/tmp/novarise-'+language+'.js').write_text(js,encoding='utf-8')
           print('HTML, IDs y dependencias: OK')
           PY
-          node --check /tmp/novarise.js
+          node --check /tmp/novarise-es.js
+          node --check /tmp/novarise-en.js
           node tests/analyzer.test.cjs
       - name: Comprobar diseño adaptable y cancelación de consultas
         run: |
           python3 - <<'PY'
           from pathlib import Path
           html=Path('index.html').read_text(encoding='utf-8')
+          english=Path('en.html').read_text(encoding='utf-8')
+          css=Path('assets/site.css').read_text(encoding='utf-8')
           checks={
             'viewport móvil':'name="viewport"' in html,
-            'diseño móvil':'@media(max-width:780px)' in html,
-            'menú móvil accesible':'.links{display:flex;order:3' in html,
+            'diseño móvil':'@media(max-width:780px)' in css,
+            'menú móvil accesible':'.links{display:flex;order:3' in css,
             'cancelación de solicitudes':'function cancelPending()' in html,
             'limpieza de resultados':'function invalidateReport()' in html,
-            'resultado obsoleto descartado':'requestId!==activeRequest' in html,
+            'resultado obsoleto descartado':'requestId!==activeRequest' in html and 'requestId!==activeRequest' in english,
+            'hoja de estilos compartida':'href="assets/site.css"' in html and 'href="assets/site.css"' in english,
           }
           for name,ok in checks.items():
             print(('OK' if ok else 'ERROR')+' · '+name)
