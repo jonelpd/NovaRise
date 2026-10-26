@@ -98,7 +98,7 @@ function usd(value,digits=2){
 }
 function appendMarket(pairs,address,network){
  report.append(element('h4','section-title','Mercados DEX · DexScreener'));
- const selected=pairs.filter(p=>p&&typeof p==='object'&&p.chainId===dexChains[network]&&
+ const selected=pairs.filter(p=>p&&typeof p==='object'&&!Array.isArray(p)&&p.chainId===dexChains[network]&&
    [p.baseToken?.address,p.quoteToken?.address].some(a=>typeof a==='string'&&a.toLowerCase()===address.toLowerCase()));
  if(!selected.length){report.append(element('p','muted','No se encontraron pares DEX para este contrato en la red seleccionada. No significa que no se negocie en otros mercados.'));return;}
  selected.sort((a,b)=>(safeNumber(b.liquidity?.usd)||0)-(safeNumber(a.liquidity?.usd)||0));
@@ -174,9 +174,10 @@ analyzeButton.addEventListener('click',async()=>{
   const data=await response.json();
   if(!data||typeof data!=='object')throw new Error('Respuesta sin datos');
   if(data.code!==1&&data.code!=='1')throw new Error(data.message||'Respuesta no válida');
-  const token=data.result?.[address.toLowerCase()];
+  const results=data.result&&typeof data.result==='object'&&!Array.isArray(data.result)?data.result:{};
+ const token=results[address.toLowerCase()]||Object.entries(results).find(([key])=>key.toLowerCase()===address.toLowerCase())?.[1];
   if(requestId!==activeRequest)return;
-  if(!token||typeof token!=='object'||Object.keys(token).length===0){
+  if(!token||typeof token!=='object'||Array.isArray(token)||Object.keys(token).length===0){
    showMessage('Sin datos de seguridad','GoPlus no devolvió indicadores para este contrato en la red seleccionada. Esto no significa que sea seguro. Consultando mercados DEX por separado…');await appendMarketFromApi(address,network,requestId);return;
   }
   report.replaceChildren();
