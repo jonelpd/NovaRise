@@ -36,7 +36,7 @@ assert.match(translations,/Educational technical indicators/);
 const nodes=new Map();
 const handlers=new Map();
 function node(tag='div'){
- return {tagName:tag,children:[],classList:{add(){},remove(){}},append(...items){this.children.push(...items)},replaceChildren(){this.children=[]},addEventListener(type,handler){handlers.set((this.id||'')+':'+type,handler)},set textContent(v){this.text=v},get textContent(){return this.text},value:'',disabled:false};
+ return {tagName:tag,children:[],classList:{add(){},remove(){}},append(...items){this.children.push(...items)},replaceChildren(){this.children=[]},setAttribute(name,value){this[name]=value},addEventListener(type,handler){handlers.set((this.id||'')+':'+type,handler)},set textContent(v){this.text=v},get textContent(){return this.text},value:'',disabled:false};
 }
 const context={document:{getElementById(id){if(!nodes.has(id)){const e=node();e.id=id;nodes.set(id,e)}return nodes.get(id)},createElement:node},console,Intl,Number,String,Array,Object,Date,RegExp,AbortController,setTimeout,clearTimeout,fetch:async()=>{throw Error('network disabled in unit tests')}};
 vm.createContext(context);vm.runInContext(translations,context);vm.runInContext(script,context);
@@ -78,6 +78,12 @@ assert.ok(script.includes('appendDynamicHistoryNarrative(available,box)'));
 assert.ok(script.includes('appendSupportResistanceInterpretation(available,box)'));
 assert.match(translations,/Support, resistance and potential breakouts/);
 assert.ok(script.includes('const available=points;'));
+assert.match(script,/indicatorTitle\.id='report-indicators'/);
+assert.match(script,/holdersTitle\.id='report-holders'/);
+assert.match(script,/marketTitle\.id='report-markets'/);
+assert.match(script,/report\.append\(guide\)/);
+assert.ok(script.indexOf("report.append(indicatorTitle)")<script.indexOf("appendDashboard(token);"),'Security indicators must precede holder dashboard');
+
 assert.ok(script.includes('const volumePoints=points.filter(p=>p.volume!==null);'));
 
 context.levelSample=[10,9,8,9,11,13,12,11,12,14,13,12,13].map(close=>({close,volume:100}));
