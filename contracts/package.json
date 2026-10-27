@@ -1,0 +1,18 @@
+{
+  "name": "nvra-experimental-contract",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Local-only experimental NVRA fixed-supply token. No deployment scripts or private keys.",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "clean": "hardhat clean"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "hardhat": "^2.22.0"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.0.0"
+  }
+}
