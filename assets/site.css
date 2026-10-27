@@ -75,3 +75,21 @@ section[id],main[id]{scroll-margin-top:130px}
 .token-launch-action{position:relative;flex-shrink:0;text-align:center;max-width:260px}
 @media(max-width:780px){.token-launch{flex-direction:column;align-items:stretch;gap:16px;margin-top:18px;padding:22px}.token-launch-action{max-width:none}}
 @media(max-width:480px){.token-launch{padding:19px 17px;border-radius:17px}.token-launch h2{font-size:23px}.token-launch p{font-size:13px}}
+
+/* NVRA ecosystem and public roadmap */
+.ecosystem-intro{max-width:760px}
+.ecosystem-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:26px}
+.ecosystem-card{display:flex;flex-direction:column;align-items:flex-start;gap:10px;min-width:0}
+.ecosystem-card h3{margin:4px 0 0;font-size:20px;line-height:1.25}
+.ecosystem-card p{margin:0;flex:1;font-size:14px}
+.ecosystem-card .subtle-link{margin-top:6px;font-weight:700}
+.ecosystem-state{display:inline-flex;align-items:center;max-width:100%;padding:6px 10px;border-radius:999px;font-size:11px;font-weight:750;line-height:1.4}
+.ecosystem-state.live{color:#aaf4d1;background:#23513d;border:1px solid #397b5b}
+.ecosystem-state.planned{color:#d4dedb;background:#2b413c;border:1px solid #4c6960}
+.roadmap{list-style:none;padding:0;margin:26px 0 0;display:grid;gap:10px}
+.roadmap li{display:grid;grid-template-columns:minmax(170px,.8fr) minmax(0,1.6fr) auto;align-items:center;gap:16px;padding:20px 22px;background:#102b25;border:1px solid #315c50;border-radius:15px}
+.roadmap strong{color:#b6f4d6;font-size:14px}
+.roadmap span{color:#c4dfd5;font-size:14px;line-height:1.55}
+.roadmap em{font-size:12px;color:#d7e7df;font-style:normal;white-space:nowrap;background:#25483c;padding:6px 10px;border-radius:999px}
+@media(max-width:900px){.ecosystem-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.roadmap li{grid-template-columns:1fr auto}.roadmap li span{grid-column:1/-1;grid-row:2}}
+@media(max-width:560px){.ecosystem-grid{grid-template-columns:1fr}.roadmap li{padding:17px;gap:9px}.roadmap strong{font-size:13px}.roadmap span{font-size:13px}.roadmap em{font-size:11px}}
