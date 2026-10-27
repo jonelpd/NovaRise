@@ -8,7 +8,8 @@
     "test": "hardhat test",
     "clean": "hardhat clean",
     "preflight": "node scripts/preflight.cjs",
-    "amoy:readiness": "node scripts/amoy-readiness.cjs"
+    "amoy:readiness": "node scripts/amoy-readiness.cjs",
+    "simulate:local": "hardhat run scripts/simulate-deployment.cjs --network hardhat"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^5.0.0",
