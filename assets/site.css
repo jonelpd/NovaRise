@@ -63,3 +63,15 @@ section[id],main[id]{scroll-margin-top:130px}
 #report .indicator:nth-of-type(even){background:#ffffff05}
 #report .indicator-head strong{font-size:14px;line-height:1.5}
 @media(max-width:480px){.report-jump{display:grid;grid-template-columns:1fr;gap:7px}.report-jump-link{border-radius:12px;min-height:44px}.report-jump-link::after{content:'›';margin-left:auto;font-size:20px;line-height:1}.report-jump-link{font-size:13px}}
+
+/* NVRA editorial launch announcement, before the main hero */
+.token-launch{position:relative;display:flex;align-items:center;justify-content:space-between;gap:28px;margin-top:28px;padding:27px 30px;border:1px solid #538d76;border-radius:22px;background:linear-gradient(115deg,#173d32 0%,#102e28 62%,#0b241f 100%);box-shadow:0 16px 40px #0003;overflow:hidden}
+.token-launch::before{content:'';position:absolute;right:-70px;top:-100px;width:270px;height:270px;border-radius:50%;background:radial-gradient(circle,#6ce9bb26,transparent 70%);pointer-events:none}
+.token-launch-copy{position:relative;max-width:740px}
+.token-launch-kicker{display:inline-block;color:#a8f4d4;font-size:12px;font-weight:800;letter-spacing:.09em;text-transform:uppercase}
+.token-launch h2{font-size:clamp(23px,3vw,32px);letter-spacing:-.7px;line-height:1.2;margin:9px 0}
+.token-launch p{font-size:14px;line-height:1.65;margin:8px 0}
+.token-launch-disclaimer{color:#c4d8d0;font-size:12px!important}
+.token-launch-action{position:relative;flex-shrink:0;text-align:center;max-width:260px}
+@media(max-width:780px){.token-launch{flex-direction:column;align-items:stretch;gap:16px;margin-top:18px;padding:22px}.token-launch-action{max-width:none}}
+@media(max-width:480px){.token-launch{padding:19px 17px;border-radius:17px}.token-launch h2{font-size:23px}.token-launch p{font-size:13px}}
