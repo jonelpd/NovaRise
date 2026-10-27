@@ -93,3 +93,22 @@ section[id],main[id]{scroll-margin-top:130px}
 .roadmap em{font-size:12px;color:#d7e7df;font-style:normal;white-space:nowrap;background:#25483c;padding:6px 10px;border-radius:999px}
 @media(max-width:900px){.ecosystem-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.roadmap li{grid-template-columns:1fr auto}.roadmap li span{grid-column:1/-1;grid-row:2}}
 @media(max-width:560px){.ecosystem-grid{grid-template-columns:1fr}.roadmap li{padding:17px;gap:9px}.roadmap strong{font-size:13px}.roadmap span{font-size:13px}.roadmap em{font-size:11px}}
+
+/* NVRA concept whitepaper */
+.wp-main{padding-top:60px;padding-bottom:90px}
+.wp-main>h1{font-size:clamp(40px,6vw,64px);margin:15px 0}
+.wp-lead{font-size:clamp(17px,2vw,22px);color:#c4dfd5;max-width:820px}
+.wp-alert{margin:28px 0 38px;border-left:4px solid #ffdb91}
+.wp-alert p{margin:8px 0 0;font-size:14px}
+.wp-layout{display:grid;grid-template-columns:250px minmax(0,1fr);gap:45px;align-items:start}
+.wp-toc{position:sticky;top:95px;display:flex;flex-direction:column;gap:5px;background:#102b25;border:1px solid #315c50;padding:20px;border-radius:18px}
+.wp-toc h2{font-size:19px;margin:0 0 12px;letter-spacing:0}
+.wp-toc a{font-size:13px;line-height:1.5;padding:8px 9px;border-radius:8px;color:#c4dfd5}
+.wp-toc a:hover,.wp-toc a:focus-visible{background:#244b3f;color:white}
+.wp-article{min-width:0}
+.wp-section{padding:12px 0 30px;border-bottom:1px solid #31564b;scroll-margin-top:100px}
+.wp-section h2{font-size:clamp(23px,3vw,30px);letter-spacing:-.5px;margin:8px 0 12px}
+.wp-section p{color:#c4dfd5;font-size:16px;line-height:1.8}
+.wp-end{margin-top:25px;font-size:13px;color:#b1ccc3}
+.wp-home-link{display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin-top:24px}
+@media(max-width:780px){.wp-main{padding-top:35px}.wp-layout{grid-template-columns:1fr;gap:18px}.wp-toc{position:static}.wp-section{padding-top:18px}.wp-section p{font-size:15px}}
