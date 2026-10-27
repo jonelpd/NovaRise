@@ -4,6 +4,21 @@ const assert=require('node:assert/strict');
 const html=fs.readFileSync('index.html','utf8');
 const english=fs.readFileSync('en.html','utf8');
 const sharedCss=fs.readFileSync('assets/site.css','utf8');
+const whitepaperEs=fs.readFileSync('libro-blanco.html','utf8');
+const whitepaperEn=fs.readFileSync('whitepaper-en.html','utf8');
+assert.match(html,/href="libro-blanco\.html"/);
+assert.match(english,/href="whitepaper-en\.html"/);
+for(const [page,lang,other] of [[whitepaperEs,'es','whitepaper-en.html'],[whitepaperEn,'en','libro-blanco.html']]){
+ assert.match(page,new RegExp('<html lang="'+lang+'">'));
+ assert.match(page,/href="assets\/site\.css"/);
+ assert.ok(page.includes('href="'+other+'"'),'Whitepaper language switch missing');
+ assert.equal((page.match(/class="wp-section"/g)||[]).length,10);
+ assert.match(page,/v0\.1/);
+}
+assert.match(whitepaperEs,/NVRA no se ha emitido/);
+assert.match(whitepaperEn,/NVRA has not been issued/);
+assert.match(sharedCss,/\.wp-layout\{/);
+
 assert.match(html,/href="assets\/site\.css"/);
 assert.match(english,/href="assets\/site\.css"/);
 assert.match(sharedCss,/@media\(max-width:780px\)/);
