@@ -13,12 +13,16 @@ for(const [page,lang,other] of [[whitepaperEs,'es','whitepaper-en.html'],[whitep
  assert.match(page,/href="assets\/site\.css"/);
  assert.ok(page.includes('href="'+other+'"'),'Whitepaper language switch missing');
  assert.equal((page.match(/class="wp-section"/g)||[]).length,10);
- assert.match(page,/v0\.2/);
+ assert.match(page,/v0\.3/);
 }
 assert.match(whitepaperEs,/NVRA no se ha emitido/);
 assert.match(whitepaperEn,/NVRA has not been issued/);
 assert.match(whitepaperEs,/100\.000\.000 NVRA/);
 assert.match(whitepaperEn,/100,000,000 NVRA/);
+assert.match(whitepaperEs,/Polygon PoS/);
+assert.match(whitepaperEn,/Polygon PoS/);
+assert.match(whitepaperEs,/Amoy/);
+assert.match(whitepaperEn,/Amoy/);
 for(const page of [whitepaperEs,whitepaperEn]){
  assert.equal((page.match(/<tbody><tr>/g)||[]).length,1);
  assert.equal((page.match(/<tr><td>/g)||[]).length,5);
