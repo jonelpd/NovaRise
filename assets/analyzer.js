@@ -504,8 +504,17 @@ analyzeButton.addEventListener('click',async()=>{
   summary.append(element('h4','',title));
   summary.append(element('p','small muted',known+nvraText(' de ')+fields.length+' indicadores disponibles · '+unavailable+nvraText(' sin datos. No se calcula una puntuación de seguridad.')));
   report.append(summary);
-  appendDashboard(token);
-  report.append(element('h4','section-title',nvraText('Indicadores del contrato')));
+  const guide=element('nav','report-jump');
+  guide.setAttribute('aria-label',nvraText('Secciones del informe'));
+  for(const [target,label] of [['report-indicators','Indicadores de seguridad'],['report-holders','Titulares y suministro'],['report-markets','Mercados y gráficos']]){
+   const link=element('a','report-jump-link',nvraText(label));
+   link.href='#'+target;
+   guide.append(link);
+  }
+  report.append(guide);
+  const indicatorTitle=element('h4','section-title',nvraText('Indicadores del contrato'));
+  indicatorTitle.id='report-indicators';
+  report.append(indicatorTitle);
   for(const item of results){
    const {field,state}=item;
    const block=element('div','indicator');
@@ -518,6 +527,13 @@ analyzeButton.addEventListener('click',async()=>{
    report.append(block);
   }
   report.append(element('p','notice',nvraText('Los resultados dependen de un proveedor externo y pueden ser incompletos o cambiar. “Sin alerta” no significa “seguro”. No es una auditoría ni asesoramiento financiero.')));
+  const holdersTitle=element('h4','section-title',nvraText('Titulares y suministro'));
+  holdersTitle.id='report-holders';
+  report.append(holdersTitle);
+  appendDashboard(token);
+  const marketTitle=element('h4','section-title',nvraText('Mercados y gráficos'));
+  marketTitle.id='report-markets';
+  report.append(marketTitle);
   await appendMarketFromApi(address,network,requestId);
  }catch(e){
   if(requestId===activeRequest){showMessage(nvraText('Datos de seguridad no disponibles'),nvraText('No fue posible obtener información de GoPlus. Puede tratarse de un fallo temporal o de falta de cobertura. Esto no implica que el contrato sea seguro. Intentando consultar mercados DEX por separado…'));await appendMarketFromApi(address,network,requestId);}
