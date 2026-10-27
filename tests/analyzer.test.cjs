@@ -19,6 +19,20 @@ for(const page of [html,english]){
 assert.match(html,/no existe fecha de lanzamiento confirmada/);
 assert.match(english,/no launch date is confirmed/);
 assert.match(sharedCss,/\.token-launch\{/);
+for(const page of [html,english]){
+ assert.match(page,/<section id="ecosistema" class="ecosystem-section"/);
+ assert.match(page,/<section id="ruta-nvra" class="roadmap-section"/);
+ assert.match(page,/class="ecosystem-grid"/);
+ assert.match(page,/class="roadmap"/);
+ assert.equal((page.match(/class="feature ecosystem-card"/g)||[]).length,6);
+ assert.equal((page.match(/<li><strong>0[1-5] · /g)||[]).length,5);
+ assert.ok(page.indexOf('id="ecosistema"')<page.indexOf('id="planes"'));
+}
+assert.match(html,/En estudio/);
+assert.match(english,/Under consideration/);
+assert.match(sharedCss,/\.ecosystem-grid\{/);
+assert.match(sharedCss,/\.roadmap li\{/);
+
 
 assert.match(html,/href="en\.html"/);
 assert.match(english,/href="index\.html"/);
