@@ -9,12 +9,15 @@ on:
     paths:
       - 'contracts/**'
       - '.github/workflows/nvra-contract.yml'
+
+permissions:
+  contents: read
+
 jobs:
-  contract:
+  preflight:
+    name: Structural preflight (no npm dependencies)
     runs-on: ubuntu-latest
-    timeout-minutes: 15
-    permissions:
-      contents: read
+    timeout-minutes: 5
     defaults:
       run:
         working-directory: contracts
@@ -23,10 +26,24 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - name: Structural preflight
+      - name: Validate repository contract structure
         run: npm run preflight
+
+  contract:
+    name: Solidity compile and Hardhat tests
+    needs: preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: contracts
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
       - name: Install dependencies
-        run: npm install --no-audit --no-fund
+        run: npm install --no-audit --no-fund --fetch-retries=3
       - name: Compile Solidity
         run: npm run compile
       - name: Run contract tests
