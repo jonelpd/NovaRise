@@ -4,6 +4,7 @@ on:
     paths:
       - 'contracts/**'
       - '.github/workflows/nvra-contract.yml'
+  workflow_dispatch:
   pull_request:
     paths:
       - 'contracts/**'
@@ -20,4 +21,5 @@ jobs:
         with:
           node-version: '20'
       - run: npm install --no-audit --no-fund
+      - run: npm run compile
       - run: npm test
