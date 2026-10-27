@@ -6,5 +6,6 @@ module.exports = {
     version: "0.8.24",
     settings: { optimizer: { enabled: true, runs: 200 } }
   },
-  networks: { hardhat: { chainId: 31337 } }
+  networks: { hardhat: { chainId: 31337 } },
+  paths: { sources: "./src", tests: "./test" }
 };
