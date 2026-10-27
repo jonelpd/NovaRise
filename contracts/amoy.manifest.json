@@ -1,0 +1,17 @@
+{
+  "network": "polygon-amoy",
+  "chainId": 80002,
+  "currency": "POL",
+  "status": "PREPARATION_ONLY",
+  "deployed": false,
+  "contractAddress": null,
+  "treasuryAddress": null,
+  "transactionHash": null,
+  "token": {
+    "name": "NovaRise Utility Token",
+    "symbol": "NVRA",
+    "decimals": 18,
+    "maxSupply": "100000000"
+  },
+  "notes": "Experimental plan only. Do not interpret this file as proof of deployment, issuance, or a verified contract address."
+}
