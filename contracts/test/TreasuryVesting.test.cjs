@@ -29,7 +29,10 @@ describe("NVRA illustrative vesting integration (local)", function () {
     expect(vestedHalf).to.be.greaterThan(0n);
     expect(vestedHalf).to.be.lessThan(allocation);
     await vesting.connect(beneficiary)["release(address)"](await token.getAddress());
-    expect(await token.balanceOf(beneficiary.address)).to.equal(vestedHalf);
+    const releasedAtHalf = await token.balanceOf(beneficiary.address);
+    // Mining the release transaction advances the block timestamp slightly.
+    expect(releasedAtHalf).to.be.greaterThanOrEqual(vestedHalf);
+    expect(releasedAtHalf).to.be.lessThan(allocation);
 
     await time.increaseTo(start + duration);
     await vesting.connect(beneficiary)["release(address)"](await token.getAddress());
