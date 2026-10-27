@@ -28,6 +28,8 @@ jobs:
           node-version: '24'
       - name: Validate repository contract structure
         run: npm run preflight
+      - name: Check Amoy preparation manifest (read-only)
+        run: npm run amoy:readiness
 
   contract:
     name: Solidity compile and Hardhat tests
