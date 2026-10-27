@@ -218,5 +218,9 @@ const nvraEnglish={
   "Ver par en DexScreener": "View pair on DexScreener",
   "Liquidez: ": "Liquidity: ",
   "zona intermedia": "middle range",
-  "No": "No"
+  "No": "No",
+  "Secciones del informe": "Report sections",
+  "Indicadores de seguridad": "Security indicators",
+  "Titulares y suministro": "Holders and supply",
+  "Mercados y gráficos": "Markets and charts"
 };
