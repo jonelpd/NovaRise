@@ -112,3 +112,13 @@ section[id],main[id]{scroll-margin-top:130px}
 .wp-end{margin-top:25px;font-size:13px;color:#b1ccc3}
 .wp-home-link{display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin-top:24px}
 @media(max-width:780px){.wp-main{padding-top:35px}.wp-layout{grid-template-columns:1fr;gap:18px}.wp-toc{position:static}.wp-section{padding-top:18px}.wp-section p{font-size:15px}}
+
+/* Whitepaper tokenomics table */
+.wp-table-wrap{overflow-x:auto;max-width:100%;margin:22px 0;border:1px solid #376456;border-radius:14px}
+.wp-economics{border-collapse:collapse;width:100%;min-width:640px;font-size:13px}
+.wp-economics caption{caption-side:top;text-align:left;padding:13px 15px;color:#a8f4d4;font-weight:750;background:#102b25}
+.wp-economics th,.wp-economics td{padding:13px 14px;text-align:left;border-top:1px solid #31564b;vertical-align:top}
+.wp-economics th{color:#b8f7dc;font-weight:750}
+.wp-economics td{color:#d0e3d9}
+.wp-economics tbody tr:nth-child(odd){background:#ffffff05}
+.wp-economics tfoot{background:#173a30}
