@@ -1,5 +1,6 @@
 const { expect } = require("chai");
-const { ethers, time } = require("hardhat");
+const { ethers } = require("hardhat");
+const { time } = require("@nomicfoundation/hardhat-network-helpers");
 
 /**
  * Integration exercise using OpenZeppelin's VestingWallet.
