@@ -177,3 +177,7 @@ section[id],main[id]{scroll-margin-top:130px}
 .interest-modal-close{margin-top:8px;min-width:150px}
 body.interest-modal-open{overflow:hidden}
 @media(max-width:480px){.interest-modal-panel{padding:27px 20px}}
+
+/* Optional participant feedback */
+.interest-form textarea{display:block;width:100%;min-height:110px;resize:vertical;padding:12px;border-radius:10px;border:1px solid #527b6a;background:#10291f;color:inherit;font:inherit;box-sizing:border-box}
+.interest-form textarea:focus-visible{outline:2px solid #73e3b4;outline-offset:2px}
