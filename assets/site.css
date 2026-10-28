@@ -160,3 +160,7 @@ section[id],main[id]{scroll-margin-top:130px}
 #interest-form .interest-consent-row{grid-column:1/-1;display:grid;grid-template-columns:20px minmax(0,1fr);align-items:start;column-gap:12px;width:100%;max-width:100%;min-width:0;margin:0}
 #interest-form .interest-consent-row input[type="checkbox"]{appearance:auto;display:block;box-sizing:border-box;width:18px!important;min-width:18px!important;max-width:18px!important;height:18px!important;min-height:18px!important;margin:2px 0 0!important;padding:0!important;grid-column:1;grid-row:1}
 #interest-form .interest-consent-row label{display:block!important;grid-column:2;grid-row:1;width:auto!important;min-width:0!important;max-width:none!important;margin:0!important;padding:0!important;color:#d1e4db;font-size:13px;font-weight:400;line-height:1.6;text-align:left;white-space:normal;overflow-wrap:break-word}
+
+/* Subtle emphasis for community participation navigation */
+.nav .links a.nav-participation{display:inline-flex;align-items:center;justify-content:center;padding:8px 13px;border:1px solid #66dfb3;border-radius:999px;background:rgba(102,223,179,.13);color:#a6f8d5;font-weight:750;white-space:nowrap;transition:background .2s ease,border-color .2s ease}
+.nav .links a.nav-participation:hover,.nav .links a.nav-participation:focus-visible{background:rgba(102,223,179,.24);border-color:#a6f8d5;color:#fff}
