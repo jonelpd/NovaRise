@@ -368,6 +368,10 @@ function drawHistoricalChart(points,container,metric,showAverages=false){
  container.append(svg);
 }
 async function appendHistoricalChart(pair,network,requestId){
+ if(requestId!==activeRequest)return;
+ if(historyController){historyController.abort();historyController=null;}
+ const selectedPeriod=historyPeriod;
+ const selectedMetric=historyMetric;
  lastHistoricalPair=pair;lastHistoricalNetwork=network;lastHistoricalRequest=requestId;
  const previous=document.getElementById('historical-chart');
  if(previous)previous.remove();
@@ -388,12 +392,11 @@ async function appendHistoricalChart(pair,network,requestId){
  periodLabel.append(periodSelect);metricLabel.append(metricSelect);controls.append(periodLabel,metricLabel);box.append(controls);
  if(!pair||!/^0x[a-fA-F0-9]{40}$/.test(String(pair.pairAddress||''))){box.append(element('p','muted',nvraText('No hay un pool EVM compatible para consultar datos históricos.')));return;}
  box.append(element('p','small muted',nvraText('Fuente: GeckoTerminal. El precio corresponde al activo base del pool (')+String(pair.baseToken?.symbol||nvraText('sin símbolo'))+nvraText('); el volumen corresponde al pool completo. No son datos agregados de todo el mercado.')));
- if(historyController)historyController.abort();
  const controller=new AbortController();historyController=controller;
  const timeout=setTimeout(()=>controller.abort(),10000);
  try{
-  const interval=historyPeriod===1?'hour':'day';
-  const limit=historyPeriod===1?24:historyPeriod;
+  const interval=selectedPeriod===1?'hour':'day';
+  const limit=selectedPeriod===1?24:selectedPeriod;
   const url='https://api.geckoterminal.com/api/v2/networks/'+geckoChains[network]+'/pools/'+encodeURIComponent(pair.pairAddress)+'/ohlcv/'+interval+'?aggregate=1&limit='+limit+'&currency=usd';
   const response=await fetch(url,{signal:controller.signal,headers:{Accept:'application/json'}});
   if(!response.ok)throw Error(nvraText('Histórico no disponible'));
@@ -401,7 +404,7 @@ async function appendHistoricalChart(pair,network,requestId){
   if(requestId!==activeRequest||historyController!==controller)return;
   const available=points;
   const volumePoints=points.filter(p=>p.volume!==null);
-  if(available.length<2){box.append(element('p','muted',historyMetric==='volume'||historyMetric==='both'?nvraText('La fuente no proporciona suficientes precios y volúmenes históricos para este pool.'):nvraText('No hay suficientes precios históricos para mostrar el gráfico.')));return;}
+  if(available.length<2){box.append(element('p','muted',selectedMetric==='volume'||selectedMetric==='both'?nvraText('La fuente no proporciona suficientes precios y volúmenes históricos para este pool.'):nvraText('No hay suficientes precios históricos para mostrar el gráfico.')));return;}
   const first=available[0].close,last=available[available.length-1].close;
   const change=first>0?(last-first)/first*100:null;
   const stats=element('div','history-summary');
@@ -415,12 +418,12 @@ async function appendHistoricalChart(pair,network,requestId){
   appendSupportResistanceInterpretation(available,box);
   appendTechnicalIndicators(available,box);
   const plots=element('div','history-comparison');
-  if(historyMetric==='both'){
+  if(selectedMetric==='both'){
    const pricePlot=element('div');pricePlot.append(element('h5','',nvraText('Precio de cierre · USD')));drawHistoricalChart(available,pricePlot,'close',true);plots.append(pricePlot);
    const volumePlot=element('div');volumePlot.append(element('h5','',nvraText('Volumen del pool · USD')));if(volumePoints.length>=2)drawHistoricalChart(volumePoints,volumePlot,'volume');else volumePlot.append(element('p','muted',nvraText('No hay suficientes volúmenes comparables para evaluar su evolución.')));plots.append(volumePlot);
-  }else if(historyMetric==='volume'){if(volumePoints.length>=2)drawHistoricalChart(volumePoints,plots,'volume');else plots.append(element('p','muted',nvraText('No hay suficientes volúmenes comparables para evaluar su evolución.')));}else drawHistoricalChart(available,plots,'close',true);
+  }else if(selectedMetric==='volume'){if(volumePoints.length>=2)drawHistoricalChart(volumePoints,plots,'volume');else plots.append(element('p','muted',nvraText('No hay suficientes volúmenes comparables para evaluar su evolución.')));}else drawHistoricalChart(available,plots,'close',true);
   box.append(plots);
-  if(historyMetric!=='volume')box.append(element('p','small muted',nvraText('Líneas del gráfico: precio (verde), media móvil SMA 7 (amarillo) y SMA 14 (azul discontinuo). Las medias solo aparecen cuando existen suficientes cierres.')));
+  if(selectedMetric!=='volume')box.append(element('p','small muted',nvraText('Líneas del gráfico: precio (verde), media móvil SMA 7 (amarillo) y SMA 14 (azul discontinuo). Las medias solo aparecen cuando existen suficientes cierres.')));
   const inspector=element('div','history-inspector');
   const reading=element('p','small');reading.setAttribute('aria-live','polite');
   const slider=element('input');slider.type='range';slider.min='0';slider.max=String(available.length-1);slider.step='1';slider.value=String(available.length-1);
