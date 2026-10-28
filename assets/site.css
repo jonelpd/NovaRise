@@ -150,3 +150,8 @@ section[id],main[id]{scroll-margin-top:130px}
 #interest-status{grid-column:1/-1;min-height:1.4em;margin:0;color:#b6f4d6}
 .interest-trap{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 @media(max-width:600px){.interest-section{padding:20px}.interest-form{grid-template-columns:1fr}}
+
+/* Fix consent checkbox alignment: global form label/grid rules must not split text */
+#interest-form .interest-consent{display:flex!important;flex-direction:row!important;align-items:flex-start!important;justify-content:flex-start!important;gap:12px!important;grid-column:1 / -1;width:100%;max-width:100%;min-width:0;text-align:left}
+#interest-form .interest-consent input[type="checkbox"]{display:block;flex:0 0 18px;width:18px;height:18px;min-width:18px;margin:2px 0 0;padding:0;align-self:flex-start}
+#interest-form .interest-consent span{display:block;flex:1 1 auto;width:auto;min-width:0;max-width:100%;overflow-wrap:break-word;white-space:normal}
