@@ -122,3 +122,16 @@ section[id],main[id]{scroll-margin-top:130px}
 .wp-economics td{color:#d0e3d9}
 .wp-economics tbody tr:nth-child(odd){background:#ffffff05}
 .wp-economics tfoot{background:#173a30}
+
+/* NVRA testnet record: responsive address and action links */
+#nvr .panel{min-width:0}
+#nvr .stat{align-items:flex-start}
+#nvr .stat > *{min-width:0}
+#nvr .stat code{display:block;max-width:100%;overflow-wrap:anywhere;word-break:break-word;font-size:clamp(11px,1.5vw,14px);line-height:1.7;text-align:right}
+#nvr .actions .btn{max-width:100%;text-align:center}
+@media(max-width:560px){
+  #nvr .stat{flex-direction:column;align-items:stretch;gap:6px}
+  #nvr .stat code{text-align:left}
+  #nvr .actions{flex-direction:column}
+  #nvr .actions .btn{width:100%}
+}
