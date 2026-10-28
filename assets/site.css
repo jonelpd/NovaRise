@@ -164,3 +164,16 @@ section[id],main[id]{scroll-margin-top:130px}
 /* Subtle emphasis for community participation navigation */
 .nav .links a.nav-participation{display:inline-flex;align-items:center;justify-content:center;padding:8px 13px;border:1px solid #66dfb3;border-radius:999px;background:rgba(102,223,179,.13);color:#a6f8d5;font-weight:750;white-space:nowrap;transition:background .2s ease,border-color .2s ease}
 .nav .links a.nav-participation:hover,.nav .links a.nav-participation:focus-visible{background:rgba(102,223,179,.24);border-color:#a6f8d5;color:#fff}
+
+/* Registration success confirmation overlay */
+.interest-modal[hidden]{display:none!important}
+.interest-modal{position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px}
+.interest-modal-backdrop{position:absolute;inset:0;background:rgba(1,13,10,.78);backdrop-filter:blur(5px)}
+.interest-modal-panel{position:relative;z-index:1;width:min(100%,480px);max-height:calc(100dvh - 40px);overflow:auto;padding:35px 30px;text-align:center;background:#102b25;color:#eafff5;border:1px solid #58cfa4;border-radius:22px;box-shadow:0 24px 80px rgba(0,0,0,.55)}
+.interest-modal-icon{display:grid;place-items:center;margin:0 auto 18px;width:68px;height:68px;border-radius:50%;background:#6ce9bb;color:#06221a;font-size:39px;font-weight:800}
+.interest-modal-panel h2{font-size:clamp(24px,4vw,32px);margin:0 0 12px;letter-spacing:-.6px}
+.interest-modal-panel p{font-size:15px;line-height:1.65;margin:0 0 15px;color:#d6eee3}
+.interest-modal-panel .interest-modal-note{font-size:13px;color:#b1ccc3}
+.interest-modal-close{margin-top:8px;min-width:150px}
+body.interest-modal-open{overflow:hidden}
+@media(max-width:480px){.interest-modal-panel{padding:27px 20px}}
