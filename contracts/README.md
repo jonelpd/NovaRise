@@ -1,6 +1,6 @@
 # NVRA — experimental ERC-20 prototype
 
-**Status: source-code prototype only.** No token has been issued, no contract has been deployed, no public sale exists, and no official contract address is available. The proposed 100 million supply remains subject to validation.
+**Status: experimental source prototype and separately documented Polygon Amoy testnet deployment.** A testnet NVRA contract is recorded at `0xCCC748d63333F9aF58f259CDF771d5AB1226e20D` (chain ID 80002). This repository README does not by itself establish that the deployed bytecode matches the source; that verification remains pending. Testnet tokens have no monetary value. There is no public sale or mainnet launch.
 
 ## Design
 
@@ -20,9 +20,9 @@ npm test
 npm run compile
 ```
 
-No testnet or mainnet configuration or deployment script is included. Do not connect a wallet or add private keys to this repository.
+This source directory does not include a reproducible deployment script or configuration for the recorded Amoy deployment. Do not connect a wallet or add private keys to this repository.
 
-## Before any testnet deployment
+## Before any further testnet deployment
 
 1. Validate utility and tokenomics; determine whether a token is actually needed.
 2. Specify multisig treasury, role separation, distribution and vesting contracts.
@@ -31,3 +31,7 @@ No testnet or mainnet configuration or deployment script is included. Do not con
 5. Only then prepare a separate, reviewed testnet deployment procedure and record the contract address publicly with clear TESTNET labeling.
 
 This prototype is **not audited**, is not financial advice, and is not ready for real funds.
+
+## Smart-contract ecosystem roadmap
+
+See [NovaRise Smart Contracts — architecture v0.1](../docs/smart-contracts-architecture.md) for the proposed read-only access-pass laboratory, security gates, gaming integrations and conditional long-term blockchain vision.
