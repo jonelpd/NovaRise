@@ -1,51 +1,45 @@
-# NVRA — Preparación del primer despliegue en Polygon Amoy (v0.2)
+# NVRA — Primer despliegue en Polygon Amoy (registro actualizado)
 
-**ESTADO: PREPARADO, NO DESPLEGADO.** Este documento NO autoriza ejecutar una transacción. El token NVRA es un prototipo experimental sin valor monetario prometido.
+**ESTADO: DESPLEGADO EN TESTNET — 28 de octubre de 2026.** NVRA es un token experimental de pruebas, sin valor monetario prometido. No está desplegado en Polygon mainnet.
 
-## Datos aprobados para preparar el procedimiento
+## Registro del despliegue
 
-| Parámetro | Valor |
+| Campo | Dato |
 |---|---|
 | Red | Polygon Amoy Testnet |
-| Chain ID | 80002 (hexadecimal 0x13882) |
-| RPC usado por el monedero | https://polygon-amoy.drpc.org |
-| Explorador | https://amoy.polygonscan.com |
-| Contrato fuente | `contracts/NVRAToken.sol` |
-| Constructor | `constructor(address treasury)` |
-| Tesorería **propuesta**, solo pruebas | `0x58f15EA8C1Fb2a783dB296d6F65020B4Ab8cBE77` |
-| Nombre / símbolo | NovaRise Utility Token / NVRA |
-| Decimales | 18 |
-| Suministro inicial y máximo | 100.000.000 NVRA |
-| Saldo testnet observado en captura de usuario | 0,1 POL (no verificado en tiempo real) |
-| Contrato desplegado / dirección / transacción | **No / ninguna / ninguna** |
+| Chain ID | 80002 |
+| Moneda de gas | POL de prueba |
+| Contrato | `0xCCC748d63333F9aF58f259CDF771d5AB1226e20D` |
+| Tesorería y creador | `0x58f15EA8C1Fb2a783dB296d6F65020B4Ab8cBE77` |
+| Token | NovaRise Utility Token (NVRA) |
+| Decimales | 18 (definidos por ERC20 de OpenZeppelin; comprobación independiente de lectura pendiente) |
+| Emisión fija definida por código | 100.000.000 NVRA |
+| Saldo observado de la tesorería | 100.000.000 NVRA (captura de Amoy Polygonscan) |
+| Herramientas | Remix + MetaMask Browser Extension |
+| Solidity | 0.8.34 (según sesión de Remix) |
+| Hash completo de transacción | **Pendiente de registrar** |
+| Bloque observado en captura | 51351109 |
+| Comisión observada | 0,02826931 POL de prueba |
 
-La tesorería propuesta es una **dirección pública** facilitada por el usuario; nunca introducir una frase semilla, clave privada o contraseña en GitHub, Remix o este chat.
+- [Contrato en Amoy Polygonscan](https://amoy.polygonscan.com/address/0xCCC748d63333F9aF58f259CDF771d5AB1226e20D)
+- [Tesorería en Amoy Polygonscan](https://amoy.polygonscan.com/address/0x58f15EA8C1Fb2a783dB296d6F65020B4Ab8cBE77)
+- Fuente del contrato: [NVRAToken.sol](./NVRAToken.sol).
+- Manifest de red: [amoy.manifest.json](./amoy.manifest.json).
 
-## Opción de despliegue: Remix + MetaMask (solo cuando se autorice por separado)
+## Evidencias y alcance
 
-1. En un navegador con MetaMask compatible, abrir **https://remix.ethereum.org/** escribiendo la dirección manualmente. Verificar que se trata del editor oficial.
-2. Cargar el código del contrato y sus dependencias de OpenZeppelin **con versiones reproducibles**. Antes de desplegar, asegurar que se compila el mismo código que pasó las pruebas CI. El import de `@openzeppelin/contracts` requiere resolver esa dependencia; no pegar contratos o importaciones obtenidos de fuentes desconocidas.
-3. En **Solidity Compiler**, seleccionar **0.8.24**, activar el optimizador con **200 runs**, compilar `NVRAToken.sol` y comprobar que no hay errores. Revisar el bytecode y el constructor.
-4. En **Deploy & Run Transactions**, seleccionar **Injected Provider - MetaMask** (el nombre puede variar según la versión). Confirmar que la conexión de MetaMask indica **Polygon Amoy, chain ID 80002**, y que la cuenta firmante es la deseada. No continuar si indica Polygon mainnet o Ethereum mainnet.
-5. Seleccionar `NVRAToken`. En el parámetro `treasury`, introducir exclusivamente `0x58f15EA8C1Fb2a783dB296d6F65020B4Ab8cBE77`. Comprobarlo carácter por carácter.
-6. **DETENERSE AQUÍ para obtener autorización explícita de la transacción.** Antes de pulsar `Deploy`, revisar el coste de gas en POL de prueba y que el monedero muestre Amoy. Una transacción confirmada no puede deshacerse.
-7. Solo tras la autorización: firmar en MetaMask sin exportar claves ni introducir frases de recuperación en páginas web.
+Las capturas del despliegue muestran un contrato en «Deployed Contracts» de Remix, el aviso «Verification Successful», el contrato identificado por Polygonscan como NovaRise Utility Token (NVRA), una transacción «Create: NVRAToken» y la tenencia de 100.000.000 NVRA en la tesorería. La pantalla de MetaMask muestra «100.00 M NVRA».
 
-> **Limitación práctica:** MetaMask móvil no siempre ofrece el mismo flujo de proveedor inyectado que una extensión de escritorio. Si el navegador no permite conectar Remix con MetaMask de forma segura, usar el ordenador con la extensión oficial; **no** exportar la clave privada para resolverlo.
+Estos hechos **no sustituyen** una auditoría de seguridad, una comparación independiente del bytecode ni una validación legal. La verificación del código fuente en el explorador no equivale a una auditoría. El hash completo de la transacción debe recuperarse del explorador y registrarse antes de dar por cerrado el expediente técnico.
 
-## Verificaciones obligatorias después de un eventual despliegue
+## Próximos controles
 
-- Registrar hash de transacción, dirección del contrato, número de bloque, chain ID y dirección de tesorería.
-- Confirmar `name() == "NovaRise Utility Token"`, `symbol() == "NVRA"`, `decimals() == 18`.
-- Confirmar `MAX_SUPPLY() == totalSupply() == 100000000000000000000000000` unidades base.
-- Confirmar `balanceOf(treasury) == totalSupply()` inicialmente.
-- Confirmar que no existe mint posterior, proxy de actualización, congelación o privilegios de administrador.
-- Verificar fuente y parámetros del constructor en el explorador de Amoy; ejecutar transferencias de **prueba** únicamente después de revisar las direcciones.
-- Etiquetar toda referencia al token y su contrato como **TESTNET / EXPERIMENTAL / SIN VALOR MONETARIO**.
+1. Recuperar el hash completo de la transacción de creación y comprobar su recibo.
+2. Consultar `name()`, `symbol()`, `decimals()`, `totalSupply()`, `MAX_SUPPLY()` y `balanceOf(treasury)` mediante el explorador o RPC.
+3. Revisar la coincidencia entre el bytecode desplegado y la versión fuente del repositorio y las dependencias utilizadas.
+4. Realizar pruebas de transferencia con cantidades pequeñas y sin comprometer el saldo principal de la tesorería.
+5. Identificar todo componente público como **TESTNET / EXPERIMENTAL / SIN VALOR MONETARIO**.
 
-## Límites de seguridad
+## Seguridad
 
-- La dirección pública de la tesorería puede coincidir con la cuenta firmante, pero el constructor no lo exige.
-- Una dirección con formato correcto no acredita por sí sola control de la clave ni saldo actual.
-- El saldo de 0,1 POL mostrado en una captura no garantiza que cubra el coste del despliegue; comprobar la estimación de gas antes de autorizar.
-- Este documento no sustituye auditoría de seguridad, tokenomics finales, gobierno de tesorería ni revisión legal.
+Nunca publicar frases semilla ni claves privadas. No presentar NVRA como inversión ni como token de mainnet. Cualquier futura implementación de producción requiere revisión técnica, legal y de gobernanza separada.
