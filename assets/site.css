@@ -135,3 +135,18 @@ section[id],main[id]{scroll-margin-top:130px}
   #nvr .actions{flex-direction:column}
   #nvr .actions .btn{width:100%}
 }
+
+/* Community interest registration */
+.interest-section{margin:56px 0;padding:30px;border:1px solid #315c50;border-radius:20px;background:#102b25;scroll-margin-top:90px}
+.interest-section h2{margin:10px 0 14px}
+.interest-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px;margin-top:22px;max-width:850px}
+.interest-form>label:not(.interest-consent){display:flex;flex-direction:column;gap:7px;color:#d6eee3;font-size:14px;font-weight:650}
+.interest-form input:not([type=checkbox]),.interest-form select{width:100%;min-width:0;border:1px solid #52806f;border-radius:10px;background:#09251e;color:#fff;padding:12px;font:inherit}
+.interest-form input:focus-visible,.interest-form select:focus-visible{outline:2px solid #8af0c1;outline-offset:2px}
+.interest-consent{display:flex;align-items:flex-start;gap:10px;grid-column:1/-1;color:#d1e4db;font-size:13px;line-height:1.6}
+.interest-consent input{margin-top:4px;flex:none}
+.interest-form button{justify-self:start;cursor:pointer}
+.interest-form button:disabled{opacity:.65;cursor:wait}
+#interest-status{grid-column:1/-1;min-height:1.4em;margin:0;color:#b6f4d6}
+.interest-trap{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+@media(max-width:600px){.interest-section{padding:20px}.interest-form{grid-template-columns:1fr}}
