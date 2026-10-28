@@ -436,7 +436,7 @@ async function appendHistoricalChart(pair,network,requestId){
   inspector.append(element('strong','',historyPeriod===1?nvraText('Explorar valores horarios'):nvraText('Explorar valores diarios')),reading,slider);
   inspector.append(element('p','small muted',historyPeriod===1?nvraText('Desliza o utiliza las flechas del teclado para consultar cada hora.'):nvraText('Desliza o utiliza las flechas del teclado para consultar cada día.')));
   box.append(inspector);
-  box.append(element('p','small muted',nvraText('Datos disponibles: ')+new Date(available[0].time*1000).toLocaleDateString(nvraText('es-ES'))+' a '+new Date(available[available.length-1].time*1000).toLocaleDateString(nvraText('es-ES'))+' · '+available.length+(historyPeriod===1?nvraText(' observaciones horarias.'):nvraText(' observaciones diarias.'))+nvraText(' Los datos históricos no predicen resultados futuros.')));
+  box.append(element('p','small muted',nvraText('Datos disponibles: ')+new Date(available[0].time*1000).toLocaleDateString(nvraText('es-ES'))+' a '+new Date(available[available.length-1].time*1000).toLocaleDateString(nvraText('es-ES'))+' · '+available.length+(selectedPeriod===1?nvraText(' observaciones horarias.'):nvraText(' observaciones diarias.'))+nvraText(' Los datos históricos no predicen resultados futuros.')));
  }catch(e){if(requestId===activeRequest&&historyController===controller)box.append(element('p','muted',nvraText('Histórico no disponible temporalmente para este pool. El informe de seguridad sigue siendo independiente.')));}
  finally{clearTimeout(timeout);if(historyController===controller)historyController=null;}
 }
