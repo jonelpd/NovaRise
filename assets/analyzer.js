@@ -94,7 +94,7 @@ function appendMarket(pairs,address,network){
  selected.sort((a,b)=>(safeNumber(b.liquidity?.usd)||0)-(safeNumber(a.liquidity?.usd)||0));
  const top=selected[0];
  const basePairs=selected.filter(p=>typeof p.baseToken?.address==='string'&&p.baseToken.address.toLowerCase()===address.toLowerCase());
- const pricePair=basePairs.find(p=>safeNumber(p.priceUsd)>0);
+ const pricePair=basePairs.find(p=>{const price=safeNumber(p.priceUsd);return price!==null&&price>0;});
  const summary=element('div','market-card');
  summary.append(element('p','small muted',nvraText('Par con mayor liquidez USD reportada entre los ')+selected.length+nvraText(' pares devueltos. Los datos son aproximados, no agregados de todo el mercado.')));
  const grid=element('div','market-grid');
