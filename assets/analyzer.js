@@ -94,7 +94,7 @@ function appendMarket(pairs,address,network){
  selected.sort((a,b)=>(safeNumber(b.liquidity?.usd)||0)-(safeNumber(a.liquidity?.usd)||0));
  const top=selected[0];
  const basePairs=selected.filter(p=>typeof p.baseToken?.address==='string'&&p.baseToken.address.toLowerCase()===address.toLowerCase());
- const pricePair=basePairs[0];
+ const pricePair=basePairs.find(p=>safeNumber(p.priceUsd)>0);
  const summary=element('div','market-card');
  summary.append(element('p','small muted',nvraText('Par con mayor liquidez USD reportada entre los ')+selected.length+nvraText(' pares devueltos. Los datos son aproximados, no agregados de todo el mercado.')));
  const grid=element('div','market-grid');
@@ -102,7 +102,7 @@ function appendMarket(pairs,address,network){
  grid.append(metricCard(nvraText('Liquidez del par'),usd(top.liquidity?.usd),nvraText('Liquidez estimada por DexScreener; no equivale a fondos bloqueados.')));
  grid.append(metricCard(nvraText('Volumen 24 h del par'),usd(top.volume?.h24),nvraText('Volumen de operaciones del par; no es volumen global.')));
  const priceChange=pricePair?.priceChange?.h24;
- const priceChangeNumber=priceChange===null||priceChange===undefined||priceChange===''?NaN:Number(priceChange);
+ const priceChangeNumber=!pricePair||priceChange===null||priceChange===undefined||priceChange===''?NaN:Number(priceChange);
  grid.append(metricCard(nvraText('Variación 24 h del token'),Number.isFinite(priceChangeNumber)?priceChangeNumber.toLocaleString(nvraText('es-ES'),{maximumFractionDigits:2})+' %':nvraText('Sin datos'),nvraText('Variación del activo base del mismo par utilizado para mostrar el precio.')));
  summary.append(grid);report.append(summary);
  report.append(element('h4','section-title',nvraText('Pares DEX destacados')));
@@ -430,11 +430,11 @@ async function appendHistoricalChart(pair,network,requestId){
   slider.setAttribute('aria-label',nvraText('Seleccionar día del histórico'));
   const updateReading=()=>{
    const point=available[Number(slider.value)];
-   reading.textContent=new Date(point.time*1000).toLocaleString(nvraText('es-ES'),historyPeriod===1?{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}:{day:'2-digit',month:'2-digit',year:'numeric'})+nvraText(' · Precio: ')+usd(point.close,8)+nvraText(' · Volumen: ')+usd(point.volume,0);
+   reading.textContent=new Date(point.time*1000).toLocaleString(nvraText('es-ES'),selectedPeriod===1?{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}:{day:'2-digit',month:'2-digit',year:'numeric'})+nvraText(' · Precio: ')+usd(point.close,8)+nvraText(' · Volumen: ')+usd(point.volume,0);
   };
   slider.addEventListener('input',updateReading);updateReading();
-  inspector.append(element('strong','',historyPeriod===1?nvraText('Explorar valores horarios'):nvraText('Explorar valores diarios')),reading,slider);
-  inspector.append(element('p','small muted',historyPeriod===1?nvraText('Desliza o utiliza las flechas del teclado para consultar cada hora.'):nvraText('Desliza o utiliza las flechas del teclado para consultar cada día.')));
+  inspector.append(element('strong','',selectedPeriod===1?nvraText('Explorar valores horarios'):nvraText('Explorar valores diarios')),reading,slider);
+  inspector.append(element('p','small muted',selectedPeriod===1?nvraText('Desliza o utiliza las flechas del teclado para consultar cada hora.'):nvraText('Desliza o utiliza las flechas del teclado para consultar cada día.')));
   box.append(inspector);
   box.append(element('p','small muted',nvraText('Datos disponibles: ')+new Date(available[0].time*1000).toLocaleDateString(nvraText('es-ES'))+' a '+new Date(available[available.length-1].time*1000).toLocaleDateString(nvraText('es-ES'))+' · '+available.length+(selectedPeriod===1?nvraText(' observaciones horarias.'):nvraText(' observaciones diarias.'))+nvraText(' Los datos históricos no predicen resultados futuros.')));
  }catch(e){if(requestId===activeRequest&&historyController===controller)box.append(element('p','muted',nvraText('Histórico no disponible temporalmente para este pool. El informe de seguridad sigue siendo independiente.')));}
