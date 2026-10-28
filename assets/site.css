@@ -158,5 +158,5 @@ section[id],main[id]{scroll-margin-top:130px}
 
 /* Consent is a grid row, not a nested full-width input inside a label */
 #interest-form .interest-consent-row{grid-column:1/-1;display:grid;grid-template-columns:20px minmax(0,1fr);align-items:start;column-gap:12px;width:100%;max-width:100%;min-width:0;margin:0}
-#interest-form .interest-consent-row input[type="checkbox"]{appearance:auto;display:block;box-sizing:border-box;width:18px!important;min-width:18px!important;max-width:18px!important;height:18px!important;min-height:18px!important;margin:2px 0 0!important;padding:0!important;grid-column:1}
-#interest-form .interest-consent-row label{display:block!important;grid-column:2;width:auto!important;min-width:0!important;max-width:none!important;margin:0!important;padding:0!important;color:#d1e4db;font-size:13px;font-weight:400;line-height:1.6;text-align:left;white-space:normal;overflow-wrap:break-word}
+#interest-form .interest-consent-row input[type="checkbox"]{appearance:auto;display:block;box-sizing:border-box;width:18px!important;min-width:18px!important;max-width:18px!important;height:18px!important;min-height:18px!important;margin:2px 0 0!important;padding:0!important;grid-column:1;grid-row:1}
+#interest-form .interest-consent-row label{display:block!important;grid-column:2;grid-row:1;width:auto!important;min-width:0!important;max-width:none!important;margin:0!important;padding:0!important;color:#d1e4db;font-size:13px;font-weight:400;line-height:1.6;text-align:left;white-space:normal;overflow-wrap:break-word}
