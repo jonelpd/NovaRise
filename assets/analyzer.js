@@ -125,6 +125,7 @@ function historicalPoints(payload){
  for(const row of raw){
   if(!Array.isArray(row)||row.length<6)continue;
   const time=Number(row[0]),close=safeNumber(row[4]),volume=safeNumber(row[5]);
+  if(close===0)continue;
   if(!Number.isFinite(time)||time<=0||close===null)continue;
   unique.set(time,{time,close,volume});
  }
@@ -132,6 +133,7 @@ function historicalPoints(payload){
 }
 function interpretHistory(points){
  if(!Array.isArray(points)||points.length<3)return null;
+ if(points.some(p=>!Number.isFinite(p.close)||p.close<=0))return null;
  const first=points[0].close,last=points[points.length-1].close;
  if(!Number.isFinite(first)||first<=0||!Number.isFinite(last))return null;
  const change=(last/first-1)*100;
