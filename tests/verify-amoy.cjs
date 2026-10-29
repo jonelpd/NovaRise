@@ -4,10 +4,32 @@
 const address = "0xCCC748d63333F9aF58f259CDF771d5AB1226e20D";
 const treasury = "0x58f15EA8C1Fb2a783dB296d6F65020B4Ab8cBE77";
 const endpoint = process.env.NVRA_AMOY_RPC || "https://rpc-amoy.polygon.technology/";
+if (!/^https:\/\//.test(endpoint)) throw Error("RPC endpoint must use HTTPS");
 const assert = require("node:assert/strict");
 let id = 0;
 async function rpc(method, params = []) {
-  const response = await fetch(endpoint, { method:"POST", headers:{"content-type":"application/json"}, body:JSON.stringify({jsonrpc:"2.0",id:++id,method,params}), signal:AbortSignal.timeout(15000) });
+  const requestId = ++id;
+  let response;
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    try {
+      response = await fetch(endpoint, {
+        method:"POST",
+        headers:{"content-type":"application/json"},
+        body:JSON.stringify({jsonrpc:"2.0",id:requestId,method,params}),
+        signal:AbortSignal.timeout(15000)
+      });
+      if (response.status === 429 || response.status >= 500) {
+        throw Error("RPC HTTP " + response.status);
+      }
+      break;
+    } catch (error) {
+      const cause = error.cause;
+      const detail = [error.message, cause?.code, cause?.message].filter(Boolean).join(" | ");
+      console.error("RPC attempt " + attempt + "/3 (" + method + "): " + detail);
+      if (attempt === 3) throw Error(method + " connection failed after 3 attempts: " + detail);
+      await new Promise(resolve => setTimeout(resolve, attempt * 1000));
+    }
+  }
   if (!response.ok) throw Error(method + " HTTP " + response.status);
   const body = await response.json();
   if (body.error || typeof body.result !== "string") throw Error(method + ": invalid RPC response");
@@ -27,6 +49,7 @@ const decodeText = hex => {
   throw Error("Invalid ERC20 text encoding");
 };
 async function main(){
+  console.log("Amoy RPC host:", new URL(endpoint).host, "(read-only)");
   const chain=await rpc("eth_chainId");
   assert.equal(BigInt(chain),80002n,"Unexpected chain ID");
   const code=await rpc("eth_getCode",[address,"latest"]);
