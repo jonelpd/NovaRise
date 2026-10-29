@@ -1,6 +1,15 @@
 require("@nomicfoundation/hardhat-toolbox");
 
-/** Local Hardhat network only: no RPC URLs or deployment accounts configured. */
+/**
+ * Base mainnet target: chain ID 8453.
+ * No mainnet signing account is configured: deployment is deliberately disabled
+ * until independent audit, legal review, custody setup and explicit go/no-go.
+ * BASE_MAINNET_RPC_URL is optional and is used for read-only RPC queries.
+ */
+const baseUrl = process.env.BASE_MAINNET_RPC_URL;
+if (baseUrl && !/^https:\/\//.test(baseUrl)) {
+  throw new Error("BASE_MAINNET_RPC_URL must use HTTPS");
+}
 module.exports = {
   solidity: {
     compilers: [
@@ -8,6 +17,9 @@ module.exports = {
       { version: "0.7.6", settings: { optimizer: { enabled: false } } }
     ]
   },
-  networks: { hardhat: { chainId: 31337 } },
+  networks: {
+    hardhat: { chainId: 31337 },
+    ...(baseUrl ? { base: { url: baseUrl, chainId: 8453, accounts: [] } } : {})
+  },
   paths: { sources: "./src", tests: "./test" }
 };
