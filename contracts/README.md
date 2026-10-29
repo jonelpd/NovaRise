@@ -35,3 +35,16 @@ This prototype is **not audited**, is not financial advice, and is not ready for
 ## Smart-contract ecosystem roadmap
 
 See [NovaRise Smart Contracts — architecture v0.1](../docs/smart-contracts-architecture.md) for the proposed read-only access-pass laboratory, security gates, gaming integrations and conditional long-term blockchain vision.
+
+## Future 1,000,000 NVRA mainnet candidate — DRAFT, NOT DEPLOYED
+
+The existing `src/NVRAToken.sol` and Polygon Amoy deployment remain the **100,000,000 test-token prototype**. Do not change the historical prototype to represent a future mainnet token.
+
+- `src/NVRAMainnetCandidate.sol`: a **separate, undeployed** 1,000,000 NVRA fixed-supply candidate. Its constructor requires a previously deployed contract as treasury recipient; this does **not** prove that the recipient is a secure multisig.
+- `src/NVRATeamVesting.sol`: separate, undeployed cliff-plus-linear vesting draft using OpenZeppelin VestingWallet. Durations are specified in seconds; 12 and 36 calendar months are **not automatically equivalent** to 365 and 1,095 days.
+- `src/MockNVRATreasury.sol`: **INSECURE TEST MOCK ONLY**. It allows any caller to transfer its tokens and must NEVER be used or funded in a live environment.
+- `test/mainnet-candidate.test.cjs`: local-only supply, treasury validation and cliff boundary tests.
+
+**Security caveats:** VestingWallet beneficiary ownership is transferable, late funding can release an already-vested portion immediately, and allocation purpose/budget controls are not implemented. These drafts are not audited and do not authorize deployment. A reviewed Safe multisig and separate allocation-control contracts are recommended.
+
+See [treasury and vesting architecture](../docs/treasury-vesting-architecture-v1.md) and [tokenomics V1](../docs/tokenomics-v1-mainnet-plan.md).
