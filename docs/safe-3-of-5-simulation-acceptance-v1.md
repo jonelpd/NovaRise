@@ -41,5 +41,9 @@ This plan does not authorize deployment, custody, token sales or token transfers
 
 ## Phase 2 — additional automated cases (2026-10-29)
 - Commit `4cb7a36` adds local tests for Safe-only threshold changes, rejection of direct outsider changes, approved owner rotation and former-owner rejection, and Safe-authorized funding of 150,000 NVRA into team vesting with cliff and full release checks.
-- **These new tests have been committed but their CI outcome is not yet verified.** Previous green run #17 applies to the earlier commit only.
+- **CI confirmed:** GitHub Actions run #18 shows Success for commit `4cb7a36` (screenshot supplied by repository owner, 2026-10-29). The new tests passed as part of the green compile-and-test job.
 - Remaining scope includes guards/modules, gas griefing, malformed signatures, invariant/fuzz testing, owner rotation edge cases, and an independent security review.
+
+## Confirmed CI milestone — run #18
+- Screenshot of GitHub Actions workflow run #18 shows green overall Success and compile-and-test for commit `4cb7a36`, total duration 31 seconds.
+- Covers the additional test cases introduced in that commit. Not a substitute for independent security audit or production Safe review.
