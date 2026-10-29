@@ -1,12 +1,12 @@
 # NovaRise — multisignature treasury design v1 (proposal)
 
-**Status: design only; no Safe deployed, no signers appointed, no mainnet token deployed.** Date: 2026-10-29.
+**Status: 3-of-5 threshold approved by project owner as the provisional basis for local simulations only. No Safe deployed, no signers appointed, no mainnet token deployed.** Date: 2026-10-29.
 
 ## Custody architecture
 
 - Proposed chain: Polygon PoS mainnet, subject to final legal/technical approval.
 - Use a verified Safe smart account (Gnosis Safe), not a custom unaudited multisig.
-- **Candidate threshold: 3 of 5 independent signers**, subject to formal approval. No signer list or private keys should be published in the repository.
+- **Provisional simulation threshold: 3 of 5 independent signers**, approved for testing; production governance, identities and operational arrangements remain subject to separate approval. No signer list or private keys should be published in the repository.
 - Deploy and independently verify the Safe **before** deploying the fixed-supply token, because `NVRAMainnetCandidate` requires a contract treasury and mints the full supply to it.
 - Record and cross-check Safe address, chain ID, Safe implementation, owners, threshold, transaction service configuration and verified deployment metadata from two independent reviewers.
 - Use separate hardware wallets for signers. No seed phrases, private keys, or transaction signing in GitHub Actions, browser screenshots, logs or code.
