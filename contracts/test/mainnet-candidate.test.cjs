@@ -108,4 +108,58 @@ describe("NovaRise team cliff vesting (local only)", function () {
     expect(await token.balanceOf(beneficiary.address)).to.equal(0n);
   });
 
+  it("checks vesting monotonicity and allocation bounds over deterministic boundary samples", async function () {
+    const [, beneficiary] = await ethers.getSigners();
+    const Treasury = await ethers.getContractFactory("MockNVRATreasury");
+    const treasury = await Treasury.deploy();
+    const Token = await ethers.getContractFactory("NVRAMainnetCandidate");
+    const token = await Token.deploy(await treasury.getAddress());
+    const Vesting = await ethers.getContractFactory("NVRATeamVesting");
+    const start = 2000000000;
+    const cliff = 86400;
+    const linear = 86400 * 3;
+    const vest = await Vesting.deploy(beneficiary.address, start, cliff, linear);
+    const allocation = ethers.parseUnits("150000", 18);
+    await treasury.sendToken(await token.getAddress(), await vest.getAddress(), allocation);
+    const tokenAddress = await token.getAddress();
+    const cliffEnd = start + cliff;
+    const end = cliffEnd + linear;
+    const timestamps = [
+      start - 1, start, start + 1, cliffEnd - 1, cliffEnd,
+      cliffEnd + 1, cliffEnd + 2, cliffEnd + 60,
+      cliffEnd + Math.floor(linear / 4), cliffEnd + Math.floor(linear / 2),
+      cliffEnd + Math.floor(linear * 3 / 4), end - 2, end - 1,
+      end, end + 1, end + 86400
+    ];
+    // Deterministic pseudo-random samples: reproducible across CI runs.
+    let seed = 20261029;
+    for (let i = 0; i < 64; i++) {
+      seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
+      timestamps.push(start - 3600 + seed % (linear + cliff + 7200));
+    }
+    timestamps.sort((a, b) => a - b);
+    let previous = 0n;
+    for (const timestamp of timestamps) {
+      const vested = await vest["vestedAmount(address,uint64)"](tokenAddress, timestamp);
+      expect(vested).to.be.gte(previous);
+      expect(vested).to.be.lte(allocation);
+      if (timestamp <= cliffEnd) expect(vested).to.equal(0n);
+      if (timestamp >= end) expect(vested).to.equal(allocation);
+      if (timestamp > cliffEnd && timestamp < end) {
+        const expected = allocation * BigInt(timestamp - cliffEnd) / BigInt(linear);
+        expect(vested).to.equal(expected);
+      }
+      previous = vested;
+    }
+    expect(await token.totalSupply()).to.equal(ethers.parseUnits("1000000", 18));
+  });
+
+  it("rejects duration overflow and zero-length vesting phases", async function () {
+    const [, beneficiary] = await ethers.getSigners();
+    const Vesting = await ethers.getContractFactory("NVRATeamVesting");
+    const max = (1n << 64n) - 1n;
+    await expect(Vesting.deploy(beneficiary.address, 2000000000, max, 2)).to.be.reverted;
+    await expect(Vesting.deploy(beneficiary.address, 2000000000, 1, 0)).to.be.revertedWith("NVRA: invalid durations");
+  });
+
 });
