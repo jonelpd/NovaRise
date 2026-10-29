@@ -50,6 +50,10 @@ This plan does not authorize deployment, custody, token sales or token transfers
 
 ## Phase 3 — adversarial tests (2026-10-29)
 - Commit `aac3976` adds duplicate approved-hash signatures, altered transfer payload without reapproval, and multi-transfer fixed-supply accounting tests against the official Safe proxy.
-- **Awaiting CI verification** for these new cases. A previous green run does not validate newly added tests.
+- **CI verified:** GitHub Actions run #19 shows Success for commit `aac3976` (repository owner's screenshot, 2026-10-29), with the compile-and-test job green.
 - The repeated-transfer test is a deterministic accounting check, **not** property-based fuzzing or a formal invariant proof.
 - Remaining: fuzz/property-based coverage, guard/module risks, signature edge cases, gas/griefing and independent audit.
+
+## Confirmed CI milestone — run #19
+- Screenshot of GitHub Actions workflow run #19 reports Success for commit `aac3976`, duration 40 seconds, including the new adversarial tests.
+- This confirms passing automated checks for this commit only; fuzz/property-based testing, formal verification, independent audit and production readiness remain outstanding.
