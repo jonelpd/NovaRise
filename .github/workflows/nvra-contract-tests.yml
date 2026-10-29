@@ -68,3 +68,22 @@ jobs:
         run: npx hardhat compile
       - name: Run all local Hardhat tests
         run: npx hardhat test --network hardhat
+      - name: Evaluate compatible dependency fixes without changing committed lockfile
+        run: |
+          mkdir -p audit-candidate
+          cp package.json package-lock.json audit-candidate/
+          cd audit-candidate
+          npm audit fix --package-lock-only --ignore-scripts --no-fund > npm-fix-log.txt 2>&1 || true
+          npm audit --package-lock-only --json > npm-audit-after.json || true
+          node -e 'const fs=require("fs");for(const f of ["npm-audit-after.json"]){try{const x=JSON.parse(fs.readFileSync(f));console.log("Compatible-fix candidate",JSON.stringify(x.metadata?.vulnerabilities||{}));}catch(e){console.log("Audit candidate unavailable:",e.message)}}'
+          sha256sum package-lock.json
+          if cmp -s package-lock.json ../package-lock.json; then echo "No candidate lockfile changes"; else echo "Candidate lockfile differs; requires separate testing before adoption"; fi
+      - name: Upload compatible-fix candidate for separate review
+        uses: actions/upload-artifact@v4
+        with:
+          name: nvra-compatible-fix-candidate
+          path: |
+            contracts/audit-candidate/package-lock.json
+            contracts/audit-candidate/npm-fix-log.txt
+            contracts/audit-candidate/npm-audit-after.json
+          retention-days: 14
