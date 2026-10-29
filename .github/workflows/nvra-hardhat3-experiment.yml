@@ -1,0 +1,69 @@
+name: NVRA Hardhat 3 isolated migration experiment
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/nvra-hardhat3-experiment.yml'
+      - 'contracts/src/**'
+jobs:
+  experimental-hardhat3:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Create isolated Hardhat 3 sandbox
+        run: |
+          mkdir -p /tmp/nvra-hardhat3/src
+          cp -R contracts/src/. /tmp/nvra-hardhat3/src/
+          cd /tmp/nvra-hardhat3
+          printf '%s\n' '{"name":"nvra-hardhat3-evaluation","private":true,"type":"module"}' > package.json
+          npm install --no-audit --no-fund --save-dev hardhat@^3 @nomicfoundation/hardhat-ethers@^4
+          npm install --no-audit --no-fund --save @openzeppelin/contracts@^5
+      - name: Acquire identical integrity-verified Safe Solidity sources
+        run: |
+          cd /tmp/nvra-hardhat3
+          mkdir -p safe-package node_modules/@safe-global/safe-contracts
+          npm pack @safe-global/safe-contracts@1.4.1-2 --ignore-scripts --pack-destination safe-package --silent
+          node -e 'const fs=require("fs"),crypto=require("crypto");const e=require(process.env.GITHUB_WORKSPACE+"/contracts/safe-deps/package-lock.json").packages["node_modules/@safe-global/safe-contracts"];const b=fs.readFileSync("safe-package/safe-global-safe-contracts-1.4.1-2.tgz");if(e.version!=="1.4.1-2"||"sha512-"+crypto.createHash("sha512").update(b).digest("base64")!==e.integrity)throw Error("Safe tarball integrity mismatch");'
+          tar -xzf safe-package/safe-global-safe-contracts-1.4.1-2.tgz -C safe-package --no-same-owner --no-same-permissions
+          cp -R safe-package/package/contracts node_modules/@safe-global/safe-contracts/contracts
+          node -e 'const p=require("./safe-package/package/package.json");require("fs").writeFileSync("node_modules/@safe-global/safe-contracts/package.json",JSON.stringify({name:p.name,version:p.version}));'
+      - name: Generate separate Hardhat 3 ESM config
+        run: |
+          cat > /tmp/nvra-hardhat3/hardhat.config.ts <<'EOF'
+          import { defineConfig } from "hardhat/config";
+          import hardhatEthers from "@nomicfoundation/hardhat-ethers";
+          export default defineConfig({
+            plugins: [hardhatEthers],
+            solidity: {
+              compilers: [
+                { version: "0.8.24", settings: { optimizer: { enabled: true, runs: 200 } } },
+                { version: "0.7.6", settings: { optimizer: { enabled: false } } }
+              ]
+            },
+            paths: { sources: "./src", tests: "./test" }
+          });
+          EOF
+      - name: Experimental compilation (independent of production CI)
+        working-directory: /tmp/nvra-hardhat3
+        run: |
+          npx hardhat --version
+          npx hardhat compile
+      - name: Record Hardhat 3 dependency advisories
+        if: always()
+        working-directory: /tmp/nvra-hardhat3
+        run: |
+          npm audit --json > hardhat3-audit.json || true
+          node -e 'const fs=require("fs");try{const x=JSON.parse(fs.readFileSync("hardhat3-audit.json"));console.log("Hardhat 3 audit",JSON.stringify(x.metadata?.vulnerabilities||{}))}catch(e){console.log(e.message)}'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: nvra-hardhat3-experiment-evidence
+          path: /tmp/nvra-hardhat3/hardhat3-audit.json
+          if-no-files-found: warn
+          retention-days: 14
