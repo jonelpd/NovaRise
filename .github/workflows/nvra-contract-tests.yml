@@ -25,26 +25,27 @@ jobs:
           node-version: '22'
       - name: Install root dependencies from committed lockfile
         run: npm ci --no-audit --no-fund
-      - name: Install isolated official Safe contracts from committed lockfile
-        run: npm ci --prefix safe-deps --no-audit --no-fund
+      - name: Fetch integrity-pinned Safe Solidity sources without JS dependencies
+        run: |
+          node scripts/fetch-safe-solidity.cjs
       - name: Dependency vulnerability inventory (non-blocking evidence)
         run: |
           npm audit --json > npm-audit-root.json || true
-          npm audit --prefix safe-deps --json > npm-audit-safe.json || true
-          node -e 'for(const f of ["npm-audit-root.json","npm-audit-safe.json"]){const x=require("./"+f);console.log(f,JSON.stringify(x.metadata?.vulnerabilities||{}));for(const [name,v] of Object.entries(x.vulnerabilities||{})){console.log(JSON.stringify({tree:f,package:name,severity:v.severity,isDirect:v.isDirect,range:v.range,via:v.via.map(z=>typeof z==="string"?z:{name:z.name,title:z.title,url:z.url,range:z.range}),effects:v.effects,fixAvailable:v.fixAvailable}));}}'
+          # Safe Solidity sources are extracted without installing their npm peer dependencies.
+          node -e 'for(const f of ["npm-audit-root.json"]){const x=require("./"+f);console.log(f,JSON.stringify(x.metadata?.vulnerabilities||{}));for(const [name,v] of Object.entries(x.vulnerabilities||{})){console.log(JSON.stringify({tree:f,package:name,severity:v.severity,isDirect:v.isDirect,range:v.range,via:v.via.map(z=>typeof z==="string"?z:{name:z.name,title:z.title,url:z.url,range:z.range}),effects:v.effects,fixAvailable:v.fixAvailable}));}}'
       - name: Upload dependency vulnerability reports
         uses: actions/upload-artifact@v4
         with:
           name: nvra-dependency-audit
           path: |
             contracts/npm-audit-root.json
-            contracts/npm-audit-safe.json
+            contracts/safe-solidity-provenance.json
           retention-days: 30
       - name: Record dependency versions and lockfile checksums
         run: |
           node -p '"Node " + process.version + ", npm " + process.env.npm_config_user_agent'
           npm ls --depth=0
-          npm ls --prefix safe-deps --depth=0
+          node -e 'const p=require("./safe-solidity-provenance.json"); console.log("Safe Solidity-only package",p.package,p.version,p.integrity)'
           sha256sum package-lock.json safe-deps/package-lock.json
       - name: Upload lockfiles for review and repository pinning
         uses: actions/upload-artifact@v4
@@ -54,10 +55,10 @@ jobs:
             contracts/package-lock.json
             contracts/safe-deps/package-lock.json
           retention-days: 30
-      - name: Expose isolated Safe Solidity package to Hardhat resolver
+      - name: Verify no Safe JavaScript peer dependencies installed
         run: |
-          mkdir -p node_modules/@safe-global
-          cp -R safe-deps/node_modules/@safe-global/safe-contracts node_modules/@safe-global/safe-contracts
+          test -f node_modules/@safe-global/safe-contracts/contracts/Safe.sol
+          test ! -d safe-deps/node_modules
       - name: Compile Solidity contracts
         run: npx hardhat compile
       - name: Run all local Hardhat tests
