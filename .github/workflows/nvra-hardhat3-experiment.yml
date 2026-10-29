@@ -157,7 +157,39 @@ jobs:
           await rejected(safe.connect(outsider).execTransaction(...args, signatures(owners.slice(0, 3))),
             "Replay must fail");
           assert.equal(await token.totalSupply(), supply);
-          console.log("Hardhat 3 Safe 3-of-5 passed: owners, threshold, unauthorized signatures, tampering, replay, supply");
+          // A duplicate owner cannot fill three independent signature slots.
+          const nextData = token.interface.encodeFunctionData("transfer", [recipient.address, 10n]);
+          const nextArgs = [await token.getAddress(), 0n, nextData, 0, 0n, 0n, 0n, ethers.ZeroAddress, ethers.ZeroAddress];
+          const nextHash = await safe.getTransactionHash(...nextArgs, await safe.nonce());
+          for (const owner of owners.slice(0, 2)) await (await safe.connect(owner).approveHash(nextHash)).wait();
+          const duplicate = ethers.hexlify(ethers.concat([
+            signatures([owners[0]]), signatures([owners[0]]), signatures([owners[1]])
+          ]));
+          await rejected(safe.connect(outsider).execTransaction(...nextArgs, duplicate),
+            "Duplicate signatures must fail");
+          assert.equal(await safe.nonce(), 1n);
+          // A non-owner cannot replace the missing third approval.
+          await rejected(safe.connect(outsider).execTransaction(...nextArgs,
+            signatures([owners[0], owners[1], outsider])), "Non-owner signature must fail");
+          assert.equal(await token.balanceOf(recipient.address), amount);
+          // Several independently authorized transfers must preserve supply and balances.
+          let sent = amount;
+          for (const quantity of [1n, 25n, 1000n, ethers.parseUnits("100", 18)]) {
+            const payload = token.interface.encodeFunctionData("transfer", [recipient.address, quantity]);
+            const txArgs = [await token.getAddress(), 0n, payload, 0, 0n, 0n, 0n, ethers.ZeroAddress, ethers.ZeroAddress];
+            const txHash = await safe.getTransactionHash(...txArgs, await safe.nonce());
+            for (const owner of owners.slice(0, 3)) await (await safe.connect(owner).approveHash(txHash)).wait();
+            const txReceipt = await (await safe.connect(outsider).execTransaction(...txArgs, signatures(owners.slice(0, 3)))).wait();
+            assert.ok(!txReceipt.logs.some(log => {
+              try { return safe.interface.parseLog(log)?.name === "ExecutionFailure"; } catch { return false; }
+            }), "Safe internal transfer failure");
+            sent += quantity;
+            assert.equal(await token.balanceOf(recipient.address), sent);
+            assert.equal(await token.balanceOf(await safe.getAddress()), supply - sent);
+            assert.equal(await token.totalSupply(), supply);
+          }
+          assert.equal(await safe.nonce(), 5n);
+          console.log("Hardhat 3 Safe 3-of-5 passed: owners, threshold, unauthorized/duplicate signatures, tampering, replay, multiple transfers, supply");
           EOF
           node safe-smoke.mjs
       - name: Record Hardhat 3 dependency advisories
