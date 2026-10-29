@@ -1,6 +1,6 @@
 # NovaRise Safe 3-of-5 simulation acceptance plan
 
-Status: approved **for simulation only** on 2026-10-29. Official Safe 1.4.1-2 local test code committed; **CI result not yet confirmed**. No production Safe, keys, or mainnet transactions.
+Status: approved **for simulation only** on 2026-10-29. Official Safe 1.4.1-2 local test code committed; **GitHub Actions run #17 succeeded** for commit `f362c05`, as confirmed by the repository owner's screenshot (2026-10-29). No production Safe, keys, or mainnet transactions.
 
 ## Environment
 
@@ -37,4 +37,4 @@ This plan does not authorize deployment, custody, token sales or token transfers
 - `contracts/package.json` pins `@safe-global/safe-contracts@1.4.1-2`.
 - `contracts/src/SafeLocalImports.sol` compiles official Safe singleton and SafeProxyFactory with Solidity 0.7.6.
 - `contracts/test/safe-multisig.test.cjs` deploys an actual Safe proxy locally, initializes five Hardhat signers with threshold three, mints the separate NVRA candidate into it, and tests 1/2/3 approved-hash signatures, non-owner rejection and replay prevention.
-- **Pending:** verify new GitHub Actions run is green; extend tests to owner rotation, guards/modules, vesting integration, and fuzzing. Do not treat the test implementation as a successful test execution until CI confirms it.
+- **Verified:** GitHub Actions run #17 reports Success, with the compile-and-test job green for commit `f362c05`. **Pending:** extend tests to owner rotation, guards/modules, vesting integration, and fuzzing. Do not treat the test implementation as a successful test execution until CI confirms it.
