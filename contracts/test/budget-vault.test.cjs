@@ -9,7 +9,7 @@ describe("NVRA budget vault (prototype; test-only controller impersonation)", fu
     const Token = await ethers.getContractFactory("NVRAMainnetCandidate");
     const token = await Token.deploy(await controller.getAddress());
     const Vault = await ethers.getContractFactory("NVRABudgetVault");
-    const start = 2000000000;
+    const start = (await ethers.provider.getBlock('latest')).timestamp + 1000;
     const period = 30 * 86400;
     const limit = ethers.parseUnits("3125", 18);
     const vault = await Vault.deploy(await token.getAddress(), await controller.getAddress(), start, period, 2, limit);
@@ -19,8 +19,6 @@ describe("NVRA budget vault (prototype; test-only controller impersonation)", fu
     await network.provider.send("hardhat_impersonateAccount", [await controller.getAddress()]);
     const signer = await ethers.getSigner(await controller.getAddress());
     try {
-      await network.provider.send("evm_setNextBlockTimestamp", [start - 1]);
-      await network.provider.send("evm_mine");
       await expect(vault.connect(signer).disburse(recipient.address, 1n)).to.be.revertedWith("NVRA: not started");
       await network.provider.send("evm_setNextBlockTimestamp", [start + 1]);
       await network.provider.send("evm_mine");
