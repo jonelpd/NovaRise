@@ -10,7 +10,8 @@
     "preflight": "node scripts/preflight.cjs",
     "amoy:readiness": "node scripts/amoy-readiness.cjs",
     "simulate:local": "hardhat run scripts/simulate-deployment.cjs --network hardhat",
-    "test:safe": "hardhat test test/safe-multisig.test.cjs"
+    "test:safe": "hardhat test test/safe-multisig.test.cjs",
+    "amoy:public-preflight": "node scripts/amoy-public-preflight.cjs"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^5.0.0",
