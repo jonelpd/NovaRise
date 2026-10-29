@@ -10,7 +10,7 @@ assert.match(html,/href="libro-blanco\.html"/);
 assert.match(english,/href="whitepaper-en\.html"/);
 for(const [page,lang,other] of [[whitepaperEs,'es','whitepaper-en.html'],[whitepaperEn,'en','libro-blanco.html']]){
  assert.match(page,new RegExp('<html lang="'+lang+'">'));
- assert.match(page,/href="assets\/site\.css"/);
+ assert.match(page,/href="assets\/site\.css(?:\?[^"]*)?"/);
  assert.ok(page.includes('href="'+other+'"'),'Whitepaper language switch missing');
  assert.equal((page.match(/class="wp-section"/g)||[]).length,10);
  assert.match(page,/v0\.3/);
