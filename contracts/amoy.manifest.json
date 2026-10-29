@@ -6,12 +6,14 @@
   "deployed": true,
   "contractAddress": "0xCCC748d63333F9aF58f259CDF771d5AB1226e20D",
   "treasuryAddress": "0x58f15EA8C1Fb2a783dB296d6F65020B4Ab8cBE77",
-  "transactionHash": null,
+  "transactionHash": "0x5585f12072e847257ef8c093cc62f248ca971858c71f7d8aafd9880c88b872cb",
   "token": {
     "name": "NovaRise Utility Token",
     "symbol": "NVRA",
     "decimals": 18,
     "maxSupply": "100000000"
   },
-  "notes": "Deployment observed on Polygon Amoy via Remix and MetaMask on 2026-10-28. Explorer identifies NovaRise Utility Token (NVRA); treasury token holdings screenshot shows 100000000 NVRA. Full deployment transaction hash and independent bytecode checks remain pending. TESTNET ONLY; no monetary value or mainnet deployment."
+  "notes": "PolygonScan screenshot confirms successful creation transaction and initial 100000000 test NVRA issuance to treasury. Source-to-deployed bytecode equivalence and independent security audit remain pending. TESTNET ONLY; no monetary value or mainnet deployment. Planned future mainnet supply of 1000000 NVRA is a separate design decision; see tokenomics.html.",
+  "deploymentBlock": 51351109,
+  "deploymentTimestampUtc": "2026-10-28T07:47:54Z"
 }
