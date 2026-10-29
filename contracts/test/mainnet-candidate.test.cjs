@@ -34,10 +34,10 @@ describe("NovaRise team cliff vesting (local only)", function () {
     const allocation = ethers.parseUnits("150000", 18);
     await treasury.sendToken(await token.getAddress(), await vest.getAddress(), allocation);
     const addr = await token.getAddress();
-    expect(await vest.vestedAmount(addr, start)).to.equal(0n);
-    expect(await vest.vestedAmount(addr, start + cliff)).to.equal(0n);
-    expect(await vest.vestedAmount(addr, start + cliff + linear / 2)).to.equal(allocation / 2n);
-    expect(await vest.vestedAmount(addr, start + cliff + linear)).to.equal(allocation);
+    expect(await vest["vestedAmount(address,uint64)"](addr, start)).to.equal(0n);
+    expect(await vest["vestedAmount(address,uint64)"](addr, start + cliff)).to.equal(0n);
+    expect(await vest["vestedAmount(address,uint64)"](addr, start + cliff + linear / 2)).to.equal(allocation / 2n);
+    expect(await vest["vestedAmount(address,uint64)"](addr, start + cliff + linear)).to.equal(allocation);
     expect(await vest.owner()).to.equal(beneficiary.address);
     await ethers.provider.send("evm_setNextBlockTimestamp", [start + cliff + Math.floor(linear / 2)]);
     await ethers.provider.send("evm_mine", []);
@@ -45,7 +45,7 @@ describe("NovaRise team cliff vesting (local only)", function () {
     await expect(releaseTx).to.emit(vest, "ERC20Released");
     const releaseReceipt = await releaseTx.wait();
     const releaseBlock = await ethers.provider.getBlock(releaseReceipt.blockNumber);
-    const vestedAtRelease = await vest.vestedAmount(addr, releaseBlock.timestamp);
+    const vestedAtRelease = await vest["vestedAmount(address,uint64)"](addr, releaseBlock.timestamp);
     expect(await token.balanceOf(beneficiary.address)).to.equal(vestedAtRelease);
     expect(await token.balanceOf(await vest.getAddress())).to.equal(allocation - vestedAtRelease);
   });
