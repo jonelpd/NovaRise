@@ -27,6 +27,19 @@ jobs:
         run: npm ci --no-audit --no-fund
       - name: Install isolated official Safe contracts from committed lockfile
         run: npm ci --prefix safe-deps --no-audit --no-fund
+      - name: Dependency vulnerability inventory (non-blocking evidence)
+        run: |
+          npm audit --json > npm-audit-root.json || true
+          npm audit --prefix safe-deps --json > npm-audit-safe.json || true
+          node -e 'for(const f of ["npm-audit-root.json","npm-audit-safe.json"]){const x=require("./"+f);console.log(f,JSON.stringify(x.metadata?.vulnerabilities||{}));}'
+      - name: Upload dependency vulnerability reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: nvra-dependency-audit
+          path: |
+            contracts/npm-audit-root.json
+            contracts/npm-audit-safe.json
+          retention-days: 30
       - name: Record dependency versions and lockfile checksums
         run: |
           node -p '"Node " + process.version + ", npm " + process.env.npm_config_user_agent'
