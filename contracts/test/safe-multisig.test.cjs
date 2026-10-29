@@ -25,6 +25,18 @@ describe("NovaRise official Safe 3-of-5 (local simulation only)", function () {
     return { args, hash };
   }
 
+  async function executeSafeTransaction(target, data, signers = owners.slice(0, 3)) {
+    const args = [target, 0n, data, 0, 0n, 0n, 0n, ethers.ZeroAddress, ethers.ZeroAddress];
+    const hash = await safe.getTransactionHash(...args, await safe.nonce());
+    for (const signer of signers) await safe.connect(signer).approveHash(hash);
+    const receipt = await (await safe.connect(outsider).execTransaction(...args, await signatures(signers))).wait();
+    const failed = receipt.logs.some(log => {
+      try { return safe.interface.parseLog(log)?.name === "ExecutionFailure"; } catch { return false; }
+    });
+    expect(failed, "Safe transaction must not fail internally").to.equal(false);
+    return receipt;
+  }
+
   beforeEach(async function () {
     const signers = await ethers.getSigners();
     owners = signers.slice(0, 5);
@@ -92,4 +104,66 @@ describe("NovaRise official Safe 3-of-5 (local simulation only)", function () {
     )).to.be.reverted;
     expect(await token.balanceOf(recipient.address)).to.equal(0n);
   });
+  it("prevents outsiders from changing threshold directly; 3 owners can authorize a threshold change", async function () {
+    await expect(safe.connect(outsider).changeThreshold(2)).to.be.reverted;
+    await expect(safe.connect(owners[0]).changeThreshold(2)).to.be.reverted;
+    expect(await safe.getThreshold()).to.equal(3n);
+    const data = safe.interface.encodeFunctionData("changeThreshold", [4]);
+    await executeSafeTransaction(await safe.getAddress(), data);
+    expect(await safe.getThreshold()).to.equal(4n);
+    const { args, hash } = await transferPayload(recipient.address, 1n);
+    for (const signer of owners.slice(0, 3)) await safe.connect(signer).approveHash(hash);
+    await expect(safe.connect(outsider).execTransaction(
+      ...args, await signatures(owners.slice(0, 3))
+    )).to.be.reverted;
+    expect(await token.balanceOf(recipient.address)).to.equal(0n);
+  });
+
+  it("requires Safe approval to rotate an owner and revokes the former owner's authority", async function () {
+    const previous = owners[0];
+    const replacement = recipient;
+    await expect(safe.connect(outsider).swapOwner(
+      "0x0000000000000000000000000000000000000001", previous.address, replacement.address
+    )).to.be.reverted;
+    const data = safe.interface.encodeFunctionData("swapOwner", [
+      "0x0000000000000000000000000000000000000001", previous.address, replacement.address
+    ]);
+    await executeSafeTransaction(await safe.getAddress(), data);
+    expect(await safe.isOwner(previous.address)).to.equal(false);
+    expect(await safe.isOwner(replacement.address)).to.equal(true);
+    const { args, hash } = await transferPayload(outsider.address, 1n);
+    for (const signer of owners.slice(1, 3)) await safe.connect(signer).approveHash(hash);
+    await expect(safe.connect(previous).approveHash(hash)).to.be.reverted;
+    await safe.connect(replacement).approveHash(hash);
+    await expect(safe.connect(outsider).execTransaction(
+      ...args, await signatures([previous, owners[1], owners[2]])
+    )).to.be.reverted;
+    await executeSafeTransaction(await token.getAddress(),
+      token.interface.encodeFunctionData("transfer", [outsider.address, 1n]),
+      [replacement, owners[1], owners[2]]);
+    expect(await token.balanceOf(outsider.address)).to.equal(1n);
+  });
+
+  it("funds team vesting through 3 Safe approvals and prevents premature release", async function () {
+    const latest = await ethers.provider.getBlock("latest");
+    const start = BigInt(latest.timestamp) + 100n;
+    const cliff = 200n;
+    const linear = 400n;
+    const Vesting = await ethers.getContractFactory("NVRATeamVesting");
+    const vest = await Vesting.deploy(recipient.address, start, cliff, linear);
+    const amount = ethers.parseUnits("150000", 18);
+    const data = token.interface.encodeFunctionData("transfer", [await vest.getAddress(), amount]);
+    await executeSafeTransaction(await token.getAddress(), data);
+    expect(await token.balanceOf(await vest.getAddress())).to.equal(amount);
+    expect(await token.balanceOf(await safe.getAddress())).to.equal(ethers.parseUnits("850000", 18));
+    await ethers.provider.send("evm_setNextBlockTimestamp", [Number(start + cliff)]);
+    await ethers.provider.send("evm_mine", []);
+    expect(await vest["releasable(address)"](await token.getAddress())).to.equal(0n);
+    await ethers.provider.send("evm_setNextBlockTimestamp", [Number(start + cliff + linear + 1n)]);
+    await ethers.provider.send("evm_mine", []);
+    await vest.connect(recipient)["release(address)"](await token.getAddress());
+    expect(await token.balanceOf(recipient.address)).to.equal(amount);
+    expect(await token.totalSupply()).to.equal(ethers.parseUnits("1000000", 18));
+  });
+
 });
