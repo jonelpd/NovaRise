@@ -55,4 +55,56 @@ describe("NovaRise team cliff vesting (local only)", function () {
     await expect(Vesting.deploy(ethers.ZeroAddress, 2000000000, 1, 1)).to.be.reverted;
     await expect(Vesting.deploy(beneficiary.address, 2000000000, 0, 1)).to.be.revertedWith("NVRA: invalid durations");
   });
+  it("keeps allocations locked before the cliff and allows beneficiary release after full vesting", async function () {
+    const [, beneficiary, stranger] = await ethers.getSigners();
+    const Treasury = await ethers.getContractFactory("MockNVRATreasury");
+    const treasury = await Treasury.deploy();
+    const Token = await ethers.getContractFactory("NVRAMainnetCandidate");
+    const token = await Token.deploy(await treasury.getAddress());
+    const Vesting = await ethers.getContractFactory("NVRATeamVesting");
+    const latest = await ethers.provider.getBlock("latest");
+    const start = latest.timestamp + 3600;
+    const cliff = 86400;
+    const linear = 86400 * 3;
+    const vest = await Vesting.deploy(beneficiary.address, start, cliff, linear);
+    const amount = ethers.parseUnits("100", 18);
+    await treasury.sendToken(await token.getAddress(), await vest.getAddress(), amount);
+    const addr = await token.getAddress();
+    await ethers.provider.send("evm_setNextBlockTimestamp", [start + cliff]);
+    await ethers.provider.send("evm_mine", []);
+    expect(await vest.releasable(addr)).to.equal(0n);
+    await vest.connect(stranger)["release(address)"](addr);
+    expect(await token.balanceOf(beneficiary.address)).to.equal(0n);
+    await ethers.provider.send("evm_setNextBlockTimestamp", [start + cliff + linear]);
+    await ethers.provider.send("evm_mine", []);
+    expect(await vest.releasable(addr)).to.equal(amount);
+    await vest.connect(stranger)["release(address)"](addr);
+    expect(await token.balanceOf(beneficiary.address)).to.equal(amount);
+    expect(await vest.releasable(addr)).to.equal(0n);
+  });
+
+  it("documents that vesting ownership can transfer and late funding can unlock immediately", async function () {
+    const [, beneficiary, newBeneficiary] = await ethers.getSigners();
+    const Treasury = await ethers.getContractFactory("MockNVRATreasury");
+    const treasury = await Treasury.deploy();
+    const Token = await ethers.getContractFactory("NVRAMainnetCandidate");
+    const token = await Token.deploy(await treasury.getAddress());
+    const Vesting = await ethers.getContractFactory("NVRATeamVesting");
+    const latest = await ethers.provider.getBlock("latest");
+    const start = latest.timestamp + 3600;
+    const cliff = 86400;
+    const linear = 86400 * 3;
+    const vest = await Vesting.deploy(beneficiary.address, start, cliff, linear);
+    await vest.connect(beneficiary).transferOwnership(newBeneficiary.address);
+    expect(await vest.owner()).to.equal(newBeneficiary.address);
+    await ethers.provider.send("evm_setNextBlockTimestamp", [start + cliff + linear]);
+    await ethers.provider.send("evm_mine", []);
+    const amount = ethers.parseUnits("10", 18);
+    await treasury.sendToken(await token.getAddress(), await vest.getAddress(), amount);
+    expect(await vest.releasable(await token.getAddress())).to.equal(amount);
+    await vest["release(address)"](await token.getAddress());
+    expect(await token.balanceOf(newBeneficiary.address)).to.equal(amount);
+    expect(await token.balanceOf(beneficiary.address)).to.equal(0n);
+  });
+
 });
