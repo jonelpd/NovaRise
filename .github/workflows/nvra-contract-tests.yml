@@ -1,0 +1,31 @@
+name: NVRA Solidity contracts local tests
+on:
+  push:
+    paths:
+      - 'contracts/**'
+      - '.github/workflows/nvra-contract-tests.yml'
+  pull_request:
+    paths:
+      - 'contracts/**'
+      - '.github/workflows/nvra-contract-tests.yml'
+  workflow_dispatch:
+jobs:
+  compile-and-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    defaults:
+      run:
+        working-directory: contracts
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install dependencies (local-only, no deployment)
+        run: npm install --no-audit --no-fund
+      - name: Compile Solidity contracts
+        run: npx hardhat compile
+      - name: Run all local Hardhat tests
+        run: npx hardhat test --network hardhat
