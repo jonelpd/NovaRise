@@ -33,6 +33,10 @@ jobs:
           node -e 'const fs=require("fs"),crypto=require("crypto");const e=require(process.env.GITHUB_WORKSPACE+"/contracts/safe-deps/package-lock.json").packages["node_modules/@safe-global/safe-contracts"];const b=fs.readFileSync("safe-package/safe-global-safe-contracts-1.4.1-2.tgz");if(e.version!=="1.4.1-2"||"sha512-"+crypto.createHash("sha512").update(b).digest("base64")!==e.integrity)throw Error("Safe tarball integrity mismatch");'
           tar -xzf safe-package/safe-global-safe-contracts-1.4.1-2.tgz -C safe-package --no-same-owner --no-same-permissions
           cp -R safe-package/package/contracts node_modules/@safe-global/safe-contracts/contracts
+          # Hardhat 3 does not emit deployable artifacts for every npm-only import.
+          # Compile the identical integrity-verified Safe source tree as local sources too.
+          mkdir -p src/vendor-safe
+          cp -R safe-package/package/contracts/. src/vendor-safe/
           node -e 'const p=require("./safe-package/package/package.json");require("fs").writeFileSync("node_modules/@safe-global/safe-contracts/package.json",JSON.stringify({name:p.name,version:p.version}));'
       - name: Generate separate Hardhat 3 ESM config
         run: |
