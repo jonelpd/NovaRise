@@ -1,22 +1,24 @@
-# NVRA — hallazgo de auditoría: discrepancia de suministro (2026-10-29)
+# NVRA — rectificación del hallazgo de suministro (29 octubre 2026)
 
-**Estado: ABIERTO — bloqueante para declarar equivalencia entre fuente y despliegue.**
+## Estado: discrepancia anteriormente anunciada NO CONFIRMADA
 
-## Evidencia
-1. La ejecución exitosa de GitHub Actions «NVRA Amoy read-only verification #3» aportada por el usuario devuelve un `totalSupplyRaw` equivalente a **1.000.000 NVRA** (18 decimales) para `0xCCC748d63333F9aF58f259CDF771d5AB1226e20D`, Polygon Amoy, chain ID 80002. También devuelve **100.000 NVRA** de saldo para la dirección de tesorería consultada.
-2. El archivo `contracts/NVRAToken.sol` en la rama principal declara `MAX_SUPPLY = 100_000_000 * 10 ** 18` y acuña ese importe al constructor-supplied treasury.
-3. `contracts/amoy.manifest.json` registra `token.maxSupply = "100000000"`, `deployed: true`, `status: DEPLOYED_TESTNET`, y no aporta hash de transacción (`transactionHash: null`).
-4. `contracts/README.md` también describe 100 millones de suministro fijo.
+Este documento rectifica el informe anterior, que interpretó el suministro de la salida RPC como **1.000.000 NVRA** sin verificar correctamente la conversión de unidades de 18 decimales. Esa conclusión no debe usarse como evidencia de una discrepancia de suministro.
 
-## Conclusión limitada
-El contrato consultado responde como NVRA ERC-20, pero **el suministro observado no coincide con la constante y la lógica de acuñación del código fuente actualmente publicado**. No puede declararse `sourceMatched: true` ni afirmar que el contrato desplegado fue compilado a partir de `contracts/NVRAToken.sol`. La huella del código de ejecución es una referencia para comparación posterior, no una auditoría.
+## Nueva evidencia de despliegue (captura de PolygonScan aportada por el usuario)
+- Red: Polygon Amoy (testnet), chain ID 80002.
+- Transacción: `0x5585f12072e847257ef8c093cc62f248ca971858c71f7d8aafd9880c88b872cb`.
+- Bloque: `51351109`.
+- Fecha UTC: 2026-10-28 07:47:54.
+- Creador: `0x58f15EA8C1Fb2a783dB296d6F65020B4Ab8cBE77`.
+- Contrato creado: `0xCCC748d63333F9aF58f259CDF771d5AB1226e20D`.
+- Evento ERC-20 de emisión inicial (Transfer desde dirección cero): **100.000.000 NVRA** hacia la cartera creadora.
+- La transacción aparece como exitosa en la captura.
 
-## Acciones para cerrar el hallazgo
-- Identificar transacción de creación, bloque, creador y constructor arguments del contrato.
-- Recuperar el código fuente exacto utilizado en Remix y sus versiones de compilador/OpenZeppelin, configuración de optimización y metadatos.
-- Recompilar y comparar el runtime bytecode desplegado, contemplando metadatos y parámetros inmutables.
-- Revisar permisos de minteo, propietario, actualización, pausas y distribución real antes de cualquier lanzamiento.
-- **No cambiar** suministro, fuente, manifiesto ni contrato para hacerlos coincidir sin evidencia; corregir el registro histórico mediante una actualización trazable cuando se confirme la procedencia.
-- No usar fondos reales ni anunciar equivalencia de código o auditoría superada.
+El archivo `contracts/NVRAToken.sol` acuña 100.000.000 NVRA en el constructor; el evento de creación y el código fuente son coherentes en ese aspecto. El evento de creación no equivale por sí solo a una comprobación del suministro **actual**, ni demuestra identidad de bytecode.
 
-**Alcance:** análisis documental de archivos GitHub y captura de resultado del usuario; no hay prueba de equivalencia ni de revisión de seguridad independiente.
+## Comprobación pendiente
+1. Volver a obtener `totalSupply()` y `balanceOf(treasury)` como enteros sin decimales; convertir dividiendo entre `10**18` y mostrar ambas representaciones.
+2. Comparar código de ejecución y artefactos de compilación reproducible, incluidos metadatos.
+3. Verificar código fuente, versión de compilador, optimizador, constructor y privilegios en el explorador.
+
+**No se ha demostrado una discrepancia de suministro.** Tampoco se ha demostrado aún equivalencia de código fuente ni auditoría de seguridad. No se deben modificar el contrato ni los valores históricos para hacerlos coincidir.
