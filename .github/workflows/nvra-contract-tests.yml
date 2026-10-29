@@ -23,10 +23,28 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Install dependencies (local-only, no deployment)
-        run: npm install --no-audit --no-fund
-      - name: Install isolated official Safe contracts (ethers v5 peer)
-        run: npm install --prefix safe-deps --no-audit --no-fund
+      - name: Resolve root dependency lockfile (transition stage)
+        run: npm install --package-lock-only --ignore-scripts --no-audit --no-fund
+      - name: Resolve isolated Safe lockfile (transition stage)
+        run: npm install --prefix safe-deps --package-lock-only --ignore-scripts --no-audit --no-fund
+      - name: Install root dependencies from generated lockfile
+        run: npm ci --no-audit --no-fund
+      - name: Install isolated official Safe contracts from generated lockfile
+        run: npm ci --prefix safe-deps --no-audit --no-fund
+      - name: Record dependency versions and lockfile checksums
+        run: |
+          node -p '"Node " + process.version + ", npm " + process.env.npm_config_user_agent'
+          npm ls --depth=0
+          npm ls --prefix safe-deps --depth=0
+          sha256sum package-lock.json safe-deps/package-lock.json
+      - name: Upload lockfiles for review and repository pinning
+        uses: actions/upload-artifact@v4
+        with:
+          name: nvra-npm-lockfiles
+          path: |
+            contracts/package-lock.json
+            contracts/safe-deps/package-lock.json
+          retention-days: 30
       - name: Expose isolated Safe Solidity package to Hardhat resolver
         run: |
           mkdir -p node_modules/@safe-global
