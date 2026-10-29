@@ -25,6 +25,8 @@ jobs:
           node-version: '22'
       - name: Install dependencies (local-only, no deployment)
         run: npm install --no-audit --no-fund
+      - name: Install isolated official Safe contracts (ethers v5 peer)
+        run: npm install --prefix safe-deps --no-audit --no-fund
       - name: Compile Solidity contracts
         run: npx hardhat compile
       - name: Run all local Hardhat tests
