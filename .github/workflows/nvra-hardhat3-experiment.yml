@@ -87,6 +87,72 @@ jobs:
           console.log("Hardhat 3 smoke tests passed: fixed supply, treasury, cliff, linear vesting");
           EOF
           node smoke.mjs
+      - name: Hardhat 3 official Safe 3-of-5 adversarial smoke tests
+        working-directory: /tmp/nvra-hardhat3
+        run: |
+          cat > safe-smoke.mjs <<'EOF'
+          import assert from "node:assert/strict";
+          import { network } from "hardhat";
+          const { ethers } = await network.connect();
+          const accounts = await ethers.getSigners();
+          const owners = accounts.slice(0, 5), outsider = accounts[5], recipient = accounts[6];
+          const singleton = await (await ethers.getContractFactory("Safe")).deploy();
+          await singleton.waitForDeployment();
+          const factory = await (await ethers.getContractFactory("SafeProxyFactory")).deploy();
+          await factory.waitForDeployment();
+          const initializer = singleton.interface.encodeFunctionData("setup", [
+            owners.map(s => s.address), 3, ethers.ZeroAddress, "0x",
+            ethers.ZeroAddress, ethers.ZeroAddress, 0, ethers.ZeroAddress
+          ]);
+          const receipt = await (await factory.createProxyWithNonce(await singleton.getAddress(), initializer, 42)).wait();
+          const event = receipt.logs.map(log => { try { return factory.interface.parseLog(log); } catch { return null; } }).find(x => x?.name === "ProxyCreation");
+          assert.ok(event, "Safe proxy creation event missing");
+          const safe = singleton.attach(event.args.proxy);
+          assert.equal(await safe.getThreshold(), 3n);
+          assert.deepEqual((await safe.getOwners()).map(x => x.toLowerCase()).sort(),
+            owners.map(x => x.address.toLowerCase()).sort());
+          const token = await (await ethers.getContractFactory("NVRAMainnetCandidate")).deploy(await safe.getAddress());
+          await token.waitForDeployment();
+          const supply = ethers.parseUnits("1000000", 18);
+          assert.equal(await token.totalSupply(), supply);
+          assert.equal(await token.balanceOf(await safe.getAddress()), supply);
+          const amount = ethers.parseUnits("250", 18);
+          const data = token.interface.encodeFunctionData("transfer", [recipient.address, amount]);
+          const args = [await token.getAddress(), 0n, data, 0, 0n, 0n, 0n, ethers.ZeroAddress, ethers.ZeroAddress];
+          const hash = await safe.getTransactionHash(...args, await safe.nonce());
+          const signatures = signers => ethers.hexlify(ethers.concat(
+            [...signers].sort((a,b) => a.address.toLowerCase().localeCompare(b.address.toLowerCase()))
+              .map(s => ethers.concat([ethers.zeroPadValue(s.address, 32), ethers.ZeroHash, "0x01"]))
+          ));
+          const rejected = async (promise, label) => {
+            let failed = false;
+            try { await (await promise).wait(); } catch { failed = true; }
+            assert.ok(failed, label);
+          };
+          await rejected(safe.connect(outsider).approveHash(hash), "Non-owner cannot approve");
+          for (const signer of owners.slice(0, 3)) await (await safe.connect(signer).approveHash(hash)).wait();
+          for (const n of [1, 2]) {
+            await rejected(safe.connect(outsider).execTransaction(...args, signatures(owners.slice(0, n))),
+              "Insufficient signatures: " + n);
+          }
+          assert.equal(await safe.nonce(), 0n);
+          assert.equal(await token.balanceOf(recipient.address), 0n);
+          const altered = [...args];
+          altered[2] = token.interface.encodeFunctionData("transfer", [outsider.address, amount]);
+          await rejected(safe.connect(outsider).execTransaction(...altered, signatures(owners.slice(0, 3))),
+            "Altered transfer must fail");
+          const result = await (await safe.connect(outsider).execTransaction(...args, signatures(owners.slice(0, 3)))).wait();
+          assert.ok(!result.logs.some(log => { try { return safe.interface.parseLog(log)?.name === "ExecutionFailure"; } catch { return false; } }),
+            "Safe internal execution failure");
+          assert.equal(await token.balanceOf(recipient.address), amount);
+          assert.equal(await token.balanceOf(await safe.getAddress()), supply - amount);
+          assert.equal(await safe.nonce(), 1n);
+          await rejected(safe.connect(outsider).execTransaction(...args, signatures(owners.slice(0, 3))),
+            "Replay must fail");
+          assert.equal(await token.totalSupply(), supply);
+          console.log("Hardhat 3 Safe 3-of-5 passed: owners, threshold, unauthorized signatures, tampering, replay, supply");
+          EOF
+          node safe-smoke.mjs
       - name: Record Hardhat 3 dependency advisories
         if: always()
         working-directory: /tmp/nvra-hardhat3
