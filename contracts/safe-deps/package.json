@@ -1,0 +1,9 @@
+{
+  "name": "nvra-safe-contracts-isolated",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Isolated official Safe Solidity contracts (ethers v5 peer), never used as Hardhat JS runtime",
+  "dependencies": {
+    "@safe-global/safe-contracts": "1.4.1-2"
+  }
+}
