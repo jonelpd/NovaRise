@@ -208,3 +208,10 @@ body.interest-modal-open{overflow:hidden}
 .progress-next li{padding:4px 0;line-height:1.6;color:#c8e0d7}
 @media(max-width:950px){.progress-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:580px){.project-progress{padding:20px 16px}.progress-grid{grid-template-columns:1fr}.progress-card{padding:19px}.progress-next{padding:17px}}
+
+/* Base network decision, responsive and accessible */
+.base-decision{max-width:1120px;margin:24px auto 8px;padding:22px 26px;border:1px solid #4c9a82;border-left:5px solid #6ce9bb;border-radius:14px;background:#10372f;color:#eafff5;line-height:1.65}
+.base-decision strong{display:block;font-size:clamp(17px,2vw,22px)}
+.base-decision p{margin:8px 0 0;color:#d5f4e7}
+.base-decision a{text-decoration:underline;text-underline-offset:3px;color:#a2f5cf}
+@media(max-width:780px){.base-decision{margin:14px 16px;padding:18px}}
