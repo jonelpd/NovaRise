@@ -48,6 +48,14 @@ const decodeText = hex => {
   }
   throw Error("Invalid ERC20 text encoding");
 };
+function formatUnits(value, decimals) {
+  const negative = value < 0n;
+  const absolute = negative ? -value : value;
+  const base = 10n ** decimals;
+  const whole = (absolute / base).toString();
+  const fractional = (absolute % base).toString().padStart(Number(decimals), "0").replace(/0+$/, "");
+  return (negative ? "-" : "") + whole + (fractional ? "." + fractional : "");
+}
 async function main(){
   console.log("Amoy RPC host:", new URL(endpoint).host, "(read-only)");
   const chain=await rpc("eth_chainId");
@@ -62,8 +70,15 @@ async function main(){
   assert.equal(symbol,"NVRA","Unexpected symbol");
   const supply=BigInt(await call("0x18160ddd"));
   const balance=BigInt(await call("0x70a08231"+encodeAddress(treasury)));
+  const supplyTokens=formatUnits(supply,decimals);
+  const balanceTokens=formatUnits(balance,decimals);
+  const expectedSupplyTokens="100000000";
+  const matchesSourceSupply=supplyTokens===expectedSupplyTokens;
   const checksum=await crypto.subtle.digest("SHA-256",Buffer.from(code.slice(2),"hex"));
   const codeSha=Buffer.from(checksum).toString("hex");
-  console.log(JSON.stringify({network:"polygon-amoy",chainId:Number(BigInt(chain)),contract:address,bytecodeBytes:(code.length-2)/2,bytecodeSha256:codeSha,decimals:Number(decimals),symbol,totalSupplyRaw:supply.toString(),treasury,treasuryBalanceRaw:balance.toString(),sourceMatched:false,sourceMatchNote:"Source/compiler/bytecode comparison requires independent verified build artifacts"},null,2));
+  console.log(JSON.stringify({network:"polygon-amoy",chainId:Number(BigInt(chain)),contract:address,bytecodeBytes:(code.length-2)/2,bytecodeSha256:codeSha,decimals:Number(decimals),symbol,totalSupplyRaw:supply.toString(),totalSupplyTokens:supplyTokens,expectedSourceSupplyTokens:expectedSupplyTokens,treasury,treasuryBalanceRaw:balance.toString(),treasuryBalanceTokens:balanceTokens,supplyMatchesSource:matchesSourceSupply,sourceMatched:false,sourceMatchNote:"Source/compiler/bytecode comparison requires independent verified build artifacts"},null,2));
+  if (!matchesSourceSupply) {
+    console.error("WARNING: on-chain total supply differs from repository source expectation (100000000 NVRA); investigate before source verification.");
+  }
 }
 main().catch(error=>{console.error("AMOY VERIFICATION FAILED:",error.message);process.exitCode=1});
