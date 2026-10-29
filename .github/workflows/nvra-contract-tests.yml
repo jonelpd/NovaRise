@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
-      contents: read
+      contents: write
     defaults:
       run:
         working-directory: contracts
@@ -53,3 +53,14 @@ jobs:
         run: npx hardhat compile
       - name: Run all local Hardhat tests
         run: npx hardhat test --network hardhat
+      - name: Commit verified lockfiles to repository
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f contracts/package-lock.json contracts/safe-deps/package-lock.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'build: pin verified NVRA npm dependency lockfiles'
+            git push origin HEAD:main
+          fi
+        working-directory: .
