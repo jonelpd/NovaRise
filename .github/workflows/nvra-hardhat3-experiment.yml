@@ -55,6 +55,38 @@ jobs:
         run: |
           npx hardhat --version
           npx hardhat compile
+      - name: Hardhat 3 isolated token and vesting smoke tests
+        working-directory: /tmp/nvra-hardhat3
+        run: |
+          cat > smoke.mjs <<'EOF'
+          import assert from "node:assert/strict";
+          import { network } from "hardhat";
+          const { ethers } = await network.connect();
+          const [deployer, beneficiary] = await ethers.getSigners();
+          const Treasury = await ethers.getContractFactory("MockNVRATreasury");
+          const treasury = await Treasury.deploy();
+          await treasury.waitForDeployment();
+          const Token = await ethers.getContractFactory("NVRAMainnetCandidate");
+          const token = await Token.deploy(await treasury.getAddress());
+          await token.waitForDeployment();
+          const supply = ethers.parseUnits("1000000", 18);
+          assert.equal(await token.totalSupply(), supply);
+          assert.equal(await token.balanceOf(await treasury.getAddress()), supply);
+          assert.equal(await token.balanceOf(deployer.address), 0n);
+          const Vesting = await ethers.getContractFactory("NVRATeamVesting");
+          const start = 2000000000, cliff = 86400, linear = 259200;
+          const vest = await Vesting.deploy(beneficiary.address, start, cliff, linear);
+          await vest.waitForDeployment();
+          const amount = ethers.parseUnits("150000", 18);
+          await (await treasury.sendToken(await token.getAddress(), await vest.getAddress(), amount)).wait();
+          const addr = await token.getAddress();
+          assert.equal(await vest["vestedAmount(address,uint64)"](addr, start + cliff), 0n);
+          assert.equal(await vest["vestedAmount(address,uint64)"](addr, start + cliff + linear / 2), amount / 2n);
+          assert.equal(await vest["vestedAmount(address,uint64)"](addr, start + cliff + linear), amount);
+          assert.equal(await token.totalSupply(), supply);
+          console.log("Hardhat 3 smoke tests passed: fixed supply, treasury, cliff, linear vesting");
+          EOF
+          node smoke.mjs
       - name: Record Hardhat 3 dependency advisories
         if: always()
         working-directory: /tmp/nvra-hardhat3
