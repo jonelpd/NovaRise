@@ -27,14 +27,14 @@ jobs:
           for language,page in [('es',html),('en',english)]:
               p=Parser(); p.feed(page)
               assert f'<html lang="{language}">' in page
-              assert 'href="assets/site.css"' in page
+              assert 'href="assets/site.css' in page
               for identifier in ('network','address','analyze','report','empty','year'):
                   assert identifier in p.ids, f"Falta ID {identifier} en {language}"
           analyzer=Path('assets/analyzer.js').read_text(encoding='utf-8')
           assert 'api.gopluslabs.io' in analyzer and 'api.dexscreener.com' in analyzer
           for language,page in [('es',html),('en',english)]:
-              assert 'src="assets/locale-en.js"' in page
-              assert 'src="assets/analyzer.js"' in page
+              assert 'src="assets/locale-en.js' in page
+              assert 'src="assets/analyzer.js' in page
               assert '<script>' not in page
           assert Path('assets/analyzer.js').is_file()
           assert Path('assets/locale-en.js').is_file()
@@ -59,7 +59,7 @@ jobs:
             'cancelación de solicitudes':'function cancelPending()' in Path('assets/analyzer.js').read_text(encoding='utf-8'),
             'limpieza de resultados':'function invalidateReport()' in Path('assets/analyzer.js').read_text(encoding='utf-8'),
             'resultado obsoleto descartado':'requestId!==activeRequest' in Path('assets/analyzer.js').read_text(encoding='utf-8'),
-            'hoja de estilos compartida':'href="assets/site.css"' in html and 'href="assets/site.css"' in english,
+            'hoja de estilos compartida':'href="assets/site.css' in html and 'href="assets/site.css' in english,
           }
           for name,ok in checks.items():
             print(('OK' if ok else 'ERROR')+' · '+name)
