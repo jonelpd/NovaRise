@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
-      contents: write
+      contents: read
     defaults:
       run:
         working-directory: contracts
@@ -23,13 +23,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Resolve root dependency lockfile (transition stage)
-        run: npm install --package-lock-only --ignore-scripts --no-audit --no-fund
-      - name: Resolve isolated Safe lockfile (transition stage)
-        run: npm install --prefix safe-deps --package-lock-only --ignore-scripts --no-audit --no-fund
-      - name: Install root dependencies from generated lockfile
+      - name: Install root dependencies from committed lockfile
         run: npm ci --no-audit --no-fund
-      - name: Install isolated official Safe contracts from generated lockfile
+      - name: Install isolated official Safe contracts from committed lockfile
         run: npm ci --prefix safe-deps --no-audit --no-fund
       - name: Record dependency versions and lockfile checksums
         run: |
@@ -53,14 +49,3 @@ jobs:
         run: npx hardhat compile
       - name: Run all local Hardhat tests
         run: npx hardhat test --network hardhat
-      - name: Commit verified lockfiles to repository
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add -f contracts/package-lock.json contracts/safe-deps/package-lock.json
-          if ! git diff --cached --quiet; then
-            git commit -m 'build: pin verified NVRA npm dependency lockfiles'
-            git push origin HEAD:main
-          fi
-        working-directory: .
