@@ -7,14 +7,14 @@ Status: NOT READY FOR MAINNET. Date: 2026-10-29.
 - [x] Draft team vesting source and local tests committed.
 - [x] CI workflow committed for local Hardhat compilation/tests.
 - [x] GitHub Actions run #7 reports **Success** for commit `4bdd491871f17ed07423d3f6a27803f9dcfc51e4` (run ID `40858729335`), based on the repository owner's GitHub Actions screenshot, 2026-10-29. Compilation and local test job marked green. Independent audit and broader security tests remain pending.
-- [ ] Add boundary, late-funding, ownership-transfer, adversarial and invariant tests.
+- [ ] Complete boundary, late-funding, ownership-transfer, adversarial and invariant tests. Initial cliff, ownership-transfer and late-funding cases exist and passed CI at commit `4bdd491`; broader adversarial/invariant coverage is still pending.
 - [ ] Reproducible dependency lockfile and verified compiler output.
 - [ ] Independent security review and fixes.
 
 ## Gate B — Custody and token release
 - [ ] Decide whether a token is required by validated utility.
 - [ ] Approve final allocation, recipients and initial circulating supply.
-- [ ] Decide Safe multisig signers, threshold, backups, recovery and governance.
+- [ ] Approve Safe multisig signers, threshold, backups, recovery and governance. A **3-of-5 proposal** and operational controls are documented in [multisig-treasury-design-v1.md](multisig-treasury-design-v1.md), but no Safe is deployed and no signers are approved.
 - [ ] Approve precise vesting timestamps and transferability of beneficiary rights.
 - [ ] Build spending controls for reward and community budgets; vesting alone does not restrict purpose.
 - [ ] Review all deployment arguments and on-chain destination addresses independently.
