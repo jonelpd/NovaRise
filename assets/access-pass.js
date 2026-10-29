@@ -1,7 +1,7 @@
 (() => {
 "use strict";
 const contract = "0xCCC748d63333F9aF58f259CDF771d5AB1226e20D";
-const rpc = "https://rpc-amoy.polygon.technology/";
+const rpc = "https://polygon-amoy.drpc.org";
 const en = document.documentElement.lang === "en";
 const tr = (es, eng) => en ? eng : es;
 const el = id => document.getElementById(id);
