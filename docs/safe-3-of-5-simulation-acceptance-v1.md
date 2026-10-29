@@ -38,3 +38,8 @@ This plan does not authorize deployment, custody, token sales or token transfers
 - `contracts/src/SafeLocalImports.sol` compiles official Safe singleton and SafeProxyFactory with Solidity 0.7.6.
 - `contracts/test/safe-multisig.test.cjs` deploys an actual Safe proxy locally, initializes five Hardhat signers with threshold three, mints the separate NVRA candidate into it, and tests 1/2/3 approved-hash signatures, non-owner rejection and replay prevention.
 - **Verified:** GitHub Actions run #17 reports Success, with the compile-and-test job green for commit `f362c05`. **Pending:** extend tests to owner rotation, guards/modules, vesting integration, and fuzzing. Do not treat the test implementation as a successful test execution until CI confirms it.
+
+## Phase 2 — additional automated cases (2026-10-29)
+- Commit `4cb7a36` adds local tests for Safe-only threshold changes, rejection of direct outsider changes, approved owner rotation and former-owner rejection, and Safe-authorized funding of 150,000 NVRA into team vesting with cliff and full release checks.
+- **These new tests have been committed but their CI outcome is not yet verified.** Previous green run #17 applies to the earlier commit only.
+- Remaining scope includes guards/modules, gas griefing, malformed signatures, invariant/fuzz testing, owner rotation edge cases, and an independent security review.
