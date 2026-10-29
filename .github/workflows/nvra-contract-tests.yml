@@ -27,7 +27,12 @@ jobs:
         run: npm ci --no-audit --no-fund
       - name: Fetch integrity-pinned Safe Solidity sources without JS dependencies
         run: |
-          node scripts/fetch-safe-solidity.cjs
+          mkdir -p safe-source node_modules/@safe-global/safe-contracts
+          npm pack @safe-global/safe-contracts@1.4.1-2 --ignore-scripts --pack-destination safe-source --silent
+          node -e 'const fs=require("fs"),crypto=require("crypto"),path=require("path");const e=require("./safe-deps/package-lock.json").packages["node_modules/@safe-global/safe-contracts"];const f=path.join("safe-source","safe-global-safe-contracts-1.4.1-2.tgz");const b=fs.readFileSync(f);if(e.version!=="1.4.1-2"||"sha512-"+crypto.createHash("sha512").update(b).digest("base64")!==e.integrity)throw Error("Safe source integrity mismatch");fs.writeFileSync("safe-solidity-provenance.json",JSON.stringify({package:"@safe-global/safe-contracts",version:e.version,integrity:e.integrity,sha256:crypto.createHash("sha256").update(b).digest("hex"),source:e.resolved,scope:"Solidity sources only"},null,2));'
+          tar -xzf safe-source/safe-global-safe-contracts-1.4.1-2.tgz -C safe-source --no-same-owner --no-same-permissions
+          cp -R safe-source/package/contracts node_modules/@safe-global/safe-contracts/contracts
+          node -e 'const p=require("./safe-source/package/package.json");if(p.name!=="@safe-global/safe-contracts"||p.version!=="1.4.1-2")throw Error("Safe package metadata mismatch");require("fs").writeFileSync("node_modules/@safe-global/safe-contracts/package.json",JSON.stringify({name:p.name,version:p.version,license:p.license}));'
       - name: Dependency vulnerability inventory (non-blocking evidence)
         run: |
           npm audit --json > npm-audit-root.json || true
