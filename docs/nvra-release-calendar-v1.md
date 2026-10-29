@@ -1,11 +1,11 @@
 # NovaRise — provisional NVRA allocation release calendar v1
 
-Date: 2026-10-29. **DRAFT FOR APPROVAL — no on-chain implementation or launch authorization.**
+Date: 2026-10-29. **PROVISIONALLY APPROVED FOR CONTRACT DESIGN — no on-chain implementation or launch authorization.**
 
 ## Basis
 
 - Future Polygon PoS ERC-20: fixed one-time mint of **1,000,000 NVRA**, 18 decimals, held initially by a verified production Safe, provisionally 3-of-5.
-- Allocation percentages were accepted provisionally by the project owner on 2026-10-29. The release policy below is a **new proposal**, not yet approved.
+- Allocation percentages were accepted provisionally by the project owner on 2026-10-29. The release policy below was **provisionally accepted by the project owner for contract design on 2026-10-29**; final deployment parameters and governance are not approved.
 - **T0** means the independently approved future launch activation date/time in UTC, **not** today's date or necessarily the contract deployment block. No exact UTC timestamps have been chosen.
 - Initial circulating supply is **not determined**. A planning default is zero tokens transferred out of the treasury until the separate release approvals. A Safe-held balance is not inherently technically locked: policy-only restrictions are insufficient.
 
@@ -41,7 +41,7 @@ Date: 2026-10-29. **DRAFT FOR APPROVAL — no on-chain implementation or launch 
 
 ## Decisions still required
 
-- Confirm or revise this proposed release calendar, especially the 4-year community horizon and liquidity gate.
+- Ratify this provisionally accepted calendar as final only after independent security/legal review and verified technical enforcement.
 - Define exact T0 UTC date, vesting beneficiary, beneficiary transferability, initial circulating supply and allocation wallets/contracts.
 - Choose and audit **enforceable** on-chain per-bucket caps and timelocks or explicitly disclose that restrictions are governance-only; specify emergency pause/recovery and role separation.
 - Complete external Solidity/custody audit, Amoy full-architecture rehearsal, legal review for Spain/EU (MiCA as applicable), and formal mainnet go/no-go.
