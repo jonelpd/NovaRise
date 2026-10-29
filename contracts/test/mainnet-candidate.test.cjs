@@ -39,6 +39,12 @@ describe("NovaRise team cliff vesting (local only)", function () {
     expect(await vest.vestedAmount(addr, start + cliff + linear / 2)).to.equal(allocation / 2n);
     expect(await vest.vestedAmount(addr, start + cliff + linear)).to.equal(allocation);
     expect(await vest.owner()).to.equal(beneficiary.address);
+    await ethers.provider.send("evm_setNextBlockTimestamp", [start + cliff + Math.floor(linear / 2)]);
+    await ethers.provider.send("evm_mine", []);
+    const expectedHalf = allocation / 2n;
+    await expect(vest.connect(beneficiary)["release(address)"](addr)).to.emit(vest, "ERC20Released");
+    expect(await token.balanceOf(beneficiary.address)).to.equal(expectedHalf);
+    expect(await token.balanceOf(await vest.getAddress())).to.equal(allocation - expectedHalf);
   });
   it("rejects invalid schedule", async function () {
     const [, beneficiary] = await ethers.getSigners();
