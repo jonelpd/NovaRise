@@ -166,4 +166,45 @@ describe("NovaRise official Safe 3-of-5 (local simulation only)", function () {
     expect(await token.totalSupply()).to.equal(ethers.parseUnits("1000000", 18));
   });
 
+  it("rejects duplicate owner signatures even when three slots are supplied", async function () {
+    const { args, hash } = await transferPayload(recipient.address, 10n);
+    for (const owner of owners.slice(0, 2)) await safe.connect(owner).approveHash(hash);
+    const duplicate = ethers.hexlify(ethers.concat([
+      await signatures([owners[0]]),
+      await signatures([owners[0]]),
+      await signatures([owners[1]])
+    ]));
+    await expect(safe.connect(outsider).execTransaction(...args, duplicate)).to.be.reverted;
+    expect(await safe.nonce()).to.equal(0n);
+    expect(await token.balanceOf(recipient.address)).to.equal(0n);
+  });
+
+  it("rejects altered recipient and amount when approvals bind a different transaction hash", async function () {
+    const original = await transferPayload(recipient.address, 10n);
+    for (const owner of owners.slice(0, 3)) await safe.connect(owner).approveHash(original.hash);
+    const malicious = token.interface.encodeFunctionData("transfer", [outsider.address, 999n]);
+    const alteredArgs = [...original.args];
+    alteredArgs[2] = malicious;
+    await expect(safe.connect(outsider).execTransaction(
+      ...alteredArgs, await signatures(owners.slice(0, 3))
+    )).to.be.reverted;
+    expect(await safe.nonce()).to.equal(0n);
+    expect(await token.balanceOf(outsider.address)).to.equal(0n);
+    expect(await token.balanceOf(await safe.getAddress())).to.equal(ethers.parseUnits("1000000", 18));
+  });
+
+  it("preserves the fixed total supply across several authorized Safe transfers", async function () {
+    const supply = ethers.parseUnits("1000000", 18);
+    let sent = 0n;
+    for (const amount of [1n, 25n, 1000n, ethers.parseUnits("100", 18)]) {
+      const data = token.interface.encodeFunctionData("transfer", [recipient.address, amount]);
+      await executeSafeTransaction(await token.getAddress(), data);
+      sent += amount;
+      expect(await token.totalSupply()).to.equal(supply);
+      expect(await token.balanceOf(await safe.getAddress())).to.equal(supply - sent);
+      expect(await token.balanceOf(recipient.address)).to.equal(sent);
+    }
+    expect(await safe.nonce()).to.equal(4n);
+  });
+
 });
