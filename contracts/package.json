@@ -9,14 +9,14 @@
     "clean": "hardhat clean",
     "preflight": "node scripts/preflight.cjs",
     "amoy:readiness": "node scripts/amoy-readiness.cjs",
-    "simulate:local": "hardhat run scripts/simulate-deployment.cjs --network hardhat"
+    "simulate:local": "hardhat run scripts/simulate-deployment.cjs --network hardhat",
+    "test:safe": "hardhat test test/safe-multisig.test.cjs"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^5.0.0",
     "hardhat": "^2.22.0"
   },
   "dependencies": {
-    "@openzeppelin/contracts": "^5.0.0",
-    "@safe-global/safe-contracts": "1.4.1-2"
+    "@openzeppelin/contracts": "^5.0.0"
   }
 }
