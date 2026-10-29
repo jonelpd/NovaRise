@@ -3,7 +3,7 @@
 /** Read-only Amoy verification. No keys, signatures, transfers or deployments. */
 const address = "0xCCC748d63333F9aF58f259CDF771d5AB1226e20D";
 const treasury = "0x58f15EA8C1Fb2a783dB296d6F65020B4Ab8cBE77";
-const endpoint = process.env.NVRA_AMOY_RPC || "https://rpc-amoy.polygon.technology/";
+const endpoint = process.env.NVRA_AMOY_RPC || "https://polygon-amoy.drpc.org";
 if (!/^https:\/\//.test(endpoint)) throw Error("RPC endpoint must use HTTPS");
 const assert = require("node:assert/strict");
 let id = 0;
