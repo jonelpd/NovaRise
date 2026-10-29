@@ -10,6 +10,7 @@ const status = (message, error = false) => {
   el("access-status").dataset.error = String(error);
 };
 const valid = address => /^0x[0-9a-fA-F]{40}$/.test(address);
+let activeRequest = 0;
 async function call(method, params = []) {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 12000);
@@ -35,6 +36,7 @@ function formatBalance(hex) {
 async function check(address) {
   if (!valid(address)) { status(tr("Dirección no válida.", "Invalid address."), true); return; }
   const button = el("check-balance");
+  const requestId = ++activeRequest;
   button.disabled = true;
   el("balance-result").hidden = true;
   status(tr("Consultando red de pruebas…", "Checking test network…"));
@@ -44,17 +46,21 @@ async function check(address) {
     const data = "0x70a08231" + address.slice(2).toLowerCase().padStart(64, "0");
     const result = await call("eth_call", [{ to: contract, data }, "latest"]);
     if (!/^0x[0-9a-fA-F]{64}$/.test(result)) throw new Error("Unexpected balance response");
+    const decimalsResult = await call("eth_call", [{ to: contract, data: "0x313ce567" }, "latest"]);
+    if (!/^0x[0-9a-fA-F]{64}$/.test(decimalsResult) || BigInt(decimalsResult) !== 18n) throw new Error("Unexpected token decimals");
+    if (requestId !== activeRequest) return;
     el("balance-address").textContent = address;
     el("balance-value").textContent = formatBalance(result) + " NVRA";
     el("balance-result").hidden = false;
     status(tr("Consulta completada. Saldo experimental.", "Query complete. Experimental balance."));
   } catch {
+    if (requestId !== activeRequest) return;
     status(tr("No se pudo consultar el saldo. Inténtalo más tarde.", "Balance unavailable. Please try again later."), true);
-  } finally { button.disabled = false; }
+  } finally { if (requestId === activeRequest) button.disabled = false; }
 }
 el("access-form").addEventListener("submit", event => {
   event.preventDefault();
-  check(el("wallet-address").value.trim());
+  void check(el("wallet-address").value.trim());
 });
 el("connect-wallet").addEventListener("click", async () => {
   if (!window.ethereum?.request) {
