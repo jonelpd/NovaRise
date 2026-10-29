@@ -31,7 +31,7 @@ jobs:
         run: |
           npm audit --json > npm-audit-root.json || true
           npm audit --prefix safe-deps --json > npm-audit-safe.json || true
-          node -e 'for(const f of ["npm-audit-root.json","npm-audit-safe.json"]){const x=require("./"+f);console.log(f,JSON.stringify(x.metadata?.vulnerabilities||{}));}'
+          node -e 'for(const f of ["npm-audit-root.json","npm-audit-safe.json"]){const x=require("./"+f);console.log(f,JSON.stringify(x.metadata?.vulnerabilities||{}));for(const [name,v] of Object.entries(x.vulnerabilities||{})){console.log(JSON.stringify({tree:f,package:name,severity:v.severity,isDirect:v.isDirect,range:v.range,via:v.via.map(z=>typeof z==="string"?z:{name:z.name,title:z.title,url:z.url,range:z.range}),effects:v.effects,fixAvailable:v.fixAvailable}));}}'
       - name: Upload dependency vulnerability reports
         uses: actions/upload-artifact@v4
         with:
