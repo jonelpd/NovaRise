@@ -47,3 +47,9 @@ This plan does not authorize deployment, custody, token sales or token transfers
 ## Confirmed CI milestone — run #18
 - Screenshot of GitHub Actions workflow run #18 shows green overall Success and compile-and-test for commit `4cb7a36`, total duration 31 seconds.
 - Covers the additional test cases introduced in that commit. Not a substitute for independent security audit or production Safe review.
+
+## Phase 3 — adversarial tests (2026-10-29)
+- Commit `aac3976` adds duplicate approved-hash signatures, altered transfer payload without reapproval, and multi-transfer fixed-supply accounting tests against the official Safe proxy.
+- **Awaiting CI verification** for these new cases. A previous green run does not validate newly added tests.
+- The repeated-transfer test is a deterministic accounting check, **not** property-based fuzzing or a formal invariant proof.
+- Remaining: fuzz/property-based coverage, guard/module risks, signature edge cases, gas/griefing and independent audit.
