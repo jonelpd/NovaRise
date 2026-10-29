@@ -7,7 +7,7 @@ Status: design in progress; not a launch, sale, or investment offering.
 - This is a **separate** future deployment from the existing Polygon Amoy prototype, which has an initial 100,000,000 test NVRA.
 - No mainnet token or economic value has been established; mainnet deployment remains conditional on legal and security reviews.
 
-## Allocation — working proposal, NOT approved
+## Allocation — provisionally accepted for planning (2026-10-29)
 | Bucket | Share | Tokens |
 | --- | ---: | ---: |
 | Ecosystem and verified rewards | 30% | 300,000 |
@@ -17,7 +17,7 @@ Status: design in progress; not a launch, sale, or investment offering.
 | Future liquidity | 10% | 100,000 |
 | **Total** | **100%** | **1,000,000** |
 
-All allocations are proposals and do not authorize spending or transfers.
+The project owner accepted these percentages as the provisional planning baseline on 2026-10-29. This does not finalize beneficiaries, initial circulation, unlocks, governance or legal review, and does not authorize spending, transfers, sales or mainnet deployment.
 
 ## Preliminary release policy — NOT approved
 - Ecosystem: controlled release over up to 8 years, with program-specific caps and anti-abuse rules.
