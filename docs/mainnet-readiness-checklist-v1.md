@@ -1,13 +1,13 @@
 # NovaRise — Mainnet readiness gates (draft)
 
-Status: NOT READY FOR MAINNET. Date: 2026-10-29.
+Status: NOT READY FOR MAINNET. Date: 2026-10-29. Consolidated preliminary security assessment: [nvra-consolidated-security-assessment-2026-10-29.md](nvra-consolidated-security-assessment-2026-10-29.md).
 
 ## Gate A — Code and tests
 - [x] Separate 1,000,000 NVRA candidate Solidity source committed.
 - [x] Draft team vesting source and local tests committed.
 - [x] CI workflow committed for local Hardhat compilation/tests.
 - [x] GitHub Actions run #7 reports **Success** for commit `4bdd491871f17ed07423d3f6a27803f9dcfc51e4` (run ID `40858729335`), based on the repository owner's GitHub Actions screenshot, 2026-10-29. Compilation and local test job marked green. Independent audit and broader security tests remain pending.
-- [ ] Complete boundary, late-funding, ownership-transfer, adversarial and invariant tests. Initial cliff, ownership-transfer and late-funding cases exist and passed CI at commit `4bdd491`; broader adversarial/invariant coverage is still pending.
+- [ ] Complete fuzz/property-based invariant tests and remaining edge cases. Boundary, late-funding, owner rotation, Safe adversarial signature and deterministic supply-accounting tests have passed through GitHub Actions run #19 (commit `aac3976`), per owner screenshot.
 - [ ] Reproducible dependency lockfile and verified compiler output.
 - [ ] Independent security review and fixes.
 
@@ -31,7 +31,7 @@ Existing Amoy token: 100,000,000 test NVRA, no monetary value. Future mainnet de
 
 ## CI verification reference (for repository owner)
 1. Open https://github.com/jonelpd/NovaRise/actions/workflows/nvra-contract-tests.yml
-2. Select the most recent run after commit `4675e5d3b2a03c3872ee9d68ee532bd83faa3842` (or a newer commit containing that fix).
+2. Select the latest run on the default branch; run #19 for commit `aac3976` was reported green by the owner, but verify any subsequent code changes independently.
 3. Confirm both **Compile Solidity contracts** and **Run all local Hardhat tests** are green; inspect job logs and exact tested SHA.
 4. If no run exists, use **Run workflow** on the default branch, or verify GitHub Actions is enabled.
 5. Capture any failure log for remediation. A green local run is necessary but not an independent security audit.
@@ -39,3 +39,7 @@ Existing Amoy token: 100,000,000 test NVRA, no monetary value. Future mainnet de
 ## Verified milestone — 2026-10-29
 - Screenshot of GitHub Actions run https://github.com/jonelpd/NovaRise/actions/runs/40858729335 shows overall Success and a green compile-and-test job on commit `4bdd491`.
 - This establishes a passing CI milestone for that commit, **not** proof of contract security or production readiness.
+
+## Security assessment — 2026-10-29
+- Preliminary internal report: [NVRA consolidated security assessment](nvra-consolidated-security-assessment-2026-10-29.md).
+- Current conclusion: **NO-GO for mainnet**. Passing CI is necessary but insufficient; outstanding custody, legal, reproducibility and independent audit gates remain.
