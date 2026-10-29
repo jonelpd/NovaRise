@@ -72,16 +72,16 @@ describe("NovaRise team cliff vesting (local only)", function () {
     const addr = await token.getAddress();
     await ethers.provider.send("evm_setNextBlockTimestamp", [start + cliff]);
     await ethers.provider.send("evm_mine", []);
-    expect(await vest.releasable(addr)).to.equal(0n);
+    expect(await vest["releasable(address)"](addr)).to.equal(0n);
     expect(await token.balanceOf(beneficiary.address)).to.equal(0n);
     // A release transaction mined after the exact cliff can unlock a few seconds
     // of linear vesting, so assert the boundary via a view call, not a new block.
     await ethers.provider.send("evm_setNextBlockTimestamp", [start + cliff + linear]);
     await ethers.provider.send("evm_mine", []);
-    expect(await vest.releasable(addr)).to.equal(amount);
+    expect(await vest["releasable(address)"](addr)).to.equal(amount);
     await vest.connect(stranger)["release(address)"](addr);
     expect(await token.balanceOf(beneficiary.address)).to.equal(amount);
-    expect(await vest.releasable(addr)).to.equal(0n);
+    expect(await vest["releasable(address)"](addr)).to.equal(0n);
   });
 
   it("documents that vesting ownership can transfer and late funding can unlock immediately", async function () {
@@ -102,7 +102,7 @@ describe("NovaRise team cliff vesting (local only)", function () {
     await ethers.provider.send("evm_mine", []);
     const amount = ethers.parseUnits("10", 18);
     await treasury.sendToken(await token.getAddress(), await vest.getAddress(), amount);
-    expect(await vest.releasable(await token.getAddress())).to.equal(amount);
+    expect(await vest["releasable(address)"](await token.getAddress())).to.equal(amount);
     await vest["release(address)"](await token.getAddress());
     expect(await token.balanceOf(newBeneficiary.address)).to.equal(amount);
     expect(await token.balanceOf(beneficiary.address)).to.equal(0n);
