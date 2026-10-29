@@ -20,6 +20,7 @@ jobs:
         run: |
           mkdir -p /tmp/nvra-hardhat3/src
           cp -R contracts/src/. /tmp/nvra-hardhat3/src/
+          cp contracts/NVRAToken.sol /tmp/nvra-hardhat3/NVRAToken.sol
           cd /tmp/nvra-hardhat3
           printf '%s\n' '{"name":"nvra-hardhat3-evaluation","private":true,"type":"module"}' > package.json
           npm install --no-audit --no-fund --save-dev hardhat@^3 @nomicfoundation/hardhat-ethers@^4
