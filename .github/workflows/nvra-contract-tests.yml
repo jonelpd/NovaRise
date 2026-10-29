@@ -27,6 +27,10 @@ jobs:
         run: npm install --no-audit --no-fund
       - name: Install isolated official Safe contracts (ethers v5 peer)
         run: npm install --prefix safe-deps --no-audit --no-fund
+      - name: Expose isolated Safe Solidity package to Hardhat resolver
+        run: |
+          mkdir -p node_modules/@safe-global
+          cp -R safe-deps/node_modules/@safe-global/safe-contracts node_modules/@safe-global/safe-contracts
       - name: Compile Solidity contracts
         run: npx hardhat compile
       - name: Run all local Hardhat tests
