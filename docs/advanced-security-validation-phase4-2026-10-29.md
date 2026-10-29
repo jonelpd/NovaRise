@@ -1,6 +1,6 @@
 # NovaRise — advanced security validation, phase 4
 
-Date: 2026-10-29. Status: **implemented; awaiting CI confirmation**.
+Date: 2026-10-29. Status: **CI passed; dependency vulnerability triage required before mainnet**.
 
 ## New local checks
 
@@ -23,3 +23,13 @@ Date: 2026-10-29. Status: **implemented; awaiting CI confirmation**.
 4. Request independent audit after outstanding high-severity findings are resolved.
 
 **Mainnet readiness remains NO-GO.**
+
+## Verified CI and npm audit findings — run #24
+
+- GitHub Actions run [#24](https://github.com/jonelpd/NovaRise/actions/runs/40864499973), commit `71f3906`, **Success**. Logs show **22 passing tests** and successful compilation of 40 Solidity files.
+- Root `npm audit` summary: **47 total** (19 low, 10 moderate, 18 high, 0 critical).
+- Isolated Safe `npm audit` summary: **6 total** (0 low, 0 moderate, 2 high, **4 critical**).
+- Reports artifact: [nvra-dependency-audit](https://github.com/jonelpd/NovaRise/actions/runs/40864499973/artifacts/12892394087) (retained 30 days).
+- These are dependency advisories, **not evidence that deployed contracts are exploitable**. The full report's affected package names, dependency paths, reachable use and available patches still require inspection. No automatic `npm audit fix --force` or Safe major-version upgrade should be performed without checking compatibility, source and contract tests.
+- **Action:** classify four critical Safe-tree findings first; determine whether they belong to dev/test tooling or runtime Solidity sources, then plan minimal pinned upgrades with green CI and audit review.
+- **Mainnet gate:** remains **NO-GO**.
