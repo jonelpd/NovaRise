@@ -1,6 +1,6 @@
 # NovaRise — reproducible dependency build migration
 
-Date: 2026-10-29. Status: **transition in progress; not yet fully reproducible**.
+Date: 2026-10-29. Status: **dependency lockfile migration completed and CI verified** (GitHub Actions run #22, commit `f71be12`, reported Success in owner's screenshot on 2026-10-29). This is a reproducible npm dependency install baseline, not a complete byte-for-byte reproducible Solidity build guarantee.
 
 ## Why this is needed
 
@@ -32,3 +32,9 @@ The Hardhat project uses ethers v6, while the pinned official Safe Solidity pack
 - Never introduce production keys or live network deployment credentials to this workflow.
 
 No mainnet deployment is authorized.
+
+## Completion evidence — 2026-10-29
+- Both `contracts/package-lock.json` and `contracts/safe-deps/package-lock.json` are committed in Git.
+- Workflow commit `f71be12` removes lockfile regeneration and automated commits, uses `npm ci` for both dependency trees, and sets read-only workflow permissions.
+- GitHub Actions run #22 is green according to repository owner's screenshot (27 seconds).
+- **Further hardening:** pin action revisions and runner image, verify compiler binaries and artifact hashes, perform independent reproducibility checks and supply-chain audit.
