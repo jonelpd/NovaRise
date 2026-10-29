@@ -37,6 +37,9 @@ jobs:
           # Compile the identical integrity-verified Safe source tree as local sources too.
           mkdir -p src/vendor-safe
           cp -R safe-package/package/contracts/. src/vendor-safe/
+          # Upstream Safe test fixtures import optional @gnosis.pm/mock-contract;
+          # they are not production Safe sources and are excluded from compilation.
+          rm -rf src/vendor-safe/test
           node -e 'const p=require("./safe-package/package/package.json");require("fs").writeFileSync("node_modules/@safe-global/safe-contracts/package.json",JSON.stringify({name:p.name,version:p.version}));'
       - name: Generate separate Hardhat 3 ESM config
         run: |
