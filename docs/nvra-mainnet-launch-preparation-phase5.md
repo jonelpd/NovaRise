@@ -5,13 +5,13 @@ Date: 2026-10-29. Status: **preparation only / NO-GO**.
 ## Decision
 Stop expanding the experimental Hardhat 3 smoke suite for now. Maintain the already passing Hardhat 2 regression workflow and retain Hardhat 3 as an isolated experiment. Do not deploy or market the future NVRA token yet.
 
-## Candidate parameters to ratify
+## Candidate parameters and provisional allocation decision
 - Network: Polygon PoS mainnet (chain ID 137).
 - ERC-20: NovaRise Utility Token (NVRA), 18 decimals.
 - Fixed one-time mint: 1,000,000 NVRA, minted directly to a **deployed, verified production Safe**, not to a personal account or MockNVRATreasury.
 - The existing 100,000,000-NVRA Polygon Amoy test token is a separate prototype, not a representation of the mainnet supply.
 - Proposed Safe: 3 approvals from 5 independently controlled signers; **real owners, recovery, key security, gas management and operating procedures are not approved**.
-- Proposed allocation (NOT approved): ecosystem 300,000; treasury/development 250,000; community 200,000; team 150,000; future liquidity 100,000. Total 1,000,000.
+- Allocation accepted provisionally for planning on 2026-10-29 (not final launch approval): ecosystem 300,000; treasury/development 250,000; community 200,000; team 150,000; future liquidity 100,000. Total 1,000,000.
 - Team vesting (NOT approved): 12-month cliff then 36-month linear vesting; specify UTC start/end, beneficiary, ownership transfer policy and late-funding effects before deployment.
 
 ## Mandatory sequence and acceptance evidence
@@ -28,7 +28,7 @@ Stop expanding the experimental Hardhat 3 smoke suite for now. Maintain the alre
 ## Current blockers
 - Legal entity and legal classification unresolved.
 - Safe real signers and production custody unresolved.
-- Tokenomics, initial circulation and vesting timestamps unapproved.
+- Allocation percentages accepted provisionally; initial circulation, recipient identities, release controls and vesting timestamps remain unapproved.
 - Independent audit and complete final-architecture rehearsal pending.
 - Hardhat 3 has only partial parity with the 22 stable Hardhat 2 tests; its 4 reported high dependency alerts also require triage. This does not block *preparation* but does block treating the experimental suite as a release qualification.
 
