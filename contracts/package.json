@@ -1,17 +1,15 @@
 {
-  "name": "nvra-experimental-contract",
+  "name": "nvra-contracts",
   "version": "0.1.0",
   "private": true,
-  "description": "Local-only experimental NVRA fixed-supply token. No deployment scripts or private keys.",
+  "description": "NovaRise NVRA utility token candidate and local contract tests for a proposed Base Mainnet release. Not deployed.",
   "scripts": {
     "compile": "hardhat compile",
     "test": "hardhat test",
     "clean": "hardhat clean",
     "preflight": "node scripts/preflight.cjs",
-    "amoy:readiness": "node scripts/amoy-readiness.cjs",
     "simulate:local": "hardhat run scripts/simulate-deployment.cjs --network hardhat",
     "test:safe": "hardhat test test/safe-multisig.test.cjs",
-    "amoy:public-preflight": "node scripts/amoy-public-preflight.cjs",
     "base:readiness": "node scripts/base-mainnet-readiness.cjs"
   },
   "devDependencies": {
