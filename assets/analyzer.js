@@ -510,6 +510,24 @@ analyzeButton.addEventListener('click',async()=>{
   summary.append(element('h4','',title));
   summary.append(element('p','small muted',known+nvraText(' de ')+fields.length+' indicadores disponibles · '+unavailable+nvraText(' sin datos. No se calcula una puntuación de seguridad.')));
   report.append(summary);
+  // Analytics 2.0: factual executive synopsis, without a synthetic safety score.
+  const executive=element('section','market-card');
+  executive.append(element('h4','section-title',nvraLocale==='en'?'Executive summary':'Resumen ejecutivo'));
+  const overview=alerts
+   ?(nvraLocale==='en'?'GoPlus flags '+alerts+' of '+known+' evaluated indicators for review.':'GoPlus señala '+alerts+' de '+known+' indicadores evaluados que requieren revisión.')
+   :known===0
+    ?(nvraLocale==='en'?'No interpretable security indicators were provided.':'No se recibieron indicadores de seguridad interpretables.')
+    :(nvraLocale==='en'?'No flags among '+known+' evaluated indicators.':'No se detectaron alertas entre '+known+' indicadores evaluados.');
+  executive.append(element('p','',overview));
+  const flagged=results.filter(item=>item.state==='alert').map(item=>item.field.label);
+  if(flagged.length){
+   const details=element('p','small', (nvraLocale==='en'?'Indicators to review: ':'Indicadores para revisar: ')+flagged.join(' · '));
+   executive.append(details);
+  }
+  executive.append(element('p','small muted',nvraLocale==='en'
+   ?unavailable+' indicators lack data. This is not a contract audit, safety guarantee, or investment advice. Market data is shown separately.'
+   :unavailable+' indicadores carecen de datos. No es una auditoría del contrato, garantía de seguridad ni asesoramiento financiero. Los datos de mercado se muestran por separado.'));
+  report.append(executive);
   const guide=element('nav','report-jump');
   guide.setAttribute('aria-label',nvraText('Secciones del informe'));
   for(const [target,label] of [['report-indicators','Indicadores de seguridad'],['report-holders','Titulares y suministro'],['report-markets','Mercados y gráficos']]){
