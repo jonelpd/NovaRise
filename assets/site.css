@@ -319,3 +319,28 @@ body.interest-modal-open{overflow:hidden}
 .nvra-simple .simple-analyzer a{color:#9af0c1}
 .nvra-simple .simple-analyzer .hidden{display:none!important}
 @media(max-width:780px){.nvra-simple .simple-analyzer .analyzer{grid-template-columns:1fr}.nvra-simple .simple-analyzer .panel{padding:16px}}
+
+/* Restored community participation — responsive, aligned checkbox and accessible confirmation */
+.nvra-simple .simple-participation{max-width:790px;background:#103024;border:1px solid #416c56;border-radius:18px;padding:clamp(20px,4vw,36px)}
+.nvra-simple .simple-participation .interest-form{display:grid;gap:18px}
+.nvra-simple .simple-participation .interest-form>label{display:grid;gap:8px;font-weight:650;color:#e7f9ee}
+.nvra-simple .simple-participation input:not([type=checkbox]),.nvra-simple .simple-participation select,.nvra-simple .simple-participation textarea{box-sizing:border-box;width:100%;max-width:100%;padding:13px;border:1px solid #8cae9a;border-radius:9px;background:#fff;color:#132b21;font:inherit}
+.nvra-simple .simple-participation textarea{resize:vertical;min-height:110px}
+.nvra-simple .simple-participation .interest-consent-row{display:grid!important;grid-template-columns:20px minmax(0,1fr)!important;gap:12px;align-items:start}
+.nvra-simple .simple-participation .interest-consent-row input[type=checkbox]{appearance:auto!important;width:18px!important;height:18px!important;min-width:18px;margin:3px 0 0!important;position:static!important}
+.nvra-simple .simple-participation .interest-consent-row label{display:block;line-height:1.6;color:#c6ddcf;font-size:.91rem;margin:0}
+.nvra-simple .simple-participation button[type=submit]{justify-self:start;background:#a2f5c8;color:#08251c;border:0;border-radius:9px;padding:13px 23px;font-weight:750;cursor:pointer}
+.nvra-simple .simple-participation button:disabled{opacity:.6;cursor:wait}
+.nvra-simple .simple-participation #interest-status{min-height:1.3em;margin:0;color:#d2f6e0}
+.nvra-simple .simple-participation .interest-trap{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip-path:inset(50%)!important;white-space:nowrap!important}
+.nvra-simple .simple-privacy{max-width:790px;font-size:.83rem;line-height:1.65;color:#a6c0b0;margin-top:17px}
+.nvra-simple .interest-modal[hidden]{display:none!important}
+.nvra-simple .interest-modal{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;padding:18px}
+.nvra-simple .interest-modal-backdrop{position:absolute;inset:0;background:#000b}
+.nvra-simple .interest-modal-panel{position:relative;z-index:1;max-width:460px;width:100%;box-sizing:border-box;background:#113a2b;color:#eafff5;border:1px solid #75c79b;border-radius:18px;padding:34px;text-align:center;box-shadow:0 30px 100px #0008}
+.nvra-simple .interest-modal-icon{display:grid;place-items:center;margin:0 auto 12px;width:55px;height:55px;background:#a2f5c8;color:#08251c;border-radius:50%;font-size:1.7rem;font-weight:800}
+.nvra-simple .interest-modal-panel h2{margin:12px 0}.nvra-simple .interest-modal-panel p{line-height:1.6}
+.nvra-simple .interest-modal-note{color:#bdd8c9;font-size:.9rem}
+.nvra-simple .interest-modal-close{margin-top:15px;background:#a2f5c8;color:#08251c;border:0;border-radius:9px;padding:12px 26px;font-weight:750;cursor:pointer}
+body.interest-modal-open{overflow:hidden}
+@media(max-width:520px){.nvra-simple .simple-participation button[type=submit]{width:100%}}
