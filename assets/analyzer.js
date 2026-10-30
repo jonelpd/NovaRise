@@ -106,6 +106,18 @@ function appendMarket(pairs,address,network){
  const priceChangeNumber=!pricePair||priceChange===null||priceChange===undefined||priceChange===''?NaN:Number(priceChange);
  grid.append(metricCard(nvraText('Variación 24 h del token'),Number.isFinite(priceChangeNumber)?priceChangeNumber.toLocaleString(nvraText('es-ES'),{maximumFractionDigits:2})+' %':nvraText('Sin datos'),nvraText(pricePair?'Variación reportada por DexScreener para el par utilizado en el precio. Si falta, el proveedor no ofrece ese dato; no se sustituye por la variación de otro par.':'No existe un par con precio válido donde el token consultado sea el activo base; no se infiere la variación desde otro token.')));
  summary.append(grid);report.append(summary);
+ // Analytics 2.0: source-scoped market synopsis; never combine distinct pairs into a global total.
+ const marketExecutive=element('section','market-card');
+ marketExecutive.append(element('h4','section-title',nvraLocale==='en'?'Market overview':'Resumen de mercado'));
+ const topLabel=(top.baseToken?.symbol||'?')+' / '+(top.quoteToken?.symbol||'?')+' · '+String(top.dexId||'DEX');
+ marketExecutive.append(element('p','',nvraLocale==='en'
+  ?'Highest reported liquidity among '+selected.length+' returned pairs: '+topLabel+'.'
+  :'Mayor liquidez reportada entre '+selected.length+' pares devueltos: '+topLabel+'.'));
+ marketExecutive.append(element('p','small',(nvraLocale==='en'?'Pair liquidity: ':'Liquidez del par: ')+usd(top.liquidity?.usd)+(nvraLocale==='en'?' · Pair 24h volume: ':' · Volumen del par en 24 h: ')+usd(top.volume?.h24)));
+ marketExecutive.append(element('p','small muted',nvraLocale==='en'
+  ?'Source: DexScreener. This is one pair, not total token liquidity or global trading volume. Liquidity is not proof of locked funds. Prices and 24h changes may refer to a different pair where the requested token is the base asset.'
+  :'Fuente: DexScreener. Es un único par, no la liquidez total del token ni el volumen global negociado. La liquidez no demuestra fondos bloqueados. El precio y la variación de 24 h pueden proceder de otro par donde el token consultado es el activo base.'));
+ report.append(marketExecutive);
  report.append(element('h4','section-title',nvraText('Pares DEX destacados')));
  for(const pair of selected.slice(0,5)){
   const block=element('div','market-pair');
