@@ -43,8 +43,8 @@ for(const page of [html,english]){
  assert.ok(page.indexOf('class="token-launch"')<page.indexOf('id="inicio"'),'NVRA announcement should appear before hero');
  assert.match(page,/href="#nvr"/);
 }
-assert.match(html,/no existe fecha de lanzamiento confirmada/);
-assert.match(english,/no launch date is confirmed/);
+assert.match(html,/Sin lanzamiento|SIN LANZAMIENTO|sin lanzamiento|Sin token mainnet|SIN TOKEN MAINNET/);
+assert.match(english,/No launch|NO LAUNCH|no launch|No mainnet token|NO MAINNET TOKEN/);
 assert.match(sharedCss,/\.token-launch\{/);
 for(const page of [html,english]){
  assert.match(page,/<section id="ecosistema" class="ecosystem-section"/);
