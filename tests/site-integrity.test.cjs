@@ -44,6 +44,7 @@ for (const page of ["index.html","en.html"]) {
   assert.match(text[page],/id="analyze"/);
   assert.match(text[page],/src="assets\/analyzer\.js/);
   assert.match(text[page],/src="assets\/locale-en\.js/);
+  assert.match(text[page],/<a href="crm\.html" aria-label="(?:Acceso administrador|Admin access)">/);
 }
 assert.match(text["base-portal.html"],/base-portal-en\.html/);
 assert.match(text["base-portal-en.html"],/base-portal\.html/);
