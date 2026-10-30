@@ -42,6 +42,7 @@ function dataQualityCard(source,reported,estimated,missing){
  const section=element('section','market-card');
  section.append(element('h4','section-title',nvraLocale==='en'?'Data quality and sources':'Calidad y procedencia de los datos'));
  section.append(element('p','small',(nvraLocale==='en'?'Provider: ':'Proveedor: ')+source));
+ section.append(element('p','small muted',(nvraLocale==='en'?'Retrieved at: ':'Consultado el: ')+new Date().toLocaleString(nvraLocale==='en'?'en-US':'es-ES')+(nvraLocale==='en'?' · Retrieval time, not necessarily the provider data timestamp.':' · Hora de consulta, no necesariamente la fecha de actualización del proveedor.')));
  const legend=element('p','small muted',nvraLocale==='en'
   ?'Provider-reported: '+reported+' · Provider-estimated: '+estimated+' · Unavailable: '+missing+'. These figures have not been independently verified.'
   :'Informados por proveedor: '+reported+' · Estimados por proveedor: '+estimated+' · No disponibles: '+missing+'. Estos datos no se han verificado de forma independiente.');
