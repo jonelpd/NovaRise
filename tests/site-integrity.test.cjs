@@ -70,6 +70,8 @@ assert.match(analyzer,/const indicatorGuides=/);
 assert.match(analyzer,/Por qué importa:/);
 assert.match(analyzer,/Calidad y procedencia de los datos/);
 assert.match(analyzer,/Data quality and sources/);
+assert.match(analyzer,/Hora de consulta, no necesariamente la fecha de actualización del proveedor/);
+assert.match(analyzer,/Retrieval time, not necessarily the provider data timestamp/);
 assert.match(analyzer,/dataQualityCard\('GoPlus Security API',known,0,unavailable\)/);
 assert.match(analyzer,/dataQualityCard\('DexScreener',reportedMarket,estimatedMarket/);
 assert.match(analyzer,/Why it matters:/);
