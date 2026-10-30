@@ -38,6 +38,16 @@ function safeNumber(value){
  if(value===null||value===undefined||value===''||typeof value==='boolean'||typeof value==='object')return null;
  const n=Number(value);return Number.isFinite(n)&&n>=0?n:null;
 }
+function dataQualityCard(source,reported,estimated,missing){
+ const section=element('section','market-card');
+ section.append(element('h4','section-title',nvraLocale==='en'?'Data quality and sources':'Calidad y procedencia de los datos'));
+ section.append(element('p','small',(nvraLocale==='en'?'Provider: ':'Proveedor: ')+source));
+ const legend=element('p','small muted',nvraLocale==='en'
+  ?'Provider-reported: '+reported+' · Provider-estimated: '+estimated+' · Unavailable: '+missing+'. These figures have not been independently verified.'
+  :'Informados por proveedor: '+reported+' · Estimados por proveedor: '+estimated+' · No disponibles: '+missing+'. Estos datos no se han verificado de forma independiente.');
+ section.append(legend);
+ return section;
+}
 function metricCard(label,value,note){
  const card=element('div','metric');card.append(element('small','',label),element('strong','',value),element('em','',note));return card;
 }
@@ -106,6 +116,9 @@ function appendMarket(pairs,address,network){
  const priceChangeNumber=!pricePair||priceChange===null||priceChange===undefined||priceChange===''?NaN:Number(priceChange);
  grid.append(metricCard(nvraText('Variación 24 h del token'),Number.isFinite(priceChangeNumber)?priceChangeNumber.toLocaleString(nvraText('es-ES'),{maximumFractionDigits:2})+' %':nvraText('Sin datos'),nvraText(pricePair?'Variación reportada por DexScreener para el par utilizado en el precio. Si falta, el proveedor no ofrece ese dato; no se sustituye por la variación de otro par.':'No existe un par con precio válido donde el token consultado sea el activo base; no se infiere la variación desde otro token.')));
  summary.append(grid);report.append(summary);
+ const reportedMarket=[pricePair?.priceUsd,top.volume?.h24,priceChange].filter(value=>value!==null&&value!==undefined&&value!==''&&Number.isFinite(Number(value))).length;
+ const estimatedMarket=safeNumber(top.liquidity?.usd)!==null?1:0;
+ report.append(dataQualityCard('DexScreener',reportedMarket,estimatedMarket,4-reportedMarket-estimatedMarket));
  // Analytics 2.0: source-scoped market synopsis; never combine distinct pairs into a global total.
  const marketExecutive=element('section','market-card');
  marketExecutive.append(element('h4','section-title',nvraLocale==='en'?'Market overview':'Resumen de mercado'));
@@ -540,6 +553,7 @@ analyzeButton.addEventListener('click',async()=>{
    ?unavailable+' indicators lack data. This is not a contract audit, safety guarantee, or investment advice. Market data is shown separately.'
    :unavailable+' indicadores carecen de datos. No es una auditoría del contrato, garantía de seguridad ni asesoramiento financiero. Los datos de mercado se muestran por separado.'));
   report.append(executive);
+  report.append(dataQualityCard('GoPlus Security API',known,0,unavailable));
   // Group the existing GoPlus signals by concern, without claiming an overall safety rating.
   const riskGroups=[
    {labelEs:'Código y posibilidad de cambios',labelEn:'Code and upgradeability',keys:['is_open_source','is_proxy']},
