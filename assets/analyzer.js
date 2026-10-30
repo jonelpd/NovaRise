@@ -6,8 +6,8 @@ const netInput=document.getElementById('network');
 const report=document.getElementById('report');
 const empty=document.getElementById('empty');
 const analyzeButton=document.getElementById('analyze');
-const endpointChains={'Ethereum':'1','Polygon':'137','BNB Smart Chain':'56'};
-const dexChains={'Ethereum':'ethereum','Polygon':'polygon','BNB Smart Chain':'bsc'};
+const endpointChains={'Base':'8453','Ethereum':'1','Polygon':'137','BNB Smart Chain':'56'};
+const dexChains={'Base':'base','Ethereum':'ethereum','Polygon':'polygon','BNB Smart Chain':'bsc'};
 const fields=[
  {key:'is_open_source',label:nvraText('Código fuente verificado'),good:'1',positive:nvraText('El proveedor indica que el código está publicado para revisión. Esto no equivale a una auditoría.'),negative:nvraText('El proveedor no identifica el código como abierto/verificado; revisar antes de confiar.')},
  {key:'is_honeypot',label:nvraText('Posible bloqueo de ventas'),good:'0',positive:nvraText('GoPlus no señala un patrón de bloqueo de ventas en este indicador. No garantiza que puedas vender.'),negative:nvraText('GoPlus señala posible restricción de venta. Investiga antes de operar.')},
@@ -16,12 +16,13 @@ const fields=[
  {key:'can_take_back_ownership',label:nvraText('Recuperación de propiedad'),good:'0',positive:nvraText('No se señala capacidad de recuperar privilegios administrativos en este indicador.'),negative:nvraText('Podría existir capacidad de recuperar el control administrativo.')},
  {key:'is_proxy',label:nvraText('Contrato proxy'),good:'0',positive:nvraText('No se señala estructura proxy en este indicador.'),negative:nvraText('Se señala una estructura proxy; su lógica podría modificarse, según permisos.')}
 ];
-document.getElementById('year').textContent=new Date().getFullYear();
+const yearElement=document.getElementById('year');
+if(yearElement)yearElement.textContent=new Date().getFullYear();
 let activeRequest=0;
 let securityController=null;
 let marketController=null;
 let historyController=null;
-const geckoChains={'Ethereum':'eth','Polygon':'polygon_pos','BNB Smart Chain':'bsc'};
+const geckoChains={'Base':'base','Ethereum':'eth','Polygon':'polygon_pos','BNB Smart Chain':'bsc'};
 let historyPeriod=30;
 let historyMetric='price';
 let lastHistoricalPair=null;
