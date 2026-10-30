@@ -39,6 +39,7 @@ for (const page of ["index.html","en.html"]) {
   assert.match(text[page],/id="interest-success-modal"/);
   assert.match(text[page],/src="assets\/interest\.js/);
   assert.match(text[page],/id="network"/);
+  assert.match(text[page],/<select id="network"><option selected>Base<\/option>/);
   assert.match(text[page],/id="address"/);
   assert.match(text[page],/id="analyze"/);
   assert.match(text[page],/src="assets\/analyzer\.js/);
@@ -48,5 +49,9 @@ assert.match(text["base-portal.html"],/base-portal-en\.html/);
 assert.match(text["base-portal-en.html"],/base-portal\.html/);
 assert.match(text["base-portal.html"],/NVRA aún no está desplegado/);
 assert.match(text["base-portal-en.html"],/NVRA has not been deployed/);
+const analyzer=fs.readFileSync("assets/analyzer.js","utf8");
+assert.match(analyzer,/['"]Base['"]:['"]8453['"]/);
+assert.match(analyzer,/['"]Base['"]:['"]base['"]/);
+assert.match(analyzer,/if\(yearElement\)yearElement\.textContent/);
 assert.deepEqual(issues,[],issues.join("\n"));
 console.log("PASS: "+pages.length+" HTML pages, local links, anchors, Base disclosures and language navigation");
