@@ -301,3 +301,21 @@ body.interest-modal-open{overflow:hidden}
 .nvra-simple .simple-doc-section{padding:23px 0;border-bottom:1px solid #315342}
 .nvra-simple .simple-doc-section h2{font-size:1.4rem;color:#d9f8e6;margin:0 0 10px}
 .nvra-simple .simple-doc-section p{line-height:1.8;color:#c3dacf;margin:0}
+
+/* Restored live token analyzer: professional presentation on the NVRA landing */
+.nvra-simple .simple-analyzer{background:#0d2b22;border:1px solid #416b55;border-radius:18px;padding:clamp(16px,3vw,30px);box-shadow:0 20px 70px #0003}
+.nvra-simple .simple-analyzer>section{padding:0;margin:0;background:transparent;border:0}
+.nvra-simple .simple-analyzer>section>.eyebrow,.nvra-simple .simple-analyzer>section>h2,.nvra-simple .simple-analyzer>section>.muted{display:none}
+.nvra-simple .simple-analyzer .analyzer{display:grid;grid-template-columns:minmax(240px,.85fr) minmax(0,1.35fr);gap:18px;align-items:start}
+.nvra-simple .simple-analyzer .panel{min-width:0;background:#12392b;border:1px solid #416d57;border-radius:12px;padding:22px;color:#eafff5}
+.nvra-simple .simple-analyzer label{display:block;font-weight:700;margin-bottom:9px;color:#eafff5}
+.nvra-simple .simple-analyzer select,.nvra-simple .simple-analyzer input{display:block;width:100%;max-width:100%;box-sizing:border-box;border-radius:9px;border:1px solid #7e9e8f;background:#fff;color:#10231c;padding:12px 13px;margin:0 0 18px}
+.nvra-simple .simple-analyzer button{background:#a2f5c8;color:#06251b;border:0;border-radius:9px;padding:14px 16px;font-weight:750;cursor:pointer}
+.nvra-simple .simple-analyzer button:disabled{opacity:.65;cursor:wait}
+.nvra-simple .simple-analyzer .muted{color:#bdd5c8}
+.nvra-simple .simple-analyzer .small{font-size:.88rem}
+.nvra-simple .simple-analyzer #report{overflow-wrap:anywhere}
+.nvra-simple .simple-analyzer #report .panel{background:#174032}
+.nvra-simple .simple-analyzer a{color:#9af0c1}
+.nvra-simple .simple-analyzer .hidden{display:none!important}
+@media(max-width:780px){.nvra-simple .simple-analyzer .analyzer{grid-template-columns:1fr}.nvra-simple .simple-analyzer .panel{padding:16px}}
