@@ -39,8 +39,9 @@ assert.doesNotMatch(english,/<style>/);
 assert.match(html,/<html lang="es">/);
 assert.match(english,/<html lang="en">/);
 for(const page of [html,english]){
- assert.match(page,/<aside class="token-launch" aria-labelledby="token-launch-title">/);
- assert.ok(page.indexOf('class="token-launch"')<page.indexOf('id="inicio"'),'NVRA announcement should appear before hero');
+ assert.match(page,/<details class="legacy-record">/);
+ assert.match(page,/<aside class="token-launch" aria-labelledby="mainnet-plan-title">/);
+ assert.ok(page.indexOf('class="token-launch"')<page.indexOf('id="inicio"'),'Base mainnet announcement should appear before hero');
  assert.match(page,/href="#nvr"/);
 }
 assert.match(html,/Sin lanzamiento|SIN LANZAMIENTO|sin lanzamiento|Sin token mainnet|SIN TOKEN MAINNET/);
