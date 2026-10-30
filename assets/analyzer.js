@@ -540,6 +540,31 @@ analyzeButton.addEventListener('click',async()=>{
    ?unavailable+' indicators lack data. This is not a contract audit, safety guarantee, or investment advice. Market data is shown separately.'
    :unavailable+' indicadores carecen de datos. No es una auditoría del contrato, garantía de seguridad ni asesoramiento financiero. Los datos de mercado se muestran por separado.'));
   report.append(executive);
+  // Group the existing GoPlus signals by concern, without claiming an overall safety rating.
+  const riskGroups=[
+   {labelEs:'Código y posibilidad de cambios',labelEn:'Code and upgradeability',keys:['is_open_source','is_proxy']},
+   {labelEs:'Venta y restricciones de direcciones',labelEn:'Trading and address restrictions',keys:['is_honeypot','is_blacklisted']},
+   {labelEs:'Emisión y control administrativo',labelEn:'Minting and administrative control',keys:['is_mintable','can_take_back_ownership']}
+  ];
+  const riskSection=element('section','market-card');
+  riskSection.append(element('h4','section-title',nvraLocale==='en'?'Risk indicators by category':'Indicadores de riesgo por categoría'));
+  for(const group of riskGroups){
+   const items=results.filter(item=>group.keys.includes(item.field.key));
+   const flaggedCount=items.filter(item=>item.state==='alert').length;
+   const missingCount=items.filter(item=>item.state==='unknown').length;
+   const category=element('div','market-pair');
+   category.append(element('strong','',nvraLocale==='en'?group.labelEn:group.labelEs));
+   const categorySummary=flaggedCount
+    ?(nvraLocale==='en'?flaggedCount+' flagged indicator(s)':' '+flaggedCount+' indicador(es) con alerta')
+    :(nvraLocale==='en'?'No flags in available indicators':'Sin alertas en los indicadores disponibles');
+   category.append(element('p','small',categorySummary+' · '+missingCount+(nvraLocale==='en'?' missing':' sin datos')));
+   category.append(element('p','small muted',items.map(item=>item.field.label+': '+(item.state==='alert'?(nvraLocale==='en'?'Review':'Revisar'):item.state==='ok'?(nvraLocale==='en'?'No flag':'Sin alerta'):(nvraLocale==='en'?'No data':'Sin datos'))).join(' · ')));
+   riskSection.append(category);
+  }
+  riskSection.append(element('p','small muted',nvraLocale==='en'
+   ?'Classification is descriptive, not a risk score. Missing data never counts as a positive result.'
+   :'La clasificación es descriptiva, no una puntuación de riesgo. Los datos ausentes nunca cuentan como resultado favorable.'));
+  report.append(riskSection);
   const guide=element('nav','report-jump');
   guide.setAttribute('aria-label',nvraText('Secciones del informe'));
   for(const [target,label] of [['report-indicators','Indicadores de seguridad'],['report-holders','Titulares y suministro'],['report-markets','Mercados y gráficos']]){
