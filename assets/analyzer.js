@@ -576,6 +576,14 @@ analyzeButton.addEventListener('click',async()=>{
   const indicatorTitle=element('h4','section-title',nvraText('Indicadores del contrato'));
   indicatorTitle.id='report-indicators';
   report.append(indicatorTitle);
+  const indicatorGuides={
+   is_open_source:['El código publicado permite que especialistas lo revisen, pero no demuestra que sea seguro.','Published code can be reviewed by specialists, but publication alone does not prove safety.'],
+   is_honeypot:['Un bloqueo de venta podría impedir intercambiar el token después de comprarlo.','A sell restriction could prevent exchanging the token after buying it.'],
+   is_mintable:['Si se pueden crear más unidades, la proporción que posee cada titular podría reducirse.','If more units can be created, each holder’s share of the supply may decrease.'],
+   is_blacklisted:['Una lista negra puede impedir que determinadas direcciones transfieran el token.','A blacklist can prevent specific addresses from transferring the token.'],
+   can_take_back_ownership:['Recuperar permisos de administración puede permitir cambios posteriores en el contrato.','Recovering administrative permissions may allow later contract changes.'],
+   is_proxy:['Un contrato proxy puede permitir modificar la lógica sin cambiar la dirección del token.','A proxy contract may allow its logic to change without changing the token address.']
+  };
   for(const item of results){
    const {field,state}=item;
    const block=element('div','indicator');
@@ -585,6 +593,10 @@ analyzeButton.addEventListener('click',async()=>{
    head.append(label,status);block.append(head);
    const explanation=state==='ok'?field.positive:state==='alert'?field.negative:nvraText('GoPlus no facilitó un valor interpretable para este indicador. No se puede concluir que exista o no un riesgo.');
    block.append(element('p','muted',explanation));
+   const guide=indicatorGuides[field.key];
+   if(guide){
+    block.append(element('p','small', (nvraLocale==='en'?'Why it matters: ':'Por qué importa: ')+guide[nvraLocale==='en'?1:0]));
+   }
    report.append(block);
   }
   report.append(element('p','notice',nvraText('Los resultados dependen de un proveedor externo y pueden ser incompletos o cambiar. “Sin alerta” no significa “seguro”. No es una auditoría ni asesoramiento financiero.')));
