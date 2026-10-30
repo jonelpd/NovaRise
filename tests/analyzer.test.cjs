@@ -48,17 +48,17 @@ assert.match(english,/No launch|NO LAUNCH|no launch|No mainnet token|NO MAINNET 
 assert.match(sharedCss,/\.token-launch\{/);
 for(const page of [html,english]){
  assert.match(page,/<section id="ecosistema" class="ecosystem-section"/);
- assert.match(page,/<section id="ruta-nvra" class="roadmap-section"/);
+ assert.match(page,/<section id="roadmap" class="roadmap-section"/);
  assert.match(page,/class="ecosystem-grid"/);
- assert.match(page,/class="roadmap"/);
+ assert.match(page,/class="roadmap-grid"/);
  assert.ok((page.match(/class="feature ecosystem-card"/g)||[]).length>=6);
- assert.ok((page.match(/class="roadmap"/g)||[]).length>=1);
+ assert.ok((page.match(/class="roadmap-card"/g)||[]).length>=1);
  assert.ok(page.indexOf('id="ecosistema"')<page.indexOf('id="planes"'));
 }
 assert.match(html,/En estudio/);
 assert.match(english,/Under consideration/);
 assert.match(sharedCss,/\.ecosystem-grid\{/);
-assert.match(sharedCss,/\.roadmap li\{/);
+assert.match(sharedCss,/\.roadmap-grid\{/);
 
 
 assert.match(html,/href="en\.html"/);
