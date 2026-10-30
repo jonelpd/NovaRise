@@ -17,7 +17,7 @@ async function scenario({input=address,chain="0x2105",balance="0xde0b6b3a7640000
     if (error) throw Error("offline");
     return {ok:true,json:async()=>({result:request.method==="eth_chainId"?chain:balance})};
   };
-  vm.runInNewContext(source,{document:{getElementById:id=>nodes[id]},window:{},fetch,AbortController,setTimeout,clearTimeout,BigInt});
+  vm.runInNewContext(source,{document:{documentElement:{lang:"es"},getElementById:id=>nodes[id]},window:{},fetch,AbortController,setTimeout,clearTimeout,BigInt});
   nodes["base-form"].listeners.submit({preventDefault(){}});
   for(let i=0;i<12&&nodes["base-check"].disabled;i++) await tick();
   return {nodes,calls};
