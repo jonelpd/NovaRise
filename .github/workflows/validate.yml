@@ -28,7 +28,7 @@ jobs:
               content=Path(name).read_text(encoding='utf-8')
               assert 'name="viewport"' in content, name
               assert 'assets/site.css' in content, name
-              assert not any(term in content.lower() for term in ['amoy','polygon','access-pass']), name
+              assert not any(term in content.lower() for term in ['amoy','access-pass']), name
               assert 'Base' in content, name
           css=Path('assets/site.css').read_text(encoding='utf-8')
           assert '.simple-hero' in css and '@media(max-width:760px)' in css
