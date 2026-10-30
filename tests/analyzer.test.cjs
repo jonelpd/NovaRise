@@ -15,8 +15,8 @@ for(const [page,lang,other] of [[whitepaperEs,'es','whitepaper-en.html'],[whitep
  assert.equal((page.match(/class="wp-section"/g)||[]).length,12);
  assert.match(page,/v2\.2/);
 }
-assert.match(whitepaperEs,/NVRA no se ha emitido/);
-assert.match(whitepaperEn,/NVRA has not been issued/);
+assert.match(whitepaperEs,/No existe un token NVRA desplegado en Base|No existe un token NVRA desplegado en Base|No existe un token NVRA desplegado en Base/);
+assert.match(whitepaperEn,/No Base token has been deployed/);
 assert.match(whitepaperEs,/100\.000\.000 NVRA/);
 assert.match(whitepaperEn,/100,000,000 NVRA/);
 assert.match(whitepaperEs,/Polygon PoS/);
