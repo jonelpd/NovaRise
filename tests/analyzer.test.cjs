@@ -107,7 +107,7 @@ check('percentage("invalid")',null);
 check('historicalPoints({data:{attributes:{ohlcv_list:[[1720000000,1,2,1,1.5,500],[1720086400,1,2,1,1.7,650]]}}}).length',2);
 check('historicalPoints({data:{attributes:{ohlcv_list:[[1720000000,1,2,1,-1,100]]}}}).length',0);
 check('historicalPoints({data:{attributes:{ohlcv_list:[[1720000000,1,2,1,1.5,500]]}}})[0].volume',500);
-check('interpretHistory([{close:100,volume:100},{close:110,volume:120},{close:121,volume:140}]).change',21);
+assert.ok(Math.abs(vm.runInContext('interpretHistory([{close:100,volume:100},{close:110,volume:120},{close:121,volume:140}]).change',context)-21)<1e-9,'Historical percentage calculation tolerance');
 check('interpretHistory([{close:100,volume:100},{close:110,volume:120}])',null);
 check('interpretHistory([{close:0,volume:100},{close:110,volume:120},{close:121,volume:140}])',null);
 check('simpleMovingAverage([{close:2},{close:4},{close:6}],3)',4);
@@ -120,7 +120,7 @@ check('relativeStrengthIndex(Array.from({length:15},(_,i)=>({close:15-i})),14)',
 check('relativeStrengthIndex(Array.from({length:15},()=>({close:5})),14)',50);
 check('relativeStrengthIndex([{close:1},{close:2}],14)',null);
 check('advancedHistorySignals([{close:10,volume:100},{close:12,volume:200},{close:9,volume:300}]).maxDrawdown',25);
-check('advancedHistorySignals([{close:10,volume:100},{close:12,volume:null},{close:9,volume:300}]).volumeCoverage',200/3);
+assert.ok(Math.abs(vm.runInContext('advancedHistorySignals([{close:10,volume:100},{close:12,volume:null},{close:9,volume:300}]).volumeCoverage',context)-200/3)<1e-9,'Volume coverage tolerance');
 check('advancedHistorySignals([{close:0},{close:2},{close:3}])',null);
 check('advancedHistorySignals([{close:2},{close:3}])',null);
 assert.ok(script.includes('appendAdvancedHistoryInterpretation(available,box)'));
