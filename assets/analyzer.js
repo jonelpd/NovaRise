@@ -428,7 +428,7 @@ async function appendHistoricalChart(pair,network,requestId){
   const inspector=element('div','history-inspector');
   const reading=element('p','small');reading.setAttribute('aria-live','polite');
   const slider=element('input');slider.type='range';slider.min='0';slider.max=String(available.length-1);slider.step='1';slider.value=String(available.length-1);
-  slider.setAttribute('aria-label',nvraText('Seleccionar día del histórico'));
+  slider.setAttribute('aria-label',selectedPeriod===1?nvraText('Seleccionar hora del histórico'):nvraText('Seleccionar día del histórico'));
   const updateReading=()=>{
    const point=available[Number(slider.value)];
    reading.textContent=new Date(point.time*1000).toLocaleString(nvraText('es-ES'),selectedPeriod===1?{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}:{day:'2-digit',month:'2-digit',year:'numeric'})+nvraText(' · Precio: ')+usd(point.close,8)+nvraText(' · Volumen: ')+usd(point.volume,0);
