@@ -1,11 +1,10 @@
 "use strict";
 const fs = require("node:fs");
-const path = require("node:path");
 const assert = require("node:assert/strict");
 const pages = [
   "index.html","en.html","libro-blanco.html","whitepaper-en.html",
   "tokenomics.html","tokenomics-en.html","base-portal.html","base-portal-en.html",
-  "access-pass.html","access-pass-en.html","crm.html"
+  "crm.html"
 ];
 const text = Object.fromEntries(pages.map(p => [p,fs.readFileSync(p,"utf8")]));
 const issues = [];
@@ -30,8 +29,8 @@ for (const [page,html] of Object.entries(text)) {
 for (const page of ["index.html","en.html"]) {
   assert.match(text[page],/Base Mainnet/);
   assert.match(text[page],/1[.,]000[.,]000|1[.]000[.]000/);
-  assert.match(text[page],/class="legacy-record"/);
-  assert.match(text[page],/class="nova-products-grid"/);
+  assert.doesNotMatch(text[page],/Amoy|Polygon|testnet|access-pass/i);
+  assert.match(text[page],/class="simple-cards"/);
 }
 assert.match(text["base-portal.html"],/base-portal-en\.html/);
 assert.match(text["base-portal-en.html"],/base-portal\.html/);
