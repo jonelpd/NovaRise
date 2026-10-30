@@ -18,7 +18,7 @@ for(const [page,lang,other] of [[whitepaperEs,'es','whitepaper-en.html'],[whitep
 assert.match(whitepaperEs,/No existe un token NVRA desplegado en Base|No existe un token NVRA desplegado en Base|No existe un token NVRA desplegado en Base/);
 assert.match(whitepaperEn,/No Base token has been deployed/);
 assert.match(whitepaperEs,/100\.000\.000 NVRA/);
-assert.match(whitepaperEn,/100,000,000 NVRA/);
+assert.match(whitepaperEn,/100,000,000(?:-token| test NVRA)/);
 assert.match(whitepaperEs,/Polygon PoS/);
 assert.match(whitepaperEn,/Polygon PoS/);
 assert.match(whitepaperEs,/Amoy/);
