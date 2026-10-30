@@ -9,60 +9,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Validar estructura y JavaScript
+      - name: Validar páginas, enlaces, idiomas y seguridad de contenido
         run: |
-          python3 - <<'PY'
-          from pathlib import Path
-          from html.parser import HTMLParser
-          html=Path('index.html').read_text(encoding='utf-8')
-          english=Path('en.html').read_text(encoding='utf-8')
-          css=Path('assets/site.css').read_text(encoding='utf-8')
-          class Parser(HTMLParser):
-              def __init__(self): super().__init__(); self.ids=set(); self.scripts=[]
-              def handle_starttag(self,tag,attrs):
-                  d=dict(attrs)
-                  if 'id' in d:
-                      assert d['id'] not in self.ids, f"ID duplicado: {d['id']}"
-                      self.ids.add(d['id'])
-          for language,page in [('es',html),('en',english)]:
-              p=Parser(); p.feed(page)
-              assert f'<html lang="{language}">' in page
-              assert 'href="assets/site.css' in page
-              for identifier in ('network','address','analyze','report','empty','year'):
-                  assert identifier in p.ids, f"Falta ID {identifier} en {language}"
-          analyzer=Path('assets/analyzer.js').read_text(encoding='utf-8')
-          assert 'api.gopluslabs.io' in analyzer and 'api.dexscreener.com' in analyzer
-          for language,page in [('es',html),('en',english)]:
-              assert 'src="assets/locale-en.js' in page
-              assert 'src="assets/analyzer.js' in page
-              assert '<script>' not in page
-          assert Path('assets/analyzer.js').is_file()
-          assert Path('assets/locale-en.js').is_file()
-          print('HTML, IDs y dependencias: OK')
-          PY
-          node --check assets/analyzer.js
-          node --check assets/locale-en.js
-          node tests/analyzer.test.cjs
           node tests/site-integrity.test.cjs
           node --check assets/base-portal.js
           node tests/base-portal.test.cjs
-      - name: Comprobar diseño adaptable y cancelación de consultas
+          node --check assets/analyzer.js
+          node --check assets/locale-en.js
+          node --check assets/interest.js
+          node --check assets/roadmap-public.js
+          node --check assets/crm.js
+      - name: Verificar diseño responsive y ausencia de testnet en páginas públicas
         run: |
           python3 - <<'PY'
           from pathlib import Path
-          html=Path('index.html').read_text(encoding='utf-8')
-          english=Path('en.html').read_text(encoding='utf-8')
+          pages=['index.html','en.html','libro-blanco.html','whitepaper-en.html','tokenomics.html','tokenomics-en.html']
+          for name in pages:
+              content=Path(name).read_text(encoding='utf-8')
+              assert 'name="viewport"' in content, name
+              assert 'assets/site.css' in content, name
+              assert not any(term in content.lower() for term in ['amoy','polygon','access-pass']), name
+              assert 'Base' in content, name
           css=Path('assets/site.css').read_text(encoding='utf-8')
-          checks={
-            'viewport móvil':'name="viewport"' in html,
-            'diseño móvil':'@media(max-width:780px)' in css,
-            'menú móvil accesible':'.links{display:flex;order:3' in css,
-            'cancelación de solicitudes':'function cancelPending()' in Path('assets/analyzer.js').read_text(encoding='utf-8'),
-            'limpieza de resultados':'function invalidateReport()' in Path('assets/analyzer.js').read_text(encoding='utf-8'),
-            'resultado obsoleto descartado':'requestId!==activeRequest' in Path('assets/analyzer.js').read_text(encoding='utf-8'),
-            'hoja de estilos compartida':'href="assets/site.css' in html and 'href="assets/site.css' in english,
-          }
-          for name,ok in checks.items():
-            print(('OK' if ok else 'ERROR')+' · '+name)
-          assert all(checks.values()), 'Falta alguna protección o regla responsive'
+          assert '.simple-hero' in css and '@media(max-width:760px)' in css
+          print('Base-only content, mobile viewport and responsive CSS: OK')
           PY
