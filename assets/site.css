@@ -215,3 +215,18 @@ body.interest-modal-open{overflow:hidden}
 .base-decision p{margin:8px 0 0;color:#d5f4e7}
 .base-decision a{text-decoration:underline;text-underline-offset:3px;color:#a2f5cf}
 @media(max-width:780px){.base-decision{margin:14px 16px;padding:18px}}
+
+/* NovaRise products: responsive, readable showcase */
+.nova-products{padding:64px 0 54px;max-width:1120px;margin:0 auto}
+.nova-products h2{font-size:clamp(28px,4vw,42px);margin:10px 0 16px;line-height:1.2}
+.nova-products>.muted{max-width:850px;line-height:1.7}
+.nova-products-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:28px}
+.nova-product{min-width:0;background:linear-gradient(150deg,#153b33,#0b2621);border:1px solid #386b59;border-radius:18px;padding:22px;display:flex;flex-direction:column;gap:10px}
+.nova-product-icon{font-size:30px;line-height:1.3}
+.nova-product h3{font-size:19px;line-height:1.3;margin:0}
+.nova-product p{font-size:14px;line-height:1.65;color:#c9e4d8;margin:0;flex:1}
+.nova-product-state{font-size:12px;font-weight:750;color:#b5f5d7;margin-top:10px}
+.nova-products-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}
+@media(max-width:950px){.nova-products-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:780px){.nova-products{padding:40px 16px}}
+@media(max-width:520px){.nova-products-grid{grid-template-columns:1fr}.nova-product{padding:19px}}
