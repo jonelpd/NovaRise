@@ -580,6 +580,23 @@ analyzeButton.addEventListener('click',async()=>{
    ?'Classification is descriptive, not a risk score. Missing data never counts as a positive result.'
    :'La clasificación es descriptiva, no una puntuación de riesgo. Los datos ausentes nunca cuentan como resultado favorable.'));
   report.append(riskSection);
+  const methodology=element('section','market-card');
+  methodology.append(element('h4','section-title',nvraLocale==='en'?'Scope and methodology':'Alcance y metodología'));
+  methodology.append(element('p','small',nvraLocale==='en'
+   ?'Security findings are derived from six GoPlus fields for the requested network and contract. A flagged field requires review; an unflagged field is not proof of safety. Missing fields are not treated as safe.'
+   :'Los resultados de seguridad proceden de seis campos de GoPlus para la red y el contrato consultados. Una alerta requiere revisión; la ausencia de alerta no demuestra seguridad. Los campos ausentes no se consideran seguros.'));
+  methodology.append(element('p','small',nvraLocale==='en'
+   ?'DEX price, liquidity, volume and 24-hour change are retrieved separately from DexScreener. They may represent different trading pairs and must not be combined as token-wide totals.'
+   :'El precio, la liquidez, el volumen y la variación de 24 horas se consultan por separado en DexScreener. Pueden corresponder a distintos pares y no deben sumarse como totales del token.'));
+  const sourceLinks=element('p','small');
+  for(const [name,url] of [['GoPlus','https://gopluslabs.io/'],['DexScreener','https://dexscreener.com/'],['GeckoTerminal','https://www.geckoterminal.com/']]){
+   const link=element('a','',name);link.href=url;link.target='_blank';link.rel='noopener noreferrer';sourceLinks.append(link,document.createTextNode(' · '));
+  }
+  methodology.append(sourceLinks);
+  methodology.append(element('p','small muted',nvraLocale==='en'
+   ?'Provider results are time-sensitive and can be incomplete. This report is not an independent smart-contract audit or investment advice.'
+   :'Los resultados de proveedores pueden cambiar y estar incompletos. Este informe no es una auditoría independiente del contrato ni asesoramiento financiero.'));
+  report.append(methodology);
   const guide=element('nav','report-jump');
   guide.setAttribute('aria-label',nvraText('Secciones del informe'));
   for(const [target,label] of [['report-indicators','Indicadores de seguridad'],['report-holders','Titulares y suministro'],['report-markets','Mercados y gráficos']]){
