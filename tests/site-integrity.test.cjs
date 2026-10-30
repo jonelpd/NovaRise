@@ -31,6 +31,12 @@ for (const page of ["index.html","en.html"]) {
   assert.match(text[page],/1[.,]000[.,]000|1[.]000[.]000/);
   assert.doesNotMatch(text[page],/Amoy|Polygon|testnet|access-pass/i);
   assert.match(text[page],/class="simple-cards"/);
+  assert.match(text[page],/id="analizador"/);
+  assert.match(text[page],/id="network"/);
+  assert.match(text[page],/id="address"/);
+  assert.match(text[page],/id="analyze"/);
+  assert.match(text[page],/src="assets\/analyzer\.js/);
+  assert.match(text[page],/src="assets\/locale-en\.js/);
 }
 assert.match(text["base-portal.html"],/base-portal-en\.html/);
 assert.match(text["base-portal-en.html"],/base-portal\.html/);
