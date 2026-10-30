@@ -32,6 +32,12 @@ for (const page of ["index.html","en.html"]) {
   assert.doesNotMatch(text[page],/Amoy|testnet|access-pass/i);
   assert.match(text[page],/class="simple-cards"/);
   assert.match(text[page],/id="analizador"/);
+  assert.match(text[page],/id="participacion"/);
+  assert.match(text[page],/id="interest-form"/);
+  assert.match(text[page],/name="suggestion"/);
+  assert.match(text[page],/name="consent" required/);
+  assert.match(text[page],/id="interest-success-modal"/);
+  assert.match(text[page],/src="assets\/interest\.js/);
   assert.match(text[page],/id="network"/);
   assert.match(text[page],/id="address"/);
   assert.match(text[page],/id="analyze"/);
