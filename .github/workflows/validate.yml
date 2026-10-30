@@ -43,6 +43,7 @@ jobs:
           node --check assets/analyzer.js
           node --check assets/locale-en.js
           node tests/analyzer.test.cjs
+          node tests/site-integrity.test.cjs
           node --check assets/base-portal.js
           node tests/base-portal.test.cjs
       - name: Comprobar diseño adaptable y cancelación de consultas
