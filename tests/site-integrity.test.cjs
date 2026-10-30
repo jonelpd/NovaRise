@@ -60,6 +60,7 @@ assert.match(analyzer,/no equivale a fondos bloqueados/);
 assert.match(analyzer,/No se suman los pares para evitar conclusiones engañosas/);
 assert.match(analyzer,/no se sustituye por la variación de otro par/);
 assert.match(analyzer,/pricePair\?\.priceChange\?\.h24/);
+assert.match(analyzer,/selectedPeriod===1\?nvraText\('Seleccionar hora del histórico'\):nvraText\('Seleccionar día del histórico'\)/);
 const interestJs=fs.readFileSync("assets/interest.js","utf8");
 const crmJs=fs.readFileSync("assets/crm.js","utf8");
 assert.match(interestJs,/novarise-interest/);
