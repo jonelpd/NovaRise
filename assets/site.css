@@ -242,3 +242,56 @@ body.interest-modal-open{overflow:hidden}
 .portal button:disabled{opacity:.6;cursor:wait}.portal .notice{border-left:4px solid #fbbf24;padding-left:1rem}.portal .result{margin-top:1.2rem;padding:1rem;border:1px solid #647e74;border-radius:9px;overflow-wrap:anywhere}
 .portal .status{min-height:1.5rem}.portal .status[data-error=true]{color:#ffc0c0}
 @media(max-width:520px){.portal{margin:1rem auto}.portal .buttons button{width:100%}}
+
+/* NovaRise simplified landing, 2026-10-30 */
+.nvra-simple{background:#071a17;color:#eafff5;font-family:Inter,system-ui,sans-serif}
+.nvra-simple .simple-container{width:min(1100px,calc(100% - 40px));margin-inline:auto}
+.nvra-simple .simple-header{position:sticky;top:0;z-index:30;background:#071a17ee;backdrop-filter:blur(12px);border-bottom:1px solid #285044}
+.nvra-simple .simple-nav{min-height:78px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+.nvra-simple .simple-brand{display:inline-flex;align-items:center;flex-shrink:0}
+.nvra-simple .simple-brand img{width:154px;height:auto;max-height:60px;object-fit:contain}
+.nvra-simple .simple-nav nav{display:flex;align-items:center;gap:clamp(12px,2.3vw,28px)}
+.nvra-simple .simple-nav a{color:#eafff5;text-decoration:none;font-size:.94rem}
+.nvra-simple .simple-nav a:hover,.nvra-simple .simple-nav a:focus-visible,.nvra-simple .simple-footer a:hover{color:#a2f5cf}
+.nvra-simple .simple-lang{padding:9px 13px;border:1px solid #568b77;border-radius:9px}
+.nvra-simple .simple-hero{padding-block:clamp(65px,10vw,132px) clamp(65px,8vw,95px);display:grid;grid-template-columns:minmax(0,1.5fr) minmax(180px,.65fr);align-items:center;gap:50px}
+.nvra-simple .simple-eyebrow{color:#7ee6b1;font-weight:750;letter-spacing:.14em;font-size:.75rem}
+.nvra-simple .simple-hero h1{font-size:clamp(2.55rem,5.3vw,5rem);line-height:1.07;letter-spacing:-.05em;margin:22px 0}
+.nvra-simple .simple-hero h1 span{color:#85e8b0}
+.nvra-simple .simple-lead{max-width:650px;color:#c1d6cc;font-size:clamp(1.06rem,1.8vw,1.24rem);line-height:1.75}
+.nvra-simple .simple-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}
+.nvra-simple .simple-button{display:inline-flex;justify-content:center;align-items:center;padding:14px 22px;background:#a2f5c8;color:#06251b!important;text-decoration:none;border-radius:10px;font-weight:750;transition:transform .15s}
+.nvra-simple .simple-button.secondary{background:transparent;color:#eafff5!important;border:1px solid #6a9d85}
+.nvra-simple .simple-button:hover{transform:translateY(-2px)}
+.nvra-simple .simple-disclaimer{font-size:.83rem;color:#9eb9ab;margin-top:22px}
+.nvra-simple .simple-hero-mark{display:grid;place-items:center;gap:6px;padding:40px 0}
+.nvra-simple .simple-hero-mark img{width:min(100%,250px);height:auto;filter:drop-shadow(0 0 40px #4bcd8a44)}
+.nvra-simple .simple-hero-mark span{letter-spacing:.28em;color:#a2f5c8;font-size:1.05rem;font-weight:800}
+.nvra-simple .simple-section{padding-block:clamp(65px,8vw,100px);border-top:1px solid #21493a}
+.nvra-simple .simple-section-alt{background:#0b241d}
+.nvra-simple .simple-heading{max-width:760px;margin-bottom:32px}
+.nvra-simple .simple-heading h2{font-size:clamp(1.9rem,3.4vw,3rem);letter-spacing:-.035em;line-height:1.2;margin:14px 0}
+.nvra-simple .simple-heading p{color:#b8d2c5;line-height:1.75}
+.nvra-simple .simple-facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.nvra-simple .simple-facts article,.nvra-simple .simple-cards article{padding:26px;border:1px solid #355f4d;border-radius:16px;background:#102c22}
+.nvra-simple .simple-facts article span{display:block;color:#accabb;font-size:.9rem;margin-bottom:13px}
+.nvra-simple .simple-facts article strong{font-size:clamp(1.25rem,2.4vw,1.85rem);line-height:1.2}
+.nvra-simple .simple-footnote{color:#b8d2c5;line-height:1.75;margin-top:22px}
+.nvra-simple .simple-footnote a,.nvra-simple .simple-bottom a{color:#a2f5c8}
+.nvra-simple .simple-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.nvra-simple .simple-cards h3{font-size:1.23rem;margin:12px 0}
+.nvra-simple .simple-cards p{color:#b8d2c5;line-height:1.65;margin-bottom:0}
+.nvra-simple .simple-card-icon{font-size:2rem}
+.nvra-simple .simple-steps{list-style:none;counter-reset:step;padding:0;margin:0;display:grid;gap:14px}
+.nvra-simple .simple-steps li{counter-increment:step;display:grid;grid-template-columns:48px 1fr;column-gap:16px;padding:19px 0;border-bottom:1px solid #2c5343}
+.nvra-simple .simple-steps li:before{content:"0" counter(step);grid-row:span 2;color:#8de6b3;font-weight:800;font-size:1.1rem}
+.nvra-simple .simple-steps li strong{font-size:1.12rem}
+.nvra-simple .simple-steps li span{color:#b8d2c5;line-height:1.65;margin-top:5px}
+.nvra-simple .simple-bottom{margin-top:34px;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px 24px;background:#15392b;border-radius:12px}
+.nvra-simple .simple-bottom p{margin:0;line-height:1.6}
+.nvra-simple .simple-bottom a{white-space:nowrap;font-weight:700}
+.nvra-simple .simple-footer{border-top:1px solid #2d5844;padding:25px 0;color:#a9c7b8}
+.nvra-simple .simple-footer .simple-container,.nvra-simple .simple-footer .simple-container>div{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap}
+.nvra-simple .simple-footer a{color:#d4ebdf;text-decoration:none}
+@media(max-width:760px){.nvra-simple .simple-nav{min-height:72px;flex-wrap:wrap;gap:5px 14px;padding-block:9px}.nvra-simple .simple-nav nav{order:3;width:100%;overflow-x:auto;padding:9px 0 3px;gap:20px}.nvra-simple .simple-nav nav a{white-space:nowrap}.nvra-simple .simple-hero{grid-template-columns:1fr;gap:15px;padding-top:62px}.nvra-simple .simple-hero-mark{display:none}.nvra-simple .simple-facts,.nvra-simple .simple-cards{grid-template-columns:1fr}.nvra-simple .simple-bottom{display:block}.nvra-simple .simple-bottom a{display:inline-block;margin-top:15px}}
+@media(prefers-reduced-motion:reduce){.nvra-simple .simple-button{transition:none}.nvra-simple .simple-button:hover{transform:none}}
