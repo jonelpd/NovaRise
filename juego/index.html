@@ -255,7 +255,7 @@ function walkTo(tx,ty){
  walking=true;let index=0;
  function step(){if(epoch!==walkEpoch){walking=false;return}if(index>=route.length||s.moves<=0||battle||s.done){walking=false;return}
   let [x,y]=route[index++],beforeX=s.x,beforeY=s.y;move(x,y);
-  if(battle||s.x===beforeX&&s.y===beforeY){walking=false;return}
+  if(battle||s.x===beforeX&&s.y===beforeY){walking=false;clearAdventureRoute();return}
   if(index<route.length&&s.moves>=movementCost(route[index][0],route[index][1]))setTimeout(step,230);else {walking=false;if(index>=route.length&&!battle&&!s.done&&(key(tx,ty)==='1,1'||key(tx,ty)==='4,7'&&s.claimed.includes('4,7')))setTimeout(()=>{if(epoch===walkEpoch&&!walking&&!battle&&s.x===tx&&s.y===ty&&$('adventure-discovery').hidden&&$('castle-screen').hidden)visitKnownLocation(tx,ty)},260)}
  }
  step()
@@ -290,13 +290,13 @@ function centerCameraOnHero(force=false){
  const viewport=$('world-viewport');if(!viewport||!s)return;
  if(!force&&(!$('follow-hero')?.checked||lastCameraKey===key(s.x,s.y)))return;
  lastCameraKey=key(s.x,s.y);
- const targetX=(s.x+.5)*204.8,targetY=(s.y+.5)*204.8;
+ const [hx,hy]=heroVisualPosition();const targetX=hx/100*2048,targetY=hy/100*2048;
  viewport.scrollTo({left:Math.max(0,targetX-viewport.clientWidth/2),top:Math.max(0,targetY-viewport.clientHeight/2),behavior:force?'smooth':'auto'});
 }
 function updateMinimap(){
  const viewport=$('world-viewport'),mini=$('minimap'),view=$('minimap-view'),hero=$('minimap-hero');
  if(!viewport||!mini||!view||!hero||!s)return;
- hero.style.left=((s.x+.5)*10)+'%';hero.style.top=((s.y+.5)*10)+'%';
+ const [hx,hy]=heroVisualPosition();hero.style.left=hx+'%';hero.style.top=hy+'%';
  view.style.left=(viewport.scrollLeft/2048*100)+'%';view.style.top=(viewport.scrollTop/2048*100)+'%';
  view.style.width=(viewport.clientWidth/2048*100)+'%';view.style.height=(viewport.clientHeight/2048*100)+'%';
 }
@@ -362,6 +362,7 @@ function drawMountedHero(map){
 }
 function showAdventureDiscovery(kind,title,detail){
  const panel=$('adventure-discovery');if(!panel)return;
+ clearAdventureRoute();
  $('discovery-icon').textContent=kind==='mine'?'💎':kind==='treasure'?'💰':'📜';
  $('discovery-title').textContent=title;
  $('discovery-detail').textContent=detail;
