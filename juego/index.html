@@ -435,33 +435,31 @@ function showBattle(){if(battle){battle.obstacles=[[2,0],[3,4],[2,3]];battle.pha
 function battleCount(type){return Math.max(0,s[type]||0)}
 function battleRange(type){return type==='archers'?3:type==='dragons'?2:1}
 function battleSpeed(type){return type==='griffins'?3:type==='dragons'?2:1}
+// Enemy uses breadth-first pathfinding: no walking through rocks or allied stacks.
 function enemyAdvance(){
  if(!battle)return;
  battle.counterUsed=false;
- const targets=[];
- if(s.soldiers>0)targets.push({x:battle.sx,y:battle.sy,type:'soldiers'});
- if(s.archers>0)targets.push({x:battle.rx,y:battle.ry,type:'archers'});
- if(s.griffins>0)targets.push({x:battle.gx,y:battle.gy,type:'griffins'});
- if(s.dragons>0)targets.push({x:battle.dx,y:battle.dy,type:'dragons'});
+ const targets=['soldiers','archers','griffins','dragons'].filter(t=>battleCount(t)).map(type=>({type,x:pos(type)[0],y:pos(type)[1]}));
  if(!targets.length)return;
- targets.sort((a,b)=>Math.abs(a.x-battle.ex)+Math.abs(a.y-battle.ey)-Math.abs(b.x-battle.ex)-Math.abs(b.y-battle.ey));
- const target=targets[0],dx=target.x-battle.ex,dy=target.y-battle.ey;
- const distance=Math.abs(dx)+Math.abs(dy);
- if(distance>1){
-  const options=[[Math.sign(dx),0],[0,Math.sign(dy)]].filter(([x,y])=>x||y);
-  options.sort((a,b)=>Math.abs(target.x-(battle.ex+a[0]))+Math.abs(target.y-(battle.ey+a[1]))-Math.abs(target.x-(battle.ex+b[0]))-Math.abs(target.y-(battle.ey+b[1])));
-  for(const [mx,my] of options){
-   const nx=battle.ex+mx,ny=battle.ey+my;
-   if(nx<0||nx>5||ny<0||ny>4)continue;
-   if(battle.obstacles?.some(p=>p[0]===nx&&p[1]===ny))continue;
-   if(targets.some(p=>p.x===nx&&p.y===ny))continue;
-   battle.ex=nx;battle.ey=ny;break
+ const occupied=new Set(targets.map(t=>t.x+','+t.y));
+ const queue=[[battle.ex,battle.ey,0]],seen=new Set([battle.ex+','+battle.ey]);
+ let chosen=null,firstStep=null;
+ while(queue.length){
+  const [x,y,d,first]=queue.shift();
+  const adjacent=targets.filter(t=>Math.abs(t.x-x)+Math.abs(t.y-y)===1);
+  if(adjacent.length){chosen=adjacent.sort((a,b)=>battleCount(a.type)-battleCount(b.type))[0];firstStep=first;break}
+  for(const [mx,my] of [[1,0],[-1,0],[0,1],[0,-1]]){
+   const nx=x+mx,ny=y+my,k=nx+','+ny;
+   if(nx<0||nx>5||ny<0||ny>4||seen.has(k)||occupied.has(k)||battle.obstacles?.some(p=>p[0]===nx&&p[1]===ny))continue;
+   seen.add(k);queue.push([nx,ny,d+1,first||[nx,ny]])
   }
- }else{
+ }
+ if(chosen&&Math.abs(chosen.x-battle.ex)+Math.abs(chosen.y-battle.ey)===1){
   const reduction=battle.defending?0:1;
-  if(target.type==='soldiers')s.soldiers=Math.max(0,s.soldiers-reduction);
-  else s[target.type]=Math.max(0,s[target.type]-reduction);
-  animateBattleFx(target.type,s[target.type]===0);
+  s[chosen.type]=Math.max(0,s[chosen.type]-reduction);
+  animateBattleFx(chosen.type,s[chosen.type]===0);
+ }else if(firstStep){
+  battle.ex=firstStep[0];battle.ey=firstStep[1]
  }
  battle.defending=false;
  battle.round++;
@@ -566,7 +564,9 @@ function drawTactics(){
 }
 function updateBattle(t='Selecciona soldados o arqueros, muévelos o ataca.'){if(!battle)return;if(battle.selected==='soldiers'&&s.soldiers===0)battle.selected='archers';if(!battleCount(battle.selected))battle.selected=['soldiers','archers','griffins','dragons'].find(t=>battleCount(t))||'soldiers';drawTactics();$('ally').textContent=`${s.soldiers} soldados · ${s.archers} arqueros · ${s.griffins} grifos · ${s.dragons} dragones · fuerza ${strength()}`;$('enemy').textContent=`Resistencia ${Math.max(0,battle.hp)} · ronda ${battle.round}`;$('selected-unit').textContent='Unidad seleccionada: '+(battle.selected==='soldiers'?'Soldados · alcance 1':battle.selected==='archers'?'Arqueros · alcance 3':battle.selected==='griffins'?'Grifos · vuelo 3, alcance 1':'Dragones · vuelo 2, alcance 2');$('unit-soldier').disabled=s.soldiers===0;$('unit-archer').disabled=s.archers===0;$('unit-griffin').disabled=s.griffins===0;$('unit-dragon').disabled=s.dragons===0;$('battle-log').textContent=t}
 function loseBattle(){const rivalFight=!!(battle&&battle.rival);battle=null;$('modal').hidden=true;message(rivalFight?'El Reino Umbrío ha vencido a tu ejército. Recluta nuevas tropas para continuar.':'Tu ejército ha sido derrotado. Recluta nuevas tropas.')}
-function hit(defend){if(!battle)return;if(!defend&&!battleCount(battle.selected))return updateBattle('Selecciona una unidad disponible antes de atacar.');if(defend)battle.defending=true;let [ux,uy]=pos(battle.selected),dist=Math.abs(ux-battle.ex)+Math.abs(uy-battle.ey),range=battleRange(battle.selected);if(!defend&&dist>range)return updateBattle('El enemigo está fuera del alcance de la unidad seleccionada.');let damage=defend?0:battle.selected==='archers'?Math.max(1,s.archers*2):battle.selected==='griffins'?Math.max(1,s.griffins*3):battle.selected==='dragons'?Math.max(1,s.dragons*7):Math.max(1,s.soldiers+(s.buildings.includes('forge')?2:0)+(s.faction==='Reino Umbrío'?2:0));battle.hp-=damage;if(!defend){animateBattleFx('enemy',battle.hp<=0);if(battle.selected==='archers')fireBattleProjectile()}if(battle.hp<=0){
+function hit(defend){if(!battle)return;if(!defend&&!battleCount(battle.selected))return updateBattle('Selecciona una unidad disponible antes de atacar.');if(defend)battle.defending=true;let [ux,uy]=pos(battle.selected),dist=Math.abs(ux-battle.ex)+Math.abs(uy-battle.ey),range=battleRange(battle.selected);if(!defend&&dist>range)return updateBattle('El enemigo está fuera del alcance de la unidad seleccionada.');
+ if(!defend&&battle.selected==='archers'&&dist<=1)return updateBattle('Los arqueros necesitan separarse del enemigo para disparar.');
+ if(!defend&&battle.selected==='archers'&&((ux===battle.ex&&battle.obstacles?.some(p=>p[0]===ux&&p[1]>Math.min(uy,battle.ey)&&p[1]<Math.max(uy,battle.ey)))||(uy===battle.ey&&battle.obstacles?.some(p=>p[1]===uy&&p[0]>Math.min(ux,battle.ex)&&p[0]<Math.max(ux,battle.ex)))))return updateBattle('Una roca bloquea la línea de tiro de los arqueros.');let damage=defend?0:battle.selected==='archers'?Math.max(1,s.archers*2):battle.selected==='griffins'?Math.max(1,s.griffins*3):battle.selected==='dragons'?Math.max(1,s.dragons*7):Math.max(1,s.soldiers+(s.buildings.includes('forge')?2:0)+(s.faction==='Reino Umbrío'?2:0));battle.hp-=damage;if(!defend){animateBattleFx('enemy',battle.hp<=0);if(battle.selected==='archers')fireBattleProjectile()}if(battle.hp<=0){
  if(battle.rival){
   const v=rivalState();v.defeated=true;v.recovery=0;v.soldiers=0;v.archers=0;
   s.gold+=Math.min(200,v.gold);s.experience+=80;
