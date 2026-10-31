@@ -1296,7 +1296,7 @@ if(arena){
  const phases=new Map();
  function decorate(){
   const arena=document.querySelector('#modal .battle-arena');
-  if(!arena||!arena.classList.contains('has-illustrated-map'))return;
+  if(!arena)return;
   arena.querySelectorAll('.combat-cell.unit-ally,.combat-cell.unit-enemy').forEach(cell=>{
    const type=cell.classList.contains('unit-enemy')?'enemy':Object.keys(types).find(k=>k!=='enemy'&&cell.title.startsWith(k));
    if(!type)return;
@@ -1310,7 +1310,7 @@ if(arena){
   });
  }
  const obs=new MutationObserver(()=>{if(!document.hidden)decorate()});
- const boot=()=>{const arena=document.querySelector('#modal .battle-arena');if(arena){obs.observe(arena,{subtree:true,childList:true,attributes:false});decorate()}};
+ const boot=()=>{const arena=document.querySelector('#modal .battle-arena');if(arena){obs.observe(arena,{subtree:true,childList:true,attributes:true,attributeFilter:['class']});decorate()}};
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
  window.novariseUnitAnimation=function(type,phase,duration=500){
   const key=type==='enemy'?'enemy':type;
