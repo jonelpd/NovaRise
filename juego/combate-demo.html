@@ -915,6 +915,20 @@ function setupHeroPanel(){
  });
  panel.append(select);const tree=document.createElement('div');tree.className='hero-skill-tree';panel.append(tree);const hint=document.createElement('p');hint.textContent='La primera elección de especialización es permanente para esta partida. Las habilidades se desbloquean automáticamente al alcanzar su nivel.';panel.append(hint);root.querySelector('.battle-arena')?.before(panel);
 }
+function renderEquipmentSlots(panel){
+ // Slots are UI-only until an artifact has been visually verified on the original map.
+ let area=panel.querySelector('.novarise-equipment-slots');
+ if(!area){area=document.createElement('section');area.className='novarise-equipment-slots';area.setAttribute('aria-label','Equipo del héroe');area.style.cssText='margin:12px 0;padding:12px;border:2px ridge #ad8b51;background:linear-gradient(140deg,#302d25,#171d23);color:#f0d9a2';panel.append(area)}
+ area.replaceChildren();
+ const heading=document.createElement('strong');heading.textContent='⚔ Equipo del héroe';area.append(heading);
+ const description=document.createElement('p');description.textContent='Ranuras preparadas. Los artefactos individuales se habilitarán únicamente tras verificar su presencia en el mapa original.';area.append(description);
+ const grid=document.createElement('div');grid.style.cssText='display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px';
+ for(const label of ['Arma','Armadura','Anillo','Objeto mágico']){
+  const slot=document.createElement('div');slot.style.cssText='padding:9px;border:1px solid #a58a57;background:#101820;text-align:center;border-radius:3px';
+  slot.textContent=label+' · Vacío';grid.append(slot)
+ }
+ area.append(grid);
+}
 function renderVerifiedTreasureLedger(panel){
  // Ledger uses only treasure coordinates already registered in the playable map.
  // It deliberately does not assert that a particular weapon or ring is visible in the artwork.
@@ -938,6 +952,7 @@ function renderHeroPanel(){
  panel.querySelector('select').value=heroSpecialization();
  panel.querySelector('select').disabled=!!s.heroSpecializationLocked;
  renderVerifiedTreasureLedger(panel);
+ renderEquipmentSlots(panel);
  const skills=panel.querySelector('.hero-skill-tree');if(skills){skills.replaceChildren();for(const skill of heroSkillMilestones()){const line=document.createElement('p');line.textContent=(skill.unlocked?'✅ ':'🔒 ')+'Nivel '+skill.required+' · '+skill.name+' — '+skill.description;skills.append(line)}}
 }
 function heroSkillMilestones(){
