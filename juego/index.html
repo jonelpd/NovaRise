@@ -461,7 +461,7 @@ function enemyAdvance(){
  battle.defending=false;
  battle.round++;
 }
-function tacticalMove(x,y){if(!battle)return;if(battle.obstacles?.some(p=>p[0]===x&&p[1]===y))return updateBattle('Las rocas bloquean esta casilla.');let [ux,uy]=pos(battle.selected);if(Math.abs(x-ux)+Math.abs(y-uy)!==1||x<0||x>5||y<0||y>4||x===battle.ex&&y===battle.ey||(battle.selected==='soldiers'&&s.archers>0&&x===battle.rx&&y===battle.ry)||(battle.selected==='archers'&&s.soldiers>0&&x===battle.sx&&y===battle.sy))return updateBattle('Selecciona una casilla libre y adyacente.');if(battle.selected==='soldiers'){battle.sx=x;battle.sy=y}else{battle.rx=x;battle.ry=y}enemyAdvance();if(s.soldiers+s.archers+s.griffins+s.dragons<=0)return loseBattle();updateBattle('Movimiento realizado. Turno enemigo completado.')}
+function tacticalMove(x,y){if(!battle)return;if(battle.selected==='soldiers'&&!s.soldiers||battle.selected==='archers'&&!s.archers)return updateBattle('No quedan unidades de ese tipo para mover.');if(battle.obstacles?.some(p=>p[0]===x&&p[1]===y))return updateBattle('Las rocas bloquean esta casilla.');let [ux,uy]=pos(battle.selected);if(Math.abs(x-ux)+Math.abs(y-uy)!==1||x<0||x>5||y<0||y>4||x===battle.ex&&y===battle.ey||(battle.selected==='soldiers'&&s.archers>0&&x===battle.rx&&y===battle.ry)||(battle.selected==='archers'&&s.soldiers>0&&x===battle.sx&&y===battle.sy))return updateBattle('Selecciona una casilla libre y adyacente.');if(battle.selected==='soldiers'){battle.sx=x;battle.sy=y}else{battle.rx=x;battle.ry=y}enemyAdvance();if(s.soldiers+s.archers+s.griffins+s.dragons<=0)return loseBattle();updateBattle('Movimiento realizado. Turno enemigo completado.')}
 // Sprites vectoriales originales: caballero, arquero y criaturas hostiles.
 const BATTLE_SPRITES={
  soldiers:'<svg viewBox="0 0 40 52" xmlns="http://www.w3.org/2000/svg"><path d="M11 46L13 31H28L30 46 25 49 21 37 17 49Z" fill="#313a48" stroke="#171d24" stroke-width="2"/><path d="M10 18L17 13 28 17 32 34 26 39 13 36 7 31Z" fill="#b7b8a6" stroke="#343c44" stroke-width="2"/><path d="M14 9L15 4 25 3 29 10 26 20 17 20Z" fill="#9aa9b1" stroke="#26333e" stroke-width="2"/><path d="M16 11H27V14H16Z" fill="#1e2935"/><path d="M3 22L11 17 16 25 13 35 4 32Z" fill="#306b8b" stroke="#e2c77e" stroke-width="2"/><path d="M31 12L36 5 38 7 34 31" fill="none" stroke="#d3d9d2" stroke-width="3"/><path d="M14 24L26 24" stroke="#e5c981" stroke-width="3"/></svg>',
@@ -513,12 +513,22 @@ function drawTactics(){
    if(obstacle)c.classList.add('combat-obstacle');
   }
   c.setAttribute('aria-label','Combate columna '+(x+1)+' fila '+(y+1)+(c.title?' · '+c.title:''));
-  c.disabled=!!obstacle;c.onclick=()=>tacticalMove(x,y);el.append(c)
+  c.disabled=!!obstacle;
+  c.onclick=()=>{
+   if(!battle)return;
+   if(soldier){battle.selected='soldiers';return updateBattle('Soldados seleccionados. Acércalos al enemigo para atacar.')}
+   if(archer){battle.selected='archers';return updateBattle('Arqueros seleccionados. Pueden atacar hasta tres casillas de distancia.')}
+   if(enemy)return hit(false);
+   return tacticalMove(x,y)
+  };
+  if(enemy)c.title+=' · Pulsa para atacar';
+  if(soldier||archer)c.title+=' · Pulsa para seleccionar';
+  el.append(c)
  }
 }
 function updateBattle(t='Selecciona soldados o arqueros, muévelos o ataca.'){if(!battle)return;if(battle.selected==='soldiers'&&s.soldiers===0)battle.selected='archers';if(battle.selected==='archers'&&s.archers===0)battle.selected='soldiers';drawTactics();$('ally').textContent=`${s.soldiers} soldados · ${s.archers} arqueros · ${s.griffins} grifos · ${s.dragons} dragones · fuerza ${strength()}`;$('enemy').textContent=`Resistencia ${Math.max(0,battle.hp)} · ronda ${battle.round}`;$('selected-unit').textContent='Unidad seleccionada: '+(battle.selected==='soldiers'?'Soldados (cuerpo a cuerpo)':'Arqueros (alcance 3)');$('unit-soldier').disabled=s.soldiers===0;$('unit-archer').disabled=s.archers===0;$('battle-log').textContent=t}
 function loseBattle(){const rivalFight=!!(battle&&battle.rival);battle=null;$('modal').hidden=true;message(rivalFight?'El Reino Umbrío ha vencido a tu ejército. Recluta nuevas tropas para continuar.':'Tu ejército ha sido derrotado. Recluta nuevas tropas.')}
-function hit(defend){if(!battle)return;if(defend)battle.defending=true;let [ux,uy]=pos(battle.selected),dist=Math.abs(ux-battle.ex)+Math.abs(uy-battle.ey),range=battle.selected==='archers'?3:1;if(!defend&&dist>range)return updateBattle('El enemigo está fuera del alcance de la unidad seleccionada.');let damage=defend?0:battle.selected==='archers'?Math.max(1,s.archers*2+s.griffins*3+s.dragons*7):Math.max(1,s.soldiers+(s.buildings.includes('forge')?2:0)+(s.faction==='Reino Umbrío'?2:0)+s.griffins*3+s.dragons*7);battle.hp-=damage;if(!defend){animateBattleFx('enemy',battle.hp<=0);if(battle.selected==='archers')fireBattleProjectile()}if(battle.hp<=0){
+function hit(defend){if(!battle)return;if(!defend&&(battle.selected==='soldiers'&&!s.soldiers||battle.selected==='archers'&&!s.archers))return updateBattle('Selecciona una unidad disponible antes de atacar.');if(defend)battle.defending=true;let [ux,uy]=pos(battle.selected),dist=Math.abs(ux-battle.ex)+Math.abs(uy-battle.ey),range=battle.selected==='archers'?3:1;if(!defend&&dist>range)return updateBattle('El enemigo está fuera del alcance de la unidad seleccionada.');let damage=defend?0:battle.selected==='archers'?Math.max(1,s.archers*2+s.griffins*3+s.dragons*7):Math.max(1,s.soldiers+(s.buildings.includes('forge')?2:0)+(s.faction==='Reino Umbrío'?2:0)+s.griffins*3+s.dragons*7);battle.hp-=damage;if(!defend){animateBattleFx('enemy',battle.hp<=0);if(battle.selected==='archers')fireBattleProjectile()}if(battle.hp<=0){
  if(battle.rival){
   const v=rivalState();v.defeated=true;v.recovery=0;v.soldiers=0;v.archers=0;
   s.gold+=Math.min(200,v.gold);s.experience+=80;
