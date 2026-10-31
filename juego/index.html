@@ -298,17 +298,28 @@ function blockForests(){
 const NAV=80;
 function navCell(x,y){return y*NAV+x}
 function navFree(x,y){return x>=1&&y>=1&&x<NAV-1&&y<NAV-1&&navBlocked&&!navBlocked[navCell(x,y)]}
-function nearestNav(px,py){
+// A destination must be close to the intended location: never snap across a river or ridge.
+function nearestNav(px,py,maxRadius=2){
  const cx=Math.max(1,Math.min(78,Math.floor(px*.8))),cy=Math.max(1,Math.min(78,Math.floor(py*.8)));
- for(let radius=0;radius<80;radius++)for(let dy=-radius;dy<=radius;dy++)for(let dx=-radius;dx<=radius;dx++){
+ for(let radius=0;radius<=maxRadius;radius++)for(let dy=-radius;dy<=radius;dy++)for(let dx=-radius;dx<=radius;dx++){
   if(Math.max(Math.abs(dx),Math.abs(dy))!==radius)continue;
   if(navFree(cx+dx,cy+dy))return [cx+dx,cy+dy];
  }
  return null
 }
+function navSegmentClear(a,b){
+ const ax=Math.floor(a[0]*.8),ay=Math.floor(a[1]*.8),bx=Math.floor(b[0]*.8),by=Math.floor(b[1]*.8);
+ const steps=Math.max(Math.abs(bx-ax),Math.abs(by-ay))*3;
+ for(let i=0;i<=steps;i++){
+  const t=steps?i/steps:0,x=Math.floor(ax+(bx-ax)*t),y=Math.floor(ay+(by-ay)*t);
+  if(!navFree(x,y))return false;
+ }
+ return true
+}
 function fineRoute(a,b){
  if(!navBlocked)return null;
- const start=nearestNav(...a),goal=nearestNav(...b);if(!start||!goal)return null;
+ if(!a||!b)return null;
+ const start=nearestNav(...a,1),goal=nearestNav(...b,1);if(!start||!goal)return null;
  const src=navCell(...start),dst=navCell(...goal),dist=new Float64Array(6400).fill(Infinity),prev=new Int32Array(6400).fill(-1),closed=new Uint8Array(6400);
  dist[src]=0;
  const heuristic=(id)=>Math.hypot(id%80-goal[0],Math.floor(id/80)-goal[1]);
@@ -330,13 +341,16 @@ function fineRoute(a,b){
 function logicalHeroPoint(x,y){return HERO_LANDMARK_ANCHORS[key(x,y)]||[(x+.5)*10,(y+.5)*10]}
 function safeHeroPoint(x,y){
  const point=logicalHeroPoint(x,y);if(!navBlocked)return point;
- const cell=nearestNav(...point);return cell?[(cell[0]+.5)*1.25,(cell[1]+.5)*1.25]:point
+ const cell=nearestNav(...point,2);return cell?[(cell[0]+.5)*1.25,(cell[1]+.5)*1.25]:null
 }
 async function travelFinePath(path,epoch){
  if(!path)return false;
+ let previous=persistentHero?[parseFloat(persistentHero.style.left),parseFloat(persistentHero.style.top)]:null;
  for(let i=0;i<path.length;i++){
+  if(!navBlocked||!nearestNav(...path[i],0)||previous&&Number.isFinite(previous[0])&&Number.isFinite(previous[1])&&!navSegmentClear(previous,path[i]))return false;
   if(epoch!==walkEpoch||battle||!$('adventure-discovery').hidden||!$('castle-screen').hidden)return false;
   if(persistentHero){persistentHero.style.left=path[i][0]+'%';persistentHero.style.top=path[i][1]+'%'}
+  previous=path[i];
   await new Promise(resolve=>setTimeout(resolve,95));
  }
  return true
@@ -400,7 +414,8 @@ function walkTo(tx,ty){
  walking=true;let index=0;
  async function step(){if(epoch!==walkEpoch){walking=false;return}if(index>=route.length||s.moves<=0||battle||s.done){walking=false;clearAdventureRoute();return}
   let [x,y]=route[index++],beforeX=s.x,beforeY=s.y;
-  const fine=fineRoute(safeHeroPoint(beforeX,beforeY),safeHeroPoint(x,y));
+  const from=safeHeroPoint(beforeX,beforeY),to=safeHeroPoint(x,y);
+  const fine=from&&to?fineRoute(from,to):null;
   if(!fine){walking=false;clearAdventureRoute();return message('No hay paso libre por el terreno hasta ese destino. Elige otro camino.');}
   if(!await travelFinePath(fine,epoch)){walking=false;clearAdventureRoute();return}
   move(x,y);
@@ -577,7 +592,7 @@ function setupCastleScreen(){
 }
 const HERO_LANDMARK_ANCHORS={'1,1':[11.8,12.1],'8,3':[78.4,28.1],'4,7':[46.3,77.3],'0,9':[7.5,93]};
 function heroVisualPosition(){
- return safeHeroPoint(s.x,s.y)
+ return safeHeroPoint(s.x,s.y)||logicalHeroPoint(s.x,s.y)
 }
 let persistentHero=null,lastHeroCoords=null;
 function drawMountedHero(map){
@@ -714,7 +729,8 @@ function rivalChooseObjective(v,options){
  const fortPoint=safeHeroPoint(4,7);
  const playerNearFort=defending&&Math.hypot(hx-fortPoint[0],hy-fortPoint[1])<18;
  const candidates=options.map(obj=>{
-  const path=fineRoute([v.x,v.y],safeHeroPoint(obj.x,obj.y));
+  const destination=safeHeroPoint(obj.x,obj.y);
+  const path=destination?fineRoute([v.x,v.y],destination):null;
   if(!path)return null;
   let priority=0;
   if(obj.type==='castle')priority+=14;
@@ -723,7 +739,7 @@ function rivalChooseObjective(v,options){
   return {obj,path,score:path.length-priority}
  }).filter(Boolean);
  if(playerNearFort){
-  const path=fineRoute([v.x,v.y],fortPoint);
+  const path=fortPoint?fineRoute([v.x,v.y],fortPoint):null;
   if(path)return {obj:{x:4,y:7,type:'defend',name:'fortaleza propia'},path}
  }
  candidates.sort((a,b)=>a.score-b.score);
@@ -763,14 +779,14 @@ async function rivalTurn(){
   const [hx,hy]=heroVisualPosition();
   const danger=Math.hypot(v.x-hx,v.y-hy)<13;
   if(danger&&rivalThreatLevel(v)<0.75){
-   const retreat=safeHeroPoint(0,9),path=fineRoute([v.x,v.y],retreat);
+   const retreat=safeHeroPoint(0,9),path=retreat?fineRoute([v.x,v.y],retreat):null;
    if(path&&path.length){best={obj:{x:0,y:9,type:'retreat',name:'refugio del Reino Umbrío'},path};v.retreats=(v.retreats||0)+1}
   }
   if(!best){s.message='El héroe rival continúa patrullando sus dominios.';return}
   const steps=Math.min(best.path.length,16);
   for(let i=0;i<steps;i++){
    if(epoch!==rivalEpoch||s.done)break;
-   const [x,y]=best.path[i];v.x=x;v.y=y;
+   const [x,y]=best.path[i];if(!navSegmentClear([v.x,v.y],[x,y]))break;v.x=x;v.y=y;
    if(rivalMarker){rivalMarker.style.left=x+'%';rivalMarker.style.top=y+'%'}
    await new Promise(resolve=>setTimeout(resolve,115))
   }
