@@ -319,7 +319,7 @@ function navSegmentClear(a,b){
 function fineRoute(a,b){
  if(!navBlocked)return null;
  if(!a||!b)return null;
- const start=nearestNav(...a,1),goal=nearestNav(...b,1);if(!start||!goal)return null;
+ const start=nearestNav(...a,0),goal=nearestNav(...b,0);if(!start||!goal)return null;
  const src=navCell(...start),dst=navCell(...goal),dist=new Float64Array(6400).fill(Infinity),prev=new Int32Array(6400).fill(-1),closed=new Uint8Array(6400);
  dist[src]=0;
  const heuristic=(id)=>Math.hypot(id%80-goal[0],Math.floor(id/80)-goal[1]);
@@ -417,7 +417,7 @@ function walkTo(tx,ty){
   const from=safeHeroPoint(beforeX,beforeY),to=safeHeroPoint(x,y);
   const fine=from&&to?fineRoute(from,to):null;
   if(!fine){walking=false;clearAdventureRoute();return message('No hay paso libre por el terreno hasta ese destino. Elige otro camino.');}
-  if(!await travelFinePath(fine,epoch)){walking=false;clearAdventureRoute();return}
+  if(!await travelFinePath(fine,epoch)){walking=false;clearAdventureRoute();render();return message('Movimiento detenido: el terreno no permite completar esa ruta.')}
   move(x,y);
   if(battle||!$('adventure-discovery').hidden||!$('castle-screen').hidden||s.x===beforeX&&s.y===beforeY){walking=false;clearAdventureRoute();return}
   if(index<route.length&&s.moves>=movementCost(route[index][0],route[index][1])&&$('adventure-discovery').hidden&&$('castle-screen').hidden)setTimeout(step,230);else {walking=false;if(index>=route.length&&!battle&&!s.done&&(key(tx,ty)==='1,1'||key(tx,ty)==='4,7'&&s.claimed.includes('4,7')))setTimeout(()=>{if(epoch===walkEpoch&&!walking&&!battle&&s.x===tx&&s.y===ty&&$('adventure-discovery').hidden&&$('castle-screen').hidden)visitKnownLocation(tx,ty)},260)}
@@ -784,14 +784,15 @@ async function rivalTurn(){
   }
   if(!best){s.message='El héroe rival continúa patrullando sus dominios.';return}
   const steps=Math.min(best.path.length,16);
+  let completed=0;
   for(let i=0;i<steps;i++){
    if(epoch!==rivalEpoch||s.done)break;
-   const [x,y]=best.path[i];if(!navSegmentClear([v.x,v.y],[x,y]))break;v.x=x;v.y=y;
+   const [x,y]=best.path[i];if(!navSegmentClear([v.x,v.y],[x,y]))break;v.x=x;v.y=y;completed++;
    if(rivalMarker){rivalMarker.style.left=x+'%';rivalMarker.style.top=y+'%'}
    await new Promise(resolve=>setTimeout(resolve,115))
   }
   if(epoch!==rivalEpoch)return;
-  if(steps===best.path.length){
+  if(completed===best.path.length){
    if(best.obj.type==='retreat'){s.message='🛡️ El rival evita una batalla desfavorable y regresa a su refugio.'}
    else if(best.obj.type==='defend'){s.message='🏰 El rival protege su fortaleza ante tu avance.'}
    else{
@@ -801,7 +802,7 @@ async function rivalTurn(){
    if(best.obj.type==='mine')v.gold+=70;
    s.message='⚔️ El Reino Umbrío reclama '+best.obj.name+' · ejército: '+v.soldiers+' soldados y '+v.archers+' arqueros.';
    }
-  }else s.message='⚔️ El héroe rival avanza hacia '+best.obj.name+'.';
+  }else s.message=completed?'⚔️ El héroe rival avanza hacia '+best.obj.name+'.':'🛡️ El rival no encuentra un paso seguro hacia '+best.obj.name+'.';
   v.explored.push([v.x,v.y]);
   if(Math.hypot(v.x-heroVisualPosition()[0],v.y-heroVisualPosition()[1])<2.2)s.rivalEncounterPending=true;
  }finally{
