@@ -155,7 +155,7 @@ body:has(#auth-screen:not([hidden])){min-height:100vh;background:linear-gradient
 #world-viewport .map .tile.hero{filter:none!important;background:radial-gradient(circle,#ffdf6933,transparent 65%)!important}
 @media(prefers-reduced-motion:no-preference){#world-viewport .map .mounted-hero-rider{animation:novarise-horse-bob 1.5s ease-in-out infinite}@keyframes novarise-horse-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}}
 </style><style id="novarise-hero-walking-v36">
-#world-viewport .map .mounted-hero-marker{transition:left .22s linear,top .22s linear!important;will-change:left,top}
+#world-viewport .map .mounted-hero-marker{transition:left .09s linear,top .09s linear!important;will-change:left,top}
 #world-viewport .map .mounted-hero-marker.hero-facing-left .mounted-hero-rider{transform:scaleX(-1)}
 #world-viewport .map .mounted-hero-marker.hero-traveling .mounted-hero-flag{background:#355947f0;border-color:#ffe19a}
 @media(prefers-reduced-motion:reduce){#world-viewport .map .mounted-hero-marker{transition:none!important}}
@@ -282,7 +282,7 @@ async function travelFinePath(path,epoch){
  for(let i=0;i<path.length;i++){
   if(epoch!==walkEpoch||battle||!$('adventure-discovery').hidden||!$('castle-screen').hidden)return false;
   if(persistentHero){persistentHero.style.left=path[i][0]+'%';persistentHero.style.top=path[i][1]+'%'}
-  if(i%3===0)await new Promise(resolve=>setTimeout(resolve,24));
+  await new Promise(resolve=>setTimeout(resolve,95));
  }
  return true
 }
