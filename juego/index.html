@@ -265,10 +265,12 @@ function hostileAt(k){
 let navBlocked=null;
 fetch('./nav-terrain.json').then(r=>{if(!r.ok)throw Error('Máscara no disponible');return r.json()}).then(data=>{
  if(data.size!==80)throw Error('Resolución de navegación incorrecta');
+ if(typeof data.blocked!=='string'||!/^[A-Za-z0-9+/]*={0,2}$/.test(data.blocked))throw Error('Máscara de navegación inválida');
  const bytes=Uint8Array.from(atob(data.blocked),c=>c.charCodeAt(0));
  if(bytes.length!==800)throw Error('Máscara incompleta');
  navBlocked=Array.from({length:6400},(_,i)=>!!(bytes[i>>3]&(128>>(i&7))));
  blockForests();
+ if(!nearestNav(15,15)||!nearestNav(46.3,77.3))throw Error('La navegación no contiene accesos a los castillos');
 }).catch(e=>{console.error('Navegación no disponible',e);});
 // Polígonos aproximados de arboledas densas de la imagen original; no se dibujan.
 const FOREST_REGIONS=[[[1,1],[16,1],[14,5],[9,7],[3,5]],[[20,1],[35,1],[33,5],[26,6],[22,4]],[[40,1],[54,1],[56,6],[49,10],[43,7]],[[60,1],[82,1],[77,6],[67,8],[62,5]],[[85,1],[99,1],[99,17],[95,13],[89,10]],[[1,12],[10,11],[15,17],[11,24],[3,23]],[[18,13],[26,11],[31,16],[28,21],[23,20]],[[35,16],[45,16],[49,24],[43,30],[37,25]],[[53,10],[64,10],[69,18],[65,26],[58,23]],[[70,17],[79,16],[82,24],[76,30],[70,27]],[[1,36],[11,34],[15,41],[12,49],[4,48]],[[54,39],[66,39],[71,47],[66,54],[56,51]],[[1,52],[15,51],[21,57],[17,65],[7,63],[1,61]],[[44,54],[57,54],[59,63],[53,69],[46,64]],[[1,66],[13,64],[21,70],[19,79],[9,80],[1,75]],[[15,70],[30,68],[36,74],[34,83],[24,82],[19,78]],[[30,77],[47,75],[55,83],[49,89],[37,86]],[[1,80],[17,79],[24,86],[20,94],[8,94],[1,89]],[[24,86],[42,85],[50,94],[42,98],[29,96]],[[51,68],[61,66],[67,73],[63,81],[55,79]],[[70,52],[81,50],[86,56],[81,63],[72,60]],[[70,73],[82,71],[85,80],[79,85],[72,81]]];
@@ -407,7 +409,7 @@ function walkTo(tx,ty){
  }
  step()
 }
-function showBattle(){if(battle){battle.obstacles=[[2,0],[3,4],[2,3]];battle.phase=0;battle.counterUsed=false;battle.initiative=battle.rival?'enemy':'player';battle.defending=false}if(battle)$('battle-title').textContent=battle.rival?'⚔️ Duelo de héroes · Reino Umbrío':battle.fort?'🏰 Asedio al castillo':'⚔️ Campo de batalla';if(s.soldiers+s.archers+s.griffins+s.dragons===0){battle=null;return message('Necesitas reclutar tropas para combatir.')} clearAdventureRoute();$('modal').hidden=false;if(battle.initiative==='enemy'){enemyAdvance();updateBattle('El ejército rival toma la iniciativa. Ahora es tu turno.')}else updateBattle('Tu ejército toma la iniciativa. Selecciona una unidad.')}function pos(unit){return unit==='archers'?[battle.rx,battle.ry]:[battle.sx,battle.sy]}
+function showBattle(){if(battle){battle.obstacles=[[2,0],[3,4],[2,3]];battle.phase=0;battle.counterUsed=false;battle.initiative=battle.rival?'enemy':'player';battle.defending=false;battle.counterUsed=false}if(battle)$('battle-title').textContent=battle.rival?'⚔️ Duelo de héroes · Reino Umbrío':battle.fort?'🏰 Asedio al castillo':'⚔️ Campo de batalla';if(s.soldiers+s.archers+s.griffins+s.dragons===0){battle=null;return message('Necesitas reclutar tropas para combatir.')} clearAdventureRoute();$('modal').hidden=false;if(battle.initiative==='enemy'){enemyAdvance();updateBattle('El ejército rival toma la iniciativa. Ahora es tu turno.')}else updateBattle('Tu ejército toma la iniciativa. Selecciona una unidad.')}function pos(unit){return unit==='archers'?[battle.rx,battle.ry]:[battle.sx,battle.sy]}
 function enemyAdvance(){
  if(!battle)return;
  battle.counterUsed=false;
