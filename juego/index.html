@@ -365,7 +365,7 @@ function updateBattle(t='Selecciona soldados o arqueros, muévelos o ataca.'){if
 function loseBattle(){const rivalFight=!!(battle&&battle.rival);battle=null;$('modal').hidden=true;message(rivalFight?'El Reino Umbrío ha vencido a tu ejército. Recluta nuevas tropas para continuar.':'Tu ejército ha sido derrotado. Recluta nuevas tropas.')}
 function hit(defend){if(!battle)return;let [ux,uy]=pos(battle.selected),dist=Math.abs(ux-battle.ex)+Math.abs(uy-battle.ey),range=battle.selected==='archers'?3:1;if(!defend&&dist>range)return updateBattle('El enemigo está fuera del alcance de la unidad seleccionada.');let damage=defend?0:battle.selected==='archers'?Math.max(1,s.archers*2+s.griffins*3+s.dragons*7):Math.max(1,s.soldiers+(s.buildings.includes('forge')?2:0)+(s.faction==='Reino Umbrío'?2:0)+s.griffins*3+s.dragons*7);battle.hp-=damage;if(battle.hp<=0){
  if(battle.rival){
-  const v=rivalState();v.defeated=true;v.soldiers=0;v.archers=0;
+  const v=rivalState();v.defeated=true;v.recovery=0;v.soldiers=0;v.archers=0;
   s.gold+=Math.min(200,v.gold);s.experience+=80;
   s.message='⚔️ Has derrotado al héroe del Reino Umbrío. Sus territorios permanecen bajo control rival hasta conquistarlos.';
   battle=null;$('modal').hidden=true;render();return
@@ -567,9 +567,33 @@ function drawRivalHero(map){
  map.appendChild(rivalMarker);
  rivalMarker.style.left=v.x+'%';rivalMarker.style.top=v.y+'%';
 }
+function rivalStrength(v){return Math.max(0,v.soldiers)+2*Math.max(0,v.archers)}
+function rivalThreatLevel(v){return rivalStrength(v)/Math.max(1,strength())}
+function rivalChooseObjective(v,options){
+ const defending=v.claimed.includes('4,7')&&!s.claimed.includes('4,7');
+ const [hx,hy]=heroVisualPosition();
+ const fortPoint=safeHeroPoint(4,7);
+ const playerNearFort=defending&&Math.hypot(hx-fortPoint[0],hy-fortPoint[1])<18;
+ const candidates=options.map(obj=>{
+  const path=fineRoute([v.x,v.y],safeHeroPoint(obj.x,obj.y));
+  if(!path)return null;
+  let priority=0;
+  if(obj.type==='castle')priority+=14;
+  if(obj.type==='mine')priority+=9;
+  if(obj.type==='artifact')priority+=4;
+  return {obj,path,score:path.length-priority}
+ }).filter(Boolean);
+ if(playerNearFort){
+  const path=fineRoute([v.x,v.y],fortPoint);
+  if(path)return {obj:{x:4,y:7,type:'defend',name:'fortaleza propia'},path}
+ }
+ candidates.sort((a,b)=>a.score-b.score);
+ return candidates[0]||null
+}
 function rivalEncounter(){
  const v=rivalState();
  if(v.defeated||battle||s.done||rivalBusy)return false;
+ if(rivalThreatLevel(v)<0.65){v.retreats=(v.retreats||0)+1;return false}
  const [hx,hy]=heroVisualPosition();
  if(Math.hypot(v.x-hx,v.y-hy)>2.2)return false;
  battle={x:s.x,y:s.y,k:'rival',hp:Math.max(12,v.soldiers*2+v.archers*3),rival:true,fort:false,defending:false,ax:0,ay:2,ex:5,ey:2,range:1,selected:s.soldiers?'soldiers':'archers',sx:0,sy:2,rx:0,ry:3,round:0};
@@ -577,19 +601,30 @@ function rivalEncounter(){
  return true
 }
 async function rivalTurn(){
- if(rivalBusy||s.done||battle||walking||rivalState().defeated)return;
+ if(rivalBusy||s.done||battle||walking)return;
  rivalBusy=true;const epoch=++rivalEpoch;
  const v=rivalState();v.turns++;
+ if(v.defeated){
+  v.recovery=(v.recovery||0)+1;
+  if(v.recovery>=3){v.defeated=false;v.recovery=0;v.soldiers=4;v.archers=1;v.x=7.5;v.y=93;s.message='⚔️ El Reino Umbrío ha reclutado un nuevo comandante.'}
+  else s.message='El Reino Umbrío reconstruye su ejército ('+v.recovery+'/3 turnos).';
+  rivalBusy=false;
+  s.turn++;s.moves=s.faction==='Alianza del Alba'?5:4;
+  s.gold+=40+25*s.claimed.length+(s.buildings.includes('market')?30:0);
+  s.crystals+=mineYield();render();return
+ }
  v.gold+=65+20*v.claimed.filter(k=>k==='4,7').length;
  const recruits=Math.min(2,Math.floor(v.gold/30));v.soldiers+=recruits;v.gold-=30*recruits;
  if(v.turns%2===0&&v.gold>=50){v.archers++;v.gold-=50}
  try{
   if(!navBlocked){s.message='El rival aguarda a que se cargue el mapa.';return}
   const options=RIVAL_OBJECTIVES.filter(o=>!v.claimed.includes(o.x+','+o.y)&&!(o.type==='castle'&&s.claimed.includes('4,7'))&&!(o.type==='mine'&&s.ownedMines.includes('8,3')));
-  let best=null;
-  for(const obj of options){
-   const point=safeHeroPoint(obj.x,obj.y),path=fineRoute([v.x,v.y],point);
-   if(path&&(!best||path.length<best.path.length))best={obj,path}
+  let best=rivalChooseObjective(v,options);
+  const [hx,hy]=heroVisualPosition();
+  const danger=Math.hypot(v.x-hx,v.y-hy)<13;
+  if(danger&&rivalThreatLevel(v)<0.75){
+   const retreat=safeHeroPoint(0,9),path=fineRoute([v.x,v.y],retreat);
+   if(path&&path.length){best={obj:{x:0,y:9,type:'retreat',name:'refugio del Reino Umbrío'},path};v.retreats=(v.retreats||0)+1}
   }
   if(!best){s.message='El héroe rival continúa patrullando sus dominios.';return}
   const steps=Math.min(best.path.length,16);
@@ -601,11 +636,15 @@ async function rivalTurn(){
   }
   if(epoch!==rivalEpoch)return;
   if(steps===best.path.length){
+   if(best.obj.type==='retreat'){s.message='🛡️ El rival evita una batalla desfavorable y regresa a su refugio.'}
+   else if(best.obj.type==='defend'){s.message='🏰 El rival protege su fortaleza ante tu avance.'}
+   else{
    const k=best.obj.x+','+best.obj.y;
    if(!v.claimed.includes(k))v.claimed.push(k);
    if(best.obj.type==='artifact')v.artifacts++;
    if(best.obj.type==='mine')v.gold+=70;
    s.message='⚔️ El Reino Umbrío reclama '+best.obj.name+' · ejército: '+v.soldiers+' soldados y '+v.archers+' arqueros.';
+   }
   }else s.message='⚔️ El héroe rival avanza hacia '+best.obj.name+'.';
   v.explored.push([v.x,v.y]);
   if(Math.hypot(v.x-heroVisualPosition()[0],v.y-heroVisualPosition()[1])<2.2)s.rivalEncounterPending=true;
