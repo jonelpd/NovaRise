@@ -657,7 +657,7 @@ function walkTo(tx,ty){
  }
  step()
 }
-function showBattle(){if(battle){battle.maxMana=20;battle.mana=20;battle.magicRound=-1;battle.initialCounts={soldiers:s.soldiers,archers:s.archers,griffins:s.griffins,dragons:s.dragons};setupBattleMagic();battle.obstacles=[[2,0],[3,4],[2,3]];battle.phase=0;battle.counterUsed=false;battle.initiative=battle.rival?'enemy':'player';battle.defending=false;battle.guarding=[];battle.gx=1;battle.gy=1;battle.dx=1;battle.dy=4;battle.selected=s.soldiers?'soldiers':s.archers?'archers':s.griffins?'griffins':'dragons';battle.acted=[];battle.selected=battleNextUnit()||battle.selected}if(battle)$('battle-title').textContent=battle.rival?'⚔️ Duelo de héroes · Reino Umbrío':battle.fort?'🏰 Asedio al castillo':'⚔️ Campo de batalla';if(s.soldiers+s.archers+s.griffins+s.dragons===0){battle=null;return message('Necesitas reclutar tropas para combatir.')} clearAdventureRoute();$('modal').hidden=false;if(battle.initiative==='enemy'){enemyAdvance();if(battle.enemyFallen){battle.enemyFallen=false;return hitResolveVictory()}if(s.soldiers+s.archers+s.griffins+s.dragons<=0)return loseBattle();updateBattle('El ejército rival toma la iniciativa. Ahora es tu turno.')}else updateBattle('Tu ejército toma la iniciativa. Selecciona una unidad.')}function pos(unit){return unit==='archers'?[battle.rx,battle.ry]:unit==='griffins'?[battle.gx,battle.gy]:unit==='dragons'?[battle.dx,battle.dy]:[battle.sx,battle.sy]}
+function showBattle(){if(battle){battle.maxMana=heroStats().maxMana;battle.mana=battle.maxMana;battle.magicRound=-1;battle.initialCounts={soldiers:s.soldiers,archers:s.archers,griffins:s.griffins,dragons:s.dragons};setupBattleMagic();battle.obstacles=[[2,0],[3,4],[2,3]];battle.phase=0;battle.counterUsed=false;battle.initiative=battle.rival?'enemy':'player';battle.defending=false;battle.guarding=[];battle.gx=1;battle.gy=1;battle.dx=1;battle.dy=4;battle.selected=s.soldiers?'soldiers':s.archers?'archers':s.griffins?'griffins':'dragons';battle.acted=[];battle.selected=battleNextUnit()||battle.selected}if(battle)$('battle-title').textContent=battle.rival?'⚔️ Duelo de héroes · Reino Umbrío':battle.fort?'🏰 Asedio al castillo':'⚔️ Campo de batalla';if(s.soldiers+s.archers+s.griffins+s.dragons===0){battle=null;return message('Necesitas reclutar tropas para combatir.')} clearAdventureRoute();$('modal').hidden=false;if(battle.initiative==='enemy'){enemyAdvance();if(battle.enemyFallen){battle.enemyFallen=false;return hitResolveVictory()}if(s.soldiers+s.archers+s.griffins+s.dragons<=0)return loseBattle();updateBattle('El ejército rival toma la iniciativa. Ahora es tu turno.')}else updateBattle('Tu ejército toma la iniciativa. Selecciona una unidad.')}function pos(unit){return unit==='archers'?[battle.rx,battle.ry]:unit==='griffins'?[battle.gx,battle.gy]:unit==='dragons'?[battle.dx,battle.dy]:[battle.sx,battle.sy]}
 function renderBattleInitiative(){
  const panel=document.querySelector('#modal .battle .novarise-initiative');
  if(!panel||!battle)return;
@@ -881,6 +881,16 @@ function battleMagicEffect(spell){
  const fx=document.createElement('div');fx.className='novarise-spell-fx '+spell;fx.setAttribute('aria-hidden','true');arena.append(fx);
  setTimeout(()=>fx.remove(),850);
 }
+function heroLevel(){return 1+Math.floor(Math.max(0,s.experience||0)/100)}
+function heroStats(){
+ const level=heroLevel();
+ return {level,might:Math.floor((level-1)/2),arcana:Math.floor((level-1)/2),maxMana:20+Math.floor((level-1)/2)*3};
+}
+function awardHeroExperience(amount){
+ const before=heroLevel();s.experience=(s.experience||0)+amount;
+ const after=heroLevel();
+ return after>before?' 🌟 ¡Héroe de nivel '+after+'! Fuerza y magia mejoradas.':'';
+}
 function battleMagicCast(spell){
  if(!battle)return;
  if(battle.magicRound===battle.round)return updateBattle('El héroe ya ha lanzado un hechizo esta ronda.');
@@ -893,7 +903,7 @@ function battleMagicCast(spell){
  battle.magicRound=battle.round;
  let note='';
  if(spell==='bolt'){
-  const damage=12+Math.floor((s.experience||0)/120);
+  const damage=12+heroStats().arcana*3;
   battle.hp=Math.max(0,battle.hp-damage);
   animateBattleFx('enemy',battle.hp===0);
   window.novariseUnitAnimation?.('enemy','hurt',600);
@@ -922,7 +932,7 @@ function battleMagicCast(spell){
 function renderBattleMagic(){
  const bar=document.querySelector('#modal .battle .novarise-magic-controls');
  if(!bar||!battle)return;
- bar.querySelector('.mana-count').textContent='🔷 Maná '+battle.mana+'/'+battle.maxMana;
+ bar.querySelector('.mana-count').textContent='🌟 Nivel '+heroLevel()+' · ⚔ '+heroStats().might+' · ✨ '+heroStats().arcana+' · 🔷 Maná '+battle.mana+'/'+battle.maxMana;
  for(const btn of bar.querySelectorAll('button[data-spell]')){
   const cost=Number(btn.dataset.cost);
   btn.disabled=battle.magicRound===battle.round||battle.mana<cost||(btn.dataset.spell==='heal'&&battleCount(battle.selected)>=(battle.initialCounts?.[battle.selected]??0))||(btn.dataset.spell==='ward'&&battle.guarding?.includes(battle.selected));
@@ -943,17 +953,17 @@ function loseBattle(){const rivalFight=!!(battle&&battle.rival);battle=null;$('m
 function hitResolveVictory(){if(!battle)return;
  if(battle.rival){
   const v=rivalState();v.defeated=true;v.recovery=0;v.soldiers=0;v.archers=0;
-  s.gold+=Math.min(200,v.gold);s.experience+=80;
-  s.message='⚔️ Has derrotado al héroe del Reino Umbrío. Sus territorios permanecen bajo control rival hasta conquistarlos.';
+  s.gold+=Math.min(200,v.gold);const levelNote=awardHeroExperience(80);
+  s.message='⚔️ Has derrotado al héroe del Reino Umbrío. Sus territorios permanecen bajo control rival hasta conquistarlos.'+levelNote;
   battle=null;$('modal').hidden=true;render();return
  }
- let isFort=battle.fort,k=battle.k;s.x=battle.x;s.y=battle.y;s.moves=Math.max(0,s.moves-movementCost(battle.x,battle.y));if(!s.taken.includes(k))s.taken.push(k);if(outposts.includes(k)&&!s.claimed.includes(k)){s.claimed.push(k);s.gold+=150;s.experience+=25;const rival=rivalState();rival.claimed=rival.claimed.filter(v=>v!==k)}if(isFort){s.experience+=100;s.done=true;s.message='🏆 ¡Victoria! Has conquistado el castillo y ganado la campaña.'}else{s.gold+=110;s.experience+=15;s.message=outposts.includes(k)?'🏯 Fortaleza conquistada. Recibes 260 de oro.':'⚔️ Guardianes derrotados. Obtienes 110 de oro.'}battle=null;$('modal').hidden=true;reveal();render();return}
+ let isFort=battle.fort,k=battle.k;s.x=battle.x;s.y=battle.y;s.moves=Math.max(0,s.moves-movementCost(battle.x,battle.y));if(!s.taken.includes(k))s.taken.push(k);if(outposts.includes(k)&&!s.claimed.includes(k)){s.claimed.push(k);s.gold+=150;s.message=(s.message||'')+awardHeroExperience(25);const rival=rivalState();rival.claimed=rival.claimed.filter(v=>v!==k)}if(isFort){const levelNote=awardHeroExperience(100);s.done=true;s.message='🏆 ¡Victoria! Has conquistado el castillo y ganado la campaña.'+levelNote}else{s.gold+=110;const levelNote=awardHeroExperience(15);s.message=(outposts.includes(k)?'🏯 Fortaleza conquistada. Recibes 260 de oro.':'⚔️ Guardianes derrotados. Obtienes 110 de oro.')+levelNote}battle=null;$('modal').hidden=true;reveal();render();return}
 function battleAttackDamage(type){
  const count=battleCount(type);
  if(!count)return 0;
  const base=type==='archers'?count*2:type==='griffins'?count*3:type==='dragons'?count*7:count+(s.buildings.includes('forge')?2:0)+(s.faction==='Reino Umbrío'?2:0);
  // Distinct roles: archers excel at range, griffins at close combat, dragons deal heavy damage.
- return Math.max(1,Math.floor(base));
+ return Math.max(1,Math.floor(base)+heroStats().might);
 }
 function hit(defend){if(!battle)return;if(!battleUnitReady(battle.selected))return updateBattle('Esta unidad ya ha actuado. Selecciona otra disponible.');if(!defend&&!battleCount(battle.selected))return updateBattle('Selecciona una unidad disponible antes de atacar.');if(defend){if(!battle.guarding)battle.guarding=[];battle.guarding.push(battle.selected);}let [ux,uy]=pos(battle.selected),dist=Math.abs(ux-battle.ex)+Math.abs(uy-battle.ey),range=battleRange(battle.selected);if(!defend&&dist>range)return updateBattle('El enemigo está fuera del alcance de la unidad seleccionada.');
  if(!defend&&battle.selected==='archers'&&dist<=1)return updateBattle('Los arqueros necesitan separarse del enemigo para disparar.');
