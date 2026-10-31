@@ -915,6 +915,17 @@ function setupHeroPanel(){
  });
  panel.append(select);const tree=document.createElement('div');tree.className='hero-skill-tree';panel.append(tree);const hint=document.createElement('p');hint.textContent='La primera elección de especialización es permanente para esta partida. Las habilidades se desbloquean automáticamente al alcanzar su nivel.';panel.append(hint);root.querySelector('.battle-arena')?.before(panel);
 }
+function renderVerifiedTreasureLedger(panel){
+ // Ledger uses only treasure coordinates already registered in the playable map.
+ // It deliberately does not assert that a particular weapon or ring is visible in the artwork.
+ let section=panel.querySelector('.novarise-treasure-ledger');
+ if(!section){section=document.createElement('details');section.className='novarise-treasure-ledger';const heading=document.createElement('summary');heading.textContent='📜 Inventario · hallazgos del mapa';section.append(heading);const list=document.createElement('div');list.className='hero-details';section.append(list);panel.append(section)}
+ const list=section.querySelector('.hero-details');list.replaceChildren();
+ const recovered=new Set(Array.isArray(s.treasureFinds)?s.treasureFinds:[]);
+ const title=document.createElement('p');title.textContent='Registro de tesoros existentes. Las mejoras se aplican automáticamente y no se duplican al cargar.';list.append(title);
+ for(const place of treasures){const item=document.createElement('span');item.textContent=(recovered.has(place)?'✓ Recuperado':'◇ Pendiente')+' · Tesoro del mapa ('+place+')';list.append(item)}
+ const eq=mapTreasureEquipment(),bonus=document.createElement('strong');bonus.textContent='Bonificaciones activas: +'+eq.attack+' daño y +'+eq.mana+' maná máximo';list.append(bonus);
+}
 function renderHeroPanel(){
  const panel=document.querySelector('#modal .battle .novarise-hero-panel');if(!panel)return;
  const stats=heroStats(),xp=Math.max(0,s.experience||0);
@@ -926,6 +937,7 @@ function renderHeroPanel(){
  panel.querySelector('.hero-progress-label').textContent=(xp%100)+'/100 PX para el próximo nivel';
  panel.querySelector('select').value=heroSpecialization();
  panel.querySelector('select').disabled=!!s.heroSpecializationLocked;
+ renderVerifiedTreasureLedger(panel);
  const skills=panel.querySelector('.hero-skill-tree');if(skills){skills.replaceChildren();for(const skill of heroSkillMilestones()){const line=document.createElement('p');line.textContent=(skill.unlocked?'✅ ':'🔒 ')+'Nivel '+skill.required+' · '+skill.name+' — '+skill.description;skills.append(line)}}
 }
 function heroSkillMilestones(){
