@@ -437,7 +437,7 @@ function walkTo(tx,ty){
  }
  step()
 }
-function showBattle(){if(battle){battle.obstacles=[[2,0],[3,4],[2,3]];battle.phase=0;battle.counterUsed=false;battle.initiative=battle.rival?'enemy':'player';battle.defending=false;battle.gx=1;battle.gy=1;battle.dx=1;battle.dy=4;battle.selected=s.soldiers?'soldiers':s.archers?'archers':s.griffins?'griffins':'dragons';battle.acted=[];battle.selected=battleNextUnit()||battle.selected}if(battle)$('battle-title').textContent=battle.rival?'⚔️ Duelo de héroes · Reino Umbrío':battle.fort?'🏰 Asedio al castillo':'⚔️ Campo de batalla';if(s.soldiers+s.archers+s.griffins+s.dragons===0){battle=null;return message('Necesitas reclutar tropas para combatir.')} clearAdventureRoute();$('modal').hidden=false;if(battle.initiative==='enemy'){enemyAdvance();updateBattle('El ejército rival toma la iniciativa. Ahora es tu turno.')}else updateBattle('Tu ejército toma la iniciativa. Selecciona una unidad.')}function pos(unit){return unit==='archers'?[battle.rx,battle.ry]:unit==='griffins'?[battle.gx,battle.gy]:unit==='dragons'?[battle.dx,battle.dy]:[battle.sx,battle.sy]}
+function showBattle(){if(battle){battle.obstacles=[[2,0],[3,4],[2,3]];battle.phase=0;battle.counterUsed=false;battle.initiative=battle.rival?'enemy':'player';battle.defending=false;battle.guarding=[];battle.gx=1;battle.gy=1;battle.dx=1;battle.dy=4;battle.selected=s.soldiers?'soldiers':s.archers?'archers':s.griffins?'griffins':'dragons';battle.acted=[];battle.selected=battleNextUnit()||battle.selected}if(battle)$('battle-title').textContent=battle.rival?'⚔️ Duelo de héroes · Reino Umbrío':battle.fort?'🏰 Asedio al castillo':'⚔️ Campo de batalla';if(s.soldiers+s.archers+s.griffins+s.dragons===0){battle=null;return message('Necesitas reclutar tropas para combatir.')} clearAdventureRoute();$('modal').hidden=false;if(battle.initiative==='enemy'){enemyAdvance();updateBattle('El ejército rival toma la iniciativa. Ahora es tu turno.')}else updateBattle('Tu ejército toma la iniciativa. Selecciona una unidad.')}function pos(unit){return unit==='archers'?[battle.rx,battle.ry]:unit==='griffins'?[battle.gx,battle.gy]:unit==='dragons'?[battle.dx,battle.dy]:[battle.sx,battle.sy]}
 function battleCount(type){return Math.max(0,s[type]||0)}
 function battleRange(type){return type==='archers'?3:type==='dragons'?2:1}
 function battleSpeed(type){return type==='griffins'?3:type==='dragons'?2:1}
@@ -450,8 +450,9 @@ function battleFinishAction(note){
  const next=battleNextUnit();
  if(next){battle.selected=next;return updateBattle(note+' Siguiente: '+({griffins:'grifos',dragons:'dragones',archers:'arqueros',soldiers:'soldados'}[next])+'.')}
  enemyAdvance();
+ if(battle.enemyFallen){battle.hp=0;battle.enemyFallen=false;return hitResolveVictory()}
  if(s.soldiers+s.archers+s.griffins+s.dragons<=0)return loseBattle();
- battle.acted=[];battle.selected=battleNextUnit()||'soldiers';
+ battle.acted=[];battle.guarding=[];battle.selected=battleNextUnit()||'soldiers';
  updateBattle(note+' El enemigo ha actuado. Nueva ronda.')
 }
 // Enemy uses breadth-first pathfinding: no walking through rocks or allied stacks.
@@ -474,9 +475,17 @@ function enemyAdvance(){
   }
  }
  if(chosen&&Math.abs(chosen.x-battle.ex)+Math.abs(chosen.y-battle.ey)===1){
-  const reduction=battle.defending?0:1;
+  const guarded=battle.guarding?.includes(chosen.type);
+  const reduction=guarded?0:1;
   s[chosen.type]=Math.max(0,s[chosen.type]-reduction);
   animateBattleFx(chosen.type,s[chosen.type]===0);
+  // Griffin retaliation: a surviving griffin stack damages the adjacent enemy.
+  if(chosen.type==='griffins'&&s.griffins>0){
+   const retaliation=Math.min(4,Math.max(1,Math.ceil(s.griffins/2)));
+   battle.hp=Math.max(0,battle.hp-retaliation);
+   animateBattleFx('enemy',battle.hp===0);
+   if(battle.hp===0)battle.enemyFallen=true
+  }
  }else if(firstStep){
   battle.ex=firstStep[0];battle.ey=firstStep[1]
  }
@@ -611,16 +620,17 @@ function drawTactics(){
 }
 function updateBattle(t='Selecciona una unidad, muévela a una casilla resaltada o ataca al enemigo.'){if(!battle)return;if(battle.selected==='soldiers'&&s.soldiers===0)battle.selected='archers';if(!battleUnitReady(battle.selected))battle.selected=battleNextUnit()||battle.selected;drawTactics();$('ally').textContent=`${s.soldiers} soldados · ${s.archers} arqueros · ${s.griffins} grifos · ${s.dragons} dragones · fuerza ${strength()}`;$('enemy').textContent=`Resistencia ${Math.max(0,battle.hp)} · ronda ${battle.round}`;$('selected-unit').textContent='Unidad seleccionada: '+(battle.selected==='soldiers'?'Soldados · alcance 1':battle.selected==='archers'?'Arqueros · alcance 3':battle.selected==='griffins'?'Grifos · vuelo 3, alcance 1':'Dragones · vuelo 2, alcance 2');$('unit-soldier').disabled=!battleUnitReady('soldiers');$('unit-archer').disabled=!battleUnitReady('archers');$('unit-griffin').disabled=!battleUnitReady('griffins');$('unit-dragon').disabled=!battleUnitReady('dragons');$('battle-log').textContent=t}
 function loseBattle(){const rivalFight=!!(battle&&battle.rival);battle=null;$('modal').hidden=true;message(rivalFight?'El Reino Umbrío ha vencido a tu ejército. Recluta nuevas tropas para continuar.':'Tu ejército ha sido derrotado. Recluta nuevas tropas.')}
-function hit(defend){if(!battle)return;if(!battleUnitReady(battle.selected))return updateBattle('Esta unidad ya ha actuado. Selecciona otra disponible.');if(!defend&&!battleCount(battle.selected))return updateBattle('Selecciona una unidad disponible antes de atacar.');if(defend)battle.defending=true;let [ux,uy]=pos(battle.selected),dist=Math.abs(ux-battle.ex)+Math.abs(uy-battle.ey),range=battleRange(battle.selected);if(!defend&&dist>range)return updateBattle('El enemigo está fuera del alcance de la unidad seleccionada.');
- if(!defend&&battle.selected==='archers'&&dist<=1)return updateBattle('Los arqueros necesitan separarse del enemigo para disparar.');
- if(!defend&&battle.selected==='archers'&&((ux===battle.ex&&battle.obstacles?.some(p=>p[0]===ux&&p[1]>Math.min(uy,battle.ey)&&p[1]<Math.max(uy,battle.ey)))||(uy===battle.ey&&battle.obstacles?.some(p=>p[1]===uy&&p[0]>Math.min(ux,battle.ex)&&p[0]<Math.max(ux,battle.ex)))))return updateBattle('Una roca bloquea la línea de tiro de los arqueros.');let damage=defend?0:battle.selected==='archers'?Math.max(1,s.archers*2):battle.selected==='griffins'?Math.max(1,s.griffins*3):battle.selected==='dragons'?Math.max(1,s.dragons*7):Math.max(1,s.soldiers+(s.buildings.includes('forge')?2:0)+(s.faction==='Reino Umbrío'?2:0));battle.hp-=damage;if(!defend){animateBattleFx('enemy',battle.hp<=0);if(battle.selected==='archers')fireBattleProjectile()}if(battle.hp<=0){
+function hitResolveVictory(){if(!battle)return;
  if(battle.rival){
   const v=rivalState();v.defeated=true;v.recovery=0;v.soldiers=0;v.archers=0;
   s.gold+=Math.min(200,v.gold);s.experience+=80;
   s.message='⚔️ Has derrotado al héroe del Reino Umbrío. Sus territorios permanecen bajo control rival hasta conquistarlos.';
   battle=null;$('modal').hidden=true;render();return
  }
- let isFort=battle.fort,k=battle.k;s.x=battle.x;s.y=battle.y;s.moves=Math.max(0,s.moves-movementCost(battle.x,battle.y));if(!s.taken.includes(k))s.taken.push(k);if(outposts.includes(k)&&!s.claimed.includes(k)){s.claimed.push(k);s.gold+=150;s.experience+=25;const rival=rivalState();rival.claimed=rival.claimed.filter(v=>v!==k)}if(isFort){s.experience+=100;s.done=true;s.message='🏆 ¡Victoria! Has conquistado el castillo y ganado la campaña.'}else{s.gold+=110;s.experience+=15;s.message=outposts.includes(k)?'🏯 Fortaleza conquistada. Recibes 260 de oro.':'⚔️ Guardianes derrotados. Obtienes 110 de oro.'}battle=null;$('modal').hidden=true;reveal();render();return}if(!defend&&battle.selected==='soldiers'&&dist===1&&!battle.counterUsed){
+ let isFort=battle.fort,k=battle.k;s.x=battle.x;s.y=battle.y;s.moves=Math.max(0,s.moves-movementCost(battle.x,battle.y));if(!s.taken.includes(k))s.taken.push(k);if(outposts.includes(k)&&!s.claimed.includes(k)){s.claimed.push(k);s.gold+=150;s.experience+=25;const rival=rivalState();rival.claimed=rival.claimed.filter(v=>v!==k)}if(isFort){s.experience+=100;s.done=true;s.message='🏆 ¡Victoria! Has conquistado el castillo y ganado la campaña.'}else{s.gold+=110;s.experience+=15;s.message=outposts.includes(k)?'🏯 Fortaleza conquistada. Recibes 260 de oro.':'⚔️ Guardianes derrotados. Obtienes 110 de oro.'}battle=null;$('modal').hidden=true;reveal();render();return}
+function hit(defend){if(!battle)return;if(!battleUnitReady(battle.selected))return updateBattle('Esta unidad ya ha actuado. Selecciona otra disponible.');if(!defend&&!battleCount(battle.selected))return updateBattle('Selecciona una unidad disponible antes de atacar.');if(defend){if(!battle.guarding)battle.guarding=[];battle.guarding.push(battle.selected);}let [ux,uy]=pos(battle.selected),dist=Math.abs(ux-battle.ex)+Math.abs(uy-battle.ey),range=battleRange(battle.selected);if(!defend&&dist>range)return updateBattle('El enemigo está fuera del alcance de la unidad seleccionada.');
+ if(!defend&&battle.selected==='archers'&&dist<=1)return updateBattle('Los arqueros necesitan separarse del enemigo para disparar.');
+ if(!defend&&battle.selected==='archers'&&((ux===battle.ex&&battle.obstacles?.some(p=>p[0]===ux&&p[1]>Math.min(uy,battle.ey)&&p[1]<Math.max(uy,battle.ey)))||(uy===battle.ey&&battle.obstacles?.some(p=>p[1]===uy&&p[0]>Math.min(ux,battle.ex)&&p[0]<Math.max(ux,battle.ex)))))return updateBattle('Una roca bloquea la línea de tiro de los arqueros.');let damage=defend?0:battle.selected==='archers'?Math.max(1,s.archers*2):battle.selected==='griffins'?Math.max(1,s.griffins*3):battle.selected==='dragons'?Math.max(1,s.dragons*7):Math.max(1,s.soldiers+(s.buildings.includes('forge')?2:0)+(s.faction==='Reino Umbrío'?2:0));battle.hp-=damage;if(!defend){animateBattleFx('enemy',battle.hp<=0);if(battle.selected==='archers'||battle.selected==='dragons')fireBattleProjectile()}if(battle.hp<=0)return hitResolveVictory();if(!defend&&battle.selected==='soldiers'&&dist===1&&!battle.counterUsed){
  battle.counterUsed=true;
  if(s.soldiers>0)s.soldiers=Math.max(0,s.soldiers-1);
  animateBattleFx('soldiers',s.soldiers===0);
