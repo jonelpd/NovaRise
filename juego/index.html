@@ -201,6 +201,60 @@ function terrainKind(x,y){
 function hostileAt(k){
  return (monsters.includes(k)&&!s.taken.includes(k))||(outposts.includes(k)&&!s.claimed.includes(k))||(k===fort&&!s.done)
 }
+// Navegación de precisión sobre la imagen: máscara 80x80 extraída del mapa aportado.
+let navBlocked=null;
+fetch('./nav-terrain.json').then(r=>{if(!r.ok)throw Error('Máscara no disponible');return r.json()}).then(data=>{
+ if(data.size!==80)throw Error('Resolución de navegación incorrecta');
+ const bytes=Uint8Array.from(atob(data.blocked),c=>c.charCodeAt(0));
+ if(bytes.length!==800)throw Error('Máscara incompleta');
+ navBlocked=Array.from({length:6400},(_,i)=>!!(bytes[i>>3]&(128>>(i&7))));
+}).catch(e=>{console.error('Navegación no disponible',e);});
+const NAV=80;
+function navCell(x,y){return y*NAV+x}
+function navFree(x,y){return x>=1&&y>=1&&x<NAV-1&&y<NAV-1&&navBlocked&&!navBlocked[navCell(x,y)]}
+function nearestNav(px,py){
+ const cx=Math.max(1,Math.min(78,Math.floor(px*.8))),cy=Math.max(1,Math.min(78,Math.floor(py*.8)));
+ for(let radius=0;radius<80;radius++)for(let dy=-radius;dy<=radius;dy++)for(let dx=-radius;dx<=radius;dx++){
+  if(Math.max(Math.abs(dx),Math.abs(dy))!==radius)continue;
+  if(navFree(cx+dx,cy+dy))return [cx+dx,cy+dy];
+ }
+ return null
+}
+function fineRoute(a,b){
+ if(!navBlocked)return null;
+ const start=nearestNav(...a),goal=nearestNav(...b);if(!start||!goal)return null;
+ const src=navCell(...start),dst=navCell(...goal),dist=new Float64Array(6400).fill(Infinity),prev=new Int32Array(6400).fill(-1),closed=new Uint8Array(6400);
+ dist[src]=0;
+ const heuristic=(id)=>Math.hypot(id%80-goal[0],Math.floor(id/80)-goal[1]);
+ const open=[src];
+ while(open.length){
+  let best=0;for(let i=1;i<open.length;i++)if(dist[open[i]]+heuristic(open[i])<dist[open[best]]+heuristic(open[best]))best=i;
+  const id=open.splice(best,1)[0];if(closed[id])continue;closed[id]=1;if(id===dst)break;
+  const x=id%80,y=Math.floor(id/80);
+  for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]]){
+   const nx=x+dx,ny=y+dy;if(!navFree(nx,ny)||dx&&dy&&(!navFree(x+dx,y)||!navFree(x,y+dy)))continue;
+   const ni=navCell(nx,ny),cost=dist[id]+Math.hypot(dx,dy);
+   if(cost<dist[ni]){dist[ni]=cost;prev[ni]=id;open.push(ni)}
+  }
+ }
+ if(!Number.isFinite(dist[dst]))return null;
+ const result=[];for(let p=dst;p!==src;p=prev[p]){if(p<0)return null;result.push([((p%80)+.5)*1.25,(Math.floor(p/80)+.5)*1.25])}
+ return result.reverse()
+}
+function logicalHeroPoint(x,y){return HERO_LANDMARK_ANCHORS[key(x,y)]||[(x+.5)*10,(y+.5)*10]}
+function safeHeroPoint(x,y){
+ const point=logicalHeroPoint(x,y);if(!navBlocked)return point;
+ const cell=nearestNav(...point);return cell?[(cell[0]+.5)*1.25,(cell[1]+.5)*1.25]:point
+}
+async function travelFinePath(path,epoch){
+ if(!path)return false;
+ for(let i=0;i<path.length;i++){
+  if(epoch!==walkEpoch||battle||!$('adventure-discovery').hidden||!$('castle-screen').hidden)return false;
+  if(persistentHero){persistentHero.style.left=path[i][0]+'%';persistentHero.style.top=path[i][1]+'%'}
+  if(i%3===0)await new Promise(resolve=>setTimeout(resolve,24));
+ }
+ return true
+}
 function findRoute(tx,ty){
  const start=key(s.x,s.y),target=key(tx,ty);
  if(tx<0||ty<0||tx>=W||ty>=H||water.includes(target))return null;
@@ -254,11 +308,16 @@ function walkTo(tx,ty){
  if(walking||battle||s.done||!$('adventure-discovery').hidden||!$('castle-screen').hidden)return;
  if(tx===s.x&&ty===s.y)return visitKnownLocation(tx,ty);
  if(s.moves<=0)return message('No quedan movimientos. Termina el turno.');
+ if(!navBlocked)return message('Preparando los caminos del mapa. Inténtalo en unos segundos.');
  const route=findRoute(tx,ty);if(!route)return message('No existe una ruta conocida hasta ese lugar.');
  clearAdventureRoute();const epoch=++walkEpoch;
  walking=true;let index=0;
- function step(){if(epoch!==walkEpoch){walking=false;return}if(index>=route.length||s.moves<=0||battle||s.done){walking=false;clearAdventureRoute();return}
-  let [x,y]=route[index++],beforeX=s.x,beforeY=s.y;move(x,y);
+ async function step(){if(epoch!==walkEpoch){walking=false;return}if(index>=route.length||s.moves<=0||battle||s.done){walking=false;clearAdventureRoute();return}
+  let [x,y]=route[index++],beforeX=s.x,beforeY=s.y;
+  const fine=fineRoute(safeHeroPoint(beforeX,beforeY),safeHeroPoint(x,y));
+  if(!fine){walking=false;clearAdventureRoute();return message('No hay paso libre por el terreno hasta ese destino. Elige otro camino.');}
+  if(!await travelFinePath(fine,epoch)){walking=false;clearAdventureRoute();return}
+  move(x,y);
   if(battle||!$('adventure-discovery').hidden||!$('castle-screen').hidden||s.x===beforeX&&s.y===beforeY){walking=false;clearAdventureRoute();return}
   if(index<route.length&&s.moves>=movementCost(route[index][0],route[index][1])&&$('adventure-discovery').hidden&&$('castle-screen').hidden)setTimeout(step,230);else {walking=false;if(index>=route.length&&!battle&&!s.done&&(key(tx,ty)==='1,1'||key(tx,ty)==='4,7'&&s.claimed.includes('4,7')))setTimeout(()=>{if(epoch===walkEpoch&&!walking&&!battle&&s.x===tx&&s.y===ty&&$('adventure-discovery').hidden&&$('castle-screen').hidden)visitKnownLocation(tx,ty)},260)}
  }
@@ -339,9 +398,7 @@ function setupCastleScreen(){
 }
 const HERO_LANDMARK_ANCHORS={'1,1':[11.8,12.1],'8,3':[78.4,28.1],'4,7':[46.3,77.3],'0,9':[7.5,93]};
 function heroVisualPosition(){
- const exact=HERO_LANDMARK_ANCHORS[key(s.x,s.y)];if(exact)return exact;
- // Posición de respaldo sobre la cuadrícula mientras se desarrolla una malla de caminos.
- return [(s.x+.5)*10,(s.y+.5)*10]
+ return safeHeroPoint(s.x,s.y)
 }
 let persistentHero=null,lastHeroCoords=null;
 function drawMountedHero(map){
