@@ -344,3 +344,13 @@ body.interest-modal-open{overflow:hidden}
 .nvra-simple .interest-modal-close{margin-top:15px;background:#a2f5c8;color:#08251c;border:0;border-radius:9px;padding:12px 26px;font-weight:750;cursor:pointer}
 body.interest-modal-open{overflow:hidden}
 @media(max-width:520px){.nvra-simple .simple-participation button[type=submit]{width:100%}}
+
+/* NovaRise: accessible applications dropdown (ES / EN). */
+.simple-nav nav .simple-app-menu{position:relative;display:inline-block;align-self:center}
+.simple-nav nav .simple-app-menu summary{display:flex;align-items:center;gap:.35rem;list-style:none;cursor:pointer;color:inherit;font:inherit;padding:.5rem .8rem;border-radius:9px;border:1px solid rgba(117,207,198,.35);background:rgba(48,145,148,.12);white-space:nowrap}
+.simple-nav nav .simple-app-menu summary::-webkit-details-marker{display:none}
+.simple-nav nav .simple-app-menu summary:hover,.simple-nav nav .simple-app-menu[open] summary{border-color:#69d4c5;background:rgba(48,145,148,.24)}
+.simple-nav nav .simple-app-dropdown{position:absolute;right:0;top:calc(100% + 7px);z-index:100;min-width:235px;padding:7px;border:1px solid rgba(117,207,198,.4);border-radius:11px;background:#10242c;box-shadow:0 12px 30px rgba(0,0,0,.35)}
+.simple-nav nav .simple-app-dropdown a{display:block;padding:11px 13px;color:#f1f8f5;text-decoration:none;border-radius:7px;white-space:normal}
+.simple-nav nav .simple-app-dropdown a:hover,.simple-nav nav .simple-app-dropdown a:focus-visible{background:#244e56}
+@media(max-width:760px){.simple-nav nav .simple-app-menu{width:100%}.simple-nav nav .simple-app-menu summary{justify-content:space-between}.simple-nav nav .simple-app-dropdown{position:static;min-width:0;margin-top:6px;box-shadow:none}}
