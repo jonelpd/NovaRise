@@ -1047,15 +1047,16 @@ if(arena){
    const wood=new THREE.Mesh(woodGeo,trunk);wood.position.set(x,.65*scale,z);wood.scale.setScalar(scale);wood.castShadow=true;scene.add(wood);
    const crown=new THREE.Mesh(treeGeo,i%2?leaf:leaf2);crown.position.set(x,2.45*scale,z);crown.scale.setScalar(scale);crown.castShadow=true;scene.add(crown)
   }
+  const tiles=[];const rocks=[];
   const tileMat=mat(0x8b9c68);
   for(let row=0;row<5;row++)for(let col=0;col<6;col++){
    const tile=new THREE.Mesh(new THREE.BoxGeometry(2.9,.12,3),row%2===col%2?tileMat:earth);
    tile.position.set((col-2.5)*3.03,-.08,(row-2)*3.03);
-   tile.receiveShadow=true;scene.add(tile)
+   tile.receiveShadow=true;scene.add(tile);tiles.push(tile)
   }
   for(const [x,y] of [[2,0],[3,4],[2,3]]){
    const rock=new THREE.Mesh(new THREE.DodecahedronGeometry(.85,0),stone);
-   rock.position.set((x-2.5)*3.03,.52,(y-2)*3.03);rock.scale.set(1.1,.75,.9);rock.castShadow=true;scene.add(rock)
+   rock.position.set((x-2.5)*3.03,.52,(y-2)*3.03);rock.scale.set(1.1,.75,.9);rock.castShadow=true;scene.add(rock);rocks.push({rock,x,y})
   }
 
   // Original procedural 3D troop models; positions follow the tactical DOM grid.
@@ -1101,6 +1102,29 @@ if(arena){
    root.scale.setScalar(type==='dragons'?.8:type==='griffins'?.75:.85);
    return root
   }
+  // Map each HTML tactical square to its actual position on the WebGL ground.
+  // This keeps models, clicks and highlights aligned at every viewport size.
+  const raycaster=new THREE.Raycaster(),groundPlane=new THREE.Plane(new THREE.Vector3(0,1,0),0);
+  const groundPoint=new THREE.Vector3(),pointer=new THREE.Vector2();
+  const worldCell=(cell)=>{
+   const a=arena.getBoundingClientRect(),r=cell.getBoundingClientRect();
+   pointer.set(((r.left+r.width/2-a.left)/a.width)*2-1,1-((r.top+r.height/2-a.top)/a.height)*2);
+   raycaster.setFromCamera(pointer,camera);
+   return raycaster.ray.intersectPlane(groundPlane,groundPoint)?groundPoint.clone():null
+  };
+  function alignTerrain(){
+   const cells=arena.querySelectorAll('#tactics .combat-cell');
+   if(cells.length!==30)return;
+   const p0=worldCell(cells[0]),p1=worldCell(cells[1]),p6=worldCell(cells[6]);
+   if(!p0||!p1||!p6)return;
+   const dx=p0.distanceTo(p1),dz=p0.distanceTo(p6);
+   cells.forEach((cell,i)=>{
+    const p=worldCell(cell);if(!p)return;
+    tiles[i].position.set(p.x,-.10,p.z);
+    tiles[i].scale.set(Math.max(.2,dx/3.03),1,Math.max(.2,dz/3.03))
+   });
+   rocks.forEach(({rock,x,y})=>{const p=worldCell(cells[y*6+x]);if(p)rock.position.set(p.x,.55,p.z)});
+  }
   function syncTroops(){
    const cells=arena.querySelectorAll('#tactics .combat-cell');
    const active=new Set();
@@ -1111,11 +1135,12 @@ if(arena){
     active.add(type);
     let obj=troopMeshes.get(type);
     if(!obj){obj=troop(type);scene.add(obj);troopMeshes.set(type,obj)}
-    const x=index%6,y=Math.floor(index/6);
-    const targetX=(x-2.5)*3.03,targetZ=(y-2)*3.03;
+    const p=worldCell(cell);if(!p)return;
+    const targetX=p.x,targetZ=p.z;
     obj.position.x+=(targetX-obj.position.x)*.3;
     obj.position.z+=(targetZ-obj.position.z)*.3;
     obj.position.y=Math.sin(performance.now()*.0015+index)*.035;
+    obj.scale.setScalar(type==='dragons'?.78:type==='griffins'?.73:.8);
     obj.rotation.y=type==='enemy'?-Math.PI/2:Math.PI/2;
    });
    for(const [type,obj] of troopMeshes)if(!active.has(type)){scene.remove(obj);troopMeshes.delete(type)}
@@ -1124,12 +1149,15 @@ if(arena){
   let w=0,h=0;
   const resize=()=>{const rect=arena.getBoundingClientRect();const nw=Math.max(1,Math.floor(rect.width)),nh=Math.max(1,Math.floor(rect.height));if(nw!==w||nh!==h){w=nw;h=nh;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix()}};
   const observer=new ResizeObserver(resize);observer.observe(arena);resize();
+  let lastLayout='';
   let frame=0;
   const animate=()=>{if(!arena.isConnected){observer.disconnect();renderer.dispose();return}
    frame=requestAnimationFrame(animate);
    if(document.hidden||arena.closest('#modal')?.hidden)return;
-   const t=performance.now()*.00013;camera.position.x=Math.sin(t)*.5;camera.lookAt(0,0,-2);resize();syncTroops();renderer.render(scene,camera)
+   camera.position.x=0;camera.lookAt(0,0,-2);resize();const layout=w+','+h+','+arena.querySelector('#tactics')?.clientHeight;if(layout!==lastLayout){lastLayout=layout;alignTerrain()}syncTroops();renderer.render(scene,camera)
   };
+  // Keep the 2D figures visible until WebGL has rendered a complete frame.
+  renderer.render(scene,camera);
   arena.classList.add('webgl-ready');
   animate();
   window.addEventListener('pagehide',()=>{cancelAnimationFrame(frame);observer.disconnect();renderer.dispose()},{once:true});
