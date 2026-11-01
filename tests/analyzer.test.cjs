@@ -66,6 +66,17 @@ assert.match(html,/href="en\.html"/);
 assert.match(english,/href="index\.html"/);
 const script=fs.readFileSync('assets/analyzer.js','utf8');
 const translations=fs.readFileSync('assets/locale-en.js','utf8');
+// Analytics 2.0: bilingual print-to-PDF controls and scoped print styles.
+for(const page of [html,english]){
+ assert.match(page,/id="report-tools"/);
+ assert.match(page,/id="print-report"/);
+}
+assert.match(html,/Guardar como PDF/);
+assert.match(english,/Save as PDF/);
+assert.match(script,/printing-nvra-report/);
+assert.match(sharedCss,/@media print/);
+assert.match(sharedCss,/#report/);
+
 for(const page of [html,english]){
  assert.match(page,/src="assets\/locale-en\.js(?:\?[^"]*)?"/);
  assert.match(page,/src="assets\/analyzer\.js(?:\?[^"]*)?"/);
