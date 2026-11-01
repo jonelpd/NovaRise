@@ -707,7 +707,7 @@ function walkTo(tx,ty){
  }
  step()
 }
-function showBattle(){if(battle){battle.maxMana=heroStats().maxMana;battle.mana=battle.maxMana;battle.magicRound=-1;battle.initialCounts={soldiers:s.soldiers,archers:s.archers,griffins:s.griffins,dragons:s.dragons};setupBattleMagic();setupHeroPanel();battle.obstacles=[[2,0],[3,4],[2,3]];battle.phase=0;battle.counterUsed=false;battle.initiative=battle.rival?'enemy':'player';battle.defending=false;battle.guarding=[];battle.gx=1;battle.gy=1;battle.dx=1;battle.dy=4;battle.selected=s.soldiers?'soldiers':s.archers?'archers':s.griffins?'griffins':'dragons';battle.acted=[];battle.selected=battleNextUnit()||battle.selected;if(heroSpecializationBonus().guard&&battle.selected){battle.guarding.push(battle.selected);if(heroSkillUnlocked(4)){const extra=BATTLE_INITIATIVE.find(t=>t!==battle.selected&&battleCount(t));if(extra)battle.guarding.push(extra)}}}if(battle)$('battle-title').textContent=battle.rival?'⚔️ Duelo de héroes · Reino Umbrío':battle.fort?'🏰 Asedio al castillo':'⚔️ Campo de batalla';if(s.soldiers+s.archers+s.griffins+s.dragons===0){battle=null;return message('Necesitas reclutar tropas para combatir.')} clearAdventureRoute();$('modal').hidden=false;if(battle.initiative==='enemy'){enemyAdvance();if(battle.enemyFallen){battle.enemyFallen=false;return hitResolveVictory()}if(s.soldiers+s.archers+s.griffins+s.dragons<=0)return loseBattle();updateBattle('El ejército rival toma la iniciativa. Ahora es tu turno.')}else updateBattle('Tu ejército toma la iniciativa. Selecciona una unidad.')}function pos(unit){return unit==='archers'?[battle.rx,battle.ry]:unit==='griffins'?[battle.gx,battle.gy]:unit==='dragons'?[battle.dx,battle.dy]:[battle.sx,battle.sy]}
+function showBattle(){if(battle){battle.maxMana=heroStats().maxMana;battle.mana=battle.maxMana;battle.magicRound=-1;battle.initialCounts={soldiers:s.soldiers,archers:s.archers,griffins:s.griffins,dragons:s.dragons};setupBattleMagic();setupHeroPanel();battle.obstacles=[[2,0],[3,4],[2,3]];battle.phase=0;battle.counterUsed=false;battle.initiative=battle.defenseSiteId?'player':battle.rival?'enemy':'player';battle.defending=!!battle.defenseSiteId;battle.guarding=[];battle.gx=1;battle.gy=1;battle.dx=1;battle.dy=4;battle.selected=s.soldiers?'soldiers':s.archers?'archers':s.griffins?'griffins':'dragons';battle.acted=[];battle.selected=battleNextUnit()||battle.selected;if(heroSpecializationBonus().guard&&battle.selected){battle.guarding.push(battle.selected);if(heroSkillUnlocked(4)){const extra=BATTLE_INITIATIVE.find(t=>t!==battle.selected&&battleCount(t));if(extra)battle.guarding.push(extra)}}}if(battle)$('battle-title').textContent=battle.defenseSiteId?'🛡️ Defensa de '+CASTLE_PROFILES[battle.defenseSiteId].name:battle.rival?'⚔️ Duelo de héroes · Reino Umbrío':battle.fort?'🏰 Asedio al castillo':'⚔️ Campo de batalla';if(s.soldiers+s.archers+s.griffins+s.dragons===0){battle=null;return message('Necesitas reclutar tropas para combatir.')} clearAdventureRoute();$('modal').hidden=false;if(battle.initiative==='enemy'){enemyAdvance();if(battle.enemyFallen){battle.enemyFallen=false;return hitResolveVictory()}if(s.soldiers+s.archers+s.griffins+s.dragons<=0)return loseBattle();updateBattle('El ejército rival toma la iniciativa. Ahora es tu turno.')}else updateBattle('Tu ejército toma la iniciativa. Selecciona una unidad.')}function pos(unit){return unit==='archers'?[battle.rx,battle.ry]:unit==='griffins'?[battle.gx,battle.gy]:unit==='dragons'?[battle.dx,battle.dy]:[battle.sx,battle.sy]}
 function renderBattleInitiative(){
  const panel=document.querySelector('#modal .battle .novarise-initiative');
  if(!panel||!battle)return;
@@ -1283,6 +1283,8 @@ function siteGarrison(id){
   g={stock:{...profile.stock},guard:{...profile.guard}};
   state.garrisons[id]=g;
  }
+ if(!g.defenders||typeof g.defenders!=='object')g.defenders={soldiers:0,archers:0,griffins:0,dragons:0};
+ for(const type of Object.keys(CASTLE_RECRUIT_COST)){g.defenders[type]=Math.max(0,Math.floor(Number(g.defenders[type])||0));g.stock[type]=Math.max(0,Math.floor(Number(g.stock[type])||0))}
  return g
 }
 function recruitFromCastle(site){
@@ -1394,7 +1396,7 @@ function finishDefensiveSiege(won){
  const history=Array.isArray(s.siegeHistory)?s.siegeHistory:[];
  history.unshift({turn:s.turn,castle,outcome,details:'Batalla táctica dirigida por el jugador',won,attackerBefore:enemyBefore,attackerAfter:{soldiers:v.soldiers,archers:v.archers},defenderBefore:before,defenderAfter:after});
  s.siegeHistory=history.slice(0,12);
- battle=null;$('modal').hidden=true;message(outcome);return true
+ battle=null;$('modal').hidden=true;message(outcome);render();return true
 }
 function launchDefensiveSiege(site){
  const g=siteGarrison(site.id),d=g.defenders||{};
@@ -1413,11 +1415,10 @@ function rivalCastleConquest(){
  const guard=siteGarrison(target.site.id);
  if(!guard.defenders)guard.defenders={soldiers:0,archers:0,griffins:0,dragons:0};
  const d=guard.defenders,castle=CASTLE_PROFILES[target.site.id].name;
- if(Object.values(d).some(n=>n>0)&&typeof window!=='undefined'&&confirm('🏰 ¡'+castle+' está bajo ataque!\\n¿Quieres dirigir personalmente a la guarnición en el campo de batalla?\\nAceptar: batalla táctica. Cancelar: defensa automática.')){
-  launchDefensiveSiege(target.site);
-  return '⚔️ Has asumido el mando de la defensa de '+castle+'.';
+ if(Object.values(d).some(n=>n>0)&&typeof window!=='undefined'){
+  s.pendingDefensiveSiege=target.site.id;
+  return '🛡️ '+castle+' está bajo ataque. Prepara la defensa.';
  }
-
  const initialDefenders={...d},initialAttackers={soldiers:v.soldiers,archers:v.archers};
  let attackers={soldiers:Math.max(0,v.soldiers),archers:Math.max(0,v.archers)};
  const power=()=>d.soldiers+2*d.archers+5*d.griffins+14*d.dragons;
@@ -1710,7 +1711,15 @@ async function rivalTurn(){
    if(s.buildings.includes('barracks'))s.soldiers++;
    s.crystals+=mineYield();applyVerifiedSiteTurn();
    lastCameraKey=null;render();
-   if(s.rivalEncounterPending){s.rivalEncounterPending=false;rivalEncounter()}
+   if(s.pendingDefensiveSiege){
+    const site=VERIFIED_MAP_SITES.find(t=>t.id===s.pendingDefensiveSiege);
+    s.pendingDefensiveSiege=null;
+    if(site&&verifiedSiteState()[site.id]==='player'){
+     if(confirm('🏰 ¡'+CASTLE_PROFILES[site.id].name+' está bajo ataque!\\n¿Dirigir personalmente la guarnición?\\nCancelar: defensa automática.'))launchDefensiveSiege(site);
+     else{s.message=rivalCastleConquest();render()}
+    }
+   }
+   if(!battle&&s.rivalEncounterPending){s.rivalEncounterPending=false;rivalEncounter()}
   }
  }
 }
@@ -1723,7 +1732,7 @@ function updateSiegeReport(){
  const siegeArmy=(army,enemy)=>Object.entries({soldiers:'Soldados',archers:'Arqueros',griffins:'Grifos',dragons:'Dragones'}).filter(([key])=>(army?.[key]||0)>0).map(([key,name])=>'<div class="siege-unit"><img src="./sprites/'+(enemy?'rival':key)+'-idle.png" alt="'+name+'" loading="lazy"><small>'+name+' ×'+Number(army[key])+'</small></div>').join('')||'<small>Sin tropas</small>';
  const framesMarkup=entry=>Array.isArray(entry.frames)&&entry.frames.length?'<div class="siege-replay"><button type="button" class="siege-prev" aria-label="Ronda anterior">◀</button><span class="siege-round" aria-live="polite">Preparación</span><button type="button" class="siege-next" aria-label="Siguiente ronda">▶</button></div>':'';
  const summary=(before,after)=>Object.keys(units).filter(k=>(before?.[k]||0)>0||(after?.[k]||0)>0).map(k=>units[k]+': '+(before?.[k]||0)+' → '+(after?.[k]||0)+' (bajas '+Math.max(0,(before?.[k]||0)-(after?.[k]||0))+')').join(' · ')||'Sin tropas';
- panel.innerHTML=entries.map(entry=>'<section style="border-bottom:1px solid #9d865766;padding:9px 0"><strong>Turno '+escape(entry.turn)+' · '+escape(entry.castle)+'</strong><p>'+escape(entry.outcome)+'</p><div class="siege-field"><div class="siege-side">'+siegeArmy(entry.attackerBefore,true)+'</div><div class="siege-versus">VS</div><div class="siege-side">'+siegeArmy(entry.defenderBefore,false)+'</div></div>'+framesMarkup(entry)+'<small>⚔️ Atacantes: '+escape(summary(entry.attackerBefore,entry.attackerAfter))+'</small><p><small>🛡️ Defensores: '+escape(summary(entry.defenderBefore,entry.defenderAfter))+'</small></p><details><summary>Ver rondas</summary><small>'+escape(entry.details)+'</small></details></section>').join('');
+ panel.innerHTML=entries.map(entry=>'<section style="border-bottom:1px solid #9d865766;padding:9px 0"><strong>Turno '+escape(entry.turn)+' · '+escape(entry.castle)+'</strong><p>'+escape(entry.outcome)+'</p><div class="siege-field" data-siege-index="'+entries.indexOf(entry)+'"><div class="siege-side">'+siegeArmy(entry.attackerBefore,true)+'</div><div class="siege-versus">VS</div><div class="siege-side">'+siegeArmy(entry.defenderBefore,false)+'</div></div>'+framesMarkup(entry)+'<small>⚔️ Atacantes: '+escape(summary(entry.attackerBefore,entry.attackerAfter))+'</small><p><small>🛡️ Defensores: '+escape(summary(entry.defenderBefore,entry.defenderAfter))+'</small></p><details><summary>Ver rondas</summary><small>'+escape(entry.details)+'</small></details></section>').join('');
 }
 function bindSiegeReplays(){
  const root=$('siege-report-content');if(!root)return;
