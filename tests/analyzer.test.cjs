@@ -263,3 +263,9 @@ assert.match(script,/flaggedKeys\.has\('is_mintable'\)/);
 assert.match(script,/if\(unavailable\)recommendations\.push/);
 assert.match(script,/if\(!known\)recommendations\.push/);
 assert.match(script,/report\.append\(conclusions\)/);
+
+/* Historical volume charts must retain time gaps instead of compressing missing intervals. */
+assert.match(script,/points\.map\(p=>p\[metric\]\)\.filter\(Number\.isFinite\)/);
+assert.match(script,/if\(!Number\.isFinite\(p\.volume\)\)return/);
+assert.match(script,/drawHistoricalChart\(available,volumePlot,'volume'\)/);
+assert.match(script,/drawHistoricalChart\(available,plots,'volume'\)/);
