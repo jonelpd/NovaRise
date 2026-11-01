@@ -7,11 +7,12 @@ const report=document.getElementById('report');
 const empty=document.getElementById('empty');
 const analyzeButton=document.getElementById('analyze');
 const reportTools=document.getElementById('report-tools');
+if(typeof window!=='undefined'&&window.addEventListener)window.addEventListener('afterprint',()=>document.body.classList.remove('printing-nvra-report'));
 const printReportButton=document.getElementById('print-report');
 if(printReportButton)printReportButton.addEventListener('click',()=>{
  if(!report||report.classList.contains('hidden')||!report.textContent.trim())return;
  document.body.classList.add('printing-nvra-report');
- try{window.print();}finally{document.body.classList.remove('printing-nvra-report');}
+ try{window.print();}catch(error){document.body.classList.remove('printing-nvra-report');throw error;}
 });
 
 const endpointChains={'Base':'8453','Ethereum':'1','Polygon':'137','BNB Smart Chain':'56'};
