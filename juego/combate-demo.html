@@ -1183,28 +1183,72 @@ function selectWorldDestination(x,y){
  if(s.x===x&&s.y===y)return visitKnownLocation(x,y);
  walkTo(x,y)
 }
+// Localizaciones verificadas en el mapa señalado por el usuario (porcentaje de imagen).
+// Las zonas son transparentes; las anotaciones de colores nunca se dibujan.
+const VERIFIED_MAP_SITES=[
+ {id:'home',label:'Castillo del jugador',x:11.8,y:12.1,w:6,h:6,kind:'home',k:'1,1'},
+ {id:'rival',label:'Castillo enemigo',x:7.5,y:93,w:8,h:8,kind:'rival',k:'0,9'},
+ {id:'fort-west',label:'Castillo independiente occidental',x:32.2,y:37.7,w:5.5,h:6,kind:'fort'},
+ {id:'fort-center',label:'Castillo independiente central',x:53.3,y:48.5,w:5.5,h:6,kind:'fort'},
+ {id:'fort-east',label:'Castillo independiente oriental',x:87.7,y:55.3,w:6,h:7,kind:'fort'},
+ {id:'fort-north',label:'Castillo independiente septentrional',x:79.3,y:8.2,w:6,h:6,kind:'fort'},
+ {id:'fort-south',label:'Castillo independiente meridional',x:45.7,y:76.5,w:6,h:6,kind:'fort',k:'4,7'},
+ {id:'mine-west',label:'Mina occidental',x:18.5,y:46.5,w:5,h:5,kind:'mine'},
+ {id:'mine-center',label:'Mina central',x:45,y:36.3,w:5,h:5,kind:'mine'},
+ {id:'mine-east',label:'Mina oriental',x:90.6,y:77.5,w:5,h:5,kind:'mine'},
+ {id:'mill-west',label:'Molino occidental',x:19.2,y:54.9,w:5,h:5,kind:'mill'},
+ {id:'mill-lake-west',label:'Molino del lago occidental',x:25.1,y:66.2,w:5,h:5,kind:'mill'},
+ {id:'mill-lake-south',label:'Molino del lago meridional',x:44.4,y:71.2,w:5,h:5,kind:'mill'},
+ {id:'mill-lake-east',label:'Molino del lago oriental',x:57,y:64.7,w:5,h:5,kind:'mill'},
+ {id:'mill-south',label:'Molino del sur',x:41,y:92.9,w:5,h:5,kind:'mill'}
+];
+function verifiedSiteState(){
+ if(!s.verifiedSites||typeof s.verifiedSites!=='object'||Array.isArray(s.verifiedSites))s.verifiedSites={};
+ return s.verifiedSites
+}
+function interactVerifiedSite(site){
+ if(s.done||battle||walking||rivalBusy)return;
+ if(site.k)return selectWorldDestination(...site.k.split(',').map(Number));
+ const [hx,hy]=heroVisualPosition();
+ if(Math.hypot((hx-site.x)*1.0,(hy-site.y)*1.0)>8)return message('Acerca el héroe al '+site.label.toLowerCase()+' para interactuar. El edificio está en el mapa, no es un marcador.');
+ const state=verifiedSiteState();
+ if(site.kind==='fort'){
+  if(!state[site.id]){
+   if(!confirm('¿Atacar '+site.label.toLowerCase()+'? Se requieren al menos 8 puntos de fuerza militar.'))return;
+   if(strength()<8)return message('Necesitas un ejército de al menos 8 puntos de fuerza para conquistar este castillo.');
+   s.soldiers=Math.max(0,s.soldiers-2);state[site.id]='player';s.gold+=50;
+   return message('🏰 Castillo conquistado. +50 de oro y producción de +15 de oro por turno. Has perdido 2 soldados.')
+  }
+  return message('🏰 Castillo bajo tu control. Produce +15 de oro por turno.')
+ }
+ if(site.kind==='mine'){
+  if(!state[site.id]){state[site.id]='player';return message('⛏️ Mina controlada. Produce +10 cristales por turno. Los cristales del juego no son NVRA.')}
+  return message('⛏️ Mina bajo tu control. +10 cristales al finalizar cada turno.')
+ }
+ if(site.kind==='mill'){
+  if(!state[site.id]){state[site.id]='player';return message('🌾 Molino controlado. Genera 1 comida por turno; la comida puede recuperar movimiento al inicio del turno siguiente.')}
+  return message('🌾 Molino bajo tu control. Comida acumulada: '+(s.mapFood||0)+'.')
+ }
+}
+function applyVerifiedSiteTurn(){
+ const owned=verifiedSiteState();
+ const count=kind=>VERIFIED_MAP_SITES.filter(site=>site.kind===kind&&owned[site.id]==='player').length;
+ s.gold+=count('fort')*15;
+ s.crystals+=count('mine')*10;
+ s.mapFood=Math.min(20,Math.max(0,s.mapFood||0)+count('mill'));
+ const extra=Math.min(2,s.mapFood||0);
+ s.moves=Math.min(7,s.moves+extra);
+ s.mapFood-=extra;
+}
 function drawWorldLandmarks(map){
- // Zonas transparentes sobre edificios existentes: ninguna ilustración ni etiqueta tapa el mapa.
- const sites=[
-  {k:'1,1',label:'Tu castillo',x:11.8,y:12.1,w:7.5,h:7.5,kind:'home'},
-  {k:'8,3',label:'Mina de cristales',x:78.4,y:28.1,w:6,h:6,kind:'mine'},
-  {k:'4,7',label:'Castillo independiente',x:46.3,y:77.3,w:8,h:8,kind:'fort'},
-  {k:'0,9',label:'Castillo rival',x:7.5,y:93,w:8,h:8,kind:'rival'}
- ];
- for(const site of sites){
-  const {k,label,x,y,w,h,kind}=site,[tx,ty]=k.split(',').map(Number);
+ for(const site of VERIFIED_MAP_SITES){
   const b=document.createElement('button');b.type='button';
-  b.className='world-hotspot hotspot-'+kind;
-  b.style.left=x+'%';b.style.top=y+'%';b.style.width=w+'%';b.style.height=h+'%';
-  b.setAttribute('aria-label',label);
-  b.title=label+' · '+(s.seen.includes(k)?'seleccionar lugar':'territorio por descubrir');
-  b.disabled=!s.seen.includes(k);
-  b.onclick=()=>{
-   if(!s.seen.includes(k))return message('Explora el territorio para descubrir '+label.toLowerCase()+'.');
-   selectWorldDestination(tx,ty)
-  };
-  b.onmouseenter=()=>{if(s.seen.includes(k))previewRoute(tx,ty)};
-  b.onfocus=()=>{if(s.seen.includes(k))previewRoute(tx,ty)};
+  b.className='world-hotspot hotspot-'+site.kind;
+  b.style.left=(site.x-site.w/2)+'%';b.style.top=(site.y-site.h/2)+'%';
+  b.style.width=site.w+'%';b.style.height=site.h+'%';
+  b.style.background='transparent';b.style.border='0';b.style.boxShadow='none';b.style.opacity='0';
+  b.setAttribute('aria-label',site.label);b.title=site.label;
+  b.onclick=()=>interactVerifiedSite(site);
   map.appendChild(b)
  }
 }
@@ -1311,7 +1355,7 @@ async function rivalTurn(){
   s.turn++;s.moves=s.faction==='Alianza del Alba'?5:4;
   s.gold+=40+25*s.claimed.length+(s.buildings.includes('market')?30:0)+(s.faction==='Guardianes del Bosque'?15:0);
   if(s.buildings.includes('barracks'))s.soldiers++;
-  s.crystals+=mineYield();render();return
+  s.crystals+=mineYield();applyVerifiedSiteTurn();render();return
  }
  v.gold+=65+20*v.claimed.filter(k=>k==='4,7').length;
  const recruits=Math.min(2,Math.floor(v.gold/30));v.soldiers+=recruits;v.gold-=30*recruits;
@@ -1355,7 +1399,7 @@ async function rivalTurn(){
    s.turn++;s.moves=s.faction==='Alianza del Alba'?5:4;
    s.gold+=40+25*s.claimed.length+(s.buildings.includes('market')?30:0)+(s.faction==='Guardianes del Bosque'?15:0);
    if(s.buildings.includes('barracks'))s.soldiers++;
-   s.crystals+=mineYield();
+   s.crystals+=mineYield();applyVerifiedSiteTurn();
    render();
    if(s.rivalEncounterPending){s.rivalEncounterPending=false;rivalEncounter()}
   }
