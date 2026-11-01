@@ -1415,7 +1415,7 @@ function rivalCastleConquest(){
  const guard=siteGarrison(target.site.id);
  if(!guard.defenders)guard.defenders={soldiers:0,archers:0,griffins:0,dragons:0};
  const d=guard.defenders,castle=CASTLE_PROFILES[target.site.id].name;
- if(Object.values(d).some(n=>n>0)&&typeof window!=='undefined'){
+ if(Object.values(d).some(n=>n>0)&&typeof window!=='undefined'&&!s.autoResolveDefensiveSiege){
   s.pendingDefensiveSiege=target.site.id;
   return '🛡️ '+castle+' está bajo ataque. Prepara la defensa.';
  }
@@ -1716,7 +1716,7 @@ async function rivalTurn(){
     s.pendingDefensiveSiege=null;
     if(site&&verifiedSiteState()[site.id]==='player'){
      if(confirm('🏰 ¡'+CASTLE_PROFILES[site.id].name+' está bajo ataque!\\n¿Dirigir personalmente la guarnición?\\nCancelar: defensa automática.'))launchDefensiveSiege(site);
-     else{s.message=rivalCastleConquest();render()}
+     else{s.autoResolveDefensiveSiege=true;try{s.message=rivalCastleConquest()}finally{s.autoResolveDefensiveSiege=false}render()}
     }
    }
    if(!battle&&s.rivalEncounterPending){s.rivalEncounterPending=false;rivalEncounter()}
