@@ -1328,13 +1328,23 @@ function interactVerifiedSite(site){
   return recruitFromCastle(site)
  }
  if(site.kind==='mine'){
-  if(!state[site.id]){state[site.id]='player';return message('⛏️ Mina controlada. Produce +10 cristales por turno. Los cristales del juego no son NVRA.')}
+  if(state[site.id]!=='player'){state[site.id]='player';return message('⛏️ Mina controlada. Produce +10 cristales por turno. Los cristales del juego no son NVRA.')}
   return message('⛏️ Mina bajo tu control. +10 cristales al finalizar cada turno.')
  }
  if(site.kind==='mill'){
-  if(!state[site.id]){state[site.id]='player';return message('🌾 Molino controlado. Genera 1 comida por turno; la comida puede recuperar movimiento al inicio del turno siguiente.')}
+  if(state[site.id]!=='player'){state[site.id]='player';return message('🌾 Molino controlado. Genera 1 comida por turno; la comida puede recuperar movimiento al inicio del turno siguiente.')}
   return message('🌾 Molino bajo tu control. Comida acumulada: '+(s.mapFood||0)+'.')
  }
+}
+// Minas y molinos existentes: el enemigo sólo los captura al llegar a su posición real.
+function rivalResourceCapture(){
+ const v=rivalState(),owners=verifiedSiteState();
+ const sites=VERIFIED_MAP_SITES.filter(site=>(site.kind==='mine'||site.kind==='mill')&&owners[site.id]!=='rival');
+ const site=sites.find(site=>Math.hypot(v.x-site.x,v.y-site.y)<=4.2);
+ if(!site)return '';
+ const previous=owners[site.id];
+ owners[site.id]='rival';
+ return (site.kind==='mine'?'⛏️ Mina':'🌾 Molino')+' ocupado por el Reino Umbrío: '+site.label+(previous==='player'?'. Pierdes su producción.':'.');
 }
 // El héroe rival sólo conquista un castillo si llega físicamente a él.
 // Un castillo reconquistado deja de producir recursos para el jugador.
@@ -1543,7 +1553,7 @@ async function rivalTurn(){
   if(s.buildings.includes('barracks'))s.soldiers++;
   s.crystals+=mineYield();applyVerifiedSiteTurn();render();return
  }
- v.gold+=65+20*v.claimed.filter(k=>k==='4,7').length;
+ v.gold+=65+20*v.claimed.filter(k=>k==='4,7').length+VERIFIED_MAP_SITES.filter(site=>site.kind==='mine'&&verifiedSiteState()[site.id]==='rival').length*10;
  const recruits=Math.min(2,Math.floor(v.gold/30));v.soldiers+=recruits;v.gold-=30*recruits;
  if(v.turns%2===0&&v.gold>=50){v.archers++;v.gold-=50}
  try{
@@ -1556,8 +1566,14 @@ async function rivalTurn(){
    const path=destination?fineRoute([v.x,v.y],destination):null;
    return path?{obj:{x:site.x,y:site.y,type:'recapture',name:CASTLE_PROFILES[site.id].name},path}:null
   }).filter(Boolean).sort((a,b)=>a.path.length-b.path.length);
+  const resourceRoutes=VERIFIED_MAP_SITES.filter(site=>(site.kind==='mine'||site.kind==='mill')&&verifiedSiteState()[site.id]!=='rival').map(site=>{
+   const goal=nearestNav(site.x,site.y,3);
+   const destination=goal?[(goal[0]+.5)*1.25,(goal[1]+.5)*1.25]:null;
+   const path=destination?fineRoute([v.x,v.y],destination):null;
+   return path?{obj:{x:site.x,y:site.y,type:'resource',name:site.label},path,score:path.length-(verifiedSiteState()[site.id]==='player'?12:5)}:null
+  }).filter(Boolean).sort((a,b)=>a.score-b.score);
   const options=RIVAL_OBJECTIVES.filter(o=>!v.claimed.includes(o.x+','+o.y)&&!(o.type==='castle'&&s.claimed.includes('4,7'))&&!(o.type==='mine'&&s.ownedMines.includes('8,3')));
-  let best=castleRoutes[0]||rivalChooseObjective(v,options);
+  let best=castleRoutes[0]||resourceRoutes[0]||rivalChooseObjective(v,options);
   const [hx,hy]=heroVisualPosition();
   const danger=Math.hypot(v.x-hx,v.y-hy)<13;
   if(danger&&rivalThreatLevel(v)<0.75){
@@ -1592,7 +1608,7 @@ async function rivalTurn(){
    s.message='⚔️ El Reino Umbrío reclama '+best.obj.name+' · ejército: '+v.soldiers+' soldados y '+v.archers+' arqueros.';
    }
   }else s.message=completed?'⚔️ El héroe rival avanza hacia '+best.obj.name+'.':'🛡️ El rival no encuentra un paso seguro hacia '+best.obj.name+'.';
-  const castleEvent=rivalCastleConquest();if(castleEvent)s.message=castleEvent;
+  const castleEvent=rivalCastleConquest(),resourceEvent=rivalResourceCapture();if(castleEvent||resourceEvent)s.message=[castleEvent,resourceEvent].filter(Boolean).join(' ');
   v.explored.push([v.x,v.y]);
   if(Math.hypot(v.x-heroVisualPosition()[0],v.y-heroVisualPosition()[1])<2.2)s.rivalEncounterPending=true;
  }finally{
