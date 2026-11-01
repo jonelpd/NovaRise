@@ -595,3 +595,32 @@ body.interest-modal-open{overflow:hidden}
  .nvra-simple #participacion .interest-form>button{width:100%;justify-self:stretch}
  .nvra-simple #hoja-de-ruta .simple-bottom a{width:100%;justify-content:center}
 }
+
+
+/* Visual QA: predictable mobile header, accessible dropdown and readable form controls. */
+@media screen{
+ .nvra-simple .simple-header{z-index:30}
+ .nvra-simple .simple-nav nav .simple-app-menu summary:focus-visible{outline:3px solid #a5f2cb;outline-offset:3px}
+ .nvra-simple #participacion .interest-form input::placeholder,.nvra-simple #participacion .interest-form textarea::placeholder{color:#bad0c3;opacity:1}
+ .nvra-simple #participacion .interest-form select option{background:#092a21;color:#f0fff8}
+ .nvra-simple #participacion .interest-form input[aria-invalid=true],.nvra-simple #participacion .interest-form select[aria-invalid=true]{border-color:#ffc69b}
+ .nvra-simple #participacion .interest-form .interest-consent-row label{font-weight:400}
+ .nvra-simple #participacion .interest-form .interest-trap{position:absolute!important;left:-9999px!important;width:1px!important;height:1px!important;overflow:hidden!important;clip-path:inset(50%)!important}
+}
+@media screen and (max-width:960px){
+ /* A scrollable navigation strip clips absolutely positioned dropdowns; keep the menu in flow. */
+ .nvra-simple .simple-nav nav .simple-app-menu[open] .simple-app-dropdown{position:static;right:auto;top:auto;min-width:0;width:min(280px,85vw);margin-top:8px;box-shadow:none}
+ .nvra-simple .simple-nav nav .simple-app-menu{flex-shrink:0}
+}
+@media screen and (max-width:760px){
+ .nvra-simple .simple-nav nav{scrollbar-width:thin;scroll-padding-inline:14px}
+ .nvra-simple .simple-hero-brand{max-width:min(100%,460px)}
+ .nvra-simple #participacion .interest-form>label{grid-column:1/-1}
+ .nvra-simple #participacion .interest-form .interest-consent-row{grid-column:1/-1}
+ .nvra-simple #participacion .interest-form .interest-trap{grid-column:auto}
+}
+@media screen and (max-width:440px){
+ .nvra-simple #participacion .interest-form input:not([type=checkbox]),.nvra-simple #participacion .interest-form select,.nvra-simple #participacion .interest-form textarea{font-size:16px}
+ .nvra-simple #hoja-de-ruta .simple-steps li{grid-template-columns:42px minmax(0,1fr);column-gap:12px;padding:18px 15px}
+ .nvra-simple #hoja-de-ruta .simple-steps li:before{width:40px;height:40px}
+}
