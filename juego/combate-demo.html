@@ -719,7 +719,7 @@ function walkTo(tx,ty){
  }
  step()
 }
-function showBattle(){if(battle){battle.maxMana=heroStats().maxMana;battle.mana=battle.maxMana;battle.magicRound=-1;battle.initialCounts={soldiers:s.soldiers,archers:s.archers,griffins:s.griffins,dragons:s.dragons};setupBattleMagic();setupHeroPanel();battle.obstacles=[[2,0],[3,4],[2,3]];if(battle.enemyStacks){const target=duelTarget();if(target)duelSelectEnemy(target);battle.hp=duelEnemyHp()}battle.phase=0;battle.counterUsed=false;battle.initiative=battle.defenseSiteId?'player':battle.rival?'enemy':'player';battle.defending=!!battle.defenseSiteId;battle.guarding=[];battle.gx=1;battle.gy=1;battle.dx=1;battle.dy=4;battle.selected=s.soldiers?'soldiers':s.archers?'archers':s.griffins?'griffins':'dragons';battle.acted=[];battle.selected=battleNextUnit()||battle.selected;if(heroSpecializationBonus().guard&&battle.selected){battle.guarding.push(battle.selected);if(heroSkillUnlocked(4)){const extra=BATTLE_INITIATIVE.find(t=>t!==battle.selected&&battleCount(t));if(extra)battle.guarding.push(extra)}}}if(battle)$('battle-title').textContent=battle.defenseSiteId?'🛡️ Defensa de '+CASTLE_PROFILES[battle.defenseSiteId].name:battle.rival?'⚔️ Duelo de héroes · Reino Umbrío':battle.fort?'🏰 Asedio al castillo':'⚔️ Campo de batalla';if(s.soldiers+s.archers+s.griffins+s.dragons===0){battle=null;return message('Necesitas reclutar tropas para combatir.')} clearAdventureRoute();$('modal').hidden=false;if(battle.initiative==='enemy'){const current=battle;enemyAdvance(()=>{if(battle!==current)return;if(battle.enemyFallen){battle.enemyFallen=false;return hitResolveVictory()}if(s.soldiers+s.archers+s.griffins+s.dragons<=0)return loseBattle();updateBattle('El ejército rival toma la iniciativa. Ahora es tu turno.')})}else updateBattle('Tu ejército toma la iniciativa. Selecciona una unidad.')}function pos(unit){return unit==='archers'?[battle.rx,battle.ry]:unit==='griffins'?[battle.gx,battle.gy]:unit==='dragons'?[battle.dx,battle.dy]:[battle.sx,battle.sy]}
+function showBattle(){if(battle){battle.maxMana=heroStats().maxMana;battle.mana=battle.maxMana;battle.magicRound=-1;battle.initialCounts={soldiers:s.soldiers,archers:s.archers,griffins:s.griffins,dragons:s.dragons};setupBattleMagic();setupHeroPanel();battle.obstacles=[[2,0],[3,4],[2,3]];if(battle.enemyStacks){const target=duelTarget();if(target)duelSelectEnemy(target);battle.hp=duelEnemyHp()}battle.phase=0;battle.counterUsed=false;battle.initiative=battle.defenseSiteId?'player':battle.rival?'enemy':'player';battle.defending=!!battle.defenseSiteId;battle.guarding=[];battle.gx=1;battle.gy=1;battle.dx=1;battle.dy=4;battle.selected=s.soldiers?'soldiers':s.archers?'archers':s.griffins?'griffins':'dragons';battle.acted=[];battle.selected=battleNextUnit()||battle.selected;if(heroSpecializationBonus().guard&&battle.selected){battle.guarding.push(battle.selected);if(heroSkillUnlocked(4)){const extra=BATTLE_INITIATIVE.find(t=>t!==battle.selected&&battleCount(t));if(extra)battle.guarding.push(extra)}}}if(battle)$('battle-title').textContent=battle.defenseSiteId?'🛡️ Defensa de '+CASTLE_PROFILES[battle.defenseSiteId].name:battle.castleHeroDefender?'🏰 Duelo de héroes · Defensa del castillo':battle.rival?'⚔️ Duelo de héroes · Reino Umbrío':battle.fort?'🏰 Asedio al castillo':'⚔️ Campo de batalla';if(s.soldiers+s.archers+s.griffins+s.dragons===0){battle=null;return message('Necesitas reclutar tropas para combatir.')} clearAdventureRoute();$('modal').hidden=false;if(battle.initiative==='enemy'){const current=battle;enemyAdvance(()=>{if(battle!==current)return;if(battle.enemyFallen){battle.enemyFallen=false;return hitResolveVictory()}if(s.soldiers+s.archers+s.griffins+s.dragons<=0)return loseBattle();updateBattle('El ejército rival toma la iniciativa. Ahora es tu turno.')})}else updateBattle('Tu ejército toma la iniciativa. Selecciona una unidad.')}function pos(unit){return unit==='archers'?[battle.rx,battle.ry]:unit==='griffins'?[battle.gx,battle.gy]:unit==='dragons'?[battle.dx,battle.dy]:[battle.sx,battle.sy]}
 function renderBattleInitiative(){
  const panel=document.querySelector('#modal .battle .novarise-initiative');
  if(!panel||!battle)return;
@@ -1177,6 +1177,7 @@ function loseBattle(){if(battle&&battle.defenseSiteId){finishDefensiveSiege(fals
 function hitResolveVictory(){if(!battle)return;if(battle.defenseSiteId){finishDefensiveSiege(true);return}
  if(battle.rivalCastle){verifiedSiteState().rival='player';const v=rivalState();v.defeated=true;v.recovery=0;v.soldiers=0;v.archers=0;s.moves=Math.max(0,s.moves-1);s.done=true;const note=awardHeroExperience(100);battle=null;$('modal').hidden=true;s.message='🏆 ¡Victoria! Has conquistado el castillo principal del Reino Umbrío y ganado la campaña.'+note;render();return}
  if(battle.siteId){
+  if(battle.castleHeroDefender){const v=rivalState();v.defeated=true;v.recovery=0;v.soldiers=0;v.archers=0}
   const id=battle.siteId,label=battle.siteLabel||'Castillo independiente';
   verifiedSiteState()[id]='player';
   siteGarrison(id);
@@ -1422,6 +1423,26 @@ function castleGarrisonMenu(site){
  if(choice==='2')return manageCastleGarrison(site);
 }
 let pendingSiteInteraction=null;
+function rivalHeroDefendingCastle(site){
+ const v=rivalState();
+ return !v.defeated&&Math.hypot(v.x-site.x,v.y-site.y)<=7.5;
+}
+function rivalCastleHeroBattle(site){
+ const v=rivalState(),soldiers=Math.max(0,v.soldiers),archers=Math.max(0,v.archers);
+ const stacks=[
+  {id:'soldiers',count:soldiers,hp:soldiers*2,hpPerUnit:2,x:5,y:2},
+  {id:'archers',count:archers,hp:archers*3,hpPerUnit:3,x:5,y:4}
+ ].filter(u=>u.count>0);
+ if(!stacks.length)return false;
+ battle={x:s.x,y:s.y,k:'castle-hero:'+site.id,siteId:site.kind==='fort'?site.id:null,
+  siteLabel:site.label,rivalCastle:site.kind==='rival',castleHeroDefender:true,
+  rival:true,fort:true,hp:stacks.reduce((n,u)=>n+u.hp,0),
+  enemyArmyBefore:{soldiers,archers},enemyStacks:stacks,
+  targetEnemyId:stacks[0].id,defending:false,
+  ax:0,ay:2,ex:stacks[0].x,ey:stacks[0].y,range:1,
+  selected:'soldiers',sx:0,sy:2,rx:0,ry:3,round:0};
+ showBattle();return true
+}
 function interactVerifiedSite(site){
  if(s.done||battle||walking||rivalBusy)return;
  const [hx,hy]=heroVisualPosition();
@@ -1446,6 +1467,7 @@ function interactVerifiedSite(site){
   if(state.rival==='player')return message('🏰 El castillo enemigo ya pertenece a tu reino.');
   if(s.moves<1)return message('Necesitas al menos un punto de movimiento para asediar el castillo enemigo.');
   const v=rivalState();
+  if(rivalHeroDefendingCastle(site)&&rivalCastleHeroBattle(site))return;
   battle={x:s.x,y:s.y,k:'rival-castle',rivalCastle:true,rival:true,fort:true,
    hp:Math.max(18,12+v.soldiers*2+v.archers*3),defending:false,
    ax:0,ay:2,ex:5,ey:2,range:1,selected:'soldiers',
@@ -1455,6 +1477,7 @@ function interactVerifiedSite(site){
  if(site.kind==='fort'){
   if(state[site.id]!=='player'){
    if(s.moves<1)return message('Necesitas al menos un punto de movimiento para iniciar el asedio.');
+   if(state[site.id]==='rival'&&rivalHeroDefendingCastle(site)&&rivalCastleHeroBattle(site))return;
    const profile=CASTLE_PROFILES[site.id],guard=profile.guard;
    const hp=guard.soldiers+guard.archers*2+guard.griffins*5+guard.dragons*14+(state[site.id]==='rival'?Math.max(8,rivalState().soldiers+2*rivalState().archers):0);
    battle={x:s.x,y:s.y,k:'site:'+site.id,siteId:site.id,siteLabel:profile.name,
