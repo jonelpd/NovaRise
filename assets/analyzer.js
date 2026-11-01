@@ -491,6 +491,7 @@ async function appendMarketFromApi(address,network,requestId){
 }
 function showMessage(title,message){report.replaceChildren();const h=document.createElement('h3');h.textContent=title;const p=document.createElement('p');p.className='muted';p.textContent=message;report.append(h,p);empty.classList.add('hidden');report.classList.remove('hidden');}
 function invalidateReport(){
+ if(reportTools)reportTools.hidden=true;
  activeRequest++;
  cancelPending();
  report.replaceChildren();
@@ -502,6 +503,7 @@ function invalidateReport(){
 addrInput.addEventListener('input',invalidateReport);
 netInput.addEventListener('change',invalidateReport);
 analyzeButton.addEventListener('click',async()=>{
+ if(reportTools)reportTools.hidden=true;
  const requestId=++activeRequest;
  cancelPending();
  const address=addrInput.value.trim();
@@ -653,6 +655,6 @@ analyzeButton.addEventListener('click',async()=>{
  }finally{
   clearTimeout(timeout);
   if(securityController===controller)securityController=null;
-  if(requestId===activeRequest){analyzeButton.disabled=false;analyzeButton.textContent=nvraText('Analizar contrato real');}
+  if(requestId===activeRequest){analyzeButton.disabled=false;analyzeButton.textContent=nvraText('Analizar contrato real');if(reportTools)reportTools.hidden=false;}
  }
 });
