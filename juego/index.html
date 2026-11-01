@@ -746,7 +746,7 @@ function duelSelectEnemy(unit){if(!battle||!unit)return;battle.targetEnemyId=uni
 function duelEnemyHp(){return duelEnemies().reduce((n,u)=>n+u.hp,0)}
 function duelApplyDamage(amount){
  const u=duelTarget();if(!u)return;
- u.hp=Math.max(0,u.hp-amount);u.count=Math.ceil(u.hp/u.hpPerUnit);
+ u.hp=Math.max(0,u.hp-Math.max(0,Number.isFinite(amount)?amount:0));u.count=Math.ceil(u.hp/Math.max(1,u.hpPerUnit));
  battle.hp=duelEnemyHp();
  if(!u.count){const next=duelEnemies()[0];if(next)duelSelectEnemy(next)}
 }
