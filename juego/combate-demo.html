@@ -1116,6 +1116,7 @@ function setupBattleMagic(){
 function updateBattle(t='Selecciona una unidad, muévela a una casilla resaltada o ataca al enemigo.'){if(!battle)return;if(battle.selected==='soldiers'&&s.soldiers===0)battle.selected='archers';if(!battleUnitReady(battle.selected))battle.selected=battleNextUnit()||battle.selected;drawTactics();renderBattleInitiative();renderBattleMagic();renderHeroPanel();$('ally').textContent=`${s.soldiers} soldados · ${s.archers} arqueros · ${s.griffins} grifos · ${s.dragons} dragones · fuerza ${strength()}`;$('enemy').textContent=`Resistencia ${Math.max(0,battle.hp)} · ronda ${battle.round}`;$('selected-unit').textContent='Unidad seleccionada: '+(battle.selected==='soldiers'?'Soldados · alcance 1':battle.selected==='archers'?'Arqueros · alcance 3':battle.selected==='griffins'?'Grifos · vuelo 3, alcance 1':'Dragones · vuelo 2, alcance 2');$('unit-soldier').disabled=!battleUnitReady('soldiers');$('unit-archer').disabled=!battleUnitReady('archers');$('unit-griffin').disabled=!battleUnitReady('griffins');$('unit-dragon').disabled=!battleUnitReady('dragons');$('battle-log').textContent=t}
 function loseBattle(){if(battle&&battle.defenseSiteId){finishDefensiveSiege(false);return}const rivalFight=!!(battle&&battle.rival);battle=null;$('modal').hidden=true;message(rivalFight?'El Reino Umbrío ha vencido a tu ejército. Recluta nuevas tropas para continuar.':'Tu ejército ha sido derrotado. Recluta nuevas tropas.')}
 function hitResolveVictory(){if(!battle)return;if(battle.defenseSiteId){finishDefensiveSiege(true);return}
+ if(battle.rivalCastle){verifiedSiteState().rival='player';const v=rivalState();v.defeated=true;v.recovery=0;v.soldiers=0;v.archers=0;s.moves=Math.max(0,s.moves-1);s.done=true;const note=awardHeroExperience(100);battle=null;$('modal').hidden=true;s.message='🏆 ¡Victoria! Has conquistado el castillo principal del Reino Umbrío y ganado la campaña.'+note;render();return}
  if(battle.siteId){
   const id=battle.siteId,label=battle.siteLabel||'Castillo independiente';
   verifiedSiteState()[id]='player';
@@ -1377,11 +1378,21 @@ function interactVerifiedSite(site){
   if(!candidates.length)return message('No hay un camino transitable hasta '+site.label.toLowerCase()+'.');
   const destination=candidates[0];
   pendingSiteInteraction={id:site.id,x:destination.x,y:destination.y};
-  if(s.x===destination.x&&s.y===destination.y){pendingSiteInteraction=null;return message('No puedes acercarte más a este edificio desde el camino actual.')}
+  if(s.x===destination.x&&s.y===destination.y){pendingSiteInteraction=null;return message('El edificio está fuera del alcance de interacción desde esta posición.')}
   walkTo(destination.x,destination.y);
   return
  }
  const state=verifiedSiteState();
+ if(site.kind==='rival'){
+  if(state.rival==='player')return message('🏰 El castillo enemigo ya pertenece a tu reino.');
+  if(s.moves<1)return message('Necesitas al menos un punto de movimiento para asediar el castillo enemigo.');
+  const v=rivalState();
+  battle={x:s.x,y:s.y,k:'rival-castle',rivalCastle:true,rival:true,fort:true,
+   hp:Math.max(18,12+v.soldiers*2+v.archers*3),defending:false,
+   ax:0,ay:2,ex:5,ey:2,range:1,selected:'soldiers',
+   sx:0,sy:2,rx:0,ry:3,round:0};
+  showBattle();return;
+ }
  if(site.kind==='fort'){
   if(state[site.id]!=='player'){
    if(s.moves<1)return message('Necesitas al menos un punto de movimiento para iniciar el asedio.');
