@@ -493,3 +493,28 @@ body.interest-modal-open{overflow:hidden}
  .nvra-simple .simple-brand{width:165px;max-width:55vw}
  .nvra-simple .simple-nav{min-height:82px}
 }
+
+
+/* NovaRiseAnalitica approved artwork: editorial hero presentation, no legacy blue token emblem. */
+@media screen{
+ .nvra-simple .simple-hero{grid-template-columns:minmax(0,1.3fr) minmax(340px,1fr);gap:clamp(24px,3vw,56px);min-height:600px}
+ .nvra-simple .simple-hero-brand{aspect-ratio:3/2;max-width:none;min-height:0;width:100%;padding:0;margin:0;display:flex;align-items:center;justify-content:center;border:0;border-radius:0;background:transparent;box-shadow:none}
+ .nvra-simple .simple-hero-brand:after{display:none}
+ .nvra-simple .simple-hero-brand img{display:block;width:100%;height:auto;max-height:none;object-fit:contain;filter:drop-shadow(0 22px 55px rgba(42,212,126,.12))}
+ .nvra-simple .simple-hero-brand:before{content:"";position:absolute;inset:16% 7%;border-radius:50%;background:radial-gradient(ellipse,rgba(52,192,117,.13),transparent 68%);filter:blur(20px);z-index:-1;pointer-events:none}
+ .nvra-simple .simple-brand{width:220px;max-width:28vw}
+ .nvra-simple .simple-nav{min-height:104px}
+}
+@media screen and (max-width:1000px){
+ .nvra-simple .simple-hero{grid-template-columns:minmax(0,1fr) minmax(275px,.78fr);gap:22px;min-height:0}
+ .nvra-simple .simple-brand{width:200px;max-width:35vw}
+}
+@media screen and (max-width:760px){
+ .nvra-simple .simple-hero{grid-template-columns:1fr;gap:12px}
+ .nvra-simple .simple-hero-brand{display:flex;max-width:520px;justify-self:center;margin:4px auto 0}
+ .nvra-simple .simple-brand{width:175px;max-width:55vw}
+ .nvra-simple .simple-nav{min-height:80px}
+}
+@media screen and (max-width:480px){
+ .nvra-simple .simple-hero-brand{width:100%}
+}
