@@ -1042,7 +1042,7 @@ function hitResolveVictory(){if(!battle)return;
   s.moves=Math.max(0,s.moves-1);s.gold+=100;
   const levelNote=awardHeroExperience(35);
   battle=null;$('modal').hidden=true;
-  return message('🏰 Has conquistado '+label+' tras el asedio. +100 de oro, +15 de oro por turno. Ya puedes reclutar soldados allí.'+levelNote)
+  return message('🏰 Has conquistado '+label+' tras el asedio. +100 de oro, +15 de oro por turno. Ya puedes reclutar las criaturas propias de este castillo.'+levelNote)
  }
  if(battle.rival){
   const v=rivalState();v.defeated=true;v.recovery=0;v.soldiers=0;v.archers=0;
@@ -1215,11 +1215,42 @@ function verifiedSiteState(){
  if(!s.verifiedSites||typeof s.verifiedSites!=='object'||Array.isArray(s.verifiedSites))s.verifiedSites={};
  return s.verifiedSites
 }
+const CASTLE_PROFILES={
+ 'fort-west':{name:'Bastión del Bosque',guard:{soldiers:9,archers:3,griffins:0,dragons:0},stock:{soldiers:4,archers:2,griffins:0,dragons:0}},
+ 'fort-center':{name:'Ciudadela del Lago',guard:{soldiers:6,archers:6,griffins:1,dragons:0},stock:{soldiers:3,archers:3,griffins:1,dragons:0}},
+ 'fort-east':{name:'Fortaleza de las Cumbres',guard:{soldiers:8,archers:3,griffins:3,dragons:0},stock:{soldiers:3,archers:2,griffins:2,dragons:0}},
+ 'fort-north':{name:'Torre del Dragón',guard:{soldiers:5,archers:4,griffins:2,dragons:1},stock:{soldiers:2,archers:2,griffins:1,dragons:1}},
+ 'fort-south':{name:'Bastión del Sur',guard:{soldiers:12,archers:2,griffins:1,dragons:0},stock:{soldiers:5,archers:1,griffins:1,dragons:0}}
+};
+const CASTLE_RECRUIT_COST={soldiers:30,archers:50,griffins:110,dragons:300};
+const CASTLE_UNIT_NAMES={soldiers:'soldados',archers:'arqueros',griffins:'grifos',dragons:'dragones'};
 function siteGarrison(id){
  const state=verifiedSiteState();
  if(!state.garrisons||typeof state.garrisons!=='object')state.garrisons={};
- if(!state.garrisons[id])state.garrisons[id]={soldiers:4,archers:2,available:4};
- return state.garrisons[id]
+ const profile=CASTLE_PROFILES[id]||CASTLE_PROFILES['fort-west'];
+ let g=state.garrisons[id];
+ if(!g||!g.stock){
+  g={stock:{...profile.stock},guard:{...profile.guard}};
+  state.garrisons[id]=g;
+ }
+ return g
+}
+function recruitFromCastle(site){
+ const g=siteGarrison(site.id),profile=CASTLE_PROFILES[site.id];
+ const options=Object.keys(CASTLE_RECRUIT_COST).filter(type=>g.stock[type]>0);
+ if(!options.length)return message('🏰 '+profile.name+': no quedan criaturas disponibles. La población se recupera cada turno.');
+ const info=options.map((type,i)=>(i+1)+'. '+CASTLE_UNIT_NAMES[type]+' ('+g.stock[type]+' disponibles, '+CASTLE_RECRUIT_COST[type]+' oro cada uno)').join('\\n');
+ const choice=prompt(profile.name+' · Reclutamiento\\n'+info+'\\nEscribe el número de la criatura:');
+ if(choice===null)return;
+ const index=Number(choice)-1;if(!Number.isInteger(index)||index<0||index>=options.length)return message('Selecciona un número válido.');
+ const type=options[index],quantityText=prompt('¿Cuántos '+CASTLE_UNIT_NAMES[type]+' deseas reclutar? (máximo '+g.stock[type]+')','1');
+ if(quantityText===null)return;
+ const quantity=Number(quantityText);
+ if(!Number.isInteger(quantity)||quantity<1||quantity>g.stock[type])return message('Cantidad de reclutamiento inválida.');
+ const price=quantity*CASTLE_RECRUIT_COST[type];
+ if(s.gold<price)return message('Necesitas '+price+' de oro para reclutar esas criaturas.');
+ s.gold-=price;s[type]+=quantity;g.stock[type]-=quantity;
+ message('🏰 '+profile.name+': reclutados '+quantity+' '+CASTLE_UNIT_NAMES[type]+' por '+price+' de oro.')
 }
 function interactVerifiedSite(site){
  if(s.done||battle||walking||rivalBusy)return;
@@ -1230,19 +1261,14 @@ function interactVerifiedSite(site){
  if(site.kind==='fort'){
   if(!state[site.id]){
    if(s.moves<1)return message('Necesitas al menos un punto de movimiento para iniciar el asedio.');
-   battle={x:s.x,y:s.y,k:'site:'+site.id,siteId:site.id,siteLabel:site.label,
-    hp:20+VERIFIED_MAP_SITES.filter(p=>p.kind==='fort').findIndex(p=>p.id===site.id)*4,
-    defending:false,fort:true,ax:0,ay:2,ex:5,ey:2,range:1,
+   const profile=CASTLE_PROFILES[site.id],guard=profile.guard;
+   const hp=guard.soldiers+guard.archers*2+guard.griffins*5+guard.dragons*14;
+   battle={x:s.x,y:s.y,k:'site:'+site.id,siteId:site.id,siteLabel:profile.name,
+    hp,defending:false,fort:true,ax:0,ay:2,ex:5,ey:2,range:1,
     selected:'soldiers',sx:0,sy:2,rx:0,ry:3,round:0};
    showBattle();return
   }
-  const g=siteGarrison(site.id);
-  if(g.available<=0)return message('🏰 '+site.label+': reclutamiento agotado este turno. Guarnición: '+g.soldiers+' soldados y '+g.archers+' arqueros.');
-  const amount=Math.min(2,g.available),cost=amount*30;
-  if(!confirm(site.label+' · reclutar '+amount+' soldados por '+cost+' de oro? Guarnición disponible: '+g.available))return;
-  if(s.gold<cost)return message('No tienes suficiente oro para reclutar.');
-  s.gold-=cost;s.soldiers+=amount;g.available-=amount;g.soldiers=Math.max(0,g.soldiers-amount);
-  return message('🏰 Has reclutado '+amount+' soldados en '+site.label+'.')
+  return recruitFromCastle(site)
  }
  if(site.kind==='mine'){
   if(!state[site.id]){state[site.id]='player';return message('⛏️ Mina controlada. Produce +10 cristales por turno. Los cristales del juego no son NVRA.')}
@@ -1260,7 +1286,11 @@ function applyVerifiedSiteTurn(){
  s.crystals+=count('mine')*10;
  for(const site of VERIFIED_MAP_SITES){
   if(site.kind==='fort'&&owned[site.id]==='player'){
-   const g=siteGarrison(site.id);g.available=Math.min(8,g.available+2);g.soldiers=Math.min(12,g.soldiers+2)
+   const g=siteGarrison(site.id),profile=CASTLE_PROFILES[site.id];
+   for(const type of Object.keys(CASTLE_RECRUIT_COST)){
+    const growth=type==='soldiers'?2:type==='archers'?1:type==='griffins'?(s.turn%2===0?1:0):(s.turn%4===0?1:0);
+    g.stock[type]=Math.min(profile.stock[type]*3,g.stock[type]+(profile.stock[type]?growth:0))
+   }
   }
  }
  s.mapFood=Math.min(20,Math.max(0,s.mapFood||0)+count('mill'));
