@@ -25,6 +25,18 @@ const fields=[
  {key:'can_take_back_ownership',label:nvraText('Recuperación de propiedad'),good:'0',positive:nvraText('No se señala capacidad de recuperar privilegios administrativos en este indicador.'),negative:nvraText('Podría existir capacidad de recuperar el control administrativo.')},
  {key:'is_proxy',label:nvraText('Contrato proxy'),good:'0',positive:nvraText('No se señala estructura proxy en este indicador.'),negative:nvraText('Se señala una estructura proxy; su lógica podría modificarse, según permisos.')}
 ];
+function classifySecurityIndicators(token){
+ let known=0,alerts=0,unavailable=0;
+ const results=fields.map(field=>{
+  const raw=token?.[field.key];
+  const valid=raw==='0'||raw==='1'||raw===0||raw===1;
+  if(!valid){unavailable++;return {field,state:'unknown'};}
+  known++;
+  if(String(raw)!==field.good){alerts++;return {field,state:'alert'};}
+  return {field,state:'ok'};
+ });
+ return {results,known,alerts,unavailable};
+}
 const yearElement=document.getElementById('year');
 if(yearElement)yearElement.textContent=new Date().getFullYear();
 let activeRequest=0;
@@ -533,15 +545,7 @@ analyzeButton.addEventListener('click',async()=>{
   report.replaceChildren();
   report.append(element('h3','', nvraText('Indicadores reales · GoPlus')));
   report.append(element('p','small muted break-address','Red: '+network+nvraText(' · Dirección: ')+address+' · Consulta: '+new Date().toLocaleString(nvraText('es-ES'))+' · Fuente: GoPlus Security API'));
-  let known=0,alerts=0,unavailable=0;
-  const results=fields.map(field=>{
-   const raw=token[field.key];
-   const valid=raw==='0'||raw==='1'||raw===0||raw===1;
-   if(!valid){unavailable++;return {field,state:'unknown'};}
-   known++;
-   if(String(raw)!==field.good){alerts++;return {field,state:'alert'};}
-   return {field,state:'ok'};
-  });
+  const {results,known,alerts,unavailable}=classifySecurityIndicators(token);
   const summary=element('div','summary'+(alerts?' alert':''));
   const title=alerts?nvraText('Atención: ')+alerts+nvraText(' indicador(es) para revisar'):known===0?nvraText('Información insuficiente'):nvraText('Sin alertas en los indicadores disponibles');
   summary.append(element('h4','',title));
