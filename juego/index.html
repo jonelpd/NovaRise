@@ -731,7 +731,7 @@ const BATTLE_INITIATIVE=['griffins','dragons','archers','soldiers'];
 function battleNextUnit(){return BATTLE_INITIATIVE.find(t=>battleCount(t)&&!battle.acted.includes(t))||null}
 function battleUnitReady(type){return battle&&battleCount(type)&&!battle.acted.includes(type)}
 function battleFinishAction(note){
- if(!battle)return;
+ if(!battle||battle.moving)return;
  if(!battle.acted.includes(battle.selected))battle.acted.push(battle.selected);
  const next=battleNextUnit();
  if(next){battle.selected=next;return updateBattle(note+' Siguiente: '+({griffins:'grifos',dragons:'dragones',archers:'arqueros',soldiers:'soldados'}[next])+'.')}
@@ -786,40 +786,51 @@ function enemyAdvance(){
    if(battle.hp===0)battle.enemyFallen=true;
   }
  }else if(best?.first){
-  battle.ex=best.first[0];battle.ey=best.first[1];
+  // El rival avanza varias casillas por turno, sin atravesar obstáculos ni unidades.
+  const target=best.target;
+  const route=[[battle.ex,battle.ey]],used=new Set([battle.ex+','+battle.ey]);
+  for(let step=0;step<2;step++){
+   const [cx,cy]=route[route.length-1];
+   const options=dirs.map(([dx,dy])=>[cx+dx,cy+dy]).filter(([nx,ny])=>nx>=0&&nx<6&&ny>=0&&ny<5&&!blocked.has(nx+','+ny)&&!occupied.has(nx+','+ny)&&!used.has(nx+','+ny));
+   options.sort((p,q)=>(Math.abs(p[0]-target.x)+Math.abs(p[1]-target.y))-(Math.abs(q[0]-target.x)+Math.abs(q[1]-target.y)));
+   if(!options.length)break;
+   const next=options[0];if(Math.abs(next[0]-target.x)+Math.abs(next[1]-target.y)>=Math.abs(cx-target.x)+Math.abs(cy-target.y))break;
+   route.push(next);used.add(next.join(','));
+  }
+  if(route.length>1){battle.ex=route[route.length-1][0];battle.ey=route[route.length-1][1]}
+
  }
  battle.defending=false;
  battle.round++;
 }
 function tacticalMove(x,y){
- if(!battle)return;
+ if(!battle||battle.moving)return;
  const type=battle.selected;
  if(!battleUnitReady(type))return updateBattle('Esta unidad ya ha actuado durante la ronda.');
  if(!tacticalReachable(type).has(x+','+y))return updateBattle('Esa casilla no es alcanzable por la unidad seleccionada.');
- const [ux,uy]=pos(type),distance=Math.abs(x-ux)+Math.abs(y-uy);
- if(distance<1||distance>battleSpeed(type)||x<0||x>5||y<0||y>4)return updateBattle('Destino fuera del alcance de movimiento de esta criatura.');
- const occupied=['soldiers','archers','griffins','dragons'].some(t=>battleCount(t)&&pos(t)[0]===x&&pos(t)[1]===y);
- if(occupied||x===battle.ex&&y===battle.ey)return updateBattle('La casilla está ocupada.');
- const queue=[[ux,uy,0]],visited=new Set([ux+','+uy]);let found=false;
+ const [ux,uy]=pos(type),queue=[[ux,uy]],visited=new Set([ux+','+uy]),parents=new Map();
+ const blocked=(nx,ny)=>nx<0||nx>5||ny<0||ny>4||(nx===battle.ex&&ny===battle.ey)||['soldiers','archers','griffins','dragons'].some(t=>t!==type&&battleCount(t)&&pos(t)[0]===nx&&pos(t)[1]===ny)||(type!=='griffins'&&type!=='dragons'&&battle.obstacles?.some(p=>p[0]===nx&&p[1]===ny));
  while(queue.length){
-  const [cx,cy,steps]=queue.shift();
-  if(cx===x&&cy===y){found=true;break}
-  if(steps>=battleSpeed(type))continue;
+  const [cx,cy]=queue.shift();if(cx===x&&cy===y)break;
   for(const [mx,my] of [[1,0],[-1,0],[0,1],[0,-1]]){
    const nx=cx+mx,ny=cy+my,k=nx+','+ny;
-   if(nx<0||nx>5||ny<0||ny>4||visited.has(k))continue;
-   if(nx===battle.ex&&ny===battle.ey)continue;
-   if(['soldiers','archers','griffins','dragons'].some(t=>t!==type&&battleCount(t)&&pos(t)[0]===nx&&pos(t)[1]===ny))continue;
-   if(type!=='griffins'&&type!=='dragons'&&battle.obstacles?.some(p=>p[0]===nx&&p[1]===ny))continue;
-   visited.add(k);queue.push([nx,ny,steps+1])
+   if(visited.has(k)||blocked(nx,ny))continue;
+   visited.add(k);parents.set(k,[cx,cy]);queue.push([nx,ny]);
   }
  }
- if(!found)return updateBattle('No existe un camino libre hasta esa casilla.');
- if(type==='soldiers'){battle.sx=x;battle.sy=y}
- else if(type==='archers'){battle.rx=x;battle.ry=y}
- else if(type==='griffins'){battle.gx=x;battle.gy=y}
- else {battle.dx=x;battle.dy=y}
- battleFinishAction('Movimiento realizado.')
+ const steps=[];let at=[x,y];
+ while(at[0]!==ux||at[1]!==uy){steps.unshift(at);at=parents.get(at.join(','));if(!at)return updateBattle('No existe camino hasta el destino.')}
+ if(steps.length>battleSpeed(type))return updateBattle('La unidad no dispone de tantos puntos de movimiento.');
+ const current=battle;battle.moving=true;
+ const place=(px,py)=>{if(type==='soldiers'){current.sx=px;current.sy=py}else if(type==='archers'){current.rx=px;current.ry=py}else if(type==='griffins'){current.gx=px;current.gy=py}else{current.dx=px;current.dy=py}};
+ let i=0;
+ const advance=()=>{
+  if(battle!==current)return;
+  if(i>=steps.length){current.moving=false;battleFinishAction('Movimiento realizado.');return}
+  place(...steps[i++]);drawTactics();
+  setTimeout(advance,390);
+ };
+ advance();
 }
 // Sprites vectoriales originales: caballero, arquero y criaturas hostiles.
 const BATTLE_SPRITES={
@@ -873,7 +884,7 @@ function tacticalReachable(type){
  return reachable
 }
 function tacticalCanAttack(type){
- if(!battle||!battleUnitReady(type))return false;
+ if(!battle||battle.moving||!battleUnitReady(type))return false;
  const [x,y]=pos(type),dist=Math.abs(x-battle.ex)+Math.abs(y-battle.ey);
  if(dist>battleRange(type)||type==='archers'&&dist<=1)return false;
  if(type==='archers'&&battle.obstacles?.some(p=>(x===battle.ex&&p[0]===x&&p[1]>Math.min(y,battle.ey)&&p[1]<Math.max(y,battle.ey))||(y===battle.ey&&p[1]===y&&p[0]>Math.min(x,battle.ex)&&p[0]<Math.max(x,battle.ex))))return false;
