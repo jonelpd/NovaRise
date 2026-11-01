@@ -974,9 +974,10 @@ function drawTactics(){
  for(let y=0;y<5;y++)for(let x=0;x<6;x++){
   const c=document.createElement('button');c.type='button';c.className='combat-cell';
   const obstacle=battle.obstacles?.some(p=>p[0]===x&&p[1]===y);
-  const enemy=x===battle.ex&&y===battle.ey;
+  const enemyStack=battle.enemyStacks?duelEnemies().find(u=>u.x===x&&u.y===y):null;
+  const enemy=!!enemyStack||(!battle.enemyStacks&&x===battle.ex&&y===battle.ey);
   if(!enemy&&reachable.has(x+','+y)){c.classList.add('combat-reachable');c.title='Destino alcanzable'}
-  if(enemy&&tacticalCanAttack(battle.selected))c.classList.add('combat-attackable');
+  if(enemy&&(battle.enemyStacks?(()=>{const [ax,ay]=pos(battle.selected);const dist=Math.abs(ax-x)+Math.abs(ay-y);return battleUnitReady(battle.selected)&&dist<=battleRange(battle.selected)&&(battle.selected!=='archers'||dist>1)})():tacticalCanAttack(battle.selected)))c.classList.add('combat-attackable');
   const soldier=!enemy&&s.soldiers>0&&x===battle.sx&&y===battle.sy;
   const archer=!enemy&&!soldier&&s.archers>0&&x===battle.rx&&y===battle.ry;
   const griffin=!enemy&&!soldier&&!archer&&s.griffins>0&&x===battle.gx&&y===battle.gy;
@@ -988,12 +989,12 @@ function drawTactics(){
    if(!enemy&&battle.selected===type)c.classList.add('unit-selected');
    if(!enemy&&battle.acted.includes(type))c.classList.add('combat-acted');
    const sprite=document.createElement('span');sprite.className='combat-sprite';
-   sprite.innerHTML=BATTLE_SPRITES[enemy?(battle.rival?'rival':'guardian'):type]||'<span style="font-size:32px">'+(type==='griffins'?'🦅':'🐉')+'</span>';
+   sprite.innerHTML=BATTLE_SPRITES[enemy?(enemyStack?.id==='archers'?'archers':battle.rival?'rival':'guardian'):type]||'<span style="font-size:32px">'+(type==='griffins'?'🦅':'🐉')+'</span>';
    c.append(sprite);
    const stack=document.createElement('span');stack.className='combat-stack';
-   stack.textContent=enemy?Math.max(0,battle.hp):battleCount(type);
+   stack.textContent=enemy?(enemyStack?enemyStack.count:Math.max(0,battle.hp)):battleCount(type);
    c.append(stack);
-   c.title=enemy?(battle.rival?'Ejército del Reino Umbrío':'Guardianes')+' · resistencia '+battle.hp:type+' · '+battleCount(type);
+   c.title=enemy?(enemyStack?'Reino Umbrío · '+(enemyStack.id==='archers'?'arqueros':'soldados')+' · '+enemyStack.count+' criaturas':(battle.rival?'Ejército del Reino Umbrío':'Guardianes')+' · resistencia '+battle.hp):type+' · '+battleCount(type);
   }else{
    c.classList.add('terrain-only');
    c.textContent=obstacle?'🪨':(x*7+y*11)%9===0?'✦':(x+y)%5===0?'♣':'';
@@ -1006,7 +1007,7 @@ function drawTactics(){
    if(soldier){if(!battleUnitReady('soldiers'))return updateBattle('Los soldados ya han actuado.');battle.selected='soldiers';return updateBattle('Soldados seleccionados. Acércalos al enemigo para atacar.')}
    if(archer){if(!battleUnitReady('archers'))return updateBattle('Los arqueros ya han actuado.');battle.selected='archers';return updateBattle('Arqueros seleccionados. Pueden atacar hasta tres casillas de distancia.')}
    if(griffin||dragon){if(!battleUnitReady(griffin?'griffins':'dragons'))return updateBattle('Esta criatura ya ha actuado.');battle.selected=griffin?'griffins':'dragons';return updateBattle('Criatura voladora seleccionada. Puede atravesar obstáculos en combate.')}
-   if(enemy)return hit(false);
+   if(enemy){if(enemyStack){duelSelectEnemy(enemyStack);if(!tacticalCanAttack(battle.selected))return updateBattle('Ese grupo enemigo está fuera del alcance.')}return hit(false)}
    return tacticalMove(x,y)
   };
   if(enemy)c.title+=' · Pulsa para atacar';
@@ -1198,7 +1199,7 @@ function battleAttackDamage(type){
  // Distinct roles: archers excel at range, griffins at close combat, dragons deal heavy damage.
  return Math.max(1,Math.floor(base)+heroStats().might+mapTreasureEquipment().attack+(heroSpecialization()==='warrior'&&heroSkillUnlocked(2)?2:0)+(heroSpecialization()==='warrior'&&heroSkillUnlocked(4)?3:0)+(heroSpecialization()==='guardian'&&heroSkillUnlocked(2)?1:0));
 }
-function hit(defend){if(!battle)return;if(!battleUnitReady(battle.selected))return updateBattle('Esta unidad ya ha actuado. Selecciona otra disponible.');if(!defend&&!battleCount(battle.selected))return updateBattle('Selecciona una unidad disponible antes de atacar.');if(defend){if(!battle.guarding)battle.guarding=[];battle.guarding.push(battle.selected);}let [ux,uy]=pos(battle.selected),dist=Math.abs(ux-battle.ex)+Math.abs(uy-battle.ey),range=battleRange(battle.selected);if(!defend&&dist>range)return updateBattle('El enemigo está fuera del alcance de la unidad seleccionada.');
+function hit(defend){if(!battle||battle.moving)return;if(!battleUnitReady(battle.selected))return updateBattle('Esta unidad ya ha actuado. Selecciona otra disponible.');if(!defend&&!battleCount(battle.selected))return updateBattle('Selecciona una unidad disponible antes de atacar.');if(defend){if(!battle.guarding)battle.guarding=[];battle.guarding.push(battle.selected);}let [ux,uy]=pos(battle.selected),dist=Math.abs(ux-battle.ex)+Math.abs(uy-battle.ey),range=battleRange(battle.selected);if(!defend&&dist>range)return updateBattle('El enemigo está fuera del alcance de la unidad seleccionada.');
  if(!defend&&battle.selected==='archers'&&dist<=1)return updateBattle('Los arqueros necesitan separarse del enemigo para disparar.');
  if(!defend&&!tacticalCanAttack(battle.selected))return updateBattle('El objetivo está fuera de alcance o bloqueado por el terreno.');
  const attacker=battle.selected;
