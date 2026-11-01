@@ -680,13 +680,20 @@ function walkTo(tx,ty){
  const route=findRoute(tx,ty);if(!route)return message('No existe una ruta hasta ese lugar.');
  clearAdventureRoute();const epoch=++walkEpoch;
  walking=true;let index=0;
- async function step(){if(epoch!==walkEpoch){walking=false;return}if(index>=route.length||s.moves<=0||battle||s.done){walking=false;clearAdventureRoute();return}
+ async function step(){if(epoch!==walkEpoch){walking=false;return}if(index>=route.length||s.moves<=0||battle||s.done){walking=false;clearAdventureRoute();if(index>=route.length)pendingSiteInteraction=null;return}
   let [x,y]=route[index++],beforeX=s.x,beforeY=s.y;
   const from=safeHeroPoint(beforeX,beforeY),to=safeHeroPoint(x,y);
   const fine=from&&to?fineRoute(from,to):null;
   if(!fine){walking=false;clearAdventureRoute();return message('No hay paso libre por el terreno hasta ese destino. Elige otro camino.');}
   if(!await travelFinePath(fine,epoch)){walking=false;clearAdventureRoute();render();return message('Movimiento detenido: el terreno no permite completar esa ruta.')}
   move(x,y);
+  if(pendingSiteInteraction&&s.x===pendingSiteInteraction.x&&s.y===pendingSiteInteraction.y&&!battle){
+   const site=VERIFIED_MAP_SITES.find(v=>v.id===pendingSiteInteraction.id);
+   pendingSiteInteraction=null;
+   walking=false;clearAdventureRoute();
+   if(site&&!s.done&&$('adventure-discovery').hidden&&$('castle-screen').hidden)interactVerifiedSite(site);
+   return
+  }
   if(battle||!$('adventure-discovery').hidden||!$('castle-screen').hidden||s.x===beforeX&&s.y===beforeY){walking=false;clearAdventureRoute();return}
   if(index<route.length&&s.moves>=movementCost(route[index][0],route[index][1])&&$('adventure-discovery').hidden&&$('castle-screen').hidden)setTimeout(step,120);else {walking=false;if(index>=route.length&&!battle&&!s.done&&(key(tx,ty)==='1,1'||key(tx,ty)==='4,7'&&s.claimed.includes('4,7')))setTimeout(()=>{if(epoch===walkEpoch&&!walking&&!battle&&s.x===tx&&s.y===ty&&$('adventure-discovery').hidden&&$('castle-screen').hidden)visitKnownLocation(tx,ty)},260)}
  }
@@ -1287,11 +1294,26 @@ function recruitFromCastle(site){
  s.gold-=price;s[type]+=quantity;g.stock[type]-=quantity;
  message('🏰 '+profile.name+': reclutados '+quantity+' '+CASTLE_UNIT_NAMES[type]+' por '+price+' de oro.')
 }
+let pendingSiteInteraction=null;
 function interactVerifiedSite(site){
  if(s.done||battle||walking||rivalBusy)return;
- if(site.k)return selectWorldDestination(...site.k.split(',').map(Number));
  const [hx,hy]=heroVisualPosition();
- if(Math.hypot((hx-site.x)*1.0,(hy-site.y)*1.0)>8)return message('Acerca el héroe al '+site.label.toLowerCase()+' para interactuar. El edificio está en el mapa, no es un marcador.');
+ if(Math.hypot(hx-site.x,hy-site.y)>8){
+  const candidates=[];
+  for(let y=0;y<H;y++)for(let x=0;x<W;x++){
+   const point=safeHeroPoint(x,y);
+   if(!point||Math.hypot(point[0]-site.x,point[1]-site.y)>7.5)continue;
+   const route=findRoute(x,y);
+   if(route)candidates.push({x,y,route,score:route.reduce((n,[rx,ry])=>n+movementCost(rx,ry),0)});
+  }
+  candidates.sort((a,b)=>a.score-b.score);
+  if(!candidates.length)return message('No hay un camino transitable hasta '+site.label.toLowerCase()+'.');
+  const destination=candidates[0];
+  pendingSiteInteraction={id:site.id,x:destination.x,y:destination.y};
+  if(s.x===destination.x&&s.y===destination.y){pendingSiteInteraction=null;return message('No puedes acercarte más a este edificio desde el camino actual.')}
+  walkTo(destination.x,destination.y);
+  return
+ }
  const state=verifiedSiteState();
  if(site.kind==='fort'){
   if(state[site.id]!=='player'){
@@ -1398,7 +1420,8 @@ function drawWorldLandmarks(map){
  for(const site of VERIFIED_MAP_SITES){
   const b=document.createElement('button');b.type='button';
   b.className='world-hotspot hotspot-'+site.kind;
-  b.style.left=(site.x-site.w/2)+'%';b.style.top=(site.y-site.h/2)+'%';
+  b.style.left=site.x+'%';b.style.top=site.y+'%';
+  b.style.transform='translate(-50%,-50%)';
   b.style.width=site.w+'%';b.style.height=site.h+'%';
   b.style.background='transparent';b.style.border='0';b.style.boxShadow='none';b.style.opacity='0';
   b.setAttribute('aria-label',site.label);b.title=site.label;
