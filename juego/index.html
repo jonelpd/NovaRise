@@ -1035,6 +1035,15 @@ function setupBattleMagic(){
 function updateBattle(t='Selecciona una unidad, muévela a una casilla resaltada o ataca al enemigo.'){if(!battle)return;if(battle.selected==='soldiers'&&s.soldiers===0)battle.selected='archers';if(!battleUnitReady(battle.selected))battle.selected=battleNextUnit()||battle.selected;drawTactics();renderBattleInitiative();renderBattleMagic();renderHeroPanel();$('ally').textContent=`${s.soldiers} soldados · ${s.archers} arqueros · ${s.griffins} grifos · ${s.dragons} dragones · fuerza ${strength()}`;$('enemy').textContent=`Resistencia ${Math.max(0,battle.hp)} · ronda ${battle.round}`;$('selected-unit').textContent='Unidad seleccionada: '+(battle.selected==='soldiers'?'Soldados · alcance 1':battle.selected==='archers'?'Arqueros · alcance 3':battle.selected==='griffins'?'Grifos · vuelo 3, alcance 1':'Dragones · vuelo 2, alcance 2');$('unit-soldier').disabled=!battleUnitReady('soldiers');$('unit-archer').disabled=!battleUnitReady('archers');$('unit-griffin').disabled=!battleUnitReady('griffins');$('unit-dragon').disabled=!battleUnitReady('dragons');$('battle-log').textContent=t}
 function loseBattle(){const rivalFight=!!(battle&&battle.rival);battle=null;$('modal').hidden=true;message(rivalFight?'El Reino Umbrío ha vencido a tu ejército. Recluta nuevas tropas para continuar.':'Tu ejército ha sido derrotado. Recluta nuevas tropas.')}
 function hitResolveVictory(){if(!battle)return;
+ if(battle.siteId){
+  const id=battle.siteId,label=battle.siteLabel||'Castillo independiente';
+  verifiedSiteState()[id]='player';
+  siteGarrison(id);
+  s.moves=Math.max(0,s.moves-1);s.gold+=100;
+  const levelNote=awardHeroExperience(35);
+  battle=null;$('modal').hidden=true;
+  return message('🏰 Has conquistado '+label+' tras el asedio. +100 de oro, +15 de oro por turno. Ya puedes reclutar soldados allí.'+levelNote)
+ }
  if(battle.rival){
   const v=rivalState();v.defeated=true;v.recovery=0;v.soldiers=0;v.archers=0;
   s.gold+=Math.min(200,v.gold);const levelNote=awardHeroExperience(80);
@@ -1206,6 +1215,12 @@ function verifiedSiteState(){
  if(!s.verifiedSites||typeof s.verifiedSites!=='object'||Array.isArray(s.verifiedSites))s.verifiedSites={};
  return s.verifiedSites
 }
+function siteGarrison(id){
+ const state=verifiedSiteState();
+ if(!state.garrisons||typeof state.garrisons!=='object')state.garrisons={};
+ if(!state.garrisons[id])state.garrisons[id]={soldiers:4,archers:2,available:4};
+ return state.garrisons[id]
+}
 function interactVerifiedSite(site){
  if(s.done||battle||walking||rivalBusy)return;
  if(site.k)return selectWorldDestination(...site.k.split(',').map(Number));
@@ -1214,12 +1229,20 @@ function interactVerifiedSite(site){
  const state=verifiedSiteState();
  if(site.kind==='fort'){
   if(!state[site.id]){
-   if(!confirm('¿Atacar '+site.label.toLowerCase()+'? Se requieren al menos 8 puntos de fuerza militar.'))return;
-   if(strength()<8)return message('Necesitas un ejército de al menos 8 puntos de fuerza para conquistar este castillo.');
-   s.soldiers=Math.max(0,s.soldiers-2);state[site.id]='player';s.gold+=50;
-   return message('🏰 Castillo conquistado. +50 de oro y producción de +15 de oro por turno. Has perdido 2 soldados.')
+   if(s.moves<1)return message('Necesitas al menos un punto de movimiento para iniciar el asedio.');
+   battle={x:s.x,y:s.y,k:'site:'+site.id,siteId:site.id,siteLabel:site.label,
+    hp:20+VERIFIED_MAP_SITES.filter(p=>p.kind==='fort').findIndex(p=>p.id===site.id)*4,
+    defending:false,fort:true,ax:0,ay:2,ex:5,ey:2,range:1,
+    selected:'soldiers',sx:0,sy:2,rx:0,ry:3,round:0};
+   showBattle();return
   }
-  return message('🏰 Castillo bajo tu control. Produce +15 de oro por turno.')
+  const g=siteGarrison(site.id);
+  if(g.available<=0)return message('🏰 '+site.label+': reclutamiento agotado este turno. Guarnición: '+g.soldiers+' soldados y '+g.archers+' arqueros.');
+  const amount=Math.min(2,g.available),cost=amount*30;
+  if(!confirm(site.label+' · reclutar '+amount+' soldados por '+cost+' de oro? Guarnición disponible: '+g.available))return;
+  if(s.gold<cost)return message('No tienes suficiente oro para reclutar.');
+  s.gold-=cost;s.soldiers+=amount;g.available-=amount;g.soldiers=Math.max(0,g.soldiers-amount);
+  return message('🏰 Has reclutado '+amount+' soldados en '+site.label+'.')
  }
  if(site.kind==='mine'){
   if(!state[site.id]){state[site.id]='player';return message('⛏️ Mina controlada. Produce +10 cristales por turno. Los cristales del juego no son NVRA.')}
@@ -1235,6 +1258,11 @@ function applyVerifiedSiteTurn(){
  const count=kind=>VERIFIED_MAP_SITES.filter(site=>site.kind===kind&&owned[site.id]==='player').length;
  s.gold+=count('fort')*15;
  s.crystals+=count('mine')*10;
+ for(const site of VERIFIED_MAP_SITES){
+  if(site.kind==='fort'&&owned[site.id]==='player'){
+   const g=siteGarrison(site.id);g.available=Math.min(8,g.available+2);g.soldiers=Math.min(12,g.soldiers+2)
+  }
+ }
  s.mapFood=Math.min(20,Math.max(0,s.mapFood||0)+count('mill'));
  const extra=Math.min(2,s.mapFood||0);
  s.moves=Math.min(7,s.moves+extra);
