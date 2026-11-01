@@ -707,7 +707,7 @@ function walkTo(tx,ty){
  }
  step()
 }
-function showBattle(){if(battle){battle.maxMana=heroStats().maxMana;battle.mana=battle.maxMana;battle.magicRound=-1;battle.initialCounts={soldiers:s.soldiers,archers:s.archers,griffins:s.griffins,dragons:s.dragons};setupBattleMagic();setupHeroPanel();battle.obstacles=[[2,0],[3,4],[2,3]];battle.phase=0;battle.counterUsed=false;battle.initiative=battle.defenseSiteId?'player':battle.rival?'enemy':'player';battle.defending=!!battle.defenseSiteId;battle.guarding=[];battle.gx=1;battle.gy=1;battle.dx=1;battle.dy=4;battle.selected=s.soldiers?'soldiers':s.archers?'archers':s.griffins?'griffins':'dragons';battle.acted=[];battle.selected=battleNextUnit()||battle.selected;if(heroSpecializationBonus().guard&&battle.selected){battle.guarding.push(battle.selected);if(heroSkillUnlocked(4)){const extra=BATTLE_INITIATIVE.find(t=>t!==battle.selected&&battleCount(t));if(extra)battle.guarding.push(extra)}}}if(battle)$('battle-title').textContent=battle.defenseSiteId?'🛡️ Defensa de '+CASTLE_PROFILES[battle.defenseSiteId].name:battle.rival?'⚔️ Duelo de héroes · Reino Umbrío':battle.fort?'🏰 Asedio al castillo':'⚔️ Campo de batalla';if(s.soldiers+s.archers+s.griffins+s.dragons===0){battle=null;return message('Necesitas reclutar tropas para combatir.')} clearAdventureRoute();$('modal').hidden=false;if(battle.initiative==='enemy'){enemyAdvance();if(battle.enemyFallen){battle.enemyFallen=false;return hitResolveVictory()}if(s.soldiers+s.archers+s.griffins+s.dragons<=0)return loseBattle();updateBattle('El ejército rival toma la iniciativa. Ahora es tu turno.')}else updateBattle('Tu ejército toma la iniciativa. Selecciona una unidad.')}function pos(unit){return unit==='archers'?[battle.rx,battle.ry]:unit==='griffins'?[battle.gx,battle.gy]:unit==='dragons'?[battle.dx,battle.dy]:[battle.sx,battle.sy]}
+function showBattle(){if(battle){battle.maxMana=heroStats().maxMana;battle.mana=battle.maxMana;battle.magicRound=-1;battle.initialCounts={soldiers:s.soldiers,archers:s.archers,griffins:s.griffins,dragons:s.dragons};setupBattleMagic();setupHeroPanel();battle.obstacles=[[2,0],[3,4],[2,3]];battle.phase=0;battle.counterUsed=false;battle.initiative=battle.defenseSiteId?'player':battle.rival?'enemy':'player';battle.defending=!!battle.defenseSiteId;battle.guarding=[];battle.gx=1;battle.gy=1;battle.dx=1;battle.dy=4;battle.selected=s.soldiers?'soldiers':s.archers?'archers':s.griffins?'griffins':'dragons';battle.acted=[];battle.selected=battleNextUnit()||battle.selected;if(heroSpecializationBonus().guard&&battle.selected){battle.guarding.push(battle.selected);if(heroSkillUnlocked(4)){const extra=BATTLE_INITIATIVE.find(t=>t!==battle.selected&&battleCount(t));if(extra)battle.guarding.push(extra)}}}if(battle)$('battle-title').textContent=battle.defenseSiteId?'🛡️ Defensa de '+CASTLE_PROFILES[battle.defenseSiteId].name:battle.rival?'⚔️ Duelo de héroes · Reino Umbrío':battle.fort?'🏰 Asedio al castillo':'⚔️ Campo de batalla';if(s.soldiers+s.archers+s.griffins+s.dragons===0){battle=null;return message('Necesitas reclutar tropas para combatir.')} clearAdventureRoute();$('modal').hidden=false;if(battle.initiative==='enemy'){const current=battle;enemyAdvance(()=>{if(battle!==current)return;if(battle.enemyFallen){battle.enemyFallen=false;return hitResolveVictory()}if(s.soldiers+s.archers+s.griffins+s.dragons<=0)return loseBattle();updateBattle('El ejército rival toma la iniciativa. Ahora es tu turno.')})}else updateBattle('Tu ejército toma la iniciativa. Selecciona una unidad.')}function pos(unit){return unit==='archers'?[battle.rx,battle.ry]:unit==='griffins'?[battle.gx,battle.gy]:unit==='dragons'?[battle.dx,battle.dy]:[battle.sx,battle.sy]}
 function renderBattleInitiative(){
  const panel=document.querySelector('#modal .battle .novarise-initiative');
  if(!panel||!battle)return;
@@ -735,14 +735,17 @@ function battleFinishAction(note){
  if(!battle.acted.includes(battle.selected))battle.acted.push(battle.selected);
  const next=battleNextUnit();
  if(next){battle.selected=next;return updateBattle(note+' Siguiente: '+({griffins:'grifos',dragons:'dragones',archers:'arqueros',soldiers:'soldados'}[next])+'.')}
- enemyAdvance();
- if(battle.enemyFallen){battle.hp=0;battle.enemyFallen=false;return hitResolveVictory()}
- if(s.soldiers+s.archers+s.griffins+s.dragons<=0)return loseBattle();
- battle.acted=[];battle.guarding=[];battle.counterUsed=false;battle.selected=battleNextUnit()||'soldiers';
- updateBattle(note+' El enemigo ha actuado. Nueva ronda.')
+ const current=battle;
+ enemyAdvance(()=>{
+  if(battle!==current)return;
+  if(battle.enemyFallen){battle.hp=0;battle.enemyFallen=false;return hitResolveVictory()}
+  if(s.soldiers+s.archers+s.griffins+s.dragons<=0)return loseBattle();
+  battle.acted=[];battle.guarding=[];battle.counterUsed=false;battle.selected=battleNextUnit()||'soldiers';
+  updateBattle(note+' El enemigo ha actuado. Nueva ronda.');
+ });
 }
 // Enemy uses breadth-first pathfinding: no walking through rocks or allied stacks.
-function enemyAdvance(){
+function enemyAdvance(onComplete){
  if(!battle)return;
  battle.counterUsed=false;
  const types=['soldiers','archers','griffins','dragons'];
@@ -786,22 +789,39 @@ function enemyAdvance(){
    if(battle.hp===0)battle.enemyFallen=true;
   }
  }else if(best?.first){
-  // El rival avanza varias casillas por turno, sin atravesar obstáculos ni unidades.
-  const target=best.target;
-  const route=[[battle.ex,battle.ey]],used=new Set([battle.ex+','+battle.ey]);
-  for(let step=0;step<2;step++){
-   const [cx,cy]=route[route.length-1];
-   const options=dirs.map(([dx,dy])=>[cx+dx,cy+dy]).filter(([nx,ny])=>nx>=0&&nx<6&&ny>=0&&ny<5&&!blocked.has(nx+','+ny)&&!occupied.has(nx+','+ny)&&!used.has(nx+','+ny));
-   options.sort((p,q)=>(Math.abs(p[0]-target.x)+Math.abs(p[1]-target.y))-(Math.abs(q[0]-target.x)+Math.abs(q[1]-target.y)));
-   if(!options.length)break;
-   const next=options[0];if(Math.abs(next[0]-target.x)+Math.abs(next[1]-target.y)>=Math.abs(cx-target.x)+Math.abs(cy-target.y))break;
-   route.push(next);used.add(next.join(','));
+  // Reconstruct the actual shortest route found by BFS, not a greedy shortcut.
+  const destination=best.first,route=[destination],parent=new Map();
+  const pending=[[battle.ex,battle.ey]],visited=new Set([battle.ex+','+battle.ey]);
+  while(pending.length){
+   const [cx,cy]=pending.shift();
+   for(const [dx,dy] of dirs){
+    const nx=cx+dx,ny=cy+dy,k=nx+','+ny;
+    if(nx<0||nx>=6||ny<0||ny>=5||visited.has(k)||occupied.has(k)||blocked.has(k))continue;
+    visited.add(k);parent.set(k,[cx,cy]);pending.push([nx,ny]);
+   }
   }
-  if(route.length>1){battle.ex=route[route.length-1][0];battle.ey=route[route.length-1][1]}
-
+  // Follow the shortest route toward the chosen target, two cells per turn.
+  const goals=dirs.map(([dx,dy])=>[best.target.x+dx,best.target.y+dy]).filter(([x,y])=>visited.has(x+','+y));
+  goals.sort((p,q)=>{const depth=a=>{let n=0;while(parent.has(a.join(','))){a=parent.get(a.join(','));n++}return n};return depth(p)-depth(q)});
+  if(goals.length){
+   let cursor=goals[0],steps=[];
+   while(parent.has(cursor.join(','))){steps.unshift(cursor);cursor=parent.get(cursor.join(','))}
+   const path=steps.slice(0,2),current=battle;
+   if(path.length){
+    current.moving=true;
+    let index=0;
+    const animate=()=>{
+     if(battle!==current)return;
+     if(index>=path.length){current.moving=false;current.defending=false;current.round++;if(onComplete)onComplete();return}
+     [current.ex,current.ey]=path[index++];drawTactics();setTimeout(animate,480);
+    };
+    animate();return;
+   }
+  }
  }
  battle.defending=false;
  battle.round++;
+ if(onComplete)onComplete();
 }
 function tacticalMove(x,y){
  if(!battle||battle.moving)return;
@@ -867,7 +887,7 @@ function fireBattleProjectile(){
 }
 function tacticalReachable(type){
  const reachable=new Set();
- if(!battle||!battleUnitReady(type))return reachable;
+ if(!battle||battle.moving||!battleUnitReady(type))return reachable;
  const [sx,sy]=pos(type),queue=[[sx,sy,0]],visited=new Set([sx+','+sy]);
  while(queue.length){
   const [x,y,steps]=queue.shift();
@@ -892,7 +912,7 @@ function tacticalCanAttack(type){
 }
 function drawTactics(){
  const el=$('tactics');el.replaceChildren();
- const reachable=tacticalReachable(battle.selected);
+ const reachable=battle.moving?new Set():tacticalReachable(battle.selected);
  for(let y=0;y<5;y++)for(let x=0;x<6;x++){
   const c=document.createElement('button');c.type='button';c.className='combat-cell';
   const obstacle=battle.obstacles?.some(p=>p[0]===x&&p[1]===y);
@@ -924,7 +944,7 @@ function drawTactics(){
   c.setAttribute('aria-label','Combate columna '+(x+1)+' fila '+(y+1)+(c.title?' · '+c.title:''));
   c.disabled=!!obstacle&&!reachable.has(x+','+y);
   c.onclick=()=>{
-   if(!battle)return;
+   if(!battle||battle.moving)return;
    if(soldier){if(!battleUnitReady('soldiers'))return updateBattle('Los soldados ya han actuado.');battle.selected='soldiers';return updateBattle('Soldados seleccionados. Acércalos al enemigo para atacar.')}
    if(archer){if(!battleUnitReady('archers'))return updateBattle('Los arqueros ya han actuado.');battle.selected='archers';return updateBattle('Arqueros seleccionados. Pueden atacar hasta tres casillas de distancia.')}
    if(griffin||dragon){if(!battleUnitReady(griffin?'griffins':'dragons'))return updateBattle('Esta criatura ya ha actuado.');battle.selected=griffin?'griffins':'dragons';return updateBattle('Criatura voladora seleccionada. Puede atravesar obstáculos en combate.')}
