@@ -454,3 +454,30 @@ body.interest-modal-open{overflow:hidden}
  .nvra-simple .simple-hero h1{letter-spacing:-.045em}
 }
 @media(prefers-reduced-motion:reduce){.nvra-simple .simple-facts article,.nvra-simple .simple-cards article{transition:none}.nvra-simple .simple-facts article:hover,.nvra-simple .simple-cards article:hover{transform:none}}
+
+
+/* Premium reading experience: white paper, tokenomics, and read-only Base portal. */
+@media screen{
+ .nvra-simple .simple-doc{max-width:1020px;padding-block:clamp(65px,8vw,105px)}
+ .nvra-simple .simple-doc>.simple-eyebrow{display:inline-flex;padding:9px 14px;border:1px solid rgba(162,242,196,.3);border-radius:999px;background:rgba(108,217,167,.08)}
+ .nvra-simple .simple-doc h1{max-width:880px;font-size:clamp(2.65rem,5.2vw,4.8rem);letter-spacing:-.055em;line-height:1.08;margin:25px 0}
+ .nvra-simple .simple-doc>.simple-lead{max-width:800px;color:#c2dace;font-size:clamp(1rem,1.65vw,1.2rem)}
+ .nvra-simple .simple-doc>.simple-disclaimer{display:inline-block;padding:11px 15px;border:1px solid rgba(242,203,135,.24);border-radius:12px;background:rgba(139,104,39,.09);color:#e9d5ad}
+ .nvra-simple .simple-doc-section{padding:32px clamp(20px,3vw,34px);margin:17px 0;border:1px solid rgba(155,229,192,.2);border-radius:20px;background:linear-gradient(125deg,rgba(21,60,45,.85),rgba(9,35,29,.88));box-shadow:0 18px 45px rgba(0,0,0,.1)}
+ .nvra-simple .simple-doc-section h2{font-size:clamp(1.2rem,2vw,1.55rem);letter-spacing:-.025em;color:#ecfff4}
+ .nvra-simple .simple-doc-section p{font-size:1.01rem;line-height:1.85;color:#c4ddd0}
+ .nvra-portal-premium{min-height:100vh;background:radial-gradient(ellipse at 75% 0,rgba(42,132,104,.25),transparent 55%),#071914;color:#eafff5}
+ .nvra-portal-premium .portal{max-width:970px;margin:0 auto;padding:clamp(28px,6vw,75px) 20px}
+ .nvra-portal-premium .portal>a,.nvra-portal-premium .portal>p:first-child a{color:#a2f5c8;font-weight:700}
+ .nvra-portal-premium .portal>.panel{border-radius:24px;padding:clamp(24px,4vw,46px);background:linear-gradient(140deg,#143a2c,#0b2921);border:1px solid rgba(162,240,198,.32);box-shadow:0 25px 75px rgba(0,0,0,.22)}
+ .nvra-portal-premium .portal h1{font-size:clamp(2.1rem,4.4vw,3.7rem);letter-spacing:-.05em;line-height:1.1;margin:12px 0 20px}
+ .nvra-portal-premium .portal p{color:#c4ddd0}
+ .nvra-portal-premium .portal .notice{border-radius:14px;padding:16px 19px;background:rgba(155,114,44,.13);border:1px solid rgba(239,196,124,.3);color:#f4dbb2}
+ .nvra-portal-premium .portal label{color:#e8f8ed;font-weight:700}
+ .nvra-portal-premium .portal input{background:#fff;color:#10231c;border-radius:12px;border-color:#a4c7b4}
+ .nvra-portal-premium .portal .buttons{display:flex;gap:12px;flex-wrap:wrap;margin:18px 0}
+ .nvra-portal-premium .portal button{border:1px solid rgba(167,243,200,.4);border-radius:999px;padding:12px 20px;background:#a2f5c8;color:#09251b;font-weight:750;cursor:pointer}
+ .nvra-portal-premium .portal button:first-child{background:rgba(255,255,255,.06);color:#eafff5}
+ .nvra-portal-premium .portal .result{padding:20px;border:1px solid rgba(162,240,198,.25);border-radius:16px;background:rgba(5,25,19,.48);overflow-wrap:anywhere}
+}
+@media screen and (max-width:560px){.nvra-portal-premium .portal .buttons{display:grid}.nvra-portal-premium .portal button{width:100%}.nvra-simple .simple-doc-section{padding:24px 20px}}
