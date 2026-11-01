@@ -1382,22 +1382,49 @@ function rivalResourceCapture(){
 }
 // El héroe rival sólo conquista un castillo si llega físicamente a él.
 // Un castillo reconquistado deja de producir recursos para el jugador.
+// Asedio automático por rondas: las tropas de la guarnición combaten y sufren bajas reales.
 function rivalCastleConquest(){
  const v=rivalState();if(v.defeated)return '';
- const state=verifiedSiteState();
- const candidates=VERIFIED_MAP_SITES.filter(site=>site.kind==='fort'&&state[site.id]==='player');
- if(!candidates.length)return '';
- const target=candidates.map(site=>({site,d:Math.hypot(v.x-site.x,v.y-site.y)})).sort((a,b)=>a.d-b.d)[0];
+ const owners=verifiedSiteState();
+ const target=VERIFIED_MAP_SITES.filter(site=>site.kind==='fort'&&owners[site.id]==='player')
+  .map(site=>({site,d:Math.hypot(v.x-site.x,v.y-site.y)})).sort((a,b)=>a.d-b.d)[0];
  if(!target||target.d>5.5)return '';
  const guard=siteGarrison(target.site.id);
- const defenders=guard.defenders||{};
- const defense=4+(defenders.soldiers||0)+2*(defenders.archers||0)+5*(defenders.griffins||0)+14*(defenders.dragons||0);
- const attack=v.soldiers+v.archers*2;
- if(attack<defense)return '🛡️ La guarnición de '+CASTLE_PROFILES[target.site.id].name+' resiste el ataque enemigo.';
- state[target.site.id]='rival';
- v.soldiers=Math.max(1,v.soldiers-Math.max(1,Math.ceil(defense/3)));
- guard.defenders={soldiers:0,archers:0,griffins:0,dragons:0};
- return '⚔️ ¡El Reino Umbrío ha reconquistado '+CASTLE_PROFILES[target.site.id].name+'! Su estandarte cambia a rojo y cesa su producción para tu reino.'
+ if(!guard.defenders)guard.defenders={soldiers:0,archers:0,griffins:0,dragons:0};
+ const d=guard.defenders,castle=CASTLE_PROFILES[target.site.id].name;
+ let attackers={soldiers:Math.max(0,v.soldiers),archers:Math.max(0,v.archers)};
+ const power=()=>d.soldiers+2*d.archers+5*d.griffins+14*d.dragons;
+ const alive=()=>attackers.soldiers+attackers.archers>0;
+ const report=[];
+ // Los muros ofrecen defensa básica, pero sin guarnición no sustituyen a un ejército.
+ for(let round=1;round<=8&&alive()&&power()>0;round++){
+  const wall=2;
+  const ranged=2*d.archers+3*d.griffins+7*d.dragons;
+  const melee=d.soldiers+2*d.griffins+5*d.dragons;
+  const damage=Math.max(1,Math.ceil((ranged+melee+wall)/5));
+  let losses=damage;
+  const lostSoldiers=Math.min(attackers.soldiers,losses);attackers.soldiers-=lostSoldiers;losses-=lostSoldiers;
+  attackers.archers=Math.max(0,attackers.archers-Math.ceil(losses/2));
+  const counter=Math.max(1,Math.ceil((attackers.soldiers+2*attackers.archers)/5));
+  let remaining=counter;
+  for(const type of ['soldiers','archers','griffins','dragons']){
+   const cost={soldiers:1,archers:2,griffins:5,dragons:14}[type];
+   const lost=Math.min(d[type]||0,Math.floor(remaining/cost));
+   d[type]-=lost;remaining-=lost*cost;
+  }
+  if(remaining>0){const type=['soldiers','archers','griffins','dragons'].find(t=>d[t]>0);if(type)d[type]--}
+  report.push('R'+round+': atacantes '+(attackers.soldiers+attackers.archers)+' · defensores '+Object.values(d).reduce((n,x)=>n+x,0));
+ }
+ v.soldiers=attackers.soldiers;v.archers=attackers.archers;
+ const won=power()===0&&alive();
+ if(won){owners[target.site.id]='rival';guard.defenders={soldiers:0,archers:0,griffins:0,dragons:0}}
+ if(!alive()){v.defeated=true;v.recovery=0}
+ const outcome=won?'⚔️ El Reino Umbrío conquista '+castle+'.':'🛡️ '+castle+' resiste el asedio enemigo.';
+ const details=report.length?report.join(' | '):'Sin defensores desplegados';
+ const history=Array.isArray(s.siegeHistory)?s.siegeHistory:[];
+ history.unshift({turn:s.turn,castle,outcome,details});
+ s.siegeHistory=history.slice(0,12);
+ return outcome+' '+details;
 }
 function applyVerifiedSiteTurn(){
  const owned=verifiedSiteState();
