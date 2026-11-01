@@ -247,3 +247,10 @@ async function scenario(name,api,expected){
  await scenario('DexScreener no disponible','fail-market',/Datos de mercado no disponibles/);
  console.log('Pruebas unitarias y 4 escenarios simulados: OK');
 })().catch(error=>{console.error(error);process.exitCode=1;});
+
+/* Analytics 2.0: printed reports must keep headings, warnings and tables legible. */
+assert.match(sharedCss,/page-break-after:avoid/);
+assert.match(sharedCss,/orphans:3;widows:3/);
+assert.match(sharedCss,/thead\{display:table-header-group\}/);
+assert.match(sharedCss,/body\.printing-nvra-report #report \.muted/);
+assert.match(sharedCss,/body\.printing-nvra-report #report \.history-chart/);
