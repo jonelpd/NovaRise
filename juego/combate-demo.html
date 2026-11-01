@@ -1259,10 +1259,10 @@ function interactVerifiedSite(site){
  if(Math.hypot((hx-site.x)*1.0,(hy-site.y)*1.0)>8)return message('Acerca el héroe al '+site.label.toLowerCase()+' para interactuar. El edificio está en el mapa, no es un marcador.');
  const state=verifiedSiteState();
  if(site.kind==='fort'){
-  if(!state[site.id]){
+  if(state[site.id]!=='player'){
    if(s.moves<1)return message('Necesitas al menos un punto de movimiento para iniciar el asedio.');
    const profile=CASTLE_PROFILES[site.id],guard=profile.guard;
-   const hp=guard.soldiers+guard.archers*2+guard.griffins*5+guard.dragons*14;
+   const hp=guard.soldiers+guard.archers*2+guard.griffins*5+guard.dragons*14+(state[site.id]==='rival'?Math.max(8,rivalState().soldiers+2*rivalState().archers):0);
    battle={x:s.x,y:s.y,k:'site:'+site.id,siteId:site.id,siteLabel:profile.name,
     hp,defending:false,fort:true,ax:0,ay:2,ex:5,ey:2,range:1,
     selected:'soldiers',sx:0,sy:2,rx:0,ry:3,round:0};
@@ -1278,6 +1278,24 @@ function interactVerifiedSite(site){
   if(!state[site.id]){state[site.id]='player';return message('🌾 Molino controlado. Genera 1 comida por turno; la comida puede recuperar movimiento al inicio del turno siguiente.')}
   return message('🌾 Molino bajo tu control. Comida acumulada: '+(s.mapFood||0)+'.')
  }
+}
+// El héroe rival sólo conquista un castillo si llega físicamente a él.
+// Un castillo reconquistado deja de producir recursos para el jugador.
+function rivalCastleConquest(){
+ const v=rivalState();if(v.defeated)return '';
+ const state=verifiedSiteState();
+ const candidates=VERIFIED_MAP_SITES.filter(site=>site.kind==='fort'&&state[site.id]==='player');
+ if(!candidates.length)return '';
+ const target=candidates.map(site=>({site,d:Math.hypot(v.x-site.x,v.y-site.y)})).sort((a,b)=>a.d-b.d)[0];
+ if(!target||target.d>5.5)return '';
+ const guard=siteGarrison(target.site.id);
+ const defense=4+Math.floor((guard.stock.soldiers||0)/2)+(guard.stock.archers||0);
+ const attack=v.soldiers+v.archers*2;
+ if(attack<defense)return '🛡️ La guarnición de '+CASTLE_PROFILES[target.site.id].name+' resiste el ataque enemigo.';
+ state[target.site.id]='rival';
+ v.soldiers=Math.max(1,v.soldiers-Math.max(1,Math.ceil(defense/3)));
+ guard.stock.soldiers=Math.max(0,guard.stock.soldiers-2);
+ return '⚔️ ¡El Reino Umbrío ha reconquistado '+CASTLE_PROFILES[target.site.id].name+'! Su estandarte cambia a rojo y cesa su producción para tu reino.'
 }
 function applyVerifiedSiteTurn(){
  const owned=verifiedSiteState();
@@ -1308,8 +1326,10 @@ const CASTLE_BANNER_COLORS={
 function castleBannerOwner(site){
  if(site.id==='home')return 'player';
  if(site.id==='rival')return s.done?'player':'rival';
+ const owner=verifiedSiteState()[site.id];
+ if(owner==='player'||owner==='rival')return owner;
  if(site.id==='fort-south'&&s.claimed.includes('4,7'))return 'player';
- return verifiedSiteState()[site.id]==='player'?'player':null
+ return null
 }
 function castleBannerColor(owner){
  if(owner==='rival')return CASTLE_BANNER_COLORS['Reino Umbrío'];
@@ -1490,6 +1510,7 @@ async function rivalTurn(){
    s.message='⚔️ El Reino Umbrío reclama '+best.obj.name+' · ejército: '+v.soldiers+' soldados y '+v.archers+' arqueros.';
    }
   }else s.message=completed?'⚔️ El héroe rival avanza hacia '+best.obj.name+'.':'🛡️ El rival no encuentra un paso seguro hacia '+best.obj.name+'.';
+  const castleEvent=rivalCastleConquest();if(castleEvent)s.message=castleEvent;
   v.explored.push([v.x,v.y]);
   if(Math.hypot(v.x-heroVisualPosition()[0],v.y-heroVisualPosition()[1])<2.2)s.rivalEncounterPending=true;
  }finally{
