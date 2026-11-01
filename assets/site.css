@@ -481,3 +481,15 @@ body.interest-modal-open{overflow:hidden}
  .nvra-portal-premium .portal .result{padding:20px;border:1px solid rgba(162,240,198,.25);border-radius:16px;background:rgba(5,25,19,.48);overflow-wrap:anywhere}
 }
 @media screen and (max-width:560px){.nvra-portal-premium .portal .buttons{display:grid}.nvra-portal-premium .portal button{width:100%}.nvra-simple .simple-doc-section{padding:24px 20px}}
+
+
+/* Exact approved NovaRiseAnalitica banner, using original PNG without alteration. */
+@media screen{
+ .nvra-simple .simple-brand{width:190px;max-width:32vw;flex-shrink:0}
+ .nvra-simple .simple-brand img{display:block;width:100%;height:auto;max-height:none;object-fit:contain}
+ .nvra-simple .simple-nav{min-height:96px}
+}
+@media screen and (max-width:760px){
+ .nvra-simple .simple-brand{width:165px;max-width:55vw}
+ .nvra-simple .simple-nav{min-height:82px}
+}
