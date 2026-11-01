@@ -552,7 +552,7 @@ function navSegmentClear(a,b){
 function fineRoute(a,b){
  if(!navBlocked)return null;
  if(!a||!b)return null;
- const start=nearestNav(...a,0),goal=nearestNav(...b,0);if(!start||!goal)return null;
+ const start=nearestNav(...a,2),goal=nearestNav(...b,2);if(!start||!goal)return null;
  const src=navCell(...start),dst=navCell(...goal),dist=new Float64Array(6400).fill(Infinity),prev=new Int32Array(6400).fill(-1),closed=new Uint8Array(6400);
  dist[src]=0;
  const heuristic=(id)=>Math.hypot(id%80-goal[0],Math.floor(id/80)-goal[1]);
@@ -580,7 +580,7 @@ async function travelFinePath(path,epoch){
  if(!path)return false;
  let previous=persistentHero?[parseFloat(persistentHero.style.left),parseFloat(persistentHero.style.top)]:null;
  for(let i=0;i<path.length;i++){
-  if(!navBlocked||!nearestNav(...path[i],0)||previous&&Number.isFinite(previous[0])&&Number.isFinite(previous[1])&&!navSegmentClear(previous,path[i]))return false;
+  if(!navBlocked||!nearestNav(...path[i],1)||previous&&Number.isFinite(previous[0])&&Number.isFinite(previous[1])&&!navSegmentClear(previous,path[i]))return false;
   if(epoch!==walkEpoch||battle||!$('adventure-discovery').hidden||!$('castle-screen').hidden)return false;
   if(persistentHero){persistentHero.style.left=path[i][0]+'%';persistentHero.style.top=path[i][1]+'%'}
   previous=path[i];
@@ -588,10 +588,17 @@ async function travelFinePath(path,epoch){
  }
  return true
 }
+// Ambos héroes consultan la misma malla de navegación de 80x80.
+// La cuadrícula estratégica sólo determina eventos y coste de movimiento.
+function fineStepBetween(ax,ay,bx,by){
+ const from=safeHeroPoint(ax,ay),to=safeHeroPoint(bx,by);
+ return from&&to?fineRoute(from,to):null
+}
 function findRoute(tx,ty){
  const start=key(s.x,s.y),target=key(tx,ty);
- if(tx<0||ty<0||tx>=W||ty>=H||water.includes(target))return null;
+ if(!Number.isInteger(tx)||!Number.isInteger(ty)||tx<0||ty<0||tx>=W||ty>=H||water.includes(target)||!navBlocked)return null;
  const dist=new Map([[start,0]]),prev=new Map(),pending=new Set([start]);
+ const segmentCache=new Map();
  while(pending.size){
   let current=null,best=Infinity;
   for(const k of pending){const cost=dist.get(k);if(cost<best){best=cost;current=k}}
@@ -601,8 +608,10 @@ function findRoute(tx,ty){
   for(const [dx,dy] of [[0,-1],[1,0],[0,1],[-1,0]]){
    const nx=x+dx,ny=y+dy,k=key(nx,ny);
    if(nx<0||ny<0||nx>=W||ny>=H||water.includes(k)||(hostileAt(k)&&k!==target))continue;
-   const cost=movementCost(nx,ny);
-   const candidate=best+cost;
+   const edge=[current,k].sort().join('|');
+   if(!segmentCache.has(edge))segmentCache.set(edge,!!fineStepBetween(x,y,nx,ny));
+   if(!segmentCache.get(edge))continue;
+   const candidate=best+movementCost(nx,ny);
    if(candidate<(dist.get(k)??Infinity)){dist.set(k,candidate);prev.set(k,current);pending.add(k)}
   }
  }
