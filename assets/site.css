@@ -534,3 +534,27 @@ body.interest-modal-open{overflow:hidden}
  .nvra-simple .simple-header .simple-brand{width:104px;max-width:104px;flex-basis:104px}
  .nvra-simple .simple-header .simple-nav{min-height:60px}
 }
+
+
+/* Landing-page visual finishing: compact analyzer intro, improved rhythm and interaction. */
+@media screen{
+ .nvra-simple .simple-tool-intro{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;margin:0 0 23px;padding:0 0 20px;border-bottom:1px solid rgba(162,234,196,.18)}
+ .nvra-simple .simple-tool-intro p{margin:0;max-width:650px;color:#c3d9ce;font-size:.91rem;line-height:1.65}
+ .nvra-simple .simple-tool-label{display:inline-flex;align-items:center;gap:8px;flex-shrink:0;padding:8px 12px;border:1px solid rgba(156,233,190,.32);border-radius:999px;background:rgba(87,200,138,.1);color:#b7f5d1;font-size:.76rem;font-weight:750;letter-spacing:.01em}
+ .nvra-simple .simple-tool-label span{color:#76f1a9;font-size:.75rem}
+ .nvra-simple .simple-section[id],.nvra-simple section[id]{scroll-margin-top:110px}
+ .nvra-simple .simple-hero .simple-disclaimer{font-size:.8rem;line-height:1.65;max-width:640px;color:#a9c9b9}
+ .nvra-simple .simple-section .simple-heading{margin-bottom:35px}
+ .nvra-simple .simple-facts article strong{overflow-wrap:anywhere}
+ .nvra-simple .simple-cards article a,.nvra-simple .simple-footnote a,.nvra-simple .simple-bottom a{color:#b1f9d0;text-underline-offset:4px}
+ .nvra-simple .simple-cards article a:hover,.nvra-simple .simple-footnote a:hover,.nvra-simple .simple-bottom a:hover{text-decoration:underline}
+ .nvra-simple .simple-footer a:hover{text-decoration:underline;text-underline-offset:4px}
+ .nvra-simple .simple-analyzer input:focus-visible,.nvra-simple .simple-analyzer select:focus-visible{outline:3px solid #9bf4c8;outline-offset:2px}
+}
+@media screen and (max-width:900px){
+ .nvra-simple .simple-tool-intro{flex-direction:column;gap:12px}
+}
+@media screen and (max-width:480px){
+ .nvra-simple .simple-tool-intro{padding-bottom:18px}
+ .nvra-simple .simple-tool-label{font-size:.7rem;white-space:normal}
+}
