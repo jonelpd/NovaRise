@@ -565,6 +565,42 @@ analyzeButton.addEventListener('click',async()=>{
    ?unavailable+' indicators lack data. This is not a contract audit, safety guarantee, or investment advice. Market data is shown separately.'
    :unavailable+' indicadores carecen de datos. No es una auditoría del contrato, garantía de seguridad ni asesoramiento financiero. Los datos de mercado se muestran por separado.'));
   report.append(executive);
+  // Practical next steps are tied only to observed provider signals.
+  const conclusions=element('section','market-card');
+  conclusions.append(element('h4','section-title',nvraLocale==='en'?'Conclusions and next checks':'Conclusiones y próximas comprobaciones'));
+  const recommendations=[];
+  const flaggedKeys=new Set(results.filter(item=>item.state==='alert').map(item=>item.field.key));
+  if(flaggedKeys.has('is_honeypot'))recommendations.push(nvraLocale==='en'
+   ?'Selling restriction flagged: independently verify whether selling is possible before considering any transaction.'
+   :'Restricción de venta señalada: comprueba de forma independiente si se puede vender antes de considerar cualquier operación.');
+  if(flaggedKeys.has('is_mintable'))recommendations.push(nvraLocale==='en'
+   ?'Minting capability flagged: review who can issue tokens and whether supply can change.'
+   :'Capacidad de emisión señalada: revisa quién puede emitir tokens y si el suministro puede cambiar.');
+  if(flaggedKeys.has('is_proxy')||flaggedKeys.has('can_take_back_ownership'))recommendations.push(nvraLocale==='en'
+   ?'Administrative control flagged: inspect upgrade permissions, ownership and privileged roles.'
+   :'Control administrativo señalado: examina los permisos de actualización, la propiedad y los roles privilegiados.');
+  if(flaggedKeys.has('is_blacklisted'))recommendations.push(nvraLocale==='en'
+   ?'Address restrictions flagged: review whether addresses can be blocked from transfers.'
+   :'Restricciones de direcciones señaladas: revisa si se pueden bloquear direcciones para transferencias.');
+  if(flaggedKeys.has('is_open_source'))recommendations.push(nvraLocale==='en'
+   ?'Source-code transparency flagged: check contract verification and seek an independent code review.'
+   :'Transparencia del código señalada: comprueba la verificación del contrato y solicita una revisión independiente.');
+  if(unavailable)recommendations.push(nvraLocale==='en'
+   ?unavailable+' security indicator(s) are unavailable: request additional evidence; do not interpret missing results as safe.'
+   :unavailable+' indicador(es) de seguridad no disponibles: busca pruebas adicionales; no interpretes los datos ausentes como seguros.');
+  if(!alerts&&known)recommendations.push(nvraLocale==='en'
+   ?'No alerts were returned among available signals. This does not establish that the contract is safe.'
+   :'No se recibieron alertas entre los indicadores disponibles. Esto no demuestra que el contrato sea seguro.');
+  if(!known)recommendations.push(nvraLocale==='en'
+   ?'No interpretable security signals: postpone any conclusion until reliable data is available.'
+   :'Sin indicadores de seguridad interpretables: aplaza cualquier conclusión hasta disponer de datos fiables.');
+  const actionList=element('ul','');
+  for(const recommendation of recommendations)actionList.append(element('li','',recommendation));
+  conclusions.append(actionList);
+  conclusions.append(element('p','small muted',nvraLocale==='en'
+   ?'These checks are informational and do not constitute an independent audit or investment recommendation.'
+   :'Estas comprobaciones son informativas y no constituyen una auditoría independiente ni una recomendación de inversión.'));
+  report.append(conclusions);
   report.append(dataQualityCard('GoPlus Security API',known,0,unavailable));
   // Group the existing GoPlus signals by concern, without claiming an overall safety rating.
   const riskGroups=[
