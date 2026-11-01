@@ -1443,7 +1443,7 @@ function rivalCastleConquest(){
   }
   if(remaining>0){const type=['soldiers','archers','griffins','dragons'].find(t=>d[t]>0);if(type)d[type]--}
   frames.push({round,attackers:{...attackers},defenders:{...d}});
-  report.push('R'+round': atacantes '+(attackers.soldiers+attackers.archers)+' · defensores '+Object.values(d).reduce((n,x)=>n+x,0));
+  report.push('R'+round+': atacantes '+(attackers.soldiers+attackers.archers)+' · defensores '+Object.values(d).reduce((n,x)=>n+x,0));
  }
  v.soldiers=attackers.soldiers;v.archers=attackers.archers;
  const won=power()===0&&alive();
