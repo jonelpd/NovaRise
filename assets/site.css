@@ -368,3 +368,23 @@ body.interest-modal-open{overflow:hidden}
  body.printing-nvra-report #report canvas,body.printing-nvra-report #report svg{max-width:100%!important}
  body.printing-nvra-report #report a{color:#111!important;text-decoration:underline!important}
 }
+
+/* Analytics 2.0: readable multi-page A4 reports without suppressing missing-data notices. */
+@media print{
+ body.printing-nvra-report #report h3,
+ body.printing-nvra-report #report h4,
+ body.printing-nvra-report #report h5{break-after:avoid;page-break-after:avoid;color:#10251c!important}
+ body.printing-nvra-report #report p,
+ body.printing-nvra-report #report li{orphans:3;widows:3}
+ body.printing-nvra-report #report .muted,
+ body.printing-nvra-report #report .small{color:#34463d!important}
+ body.printing-nvra-report #report .market-card,
+ body.printing-nvra-report #report .panel,
+ body.printing-nvra-report #report .summary{background:#fff!important;color:#111!important;border-color:#a7b4ac!important}
+ body.printing-nvra-report #report table{width:100%!important;border-collapse:collapse!important}
+ body.printing-nvra-report #report th,
+ body.printing-nvra-report #report td{color:#111!important;border-bottom:1px solid #cbd5ce!important;overflow-wrap:anywhere}
+ body.printing-nvra-report #report thead{display:table-header-group}
+ body.printing-nvra-report #report tr{break-inside:avoid;page-break-inside:avoid}
+ body.printing-nvra-report #report .history-chart{height:auto!important;max-height:90mm!important}
+}
