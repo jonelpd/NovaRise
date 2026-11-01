@@ -1437,6 +1437,15 @@ function drawRivalHero(map){
  map.appendChild(rivalMarker);
  rivalMarker.style.left=v.x+'%';rivalMarker.style.top=v.y+'%';
 }
+// Durante el turno rival, la cámara lo sigue para que su recorrido sea visible.
+function focusRivalCamera(x,y){
+ const viewport=$('world-viewport');
+ if(!viewport||!$('follow-hero')?.checked)return;
+ const targetX=x/100*2048-viewport.clientWidth/2;
+ const targetY=y/100*2048-viewport.clientHeight/2;
+ viewport.scrollTo({left:Math.max(0,targetX),top:Math.max(0,targetY),behavior:'auto'});
+ updateMinimap()
+}
 function rivalStrength(v){return Math.max(0,v.soldiers)+2*Math.max(0,v.archers)}
 function rivalThreatLevel(v){return rivalStrength(v)/Math.max(1,strength())}
 function rivalChooseObjective(v,options){
@@ -1510,12 +1519,14 @@ async function rivalTurn(){
   // Mantener al héroe rival visible durante su recorrido incluso tras redibujados.
   if(!rivalMarker||!rivalMarker.isConnected)drawRivalHero($('map'));
   rivalMarker.style.transition='left 90ms linear, top 90ms linear';
+  focusRivalCamera(v.x,v.y);
   const steps=Math.min(best.path.length,24);
   let completed=0;
   for(let i=0;i<steps;i++){
    if(epoch!==rivalEpoch||s.done)break;
    const [x,y]=best.path[i];if(!navSegmentClear([v.x,v.y],[x,y]))break;v.x=x;v.y=y;completed++;
    if(rivalMarker){rivalMarker.style.left=x+'%';rivalMarker.style.top=y+'%'}
+   if(i%3===0)focusRivalCamera(x,y);
    await new Promise(resolve=>setTimeout(resolve,95))
   }
   if(epoch!==rivalEpoch)return;
@@ -1540,7 +1551,7 @@ async function rivalTurn(){
    s.gold+=40+25*s.claimed.length+(s.buildings.includes('market')?30:0)+(s.faction==='Guardianes del Bosque'?15:0);
    if(s.buildings.includes('barracks'))s.soldiers++;
    s.crystals+=mineYield();applyVerifiedSiteTurn();
-   render();
+   lastCameraKey=null;render();
    if(s.rivalEncounterPending){s.rivalEncounterPending=false;rivalEncounter()}
   }
  }
