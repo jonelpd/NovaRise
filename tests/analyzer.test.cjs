@@ -254,3 +254,12 @@ assert.match(sharedCss,/orphans:3;widows:3/);
 assert.match(sharedCss,/thead\{display:table-header-group\}/);
 assert.match(sharedCss,/body\.printing-nvra-report #report \.muted/);
 assert.match(sharedCss,/body\.printing-nvra-report #report \.history-chart/);
+
+/* Actionable conclusions must be derived from real provider flags and translated. */
+assert.match(script,/Conclusiones y próximas comprobaciones/);
+assert.match(script,/Conclusions and next checks/);
+assert.match(script,/flaggedKeys\.has\('is_honeypot'\)/);
+assert.match(script,/flaggedKeys\.has\('is_mintable'\)/);
+assert.match(script,/if\(unavailable\)recommendations\.push/);
+assert.match(script,/if\(!known\)recommendations\.push/);
+assert.match(script,/report\.append\(conclusions\)/);
