@@ -6,6 +6,14 @@ const netInput=document.getElementById('network');
 const report=document.getElementById('report');
 const empty=document.getElementById('empty');
 const analyzeButton=document.getElementById('analyze');
+const reportTools=document.getElementById('report-tools');
+const printReportButton=document.getElementById('print-report');
+if(printReportButton)printReportButton.addEventListener('click',()=>{
+ if(!report||report.classList.contains('hidden')||!report.textContent.trim())return;
+ document.body.classList.add('printing-nvra-report');
+ try{window.print();}finally{document.body.classList.remove('printing-nvra-report');}
+});
+
 const endpointChains={'Base':'8453','Ethereum':'1','Polygon':'137','BNB Smart Chain':'56'};
 const dexChains={'Base':'base','Ethereum':'ethereum','Polygon':'polygon','BNB Smart Chain':'bsc'};
 const fields=[
