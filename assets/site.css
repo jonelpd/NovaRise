@@ -518,3 +518,19 @@ body.interest-modal-open{overflow:hidden}
 @media screen and (max-width:480px){
  .nvra-simple .simple-hero-brand{width:100%}
 }
+
+
+/* Compact header lockup: preserve the exact artwork while giving navigation room. */
+@media screen{
+ .nvra-simple .simple-header .simple-brand{width:132px;max-width:132px;flex:0 0 132px}
+ .nvra-simple .simple-header .simple-brand img{width:100%;height:auto;display:block}
+ .nvra-simple .simple-header .simple-nav{min-height:68px}
+}
+@media screen and (max-width:1000px){
+ .nvra-simple .simple-header .simple-brand{width:116px;max-width:116px;flex-basis:116px}
+ .nvra-simple .simple-header .simple-nav{min-height:64px}
+}
+@media screen and (max-width:760px){
+ .nvra-simple .simple-header .simple-brand{width:104px;max-width:104px;flex-basis:104px}
+ .nvra-simple .simple-header .simple-nav{min-height:60px}
+}
