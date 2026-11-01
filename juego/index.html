@@ -664,7 +664,7 @@ function findRoute(tx,ty){
   if(current===null)break;
   pending.delete(current);if(current===target)break;
   const [x,y]=current.split(',').map(Number);
-  for(const [dx,dy] of [[0,-1],[1,0],[0,1],[-1,0]]){
+  for(const [dx,dy] of [[0,-1],[1,0],[0,1],[-1,0],[1,1],[-1,1],[1,-1],[-1,-1]]){
    const nx=x+dx,ny=y+dy,k=key(nx,ny);
    if(nx<0||ny<0||nx>=W||ny>=H||water.includes(k)||(hostileAt(k)&&k!==target))continue;
    const edge=[current,k].sort().join('|');
