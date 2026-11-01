@@ -15,6 +15,7 @@ jobs:
           node --check assets/base-portal.js
           node tests/base-portal.test.cjs
           node --check assets/analyzer.js
+          node tests/analyzer.test.cjs
           node --check assets/locale-en.js
           node --check assets/interest.js
           node --check assets/roadmap-public.js
