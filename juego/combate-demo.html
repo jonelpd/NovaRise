@@ -769,7 +769,8 @@ function duelEnemyTurn(done){
   const queue=[[u.x,u.y]],seen=new Set([u.x+','+u.y]),parents=new Map();let destination=null;
   while(queue.length){
    const [x,y]=queue.shift();
-   if(Math.abs(x-nearest.x)+Math.abs(y-nearest.y)===1){destination=[x,y];break}
+   const targetDistance=Math.abs(x-nearest.x)+Math.abs(y-nearest.y);
+   if(u.id==='archers'?targetDistance>=2&&targetDistance<=3:targetDistance===1){destination=[x,y];break}
    for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){
     const nx=x+dx,ny=y+dy,k=nx+','+ny;
     if(seen.has(k)||blocked(nx,ny,u))continue;
@@ -981,7 +982,7 @@ function drawTactics(){
   const enemyStack=battle.enemyStacks?duelEnemies().find(u=>u.x===x&&u.y===y):null;
   const enemy=!!enemyStack||(!battle.enemyStacks&&x===battle.ex&&y===battle.ey);
   if(!enemy&&reachable.has(x+','+y)){c.classList.add('combat-reachable');c.title='Destino alcanzable'}
-  if(enemy&&(battle.enemyStacks?(()=>{const [ax,ay]=pos(battle.selected);const dist=Math.abs(ax-x)+Math.abs(ay-y);return battleUnitReady(battle.selected)&&dist<=battleRange(battle.selected)&&(battle.selected!=='archers'||dist>1)})():tacticalCanAttack(battle.selected)))c.classList.add('combat-attackable');
+  if(enemy&&(battle.enemyStacks?(()=>{const previous=[battle.ex,battle.ey];battle.ex=x;battle.ey=y;const can=tacticalCanAttack(battle.selected);[battle.ex,battle.ey]=previous;return can})():tacticalCanAttack(battle.selected)))c.classList.add('combat-attackable');
   const soldier=!enemy&&s.soldiers>0&&x===battle.sx&&y===battle.sy;
   const archer=!enemy&&!soldier&&s.archers>0&&x===battle.rx&&y===battle.ry;
   const griffin=!enemy&&!soldier&&!archer&&s.griffins>0&&x===battle.gx&&y===battle.gy;
@@ -1208,12 +1209,13 @@ function hit(defend){if(!battle||battle.moving)return;if(!battleUnitReady(battle
  if(!defend&&battle.selected==='archers'&&dist<=1)return updateBattle('Los arqueros necesitan separarse del enemigo para disparar.');
  if(!defend&&!tacticalCanAttack(battle.selected))return updateBattle('El objetivo está fuera de alcance o bloqueado por el terreno.');
  const attacker=battle.selected;
+ const struckEnemy=battle.enemyStacks?duelTarget():null;
  const damage=defend?0:battleAttackDamage(attacker);
  if(battle.enemyStacks){if(!defend)duelApplyDamage(damage)}else battle.hp=Math.max(0,battle.hp-damage);
  if(!defend){animateBattleFx('enemy',battle.hp<=0);window.novariseUnitAnimation?.(attacker,'attack',600);if(attacker==='archers'||attacker==='dragons')fireBattleProjectile()}
  if(battle.hp<=0)return hitResolveVictory();
  let counterNote='';
- if(!defend&&dist===1&&!battle.counterUsed){
+ if(!defend&&dist===1&&!battle.counterUsed&&(!struckEnemy||struckEnemy.count>0)){
   battle.counterUsed=true;
   const protectedStack=battle.guarding?.includes(attacker);
   const losses=protectedStack?0:1;
