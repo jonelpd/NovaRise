@@ -576,13 +576,24 @@ function safeHeroPoint(x,y){
  const point=logicalHeroPoint(x,y);if(!navBlocked)return point;
  const cell=nearestNav(...point,2);return cell?[(cell[0]+.5)*1.25,(cell[1]+.5)*1.25]:null
 }
+// Animación direccional compartida: la montura gira según el avance real.
+function animateHeroHeading(marker,from,to){
+ if(!marker||!from||!to)return;
+ const dx=to[0]-from[0],dy=to[1]-from[1];
+ if(Math.hypot(dx,dy)<0.05)return;
+ marker.classList.toggle('hero-facing-left',dx<-.08);
+ marker.classList.add('hero-traveling');
+ marker.style.setProperty('--travel-tilt',(dy<-.08?'-3deg':dy>.08?'3deg':'0deg'));
+ clearTimeout(marker._travelTimer);
+ marker._travelTimer=setTimeout(()=>marker.classList.remove('hero-traveling'),240)
+}
 async function travelFinePath(path,epoch){
  if(!path)return false;
  let previous=persistentHero?[parseFloat(persistentHero.style.left),parseFloat(persistentHero.style.top)]:null;
  for(let i=0;i<path.length;i++){
   if(!navBlocked||!nearestNav(...path[i],1)||previous&&Number.isFinite(previous[0])&&Number.isFinite(previous[1])&&!navSegmentClear(previous,path[i]))return false;
   if(epoch!==walkEpoch||battle||!$('adventure-discovery').hidden||!$('castle-screen').hidden)return false;
-  if(persistentHero){persistentHero.style.left=path[i][0]+'%';persistentHero.style.top=path[i][1]+'%'}
+  if(persistentHero){animateHeroHeading(persistentHero,previous,path[i]);persistentHero.style.left=path[i][0]+'%';persistentHero.style.top=path[i][1]+'%'}
   previous=path[i];
   await new Promise(resolve=>setTimeout(resolve,85));
  }
@@ -1519,12 +1530,14 @@ async function rivalTurn(){
   // Mantener al héroe rival visible durante su recorrido incluso tras redibujados.
   if(!rivalMarker||!rivalMarker.isConnected)drawRivalHero($('map'));
   rivalMarker.style.transition='left 90ms linear, top 90ms linear';
+  rivalMarker.style.willChange='left, top';
   focusRivalCamera(v.x,v.y);
   const steps=Math.min(best.path.length,24);
   let completed=0;
   for(let i=0;i<steps;i++){
    if(epoch!==rivalEpoch||s.done)break;
-   const [x,y]=best.path[i];if(!navSegmentClear([v.x,v.y],[x,y]))break;v.x=x;v.y=y;completed++;
+   const [x,y]=best.path[i];if(!navSegmentClear([v.x,v.y],[x,y]))break;const previousRival=[v.x,v.y];v.x=x;v.y=y;completed++;
+   animateHeroHeading(rivalMarker,previousRival,[x,y]);
    if(rivalMarker){rivalMarker.style.left=x+'%';rivalMarker.style.top=y+'%'}
    if(i%3===0)focusRivalCamera(x,y);
    await new Promise(resolve=>setTimeout(resolve,95))
