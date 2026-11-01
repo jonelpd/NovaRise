@@ -584,7 +584,7 @@ async function travelFinePath(path,epoch){
   if(epoch!==walkEpoch||battle||!$('adventure-discovery').hidden||!$('castle-screen').hidden)return false;
   if(persistentHero){persistentHero.style.left=path[i][0]+'%';persistentHero.style.top=path[i][1]+'%'}
   previous=path[i];
-  if(i%3===0||i===path.length-1)await new Promise(resolve=>setTimeout(resolve,45));
+  await new Promise(resolve=>setTimeout(resolve,85));
  }
  return true
 }
@@ -662,7 +662,7 @@ function walkTo(tx,ty){
   if(!await travelFinePath(fine,epoch)){walking=false;clearAdventureRoute();render();return message('Movimiento detenido: el terreno no permite completar esa ruta.')}
   move(x,y);
   if(battle||!$('adventure-discovery').hidden||!$('castle-screen').hidden||s.x===beforeX&&s.y===beforeY){walking=false;clearAdventureRoute();return}
-  if(index<route.length&&s.moves>=movementCost(route[index][0],route[index][1])&&$('adventure-discovery').hidden&&$('castle-screen').hidden)setTimeout(step,80);else {walking=false;if(index>=route.length&&!battle&&!s.done&&(key(tx,ty)==='1,1'||key(tx,ty)==='4,7'&&s.claimed.includes('4,7')))setTimeout(()=>{if(epoch===walkEpoch&&!walking&&!battle&&s.x===tx&&s.y===ty&&$('adventure-discovery').hidden&&$('castle-screen').hidden)visitKnownLocation(tx,ty)},260)}
+  if(index<route.length&&s.moves>=movementCost(route[index][0],route[index][1])&&$('adventure-discovery').hidden&&$('castle-screen').hidden)setTimeout(step,120);else {walking=false;if(index>=route.length&&!battle&&!s.done&&(key(tx,ty)==='1,1'||key(tx,ty)==='4,7'&&s.claimed.includes('4,7')))setTimeout(()=>{if(epoch===walkEpoch&&!walking&&!battle&&s.x===tx&&s.y===ty&&$('adventure-discovery').hidden&&$('castle-screen').hidden)visitKnownLocation(tx,ty)},260)}
  }
  step()
 }
@@ -1507,13 +1507,16 @@ async function rivalTurn(){
    if(path&&path.length){best={obj:{x:0,y:9,type:'retreat',name:'refugio del Reino Umbrío'},path};v.retreats=(v.retreats||0)+1}
   }
   if(!best){s.message='El héroe rival no encuentra una ruta transitable y mantiene su posición.';return}
-  const steps=Math.min(best.path.length,32);
+  // Mantener al héroe rival visible durante su recorrido incluso tras redibujados.
+  if(!rivalMarker||!rivalMarker.isConnected)drawRivalHero($('map'));
+  rivalMarker.style.transition='left 90ms linear, top 90ms linear';
+  const steps=Math.min(best.path.length,24);
   let completed=0;
   for(let i=0;i<steps;i++){
    if(epoch!==rivalEpoch||s.done)break;
    const [x,y]=best.path[i];if(!navSegmentClear([v.x,v.y],[x,y]))break;v.x=x;v.y=y;completed++;
    if(rivalMarker){rivalMarker.style.left=x+'%';rivalMarker.style.top=y+'%'}
-   await new Promise(resolve=>setTimeout(resolve,45))
+   await new Promise(resolve=>setTimeout(resolve,95))
   }
   if(epoch!==rivalEpoch)return;
   if(completed===best.path.length){
