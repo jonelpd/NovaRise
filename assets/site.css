@@ -354,3 +354,17 @@ body.interest-modal-open{overflow:hidden}
 .simple-nav nav .simple-app-dropdown a{display:block;padding:11px 13px;color:#f1f8f5;text-decoration:none;border-radius:7px;white-space:normal}
 .simple-nav nav .simple-app-dropdown a:hover,.simple-nav nav .simple-app-dropdown a:focus-visible{background:#244e56}
 @media(max-width:760px){.simple-nav nav .simple-app-menu{width:100%}.simple-nav nav .simple-app-menu summary{justify-content:space-between}.simple-nav nav .simple-app-dropdown{position:static;min-width:0;margin-top:6px;box-shadow:none}}
+
+/* Analytics 2.0 report PDF/print layout. Browser print dialog saves to PDF. */
+.report-tools{margin-top:16px;display:grid;gap:8px}
+.report-tools[hidden]{display:none!important}
+.report-tools .btn{justify-self:start}
+@media print{
+ @page{size:A4;margin:15mm}
+ body.printing-nvra-report,body.printing-nvra-report *{visibility:hidden!important}
+ body.printing-nvra-report #report,body.printing-nvra-report #report *{visibility:visible!important}
+ body.printing-nvra-report #report{position:absolute!important;left:0!important;top:0!important;width:100%!important;max-width:none!important;display:block!important;overflow:visible!important;color:#111!important;background:white!important;font-size:10pt!important;line-height:1.4!important}
+ body.printing-nvra-report #report .market-card,body.printing-nvra-report #report .indicator,body.printing-nvra-report #report .metric{break-inside:avoid;page-break-inside:avoid;box-shadow:none!important}
+ body.printing-nvra-report #report canvas,body.printing-nvra-report #report svg{max-width:100%!important}
+ body.printing-nvra-report #report a{color:#111!important;text-decoration:underline!important}
+}
