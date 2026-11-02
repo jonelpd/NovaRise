@@ -45,6 +45,16 @@ const assert=require('node:assert/strict');
     await page.evaluate(()=>window.dispatchEvent(new Event('afterprint')));
     assert.equal(await page.evaluate(()=>document.body.classList.contains('printing-nvra-report')),false,'afterprint must restore normal page mode');
     await page.screenshot({path:path.join(artifactDir,lang+'-'+device+'-screen.png'),fullPage:true});
+    // Master Plan 2.2: exercise the real bilingual comparison form with mocked providers.
+    const compare=page.locator('#token-comparator');
+    assert.equal(await compare.count(),1,'Token comparator must be present');
+    await compare.locator('[name=network]').selectOption('Base');
+    await compare.locator('[name=contractA]').fill('0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913');
+    await compare.locator('[name=contractB]').fill('0x4200000000000000000000000000000000000006');
+    await compare.locator('button[type=submit]').click();
+    await page.waitForFunction(()=>document.querySelector('#token-comparator button[type=submit]')?.disabled===false,{timeout:15000});
+    assert.equal(await compare.locator('table tr').count(),6,'Comparison must render five metrics');
+    assert.ok((await compare.locator('[data-results]').innerText()).includes(lang==='en'?'Unavailable':'Sin datos'),'Missing market metrics must not be shown as zero');
     assert.deepEqual(errors,[],'Browser errors: '+lang+'/'+device);
     console.log('PASS '+lang+' '+device+' report and A4 PDF ('+pdf.length+' bytes)');
     await page.close();
