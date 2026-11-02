@@ -647,3 +647,8 @@ body.interest-modal-open{overflow:hidden}
 .nvra-simple .simple-header .simple-nav nav>a.simple-facebook{display:inline-flex;align-items:center;justify-content:center;gap:6px;background:#1877f2;color:#fff;border:1px solid #4c9dff;border-radius:9px;padding:8px 12px;font-weight:750;white-space:nowrap;transition:background .2s ease,box-shadow .2s ease}
 .nvra-simple .simple-header .simple-nav nav>a.simple-facebook:hover,.nvra-simple .simple-header .simple-nav nav>a.simple-facebook:focus-visible{background:#1263cb;box-shadow:0 0 0 2px rgba(24,119,242,.2)}
 .nvra-simple .simple-header .simple-nav nav>a.simple-facebook svg{flex:0 0 auto}
+
+/* Facebook's recognizable blue roundel, displayed as a standalone icon. */
+.nvra-simple .simple-header .simple-nav nav>a.simple-facebook{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;width:42px;min-width:42px;height:42px;min-height:42px;padding:5px;background:#1877f2;color:#fff;border:1px solid #1877f2;border-radius:11px;box-shadow:0 2px 8px rgba(24,119,242,.28)}
+.nvra-simple .simple-header .simple-nav nav>a.simple-facebook svg{display:block;width:27px;height:27px;flex:0 0 27px}
+@media(max-width:760px){.nvra-simple .simple-header .simple-nav nav>a.simple-facebook{width:38px;min-width:38px;height:38px;min-height:38px;padding:4px}}
