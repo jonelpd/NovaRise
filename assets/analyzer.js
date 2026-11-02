@@ -15,6 +15,21 @@ if(printReportButton)printReportButton.addEventListener('click',()=>{
  try{window.print();}catch(error){document.body.classList.remove('printing-nvra-report');throw error;}
 });
 
+// Analytics 3.0: share a public contract lookup without sending private data.
+const sharedNetwork=new URLSearchParams(window.location.search).get('network');
+const sharedAddress=new URLSearchParams(window.location.search).get('contract');
+if(sharedNetwork&&['Base','Ethereum','Polygon','BNB Smart Chain'].includes(sharedNetwork)&&netInput){netInput.value=sharedNetwork;}
+if(sharedAddress&&/^0x[a-fA-F0-9]{40}$/.test(sharedAddress)&&addrInput){addrInput.value=sharedAddress;}
+const shareButton=document.getElementById('share-contract');
+if(shareButton)shareButton.addEventListener('click',async()=>{
+ const feedback=document.getElementById('share-feedback');
+ const address=addrInput?.value?.trim();
+ if(!address||!/^0x[a-fA-F0-9]{40}$/.test(address)){if(feedback)feedback.textContent=nvraLocale==='en'?'Enter a valid public contract address first.':'Introduce primero una dirección pública válida.';return;}
+ const url=new URL(window.location.href);url.searchParams.set('network',netInput.value);url.searchParams.set('contract',address);url.hash='analizador';
+ try{await navigator.clipboard.writeText(url.toString());if(feedback)feedback.textContent=nvraLocale==='en'?'Link copied.':'Enlace copiado.';}
+ catch(error){if(feedback)feedback.textContent=nvraLocale==='en'?'Could not copy the link.':'No se pudo copiar el enlace.';}
+});
+
 const endpointChains={'Base':'8453','Ethereum':'1','Polygon':'137','BNB Smart Chain':'56'};
 const dexChains={'Base':'base','Ethereum':'ethereum','Polygon':'polygon','BNB Smart Chain':'bsc'};
 const fields=[
