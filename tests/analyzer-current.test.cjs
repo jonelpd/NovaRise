@@ -145,4 +145,8 @@ assert.match(script,/Los campos ausentes no se consideran seguros/);
 assert.match(script,/No fue posible obtener información de GoPlus/);
 assert.match(script,/No es una auditoría ni asesoramiento financiero/);
 
+// Missing pool volume must not be silently displayed as $0 in the chart inspector.
+assert.match(script,/point\.volume===null\?nvraText\('Sin datos'\):usd\(point\.volume,0\)/);
+assert.match(script,/Histórico no disponible temporalmente para este pool/);
+assert.match(script,/Datos de mercado no disponibles en este momento/);
 console.log('PASS: current Analytics 2.0 markup, PDF, provider hooks and calculation regressions');
