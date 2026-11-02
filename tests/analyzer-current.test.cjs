@@ -153,4 +153,10 @@ assert.match(script,/Datos de mercado no disponibles en este momento/);
 const translationKeys=new Set([...script.matchAll(/nvraText\('([^']+)'\)/g)].map(match=>match[1]));
 for(const key of translationKeys)assert.ok(Object.prototype.hasOwnProperty.call(vm.runInContext('nvraEnglish',context),key),'Missing English translation: '+key);
 
+// Whitespace-only API fields must not become false zero values.
+assert.equal(vm.runInContext("safeNumber('   ')",context),null);
+assert.equal(vm.runInContext("safeNumber('\\t\\n')",context),null);
+assert.equal(vm.runInContext("safeNumber('0')",context),0);
+assert.equal(vm.runInContext("safeNumber(' 12.5 ')",context),12.5);
+
 console.log('PASS: current Analytics 2.0 markup, PDF, provider hooks and calculation regressions');
