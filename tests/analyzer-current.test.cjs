@@ -149,4 +149,8 @@ assert.match(script,/No es una auditoría ni asesoramiento financiero/);
 assert.match(script,/point\.volume===null\?nvraText\('Sin datos'\):usd\(point\.volume,0\)/);
 assert.match(script,/Histórico no disponible temporalmente para este pool/);
 assert.match(script,/Datos de mercado no disponibles en este momento/);
+// Every literal nvraText() string must have an English translation.
+const translationKeys=new Set([...script.matchAll(/nvraText\('([^']+)'\)/g)].map(match=>match[1]));
+for(const key of translationKeys)assert.ok(Object.prototype.hasOwnProperty.call(vm.runInContext('nvraEnglish',context),key),'Missing English translation: '+key);
+
 console.log('PASS: current Analytics 2.0 markup, PDF, provider hooks and calculation regressions');
