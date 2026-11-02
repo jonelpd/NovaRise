@@ -26,6 +26,8 @@ const assert=require('node:assert/strict');
     assert.ok(await page.locator('#report').innerText().then(t=>t.includes('GoPlus')));
     assert.equal(await page.locator('#print-report').count(),1);
     const pdf=await page.pdf({format:'A4',printBackground:true});
+    const pdfPageCount=(pdf.toString('latin1').match(/\/Type\s*\/Page\b/g)||[]).length;
+    assert.ok(pdfPageCount>=1&&pdfPageCount<=25,'Unexpected PDF page count: '+lang+'/'+device+' '+pdfPageCount);
     assert.ok(pdf.length>3000,'PDF too small: '+lang+'/'+device);
     fs.writeFileSync(path.join(artifactDir,lang+'-'+device+'.pdf'),pdf);
     await page.screenshot({path:path.join(artifactDir,lang+'-'+device+'.png'),fullPage:true});
