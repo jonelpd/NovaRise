@@ -170,4 +170,8 @@ assert.match(script,/typeof priceChange==='string'&&priceChange\.trim\(\)===''/)
 assert.match(script,/typeof priceChange==='boolean'/);
 assert.match(script,/Number\.isFinite\(priceChangeNumber\)/);
 
+// Provider data-quality counts must use the same validity checks as displayed metrics.
+assert.match(script,/\[pricePair\?\.priceUsd,top\.volume\?\.h24\]\.filter\(value=>safeNumber\(value\)!==null\)/);
+assert.match(script,/Number\.isFinite\(priceChangeNumber\)\?1:0/);
+
 console.log('PASS: current Analytics 2.0 markup, PDF, provider hooks and calculation regressions');
