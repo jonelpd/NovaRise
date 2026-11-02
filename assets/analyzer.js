@@ -138,7 +138,7 @@ function appendMarket(pairs,address,network){
  const priceChangeNumber=!pricePair||priceChange===null||priceChange===undefined||(typeof priceChange==='string'&&priceChange.trim()==='')||typeof priceChange==='boolean'||typeof priceChange==='object'?NaN:Number(priceChange);
  grid.append(metricCard(nvraText('Variación 24 h del token'),Number.isFinite(priceChangeNumber)?priceChangeNumber.toLocaleString(nvraText('es-ES'),{maximumFractionDigits:2})+' %':nvraText('Sin datos'),nvraText(pricePair?'Variación reportada por DexScreener para el par utilizado en el precio. Si falta, el proveedor no ofrece ese dato; no se sustituye por la variación de otro par.':'No existe un par con precio válido donde el token consultado sea el activo base; no se infiere la variación desde otro token.')));
  summary.append(grid);report.append(summary);
- const reportedMarket=[pricePair?.priceUsd,top.volume?.h24,priceChange].filter(value=>value!==null&&value!==undefined&&value!==''&&Number.isFinite(Number(value))).length;
+ const reportedMarket=[pricePair?.priceUsd,top.volume?.h24].filter(value=>safeNumber(value)!==null).length+(Number.isFinite(priceChangeNumber)?1:0);
  const estimatedMarket=safeNumber(top.liquidity?.usd)!==null?1:0;
  report.append(dataQualityCard('DexScreener',reportedMarket,estimatedMarket,4-reportedMarket-estimatedMarket));
  // Analytics 2.0: source-scoped market synopsis; never combine distinct pairs into a global total.
