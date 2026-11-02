@@ -622,7 +622,7 @@ analyzeButton.addEventListener('click',async()=>{
    category.append(element('strong','',nvraLocale==='en'?group.labelEn:group.labelEs));
    const categorySummary=flaggedCount
     ?(nvraLocale==='en'?flaggedCount+' flagged indicator(s)':' '+flaggedCount+' indicador(es) con alerta')
-    :(nvraLocale==='en'?'No flags in available indicators':'Sin alertas en los indicadores disponibles');
+    :(missingCount===items.length?(nvraLocale==='en'?'No indicators available':'Ningún indicador disponible'):(nvraLocale==='en'?'No flags in available indicators':'Sin alertas en los indicadores disponibles'));
    category.append(element('p','small',categorySummary+' · '+missingCount+(nvraLocale==='en'?' missing':' sin datos')));
    category.append(element('p','small muted',items.map(item=>item.field.label+': '+(item.state==='alert'?(nvraLocale==='en'?'Review':'Revisar'):item.state==='ok'?(nvraLocale==='en'?'No flag':'Sin alerta'):(nvraLocale==='en'?'No data':'Sin datos'))).join(' · ')));
    riskSection.append(category);
