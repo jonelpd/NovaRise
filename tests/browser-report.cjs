@@ -25,6 +25,13 @@ const assert=require('node:assert/strict');
     assert.ok(await page.locator('#report').isVisible());
     assert.ok(await page.locator('#report').innerText().then(t=>t.includes('GoPlus')));
     assert.equal(await page.locator('#print-report').count(),1);
+    // The production print button applies this class before window.print().
+    // Without it, page.pdf() captures the whole landing page instead of the report.
+    await page.evaluate(()=>document.body.classList.add('printing-nvra-report'));
+    await page.emulateMedia({media:'print'});
+    const printVisibility=await page.evaluate(()=>({report:getComputedStyle(document.querySelector('#report')).visibility,header:getComputedStyle(document.querySelector('header')).visibility}));
+    assert.equal(printVisibility.report,'visible','Report must be visible in print mode');
+    assert.equal(printVisibility.header,'hidden','Website header must be hidden in report PDF');
     const pdf=await page.pdf({format:'A4',printBackground:true});
     const pdfPageCount=(pdf.toString('latin1').match(/\/Type\s*\/Page\b/g)||[]).length;
     assert.ok(pdfPageCount>=1&&pdfPageCount<=25,'Unexpected PDF page count: '+lang+'/'+device+' '+pdfPageCount);
