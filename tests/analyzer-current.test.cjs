@@ -94,4 +94,45 @@ assert.equal(evaluate('relativeStrengthIndex(Array.from({length:15},()=>({close:
 assert.match(script,/No son datos agregados de todo el mercado/);
 assert.match(script,/No implica un cambio de tendencia próximo/);
 
+
+/* PDF/print behavior: no empty exports, and cleanup after print or print errors. */
+function makePrintHarness(){
+ const printNodes=new Map(),listeners=new Map(),classes=new Set();
+ const makeNode=(id='')=>({id,textContent:'',value:'',disabled:false,children:[],classList:{contains(c){return id==='report'?classes.has(c):false},add(){},remove(){}},append(){},replaceChildren(){},setAttribute(){},addEventListener(type,handler){listeners.set(id+':'+type,handler)}});
+ const bodyClasses=new Set();
+ const body={classList:{add(c){bodyClasses.add(c)},remove(c){bodyClasses.delete(c)},contains(c){return bodyClasses.has(c)}}};
+ const doc={documentElement:{lang:'es'},body,getElementById(id){if(!printNodes.has(id))printNodes.set(id,makeNode(id));return printNodes.get(id)},createElement(){return makeNode()}};
+ let calls=0,shouldThrow=false;
+ const win={addEventListener(type,handler){listeners.set('window:'+type,handler)},print(){calls++;if(shouldThrow)throw Error('print failed')}};
+ const ctx={document:doc,window:win,console,Intl,Number,String,Array,Object,Date,RegExp,AbortController,setTimeout,clearTimeout,fetch:async()=>{throw Error('network disabled')}};
+ vm.createContext(ctx);vm.runInContext(translations,ctx);vm.runInContext(script,ctx);
+ return {classes,bodyClasses,nodes:printNodes,listeners,click(){listeners.get('print-report:click')()},afterprint(){listeners.get('window:afterprint')()},calls(){return calls},fail(){shouldThrow=true}};
+}
+const printHarness=makePrintHarness();
+assert.ok(printHarness.listeners.has('print-report:click'));
+assert.ok(printHarness.listeners.has('window:afterprint'));
+printHarness.classes.add('hidden');
+printHarness.nodes.get('report').textContent='Report';
+printHarness.click();
+assert.equal(printHarness.calls(),0,'Hidden reports must not be printed');
+printHarness.classes.delete('hidden');
+printHarness.nodes.get('report').textContent='  ';
+printHarness.click();
+assert.equal(printHarness.calls(),0,'Empty reports must not be printed');
+printHarness.nodes.get('report').textContent='Security report with source data';
+printHarness.click();
+assert.equal(printHarness.calls(),1);
+assert.ok(printHarness.bodyClasses.has('printing-nvra-report'));
+printHarness.afterprint();
+assert.ok(!printHarness.bodyClasses.has('printing-nvra-report'));
+printHarness.fail();
+assert.throws(()=>printHarness.click(),/print failed/);
+assert.ok(!printHarness.bodyClasses.has('printing-nvra-report'));
+assert.match(css,/@page\s*\{size:A4;margin:15mm\}/);
+assert.match(css,/body\.printing-nvra-report #report/);
+assert.match(css,/thead\{display:table-header-group\}/);
+assert.match(css,/break-inside:avoid/);
+assert.match(es,/id="print-report"/);
+assert.match(en,/id="print-report"/);
+
 console.log('PASS: current Analytics 2.0 markup, PDF, provider hooks and calculation regressions');
