@@ -56,7 +56,7 @@ function cancelPending(){
 }
 function element(tag,cls,content){const e=document.createElement(tag);if(cls)e.className=cls;if(content!==undefined)e.textContent=content;return e;}
 function safeNumber(value){
- if(value===null||value===undefined||value===''||typeof value==='boolean'||typeof value==='object')return null;
+ if(value===null||value===undefined||(typeof value==='string'&&value.trim()==='')||typeof value==='boolean'||typeof value==='object')return null;
  const n=Number(value);return Number.isFinite(n)&&n>=0?n:null;
 }
 function dataQualityCard(source,reported,estimated,missing){
