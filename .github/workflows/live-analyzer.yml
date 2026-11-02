@@ -4,19 +4,23 @@ on:
   push:
     paths:
       - '.github/workflows/live-analyzer.yml'
+  pull_request:
+    paths:
+      - '.github/workflows/live-analyzer.yml'
 jobs:
   external-apis:
     runs-on: ubuntu-latest
     timeout-minutes: 4
     steps:
-      - name: Consultar GoPlus y DexScreener para USDC en Base
+      - name: Consultar GoPlus, DexScreener y GeckoTerminal para USDC en Base
         shell: bash
         run: |
           node <<'JS'
           const address='0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913';
           const checks=[
             {name:'GoPlus',url:'https://api.gopluslabs.io/api/v1/token_security/8453?contract_addresses='+address.toLowerCase(),validate:d=>d&&typeof d==='object'&&('code' in d)&&('result' in d)},
-            {name:'DexScreener',url:'https://api.dexscreener.com/token-pairs/v1/base/'+address,validate:d=>Array.isArray(d)&&d.some(p=>p?.chainId==='base'&&[p.baseToken?.address,p.quoteToken?.address].some(a=>a?.toLowerCase()===address.toLowerCase()))}
+            {name:'DexScreener',url:'https://api.dexscreener.com/token-pairs/v1/base/'+address,validate:d=>Array.isArray(d)&&d.some(p=>p?.chainId==='base'&&[p.baseToken?.address,p.quoteToken?.address].some(a=>a?.toLowerCase()===address.toLowerCase()))},
+            {name:'GeckoTerminal',url:'https://api.geckoterminal.com/api/v2/networks/base/tokens/'+address+'/pools?page=1',validate:d=>Array.isArray(d?.data)&&d.data.length>0}
           ];
           (async()=>{
             let failures=0;
