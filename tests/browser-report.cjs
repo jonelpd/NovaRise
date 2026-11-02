@@ -20,6 +20,8 @@ const assert=require('node:assert/strict');
     await page.locator('#address').fill('0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913');
     await page.locator('#analyze').click();
     await page.waitForFunction(()=>document.querySelector('#analyze')?.disabled===false&&document.querySelector('#report')?.textContent.includes('GoPlus'),{timeout:15000});
+    const dimensions=await page.evaluate(()=>({viewport:document.documentElement.clientWidth,content:document.documentElement.scrollWidth}));
+    assert.ok(dimensions.content<=dimensions.viewport+2,'Horizontal overflow: '+lang+'/'+device+' '+JSON.stringify(dimensions));
     assert.ok(await page.locator('#report').isVisible());
     assert.ok(await page.locator('#report').innerText().then(t=>t.includes('GoPlus')));
     assert.equal(await page.locator('#print-report').count(),1);
