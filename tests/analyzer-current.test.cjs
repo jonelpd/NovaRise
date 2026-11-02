@@ -49,4 +49,26 @@ check('interpretHistory([{close:100},{close:110}])',null);
 assert.ok(handlers.has('analyze:click'),'Analyzer click handler must exist');
 assert.ok(handlers.has('address:input'),'Input invalidation handler must exist');
 assert.ok(handlers.has('network:change'),'Network invalidation handler must exist');
+
+const noData=vm.runInContext('classifySecurityIndicators({})',context);
+assert.equal(noData.known,0);
+assert.equal(noData.alerts,0);
+assert.equal(noData.unavailable,6);
+assert.ok(noData.results.every(item=>item.state==='unknown'));
+const allClear=vm.runInContext("classifySecurityIndicators({is_open_source:'1',is_honeypot:'0',is_mintable:0,is_blacklisted:'0',can_take_back_ownership:0,is_proxy:'0'})",context);
+assert.equal(allClear.known,6);
+assert.equal(allClear.alerts,0);
+assert.equal(allClear.unavailable,0);
+const flagged=vm.runInContext("classifySecurityIndicators({is_open_source:'0',is_honeypot:'1',is_mintable:'1',is_blacklisted:'1',can_take_back_ownership:'1',is_proxy:'1'})",context);
+assert.equal(flagged.alerts,6);
+assert.ok(flagged.results.every(item=>item.state==='alert'));
+const mixed=vm.runInContext("classifySecurityIndicators({is_open_source:'1',is_honeypot:'1',is_mintable:'unexpected',is_blacklisted:null})",context);
+assert.equal(mixed.known,2);
+assert.equal(mixed.alerts,1);
+assert.equal(mixed.unavailable,4);
+assert.equal(mixed.results[2].state,'unknown');
+assert.equal(mixed.results[3].state,'unknown');
+assert.match(script,/No se calcula una puntuación de seguridad/);
+assert.match(script,/“Sin alerta” no significa “seguro”/);
+
 console.log('PASS: current Analytics 2.0 markup, PDF, provider hooks and calculation regressions');
