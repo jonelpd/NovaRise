@@ -222,5 +222,6 @@ const nvraEnglish={
   "Secciones del informe": "Report sections",
   "Indicadores de seguridad": "Security indicators",
   "Titulares y suministro": "Holders and supply",
-  "Mercados y gráficos": "Markets and charts"
+  "Mercados y gráficos": "Markets and charts",
+  "Seleccionar hora del histórico": "Select historical hour"
 };
