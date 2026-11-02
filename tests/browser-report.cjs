@@ -12,6 +12,7 @@ const assert=require('node:assert/strict');
     const page=await browser.newPage({viewport});
     const errors=[];
     page.on('pageerror',error=>errors.push(error.message));
+    await page.addInitScript(()=>{window.__nvraPrintCalls=0;window.print=()=>{window.__nvraPrintCalls++;};});
     await page.route('https://api.gopluslabs.io/**',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({code:1,result:{'0x833589fcd6edb6e08f4c7c32d4f71b54bda02913':{is_open_source:'1',is_honeypot:'0',is_mintable:'0',is_blacklisted:'0',can_take_back_ownership:'0',is_proxy:'0'}}})}));
     await page.route('https://api.dexscreener.com/**',route=>route.fulfill({status:200,contentType:'application/json',body:'[]'}));
     await page.goto('http://127.0.0.1:8765/'+file,{waitUntil:'domcontentloaded'});
@@ -25,9 +26,11 @@ const assert=require('node:assert/strict');
     assert.ok(await page.locator('#report').isVisible());
     assert.ok(await page.locator('#report').innerText().then(t=>t.includes('GoPlus')));
     assert.equal(await page.locator('#print-report').count(),1);
-    // The production print button applies this class before window.print().
-    // Without it, page.pdf() captures the whole landing page instead of the report.
-    await page.evaluate(()=>document.body.classList.add('printing-nvra-report'));
+    // Exercise the real print button handler, without opening a native print dialog.
+    await page.locator('#print-report').click();
+    const printState=await page.evaluate(()=>({calls:window.__nvraPrintCalls,active:document.body.classList.contains('printing-nvra-report')}));
+    assert.equal(printState.calls,1,'Print button must call window.print once');
+    assert.equal(printState.active,true,'Print button must activate report-only print mode');
     await page.emulateMedia({media:'print'});
     const printVisibility=await page.evaluate(()=>({report:getComputedStyle(document.querySelector('#report')).visibility,header:getComputedStyle(document.querySelector('header')).visibility}));
     assert.equal(printVisibility.report,'visible','Report must be visible in print mode');
@@ -39,7 +42,8 @@ const assert=require('node:assert/strict');
     fs.writeFileSync(path.join(artifactDir,lang+'-'+device+'.pdf'),pdf);
     await page.screenshot({path:path.join(artifactDir,lang+'-'+device+'-print.png'),fullPage:true});
     await page.emulateMedia({media:'screen'});
-    await page.evaluate(()=>document.body.classList.remove('printing-nvra-report'));
+    await page.evaluate(()=>window.dispatchEvent(new Event('afterprint')));
+    assert.equal(await page.evaluate(()=>document.body.classList.contains('printing-nvra-report')),false,'afterprint must restore normal page mode');
     await page.screenshot({path:path.join(artifactDir,lang+'-'+device+'-screen.png'),fullPage:true});
     assert.deepEqual(errors,[],'Browser errors: '+lang+'/'+device);
     console.log('PASS '+lang+' '+device+' report and A4 PDF ('+pdf.length+' bytes)');
