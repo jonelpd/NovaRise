@@ -135,4 +135,14 @@ assert.match(css,/break-inside:avoid/);
 assert.match(es,/id="print-report"/);
 assert.match(en,/id="print-report"/);
 
+
+// Missing security indicators must not be presented as an all-clear category.
+assert.match(script,/missingCount===items\.length/);
+assert.match(script,/No indicators available/);
+assert.match(script,/Ningún indicador disponible/);
+assert.match(script,/Missing data never counts as a positive result/);
+assert.match(script,/Los campos ausentes no se consideran seguros/);
+assert.match(script,/No fue posible obtener información de GoPlus/);
+assert.match(script,/No es una auditoría ni asesoramiento financiero/);
+
 console.log('PASS: current Analytics 2.0 markup, PDF, provider hooks and calculation regressions');
