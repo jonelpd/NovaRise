@@ -165,4 +165,9 @@ const timestampRows=vm.runInContext('historicalPoints('+JSON.stringify(timestamp
 assert.equal(timestampRows.length,1);
 assert.equal(timestampRows[0].time,1700000000);
 
+// Missing DEX 24h price changes must not be silently coerced to 0%.
+assert.match(script,/typeof priceChange==='string'&&priceChange\.trim\(\)===''/);
+assert.match(script,/typeof priceChange==='boolean'/);
+assert.match(script,/Number\.isFinite\(priceChangeNumber\)/);
+
 console.log('PASS: current Analytics 2.0 markup, PDF, provider hooks and calculation regressions');
