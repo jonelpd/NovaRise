@@ -53,7 +53,7 @@ const assert=require('node:assert/strict');
     await compare.locator('[name=contractB]').fill('0x4200000000000000000000000000000000000006');
     await compare.locator('button[type=submit]').click();
     await page.waitForFunction(()=>document.querySelector('#token-comparator button[type=submit]')?.disabled===false,{timeout:15000});
-    assert.equal(await compare.locator('table tr').count(),6,'Comparison must render five metrics');
+    assert.equal(await compare.locator('table tr').count(),14,'Comparison must render security checks and seven market/coverage metrics');
     assert.ok((await compare.locator('[data-results]').innerText()).includes(lang==='en'?'Unavailable':'Sin datos'),'Missing market metrics must not be shown as zero');
     assert.deepEqual(errors,[],'Browser errors: '+lang+'/'+device);
     console.log('PASS '+lang+' '+device+' report and A4 PDF ('+pdf.length+' bytes)');
