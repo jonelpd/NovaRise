@@ -174,4 +174,7 @@ assert.match(script,/Number\.isFinite\(priceChangeNumber\)/);
 assert.match(script,/\[pricePair\?\.priceUsd,top\.volume\?\.h24\]\.filter\(value=>safeNumber\(value\)!==null\)/);
 assert.match(script,/Number\.isFinite\(priceChangeNumber\)\?1:0/);
 
+// Currency display must respect the active page locale.
+assert.match(script,/Intl\.NumberFormat\(nvraLocale==='en'\?'en-US':'es-ES',\{style:'currency'/);
+
 console.log('PASS: current Analytics 2.0 markup, PDF, provider hooks and calculation regressions');
