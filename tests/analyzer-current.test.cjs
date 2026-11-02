@@ -159,4 +159,10 @@ assert.equal(vm.runInContext("safeNumber('\\t\\n')",context),null);
 assert.equal(vm.runInContext("safeNumber('0')",context),0);
 assert.equal(vm.runInContext("safeNumber(' 12.5 ')",context),12.5);
 
+// Malformed OHLCV timestamps must not be coerced from booleans or whitespace.
+const timestampFixture={data:{attributes:{ohlcv_list:[[true,1,1,1,2,3],['   ',1,1,1,2,3],[1700000000,1,1,1,2,3]]}}};
+const timestampRows=vm.runInContext('historicalPoints('+JSON.stringify(timestampFixture)+')',context);
+assert.equal(timestampRows.length,1);
+assert.equal(timestampRows[0].time,1700000000);
+
 console.log('PASS: current Analytics 2.0 markup, PDF, provider hooks and calculation regressions');

@@ -172,7 +172,7 @@ function historicalPoints(payload){
  const unique=new Map();
  for(const row of raw){
   if(!Array.isArray(row)||row.length<6)continue;
-  const time=Number(row[0]),close=safeNumber(row[4]),volume=safeNumber(row[5]);
+  const time=safeNumber(row[0]),close=safeNumber(row[4]),volume=safeNumber(row[5]);
   if(close===0)continue;
   if(!Number.isFinite(time)||time<=0||close===null)continue;
   unique.set(time,{time,close,volume});
