@@ -642,3 +642,8 @@ body.interest-modal-open{overflow:hidden}
  .nvra-simple .simple-header .simple-brand{width:84px;max-width:84px}
  .nvra-simple .simple-header .simple-nav nav>a{padding-inline:8px;font-size:11.5px}
 }
+
+/* Official Facebook page link in the compact navigation. */
+.nvra-simple .simple-header .simple-nav nav>a.simple-facebook{display:inline-flex;align-items:center;justify-content:center;gap:6px;background:#1877f2;color:#fff;border:1px solid #4c9dff;border-radius:9px;padding:8px 12px;font-weight:750;white-space:nowrap;transition:background .2s ease,box-shadow .2s ease}
+.nvra-simple .simple-header .simple-nav nav>a.simple-facebook:hover,.nvra-simple .simple-header .simple-nav nav>a.simple-facebook:focus-visible{background:#1263cb;box-shadow:0 0 0 2px rgba(24,119,242,.2)}
+.nvra-simple .simple-header .simple-nav nav>a.simple-facebook svg{flex:0 0 auto}
