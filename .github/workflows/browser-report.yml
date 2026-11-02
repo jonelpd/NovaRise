@@ -1,0 +1,28 @@
+name: NovaRise - informe PDF en navegador
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - '.github/workflows/browser-report.yml'
+      - 'tests/browser-report.cjs'
+      - 'assets/analyzer.js'
+      - 'assets/site.css'
+      - 'index.html'
+      - 'en.html'
+jobs:
+  report-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Chromium and Playwright
+        run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Run local website and verify bilingual desktop/mobile PDF
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/nvra-site.log 2>&1 &
+          node tests/browser-report.cjs
