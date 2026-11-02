@@ -135,7 +135,7 @@ function appendMarket(pairs,address,network){
  grid.append(metricCard(nvraText('Liquidez del par'),usd(top.liquidity?.usd),nvraText('Liquidez estimada por DexScreener; no equivale a fondos bloqueados.')));
  grid.append(metricCard(nvraText('Volumen 24 h del par'),usd(top.volume?.h24),nvraText('Volumen de operaciones del par; no es volumen global.')));
  const priceChange=pricePair?.priceChange?.h24;
- const priceChangeNumber=!pricePair||priceChange===null||priceChange===undefined||priceChange===''?NaN:Number(priceChange);
+ const priceChangeNumber=!pricePair||priceChange===null||priceChange===undefined||(typeof priceChange==='string'&&priceChange.trim()==='')||typeof priceChange==='boolean'||typeof priceChange==='object'?NaN:Number(priceChange);
  grid.append(metricCard(nvraText('Variación 24 h del token'),Number.isFinite(priceChangeNumber)?priceChangeNumber.toLocaleString(nvraText('es-ES'),{maximumFractionDigits:2})+' %':nvraText('Sin datos'),nvraText(pricePair?'Variación reportada por DexScreener para el par utilizado en el precio. Si falta, el proveedor no ofrece ese dato; no se sustituye por la variación de otro par.':'No existe un par con precio válido donde el token consultado sea el activo base; no se infiere la variación desde otro token.')));
  summary.append(grid);report.append(summary);
  const reportedMarket=[pricePair?.priceUsd,top.volume?.h24,priceChange].filter(value=>value!==null&&value!==undefined&&value!==''&&Number.isFinite(Number(value))).length;
