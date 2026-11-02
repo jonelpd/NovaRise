@@ -117,7 +117,7 @@ function appendDashboard(token){
 }
 function usd(value,digits=2){
  const n=safeNumber(value);
- return n===null?nvraText('Sin datos'):new Intl.NumberFormat('es-ES',{style:'currency',currency:'USD',maximumFractionDigits:digits}).format(n);
+ return n===null?nvraText('Sin datos'):new Intl.NumberFormat(nvraLocale==='en'?'en-US':'es-ES',{style:'currency',currency:'USD',maximumFractionDigits:digits}).format(n);
 }
 function appendMarket(pairs,address,network){
  report.append(element('h4','section-title',nvraText('Mercados DEX · DexScreener')));
