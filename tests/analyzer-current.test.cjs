@@ -71,4 +71,27 @@ assert.equal(mixed.results[3].state,'unknown');
 assert.match(script,/No se calcula una puntuación de seguridad/);
 assert.match(script,/“Sin alerta” no significa “seguro”/);
 
+
+function evaluate(expression){return vm.runInContext(expression,context)}
+function approx(actual,expected,tolerance=1e-8){assert.ok(Math.abs(actual-expected)<=tolerance,`Expected ${actual} ≈ ${expected}`)}
+const sortedHistory=evaluate('historicalPoints({data:{attributes:{ohlcv_list:[[300,1,2,1,3,30],[100,1,2,1,1,10],[200,1,2,1,2,20],[200,1,2,1,2.5,25],[400,1,2,1,0,40],[500,1,2,1,-1,50]]}}})');
+assert.deepEqual(Array.from(sortedHistory,p=>p.time),[100,200,300]);
+assert.deepEqual(Array.from(sortedHistory,p=>p.close),[1,2.5,3]);
+assert.equal(evaluate('historicalPoints({data:{attributes:{ohlcv_list:"invalid"}}}).length'),0);
+assert.equal(evaluate('historicalPoints(null).length'),0);
+const trends=evaluate('interpretHistory([{close:10,volume:100},{close:11,volume:100},{close:12,volume:200},{close:13,volume:200}])');
+approx(trends.change,30);
+approx(trends.volumeChange,100);
+assert.equal(trends.observations,4);
+assert.equal(evaluate('interpretHistory([{close:1},{close:0},{close:3}])'),null);
+assert.equal(evaluate('interpretHistory([{close:1},{close:2}])'),null);
+assert.equal(evaluate('simpleMovingAverage([{close:1},{close:2}],3)'),null);
+assert.equal(evaluate('simpleMovingAverage([{close:1},{close:2},{close:3}],3)'),2);
+assert.equal(evaluate('relativeStrengthIndex(Array.from({length:15},(_,i)=>({close:i+1})),14)'),100);
+assert.equal(evaluate('relativeStrengthIndex(Array.from({length:15},(_,i)=>({close:15-i})),14)'),0);
+assert.equal(evaluate('relativeStrengthIndex(Array.from({length:14},(_,i)=>({close:i+1})),14)'),null);
+assert.equal(evaluate('relativeStrengthIndex(Array.from({length:15},()=>({close:5})),14)'),50);
+assert.match(script,/No son datos agregados de todo el mercado/);
+assert.match(script,/No implica un cambio de tendencia próximo/);
+
 console.log('PASS: current Analytics 2.0 markup, PDF, provider hooks and calculation regressions');
