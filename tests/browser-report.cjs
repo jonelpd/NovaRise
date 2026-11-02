@@ -1,7 +1,11 @@
+const fs=require('node:fs');
+const path=require('node:path');
 const {chromium}=require('playwright');
 const assert=require('node:assert/strict');
 (async()=>{
  const browser=await chromium.launch({headless:true});
+ const artifactDir=path.resolve('artifacts/browser-reports');
+ fs.mkdirSync(artifactDir,{recursive:true});
  try{
   for(const [lang,file] of [['es','index.html'],['en','en.html']]){
    for(const [device,viewport] of [['desktop',{width:1366,height:900}],['mobile',{width:390,height:844}]]){
@@ -21,6 +25,8 @@ const assert=require('node:assert/strict');
     assert.equal(await page.locator('#print-report').count(),1);
     const pdf=await page.pdf({format:'A4',printBackground:true});
     assert.ok(pdf.length>3000,'PDF too small: '+lang+'/'+device);
+    fs.writeFileSync(path.join(artifactDir,lang+'-'+device+'.pdf'),pdf);
+    await page.screenshot({path:path.join(artifactDir,lang+'-'+device+'.png'),fullPage:true});
     assert.deepEqual(errors,[],'Browser errors: '+lang+'/'+device);
     console.log('PASS '+lang+' '+device+' report and A4 PDF ('+pdf.length+' bytes)');
     await page.close();
