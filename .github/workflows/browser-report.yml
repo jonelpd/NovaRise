@@ -6,6 +6,7 @@ on:
       - '.github/workflows/browser-report.yml'
       - 'tests/browser-report.cjs'
       - 'assets/analyzer.js'
+      - 'assets/watchlist.js'
       - 'assets/site.css'
       - 'index.html'
       - 'en.html'
