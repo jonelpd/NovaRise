@@ -16,6 +16,10 @@ test('cloud restore keeps local save backup before replacement',()=>{
  assert.ok(section.includes(replace));
  assert.ok(section.indexOf(backup)<section.indexOf(replace),'Backup must precede replacement');
  assert.ok(section.indexOf("if(!confirm('¿Reemplazar la partida local")<section.indexOf(backup),'Backup follows user confirmation');
+ assert.ok(section.includes('catch(writeError)'),'Write failures must trigger rollback');
+ assert.ok(section.includes('localStorage.setItem(SAVE,previousLocal)'),'Original save must be restored');
+ assert.ok(section.includes('localStorage.setItem(OWNER,previousOwner)'),'Original owner must be restored');
+ assert.ok(section.indexOf('catch(writeError)')<section.indexOf('location.reload()'),'Reload only after successful write');
 });
 test('cloud restore checks owner and valid game before writing',()=>{
  const start=html.indexOf("el('online-load').onclick");
