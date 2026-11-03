@@ -62,6 +62,12 @@ const assert=require('node:assert/strict');
     await watch.locator('[name=address]').fill('0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913');
     await watch.locator('button[type=submit]').click();
     assert.equal(await watch.locator('[data-list] .panel').count(),1,'One saved token');
+    // Verify that long security labels and token cards do not overflow mobile viewport.
+    if(device==='mobile'){
+      await page.evaluate(()=>{const panel=document.querySelector('#nvra-watchlist [data-list] .panel');const notice=document.createElement('p');notice.textContent='Security change: can_take_back_ownership (0 → 1) '.repeat(5);panel.append(notice)});
+      const bounds=await page.evaluate(()=>({viewport:document.documentElement.clientWidth,document:document.documentElement.scrollWidth,card:document.querySelector('#nvra-watchlist [data-list] .panel').getBoundingClientRect().right}));
+      assert.ok(bounds.document<=bounds.viewport+2&&bounds.card<=bounds.viewport+2,'Mobile watchlist overflow: '+JSON.stringify(bounds));
+    }
     assert.equal(await watch.locator('[data-status]').getAttribute('aria-live'),'polite','Watchlist status should announce API errors accessibly');
 
     // Security risk comparisons must be bilingual and run only on manual refresh.
