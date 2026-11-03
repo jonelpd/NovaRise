@@ -79,6 +79,13 @@ const assert=require('node:assert/strict');
     await page.waitForFunction(()=>document.querySelector('#nvra-watchlist [data-list] button')?.disabled===false,{timeout:15000});
     assert.ok((await watch.locator('[data-list]').innerText()).includes(lang==='en'?'No matching pairs':'No se encontraron pares'),'No-pair state should be explicit');
     assert.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('nvra-watchlist-v1')||'[]').length),1,'Watchlist must persist');
+    // Missing market pairs must not erase the last valid snapshot.
+    await page.evaluate(()=>{const key='nvra-watchlist-v1';const items=JSON.parse(localStorage.getItem(key));items[0].snapshot={liquidity:1000,volume:500};localStorage.setItem(key,JSON.stringify(items))});
+    await page.reload();
+    const watchAfterReload=page.locator('#nvra-watchlist');
+    await watchAfterReload.locator('[data-list] button').first().click();
+    await page.waitForFunction(()=>document.querySelector('#nvra-watchlist [data-list] button')?.disabled===false,{timeout:15000});
+    assert.deepEqual(await page.evaluate(()=>JSON.parse(localStorage.getItem('nvra-watchlist-v1'))[0].snapshot),{liquidity:1000,volume:500},'Missing pair must retain previous baseline');
     await watch.locator('[data-list] button').last().click();
     assert.equal(await watch.locator('[data-list] .panel').count(),0,'Remove must work');
     assert.deepEqual(errors,[],'Browser errors: '+lang+'/'+device);
