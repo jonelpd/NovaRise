@@ -1501,8 +1501,16 @@ function interactVerifiedSite(site){
   return message('⛏️ Mina bajo tu control. +10 cristales al finalizar cada turno.')
  }
  if(site.kind==='mill'){
-  if(state[site.id]!=='player'){state[site.id]='player';return message('🌾 Molino controlado. Genera 1 comida por turno; la comida puede recuperar movimiento al inicio del turno siguiente.')}
-  return message('🌾 Molino bajo tu control. Comida acumulada: '+(s.mapFood||0)+'.')
+  if(state[site.id]!=='player'){
+   state[site.id]='player';
+   return message('🌾 Molino controlado. Genera 1 comida por turno. Visítalo de nuevo para recoger una provisión semanal.')
+  }
+  if(!s.millVisits||typeof s.millVisits!=='object'||Array.isArray(s.millVisits))s.millVisits={};
+  const week=Math.floor((Math.max(1,s.turn)-1)/7);
+  if(s.millVisits[site.id]===week)return message('🌾 Ya has recogido la provisión de '+site.label+' esta semana. Vuelve en la próxima semana (cada 7 turnos).');
+  const reward=site.id==='mill-lake-east'?{crystals:8,gold:0}:{crystals:0,gold:65};
+  s.millVisits[site.id]=week;s.gold+=reward.gold;s.crystals+=reward.crystals;
+  return message('🌾 Provisión semanal de '+site.label+': +'+(reward.crystals?reward.crystals+' cristales':reward.gold+' monedas de oro')+'. Próxima recompensa a partir de la semana siguiente.')
  }
 }
 // Minas y molinos existentes: el enemigo sólo los captura al llegar a su posición real.
