@@ -703,7 +703,8 @@ function walkTo(tx,ty){
   const fine=from&&to?fineRoute(from,to):null;
   if(!fine){walking=false;clearAdventureRoute();return message('No hay paso libre por el terreno hasta ese destino. Elige otro camino.');}
   if(!await travelFinePath(fine,epoch)){walking=false;clearAdventureRoute();render();return message('Movimiento detenido: el terreno no permite completar esa ruta.')}
-  move(x,y);
+  await move(x,y);
+  if(epoch!==walkEpoch){walking=false;return}
   if(!battle&&!rivalBusy&&!s.done){
    const v=rivalState(),[hx,hy]=heroVisualPosition();
    if(!v.defeated&&Math.hypot(v.x-hx,v.y-hy)<=2.2){
