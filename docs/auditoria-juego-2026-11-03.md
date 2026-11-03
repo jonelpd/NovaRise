@@ -36,3 +36,23 @@ Las dos páginas contienen gran cantidad de lógica embebida y duplicada. Planif
 
 ## Criterio de cierre
 La auditoría solo estará completa cuando pasen pruebas automatizadas y una matriz manual de exploración, combate, castillos, cuentas, guardado y visual móvil/escritorio. Esta primera entrega es una revisión estática con una corrección P0 integrada.
+
+## Segunda revisión — 2026-11-03
+
+### P1 — CORREGIDO: cierre de selección de cofre
+En la versión anterior, pulsar Escape durante la elección de oro/experiencia devolvía null y la lógica interpretaba ese resultado como oro. Ahora la elección del cofre exige pulsar expresamente una de las dos opciones; Escape no descarta esa decisión. Commits: 50dd142 (principal) y 67b4394 (demo).
+
+### P2 — CORREGIDO: confirmación por teclado
+Los campos de entrada de los diálogos ahora permiten confirmar mediante Enter, además del botón. Se conserva la navegación por Tab y Shift+Tab.
+
+### P1 — pendiente: cobertura de persistencia en decisiones interrumpidas
+El tesoro se marca como recogido antes de abrir la elección; la nueva ventana impide cancelarlo con Escape, pero todavía hay que probar cierre de pestaña, recarga y restauración durante el diálogo. Propuesta: registrar la decisión como transacción lógica y consolidar recompensa y estado del tesoro en el mismo paso, con pruebas de interrupción.
+
+### P1 — pendiente: diferencia de validadores
+La carga local y la restauración online tienen validadores de alcance distinto. Deben probarse campos obligatorios, límites de recursos, propiedades opcionales heredadas y compatibilidad de versiones antes de armonizarlos.
+
+### P2 — pendiente: desempeño de mapa
+La rutina render() reconstruye los botones de todas las casillas y persiste el estado. Medir frecuencia de redibujado, coste de rutas y respuesta en móviles de gama media antes de optimizar.
+
+### Estado de esta revisión
+Los dos arreglos se han integrado en main; siguen sin ejecutarse pruebas en navegador o Node. No se declara finalizada la auditoría.
