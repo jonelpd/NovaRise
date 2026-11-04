@@ -17,6 +17,8 @@ const assert=require('node:assert/strict');
     await page.route('https://api.dexscreener.com/**',route=>route.fulfill({status:200,contentType:'application/json',body:'[]'}));
     await page.route('https://spaafpqczvqahhwjxxrz.supabase.co/rest/v1/novarise_public_ideas**',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify([{title_es:'Idea aprobada',title_en:'Approved idea',description_es:'Propuesta visible',description_en:'Visible proposal',stage:'planificada',created_at:'2026-10-30T10:00:00Z'},{title_es:'Idea en estudio',title_en:'Idea under review',description_es:'En evaluación',description_en:'Being reviewed',stage:'consideracion'}])}));
     await page.goto('http://127.0.0.1:8765/'+file,{waitUntil:'domcontentloaded'});
+    const participation=page.locator('#participacion');
+    assert.ok((await participation.innerText()).includes(lang==='en'?'It does not create a public proposal':'No crea una propuesta pública'),'Interest form must not imply formal proposal submission');
     const proposals=page.locator('#community-proposals');
     assert.equal(await proposals.count(),1,'Phase 3 public proposals must be present');
     const criteria=proposals.locator('.community-criteria');
