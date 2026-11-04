@@ -652,3 +652,9 @@ body.interest-modal-open{overflow:hidden}
 .nvra-simple .simple-header .simple-nav nav>a.simple-facebook{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;width:42px;min-width:42px;height:42px;min-height:42px;padding:5px;background:#1877f2;color:#fff;border:1px solid #1877f2;border-radius:11px;box-shadow:0 2px 8px rgba(24,119,242,.28)}
 .nvra-simple .simple-header .simple-nav nav>a.simple-facebook svg{display:block;width:27px;height:27px;flex:0 0 27px}
 @media(max-width:760px){.nvra-simple .simple-header .simple-nav nav>a.simple-facebook{width:38px;min-width:38px;height:38px;min-height:38px;padding:4px}}
+
+/* Phase 3: accessible, responsive community evaluation disclosure. */
+.nvra-simple .community-criteria{margin:16px 0;padding:14px 18px;border:1px solid #47776b;border-radius:12px;background:rgba(12,48,39,.55)}
+.nvra-simple .community-criteria summary{cursor:pointer;font-weight:700;color:#d9fff0}
+.nvra-simple .community-criteria summary:focus-visible{outline:3px solid #85f0c9;outline-offset:4px}
+.nvra-simple .community-criteria p{margin:12px 0 0;line-height:1.6;overflow-wrap:anywhere}
