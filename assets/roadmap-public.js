@@ -9,7 +9,7 @@ const escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>'
 const validStages=new Set(Object.keys(labels));
 const explanations=en?{consideracion:'Being evaluated; not approved for development.',planificada:'Approved for planning; implementation has not started.',desarrollo:'Work is in progress; delivery is not yet complete.',completada:'Marked as completed by the project team.'}:{consideracion:'En evaluación; todavía no está aprobada para desarrollo.',planificada:'Aprobada para planificación; su ejecución no ha comenzado.',desarrollo:'Trabajo en curso; todavía no está terminada.',completada:'Marcada como completada por el equipo del proyecto.'};
 const dateFormat=new Intl.DateTimeFormat(en?'en-GB':'es-ES',{year:'numeric',month:'short',day:'numeric',timeZone:'UTC'});
-function publicationDate(value){if(typeof value!=='string'||!/^\\d{4}-\\d{2}-\\d{2}/.test(value))return '';const date=new Date(value);return Number.isNaN(date.getTime())?'':dateFormat.format(date)}
+function publicationDate(value){if(typeof value!=='string'||!/^\d{4}-\d{2}-\d{2}/.test(value))return '';const date=new Date(value);return Number.isNaN(date.getTime())?'':dateFormat.format(date)}
 let initiatives=[];
 function render(){
  const stage=filter&&validStages.has(filter.value)?filter.value:'all';
