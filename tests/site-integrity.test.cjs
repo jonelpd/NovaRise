@@ -131,3 +131,6 @@ const interestSource=fs.readFileSync('assets/interest.js','utf8');assert.ok(inte
 
 // Public updates must be bilingual, traceable and explicit that NVRA is not launched.
 for(const [file,id] of [['index.html','actualizaciones'],['en.html','updates']]){const markup=fs.readFileSync(file,'utf8');assert.ok(markup.includes('id="'+id+'"'),file+' missing updates section');assert.ok(markup.includes('github.com/jonelpd/NovaRise/pulls?q='),file+' missing verifiable development history');assert.ok(markup.includes('4 November 2026')||markup.includes('4 de noviembre de 2026'),file+' missing editorial date');}
+
+// Updates must be discoverable in both primary navigation menus.
+for(const [file,anchor] of [['index.html','actualizaciones'],['en.html','updates']]){const markup=fs.readFileSync(file,'utf8');assert.ok(markup.includes('<a href="#'+anchor+'">'),file+' missing updates navigation link');assert.ok(markup.includes('id="'+anchor+'"'),file+' missing updates destination');}
