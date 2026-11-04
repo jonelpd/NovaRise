@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+  <title>NovaRise — Development updates</title>
+  <id>https://jonelpd.github.io/NovaRise/updates-en.atom</id>
+  <link href="https://jonelpd.github.io/NovaRise/en.html#updates"/>
+  <link rel="self" type="application/atom+xml" href="https://jonelpd.github.io/NovaRise/updates-en.atom"/>
+  <updated>2026-11-04T21:00:00Z</updated>
+  <subtitle>Verified website milestones. Manually maintained; no automated news or token launch.</subtitle>
+  <entry><title>Bilingual project transparency</title><id>https://github.com/jonelpd/NovaRise/pull/64</id><link href="https://github.com/jonelpd/NovaRise/pull/64"/><updated>2026-11-04T21:00:00Z</updated><summary>Public development status of Analytics 2.0, community and NVRA, with source links.</summary></entry>
+  <entry><title>Participation form improvements</title><id>https://github.com/jonelpd/NovaRise/pull/62</id><link href="https://github.com/jonelpd/NovaRise/pull/62"/><updated>2026-11-04T21:00:00Z</updated><summary>Bilingual privacy guidance and accessible character counter.</summary></entry>
+  <entry><title>Community moderation guidance</title><id>https://github.com/jonelpd/NovaRise/pull/61</id><link href="https://github.com/jonelpd/NovaRise/pull/61"/><updated>2026-11-04T21:00:00Z</updated><summary>Private evaluation and publication review guidance in the CRM.</summary></entry>
+</feed>
