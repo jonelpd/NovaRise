@@ -120,3 +120,7 @@ const crmMarkup=fs.readFileSync('crm.html','utf8');
 for(const id of ['idea-summary','idea-priority-filter','idea-feasibility-filter'])assert.ok(crmMarkup.includes('id="'+id+'"'),'Missing CRM moderation control: '+id);
 for(const id of ['idea-priority-filter','idea-feasibility-filter'])assert.ok(crmSource.includes("$('"+id+"').value"),'CRM moderation filter not wired: '+id);
 assert.ok(crmSource.includes("$('idea-summary').textContent"),'Moderation status overview must update from records');
+
+// Moderation guidance must be available in the private CRM without exposing participant data.
+assert.ok(fs.readFileSync('crm.html','utf8').includes('class="idea-review-guide"'),'CRM moderation guide missing');
+assert.ok(fs.readFileSync('crm.html','utf8').includes('No copies nombres, correos'),'CRM privacy guidance missing');
