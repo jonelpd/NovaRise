@@ -1,0 +1,52 @@
+name: NovaRise Telegram daily
+on:
+  schedule:
+    - cron: '0 18 * * *'
+      timezone: Europe/Madrid
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: novarise-telegram-daily
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Publish today's approved post
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHANNEL: "@NovaRiseNVRA"
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          python3 - <<'PY'
+          import json, os, urllib.request, urllib.parse, datetime, zoneinfo, sys
+          if not os.environ.get("TELEGRAM_BOT_TOKEN"):
+              sys.exit("Missing TELEGRAM_BOT_TOKEN secret")
+          if os.environ.get("EVENT_NAME") == "workflow_dispatch":
+              print("Manual run is validation-only to avoid duplicate posts.")
+              sys.exit(0)
+          today = datetime.datetime.now(zoneinfo.ZoneInfo("Europe/Madrid")).date().isoformat()
+          with open("telegram/posts.json", encoding="utf-8") as f:
+              posts = json.load(f)["posts"]
+          match = next((p for p in posts if p["date"] == today), None)
+          if not match:
+              print(f"No approved Telegram post for {today}; skipping (no invented updates).")
+              sys.exit(0)
+          endpoint = "https://api.telegram.org/bot" + os.environ["TELEGRAM_BOT_TOKEN"] + "/sendPhoto"
+          payload = urllib.parse.urlencode({
+              "chat_id": os.environ["TELEGRAM_CHANNEL"],
+              "photo": match["image"],
+              "caption": match["text"][:1024],
+          }).encode("utf-8")
+          try:
+              with urllib.request.urlopen(urllib.request.Request(endpoint, data=payload), timeout=45) as response:
+                  data = json.load(response)
+          except Exception as exc:
+              print("Telegram publishing request failed:", type(exc).__name__)
+              raise
+          if not data.get("ok"):
+              sys.exit("Telegram rejected publication")
+          print(f"Telegram publication successful for {today}.")
+          PY
