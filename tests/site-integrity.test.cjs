@@ -128,3 +128,6 @@ assert.ok(fs.readFileSync('crm.html','utf8').includes('No copies nombres, correo
 // Phase 3 participation: both languages explain privacy and expose a live character counter.
 for(const file of ['index.html','en.html']){const markup=fs.readFileSync(file,'utf8');for(const id of ['suggestion-guidance','suggestion-counter'])assert.ok(markup.includes('id="'+id+'"'),file+' missing '+id);assert.ok(markup.includes('aria-describedby="suggestion-guidance suggestion-counter"'),file+' missing accessible suggestion description');}
 const interestSource=fs.readFileSync('assets/interest.js','utf8');assert.ok(interestSource.includes('updateCounter();openSuccess()'),'Counter must reset after successful submission');
+
+// Public updates must be bilingual, traceable and explicit that NVRA is not launched.
+for(const [file,id] of [['index.html','actualizaciones'],['en.html','updates']]){const markup=fs.readFileSync(file,'utf8');assert.ok(markup.includes('id="'+id+'"'),file+' missing updates section');assert.ok(markup.includes('github.com/jonelpd/NovaRise/pulls?q='),file+' missing verifiable development history');assert.ok(markup.includes('4 November 2026')||markup.includes('4 de noviembre de 2026'),file+' missing editorial date');}
