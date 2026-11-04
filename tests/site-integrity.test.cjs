@@ -134,3 +134,6 @@ for(const [file,id] of [['index.html','actualizaciones'],['en.html','updates']])
 
 // Phase 3.3: public dated history and navigation must be bilingual and source-backed.
 for(const [file,anchor] of [['index.html','actualizaciones'],['en.html','updates']]){const markup=fs.readFileSync(file,'utf8');assert.ok(markup.includes('<a href="#'+anchor+'">'),file+' missing updates nav');assert.ok(markup.includes('class="updates-history"'),file+' missing development log');for(const pr of [61,62,64])assert.ok(markup.includes('NovaRise/pull/'+pr),file+' missing source PR '+pr);assert.ok(markup.includes('<time datetime="2026-11-04">'),file+' missing dated entries');}
+
+// The public updates history has responsive and keyboard-visible styles.
+const updatesCss=fs.readFileSync('assets/site.css','utf8');assert.ok(updatesCss.includes('.updates-history a:focus-visible'),'Missing keyboard focus for history links');assert.ok(updatesCss.includes('@media(max-width:600px){.updates-history'),'Missing mobile history layout');
