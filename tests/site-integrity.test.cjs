@@ -140,3 +140,7 @@ const updatesCss=fs.readFileSync('assets/site.css','utf8');assert.ok(updatesCss.
 
 // Phase 3.3: bilingual manually curated Atom feeds and discoverability.
 for(const [html,feed] of [['index.html','actualizaciones.atom'],['en.html','updates-en.atom']]){const page=fs.readFileSync(html,'utf8');const xml=fs.readFileSync(feed,'utf8');assert.ok(page.includes('rel="alternate" type="application/atom+xml"'),html+' missing feed discovery');assert.ok(page.includes('href="'+feed+'"'),html+' missing feed link');assert.ok(xml.includes('xmlns="http://www.w3.org/2005/Atom"'),feed+' missing Atom namespace');for(const pr of [61,62,64])assert.ok(xml.includes('NovaRise/pull/'+pr),feed+' missing verified milestone '+pr);}
+
+// Phase 3.4: both landing pages declare canonical and reciprocal language versions.
+for(const [file,canonical] of [['index.html','index.html'],['en.html','en.html']]){const page=fs.readFileSync(file,'utf8');assert.ok(page.includes('rel="canonical" href="https://jonelpd.github.io/NovaRise/'+canonical+'"'),file+' missing canonical');for(const lang of ['es','en','x-default'])assert.ok(page.includes('hreflang="'+lang+'"'),file+' missing '+lang);assert.ok(page.includes('property="og:description"'),file+' missing social description');}
+assert.ok(fs.readFileSync('robots.txt','utf8').includes('sitemap.xml'),'Missing sitemap discovery');const sitemap=fs.readFileSync('sitemap.xml','utf8');for(const page of ['index.html','en.html'])assert.ok(sitemap.includes('NovaRise/'+page),'Sitemap missing '+page);
