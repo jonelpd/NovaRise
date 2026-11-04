@@ -1,9 +1,10 @@
 # NovaRise — tokenomics V1 and execution plan
 Date: 2026-10-29
+Network decision updated: 2026-11-04 (Base Mainnet; replaces the older Polygon PoS mainnet plan)
 Status: design in progress; not a launch, sale, or investment offering.
 
 ## Decisions agreed
-- Proposed future **Polygon PoS mainnet** ERC-20: **1,000,000 NVRA** maximum supply, 18 decimals, no further minting planned.
+- Proposed future **Base Mainnet** (chain ID 8453) ERC-20: **1,000,000 NVRA** maximum supply, 18 decimals, no further minting planned.
 - This is a **separate** future deployment from the existing Polygon Amoy prototype, which has an initial 100,000,000 test NVRA.
 - No mainnet token or economic value has been established; mainnet deployment remains conditional on legal and security reviews.
 
@@ -27,6 +28,9 @@ The project owner accepted these percentages as the provisional planning baselin
 - Liquidity: locked until a documented, legally reviewed market plan is approved.
 
 A fixed maximum supply is not a value guarantee. Token price depends on demand, liquidity and actual utility. Token vesting does not create operating cash or market demand.
+
+## Network clarification
+The historical Polygon Amoy testnet token (100,000,000 experimental units) is not the planned production token. The future 1,000,000 NVRA candidate targets **Base Mainnet** only, pending explicit launch approval, contract verification, legal review and treasury security. This document records a network planning decision; it does not authorize deployment.
 
 ## Contracts — proposed architecture
 1. **NVRAToken**: fixed-supply ERC-20 with no owner mint or tax.

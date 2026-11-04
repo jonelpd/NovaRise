@@ -147,3 +147,6 @@ for(const file of ['index.html','en.html','actualizaciones.atom','updates-en.ato
 // Phase 3.4: international SEO and privacy constraints.
 for(const [file,canonical] of [['index.html','index.html'],['en.html','en.html']]){const page=fs.readFileSync(file,'utf8');assert.ok(page.includes('rel="canonical" href="https://jonelpd.github.io/NovaRise/'+canonical+'"'),file+' missing canonical');for(const lang of ['es','en','x-default'])assert.ok(page.includes('hreflang="'+lang+'"'),file+' missing '+lang);assert.ok(page.includes('property="og:description"'),file+' missing social description');assert.ok(!page.includes('github.com/'),file+' exposes repository link');}
 assert.ok(fs.readFileSync('robots.txt','utf8').includes('sitemap.xml'),'Missing sitemap discovery');const sitemap=fs.readFileSync('sitemap.xml','utf8');for(const page of ['index.html','en.html'])assert.ok(sitemap.includes('NovaRise/'+page),'Sitemap missing '+page);
+
+// Phase 4: the approved future chain is Base; Polygon Amoy is historical testnet only.
+const nvraPlan=fs.readFileSync('docs/tokenomics-v1-mainnet-plan.md','utf8');assert.ok(nvraPlan.includes('**Base Mainnet**'),'Future token network must be Base');assert.ok(!nvraPlan.includes('**Polygon PoS mainnet**'),'Stale Polygon mainnet decision');assert.ok(nvraPlan.includes('8453'),'Missing Base chain ID');
