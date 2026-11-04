@@ -107,3 +107,10 @@ assert.match(crmJs,/from\('novarise_interests'\)/);
 assert.match(crmJs,/from\('novarise_public_ideas'\)/);
 assert.deepEqual(issues,[],issues.join("\n"));
 console.log("PASS: "+pages.length+" HTML pages, local links, anchors, Base disclosures and language navigation");
+
+// Community publications require explicit bilingual and privacy review before going live.
+const crmSource=fs.readFileSync('assets/crm.js','utf8');
+assert.ok(crmSource.includes('Revisión final antes de publicar.'),'Missing publication review prompt');
+assert.ok(crmSource.includes('Title EN: ')&&crmSource.includes('Título ES: '),'Both language titles must appear in publication review');
+assert.ok(crmSource.includes('Description EN: ')&&crmSource.includes('Descripción ES: '),'Both language descriptions must appear in publication review');
+assert.ok(crmSource.includes('datos personales'),'Privacy review reminder must appear before publication');
