@@ -1,1 +1,22 @@
-(()=>{'use strict';const root=document.getElementById('roadmap-public-ideas');if(!root)return;const en=document.documentElement.lang==='en';const filter=document.getElementById('community-stage-filter'),count=document.getElementById('community-proposals-count');const labels=en?{consideracion:'Under consideration',planificada:'Planned',desarrollo:'In development',completada:'Completed'}:{consideracion:'En consideración',planificada:'Planificada',desarrollo:'En desarrollo',completada:'Completada'};const escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));let rows=[];const render=()=>{const stage=filter?.value||'all';const visible=rows.filter(r=>stage==='all'||r.stage===stage);count.textContent=en?visible.length+' published initiatives shown':visible.length+' iniciativas publicadas visibles';root.innerHTML=visible.map(r=>'<article class="roadmap-card"><span class="roadmap-status study">'+escape(labels[r.stage]||r.stage)+'</span><h4>'+escape((en?r.title_en:r.title_es)||(en?r.title_es:r.title_en)||'')+'</h4><p>'+escape((en?r.description_en:r.description_es)||(en?r.description_es:r.description_en)||'')+'</p></article>').join('')||'<p class="muted">'+(en?'No published initiatives match this filter.':'No hay iniciativas publicadas para este filtro.')+'</p>'};filter?.addEventListener('change',render);fetch('https://spaafpqczvqahhwjxxrz.supabase.co/rest/v1/novarise_public_ideas?select=title_es,title_en,description_es,description_en,stage,created_at&published=eq.true&order=created_at.desc&limit=30',{headers:{apikey:'sb_publishable_U3x_STcgAUkwqmU23WZb1w_M8dBoFMz'}}).then(async r=>{if(!r.ok)throw Error('fetch');return r.json()}).then(data=>{if(!Array.isArray(data))throw Error('invalid');rows=data.filter(r=>r&&Object.hasOwn(labels,r.stage));render()}).catch(()=>{count.textContent='';root.textContent=en?'Initiatives are temporarily unavailable. Please try again later.':'Las iniciativas no están disponibles temporalmente. Inténtalo más tarde.'})})();
+(()=>{'use strict';
+const root=document.getElementById('roadmap-public-ideas');
+if(!root)return;
+const filter=document.getElementById('community-stage-filter');
+const count=document.getElementById('community-proposals-count');
+const en=document.documentElement.lang==='en';
+const labels=en?{consideracion:'Under consideration',planificada:'Planned',desarrollo:'In development',completada:'Completed'}:{consideracion:'En consideración',planificada:'Planificada',desarrollo:'En desarrollo',completada:'Completada'};
+const escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const validStages=new Set(Object.keys(labels));
+let initiatives=[];
+function render(){
+ const stage=filter&&validStages.has(filter.value)?filter.value:'all';
+ const visible=stage==='all'?initiatives:initiatives.filter(item=>item.stage===stage);
+ if(count)count.textContent=en?(visible.length+' of '+initiatives.length+' published initiatives'):(visible.length+' de '+initiatives.length+' iniciativas publicadas');
+ root.innerHTML=visible.length?visible.map(item=>'<article class="roadmap-card"><span class="roadmap-status study">'+escape(labels[item.stage]||item.stage)+'</span><h3>'+escape((en?item.title_en:item.title_es)||(en?item.title_es:item.title_en)||'')+'</h3><p>'+escape((en?item.description_en:item.description_es)||(en?item.description_es:item.description_en)||'')+'</p></article>').join(''):'<p class="muted">'+(initiatives.length?(en?'No initiatives match this stage.':'No hay iniciativas en este estado.'):(en?'No approved initiatives have been published yet.':'Todavía no se han publicado iniciativas aprobadas.'))+'</p>';
+}
+if(filter)filter.addEventListener('change',render);
+fetch('https://spaafpqczvqahhwjxxrz.supabase.co/rest/v1/novarise_public_ideas?select=title_es,title_en,description_es,description_en,stage,created_at&published=eq.true&order=created_at.desc&limit=30',{headers:{apikey:'sb_publishable_U3x_STcgAUkwqmU23WZb1w_M8dBoFMz'}})
+.then(async response=>{if(!response.ok)throw Error('fetch');return response.json()})
+.then(rows=>{if(!Array.isArray(rows))throw Error('format');initiatives=rows.filter(row=>row&&validStages.has(row.stage));render()})
+.catch(()=>{if(count)count.textContent='';root.textContent=en?'Initiatives are temporarily unavailable.':'Las iniciativas no están disponibles temporalmente.'});
+})();
