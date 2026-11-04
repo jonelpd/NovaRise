@@ -25,7 +25,25 @@ jobs:
           if not os.environ.get("TELEGRAM_BOT_TOKEN"):
               sys.exit("Missing TELEGRAM_BOT_TOKEN secret")
           if os.environ.get("EVENT_NAME") == "workflow_dispatch":
-              print("Manual run is validation-only to avoid duplicate posts.")
+              token = os.environ["TELEGRAM_BOT_TOKEN"]
+              base = "https://api.telegram.org/bot" + token + "/"
+              def call(method, args=None):
+                  url = base + method
+                  if args:
+                      url += "?" + urllib.parse.urlencode(args)
+                  with urllib.request.urlopen(url, timeout=25) as response:
+                      result = json.load(response)
+                  if not result.get("ok"):
+                      sys.exit("Telegram API validation failed")
+                  return result["result"]
+              bot = call("getMe")
+              channel = call("getChat", {"chat_id": os.environ["TELEGRAM_CHANNEL"]})
+              membership = call("getChatMember", {"chat_id": os.environ["TELEGRAM_CHANNEL"], "user_id": bot["id"]})
+              if channel.get("type") != "channel":
+                  sys.exit("Configured destination is not a channel")
+              if membership.get("status") not in ("administrator", "creator") or not membership.get("can_post_messages", False):
+                  sys.exit("Bot lacks channel permission to post messages")
+              print("Validation successful: bot can post to the channel. No message was sent.")
               sys.exit(0)
           today = datetime.datetime.now(zoneinfo.ZoneInfo("Europe/Madrid")).date().isoformat()
           with open("telegram/posts.json", encoding="utf-8") as f:
