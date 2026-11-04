@@ -124,3 +124,6 @@ assert.ok(crmSource.includes("$('idea-summary').textContent"),'Moderation status
 // Moderation guidance must be available in the private CRM without exposing participant data.
 assert.ok(fs.readFileSync('crm.html','utf8').includes('class="idea-review-guide"'),'CRM moderation guide missing');
 assert.ok(fs.readFileSync('crm.html','utf8').includes('No copies nombres, correos'),'CRM privacy guidance missing');
+
+// Public updates must be bilingual, traceable and explicit that NVRA is not launched.
+for(const [file,id] of [['index.html','actualizaciones'],['en.html','updates']]){const markup=fs.readFileSync(file,'utf8');assert.ok(markup.includes('id="'+id+'"'),file+' missing updates section');assert.ok(markup.includes('github.com/jonelpd/NovaRise/pulls?q='),file+' missing verifiable development history');assert.ok(markup.includes('4 November 2026')||markup.includes('4 de noviembre de 2026'),file+' missing editorial date');}
