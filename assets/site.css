@@ -658,3 +658,15 @@ body.interest-modal-open{overflow:hidden}
 .nvra-simple .community-criteria summary{cursor:pointer;font-weight:700;color:#d9fff0}
 .nvra-simple .community-criteria summary:focus-visible{outline:3px solid #85f0c9;outline-offset:4px}
 .nvra-simple .community-criteria p{margin:12px 0 0;line-height:1.6;overflow-wrap:anywhere}
+
+/* Phase 3.3: readable, responsive and keyboard-accessible project history. */
+.updates-history{margin-top:1.5rem;padding:1.25rem 1.5rem;border:1px solid #31554d;border-radius:18px;background:#0b2621}
+.updates-history h3{margin:0 0 1rem;color:#eafff5;font-size:1.15rem}
+.updates-history ol{margin:0;padding-left:1.5rem;display:grid;gap:1rem}
+.updates-history li{padding-left:.3rem;line-height:1.65;overflow-wrap:anywhere}
+.updates-history time{font-weight:700;color:#a8e9cf;white-space:nowrap}
+.updates-history a{color:#8eeac5;text-decoration:underline;text-underline-offset:3px}
+.updates-history a:hover{color:#fff}
+.updates-history a:focus-visible{outline:3px solid #a8e9cf;outline-offset:3px;border-radius:2px}
+.updates-history .simple-footnote{margin:1rem 0 0}
+@media(max-width:600px){.updates-history{padding:1rem}.updates-history time{white-space:normal}}
