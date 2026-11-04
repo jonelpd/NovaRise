@@ -7,6 +7,7 @@ on:
       - 'tests/browser-report.cjs'
       - 'assets/analyzer.js'
       - 'assets/watchlist.js'
+      - 'assets/roadmap-public.js'
       - 'assets/site.css'
       - 'index.html'
       - 'en.html'
