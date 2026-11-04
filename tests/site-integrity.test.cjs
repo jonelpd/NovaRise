@@ -137,3 +137,6 @@ for(const [file,anchor] of [['index.html','actualizaciones'],['en.html','updates
 
 // The public updates history has responsive and keyboard-visible styles.
 const updatesCss=fs.readFileSync('assets/site.css','utf8');assert.ok(updatesCss.includes('.updates-history a:focus-visible'),'Missing keyboard focus for history links');assert.ok(updatesCss.includes('@media(max-width:600px){.updates-history'),'Missing mobile history layout');
+
+// Phase 3.3: bilingual manually curated Atom feeds and discoverability.
+for(const [html,feed] of [['index.html','actualizaciones.atom'],['en.html','updates-en.atom']]){const page=fs.readFileSync(html,'utf8');const xml=fs.readFileSync(feed,'utf8');assert.ok(page.includes('rel="alternate" type="application/atom+xml"'),html+' missing feed discovery');assert.ok(page.includes('href="'+feed+'"'),html+' missing feed link');assert.ok(xml.includes('xmlns="http://www.w3.org/2005/Atom"'),feed+' missing Atom namespace');for(const pr of [61,62,64])assert.ok(xml.includes('NovaRise/pull/'+pr),feed+' missing verified milestone '+pr);}
