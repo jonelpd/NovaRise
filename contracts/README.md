@@ -36,9 +36,9 @@ This prototype is **not audited**, is not financial advice, and is not ready for
 
 See [NovaRise Smart Contracts — architecture v0.1](../docs/smart-contracts-architecture.md) for the proposed read-only access-pass laboratory, security gates, gaming integrations and conditional long-term blockchain vision.
 
-## Future 1,000,000 NVRA mainnet candidate — DRAFT, NOT DEPLOYED
+## Future 1,000,000 NVRA on Base Mainnet — DRAFT, NOT DEPLOYED
 
-The existing `src/NVRAToken.sol` and Polygon Amoy deployment remain the **100,000,000 test-token prototype**. Do not change the historical prototype to represent a future mainnet token.
+The planned network is Base Mainnet (chain ID 8453). The existing `src/NVRAToken.sol` and Polygon Amoy deployment remain the **100,000,000 test-token prototype**. Do not change the historical prototype to represent a future mainnet token.
 
 - `src/NVRAMainnetCandidate.sol`: a **separate, undeployed** 1,000,000 NVRA fixed-supply candidate. Its constructor requires a previously deployed contract as treasury recipient; this does **not** prove that the recipient is a secure multisig.
 - `src/NVRATeamVesting.sol`: separate, undeployed cliff-plus-linear vesting draft using OpenZeppelin VestingWallet. Durations are specified in seconds; 12 and 36 calendar months are **not automatically equivalent** to 365 and 1,095 days.
