@@ -114,3 +114,9 @@ assert.ok(crmSource.includes('Revisión final antes de publicar.'),'Missing publ
 assert.ok(crmSource.includes('Title EN: ')&&crmSource.includes('Título ES: '),'Both language titles must appear in publication review');
 assert.ok(crmSource.includes('Description EN: ')&&crmSource.includes('Descripción ES: '),'Both language descriptions must appear in publication review');
 assert.ok(crmSource.includes('datos personales'),'Privacy review reminder must appear before publication');
+
+// The private moderation dashboard must support independent triage filters.
+const crmMarkup=fs.readFileSync('crm.html','utf8');
+for(const id of ['idea-summary','idea-priority-filter','idea-feasibility-filter'])assert.ok(crmMarkup.includes('id="'+id+'"'),'Missing CRM moderation control: '+id);
+for(const id of ['idea-priority-filter','idea-feasibility-filter'])assert.ok(crmSource.includes("$('"+id+"').value"),'CRM moderation filter not wired: '+id);
+assert.ok(crmSource.includes("$('idea-summary').textContent"),'Moderation status overview must update from records');
