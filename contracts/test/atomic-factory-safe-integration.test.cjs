@@ -88,7 +88,7 @@ describe("NVRA atomic vaults with official Safe 3-of-5 (local only)", function (
     expect(await token.balanceOf(recipient.address)).to.equal(amount);
     expect(await team.released()).to.equal(amount);
     expect(await token.balanceOf(await safe.getAddress())).to.equal(0n);
-    await executeVault(3, recipient.address, 1n);
+    await expect(executeVault(3, recipient.address, 1n)).to.be.revertedWith("GS013");
     expect(await team.released()).to.equal(amount);
     expect(await token.totalSupply()).to.equal(ethers.parseUnits("1000000", 18));
   });
