@@ -22,7 +22,7 @@ describe("NVRA immutable CREATE2 factory security boundaries", () => {
     // This mock has no Safe 3-of-5 approvals: the production identity check remains a P0 blocker.
   });
 
-  it("demonstrates late direct transfers become immediately releasable after vesting ends", async () => {
+  it("does not release unsolicited tokens after the fixed allocation has vested", async () => {
     const { beneficiary, outsider, token, vesting } = await fixture();
     const end = Number(await vesting.start()) + Number(await vesting.cliffDuration()) +
       Number(await vesting.linearDuration()) + 1;
@@ -33,14 +33,24 @@ describe("NVRA immutable CREATE2 factory security boundaries", () => {
     expect(await token.balanceOf(beneficiary.address)).to.equal(initial);
     expect(await vesting.releasable()).to.equal(0n);
 
-    // Ordinary ERC20 transfer bypasses the factory escrow and can occur after vesting end.
+    // Ordinary ERC20 transfers can still arrive; excess is intentionally NOT releasable.
     const unexpected = ethers.parseEther("7");
     await token.connect(beneficiary).transfer(await vesting.getAddress(), unexpected);
-    expect(await vesting.releasable()).to.equal(unexpected);
-    await vesting.connect(outsider).release();
+    expect(await vesting.releasable()).to.equal(0n);
+    expect(await token.balanceOf(await vesting.getAddress())).to.equal(unexpected);
+    await expect(vesting.connect(outsider).release()).to.be.revertedWith("NVRA: nothing releasable");
     expect(await token.balanceOf(beneficiary.address)).to.equal(initial);
     expect(await vesting.releasable()).to.equal(0n);
+    expect(await token.balanceOf(await vesting.getAddress())).to.equal(unexpected);
     expect(await token.totalSupply()).to.equal(ethers.parseEther("1000000"));
+  });
+
+  it("keeps the original team allocation fixed even if surplus arrives before cliff", async () => {
+    const { beneficiary, token, vesting } = await fixture();
+    expect(await vesting.TEAM_ALLOCATION()).to.equal(ethers.parseEther("150000"));
+    await token.connect(beneficiary).transfer(await vesting.getAddress(), 0n);
+    expect(await vesting.vestedAmount(0)).to.equal(0n);
+    expect(await vesting.releasable()).to.equal(0n);
   });
 
   it("rejects second initialization and unauthorized factory initialization", async () => {
