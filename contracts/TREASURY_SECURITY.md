@@ -1,35 +1,55 @@
-# NVRA treasury and vesting — security design v0.1
+# NVRA treasury and vesting — Base Mainnet security design v0.2
 
-**Design proposal only. No wallets, contracts or allocations have been deployed. No real funds should be sent.**
+**Status: design only. No production Safe, token, vesting contract, allocations or funds have been deployed. No launch or transfers are authorized.**
 
-## Recommended custody model
+## Current agreed scope (2026-11-05)
 
-1. Use a widely reviewed multisignature treasury (e.g. Safe) on the *same chain* as NVRA. For a small independent team, a **2-of-3** signing threshold is a preliminary option, not a final security guarantee.
-2. Each signer must be a separate trusted person or institution with an independently protected hardware wallet. Do not place all keys on one device or with one person. Define key rotation, recovery and incident procedures before launch.
-3. Separate treasury administration from service operations and analytics infrastructure. Never store seed phrases, private keys, RPC credentials or signer material in the website, repository, GitHub Actions, or analytics services.
-4. Treasury movements require a written allocation policy, spending limits, public transaction records and at least two independent approvals under the proposed 2-of-3 model. Reassess threshold as the project grows.
-5. Do not publish a treasury address as official until its signers, network, ownership and test transfers have been independently verified.
+- Target network: **Base Mainnet (chain ID 8453)**. The historical Polygon Amoy test prototype (100,000,000 test NVRA) is separate and must not be confused with production.
+- Candidate ERC-20: `src/NVRAMainnetCandidate.sol`, **1,000,000 NVRA**, 18 decimals, fixed supply, minted once to a constructor-supplied contract address. The candidate only checks that the recipient has code; it **does not verify Safe implementation, owners, threshold or governance**.
+- Proposed custody: **Safe 3-of-5**, subject to independent signer, implementation, module, guard and transaction-policy verification. The earlier 2-of-3 design is superseded.
+- No signer addresses, beneficiary addresses, initial circulation, release dates or final unlock policy have been approved.
 
-## Proposed allocation controls
+## Custody safeguards — required before any launch
 
-The current **illustrative** distribution in whitepaper v0.3 is: 45% ecosystem utility/incentives, 20% treasury/operations, 15% team/development, 10% security/audits and 10% partnerships. These are not commitments or circulating balances.
+1. Five genuinely independent, verified signers, with hardware-backed key custody and documented identity/authority. No shared seed phrase, single custodian or keys in code, CI, analytics or the website.
+2. Verify the actual deployed Safe proxy, singleton/master-copy, owner set, threshold **3**, chain ID **8453**, enabled modules, guards, fallback handler and upgrade/change pathways. Interface checks alone are insufficient.
+3. Independently review signing policy, spending limits, transaction simulation, recipient verification, rotation/recovery, emergency response and the risk of malicious approvals.
+4. Never deploy the token with `MockNVRATreasury.sol`: that contract lets **any caller transfer its balance**. It is for isolated local tests only.
+5. Prefer separated, independently reviewed allocation-control and vesting contracts. Minting the entire supply into Safe custody does **not** imply circulation or enforce release limits.
+6. Obtain explicit go/no-go authorization only after legal review (including applicable EU/MiCA requirements), independent security audit and operational verification. No private keys or signing accounts in the repository.
 
-- At deployment, NVRAToken mints all 100,000,000 NVRA to the provided treasury address; this is **not** an unlock schedule. The treasury controls the full balance until it transfers tokens to independently specified allocation contracts or recipients.
-- Consider OpenZeppelin `VestingWallet` for time-based team/partner unlocks. The sample test funds a 15% allocation to a 365-day vesting wallet after a short future start delay **only to demonstrate the mechanism**; it does not represent the actual schedule.
-- A real vesting policy must define a meaningful cliff, start date, duration, beneficiary restrictions and treatment of departures. **OpenZeppelin VestingWallet is not a cliff by default**, and its beneficiary/ownership may be transferable: assess whether that meets the intended policy.
-- Use separate contracts and explicit vesting schedules for each beneficiary, subject to security review. Do not assume that a lock guarantees no economic transfer if beneficiary ownership can be sold.
-- Avoid automated burning, discretionary minting, transfer taxes, arbitrary freezing and hidden administrator privileges in the token itself.
-- A service-credit system should be implemented separately, after validating off-chain accounting, pricing, fraud controls and consumer protections.
+## Provisional token allocations — NOT funded or released
 
-## Release gates
+| Purpose | Share | NVRA |
+| --- | ---: | ---: |
+| Ecosystem and verified rewards | 30% | 300,000 |
+| Treasury and development | 25% | 250,000 |
+| Community and adoption | 20% | 200,000 |
+| Team | 15% | 150,000 |
+| Future liquidity | 10% | 100,000 |
+| **Total** | **100%** | **1,000,000** |
 
-- Confirm whether token issuance is necessary and legally permissible; identify the responsible legal entity and relevant MiCA obligations.
-- Fix tokenomics and publicly document initial circulating supply and all allocations.
-- Verify multisig signers, hardware custody, disaster recovery, transaction monitoring and approval procedures.
-- Review vesting semantics, including cliff, start time, ownership transfer, revocation policy and beneficiary eligibility.
-- Add negative tests and static analysis, then commission an independent contract/security review.
-- Test the complete flow locally; only then consider Amoy testnet. **No production deployment or mainnet token issuance is authorized by this document.**
+These are planning amounts, **not** token balances, guaranteed rewards, commitments or an approved distribution. Program-level budgets, eligibility, abuse prevention, beneficiaries, dates and unlock enforcement remain pending.
 
-## Local test
+## Team vesting caveats
 
-Run `npm install && npm test` inside `contracts/`. Tests require access to npm dependencies and a Solidity compiler. The test suite is intended to validate mechanics, not certify security.
+- The undeployed `src/NVRATeamVesting.sol` draft implements a cliff plus linear release. Proposed schedule: 12-month cliff and 36-month linear release, but **calendar months and fixed-day durations are not interchangeable**; exact UTC timestamps must be approved.
+- OpenZeppelin `VestingWallet` beneficiary ownership is transferable; transferring ownership may transfer economic rights.
+- Funding after vesting time has elapsed can make tokens immediately releasable. Review funding deadlines, cap enforcement and allocation isolation.
+- Define beneficiary eligibility, revocation policy, departures, recovery and emergency handling before any real funding.
+
+## Verification and launch gates
+
+- [ ] Confirm the responsible legal entity and complete independent legal/regulatory assessment.
+- [ ] Approve 3-of-5 signer identities, independence, hardware custody and emergency plan.
+- [ ] Verify Safe implementation, proxy, modules/guards, threshold, owners and Base chain ID independently.
+- [ ] Finalize allocations, initial circulating supply, exact vesting timestamps, beneficiaries and enforceable release controls.
+- [ ] Expand negative/invariant tests and independent security audit; remediate findings.
+- [ ] Demonstrate real utility and operational safeguards, including reward anti-abuse controls.
+- [ ] Obtain explicit separate approval for any production deployment, funding or token distribution.
+
+## Read-only verification
+
+`npm run base:readiness` (from `contracts/`) performs read-only Base chain ID checks when `BASE_MAINNET_RPC_URL` is provided, and optional Safe interface checks with `BASE_SAFE_ADDRESS`. It does **not** authenticate the Safe implementation or sign transactions. Keep RPC credentials out of logs.
+
+**This document does not authorize any deployment, signing, transaction, token sale or investment offer.**
