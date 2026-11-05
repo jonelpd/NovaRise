@@ -38,6 +38,8 @@ These amounts are **provisional**, not commitments, approved circulating supply 
 - A Safe 3-of-5 alone is not enough: independently inspect the actual Safe proxy, singleton, modules, guards, owner addresses and threshold, and review transaction policy and signer independence.
 - Complete independent Solidity/security review and legal/MiCA assessment, and obtain explicit authorization before any production deployment, funding or distribution.
 
+See [ADR-001: custody architecture comparison](nvra-custody-architecture-decision-adr001.md) for the evaluation of options A, B and a possible atomic five-vault design C. The recommendation is for further engineering only.
+
 ## Open architecture decision
 
 **Option A — mint to reviewed allocation controller:** minimizes an interim unrestricted Safe custody window but introduces controller availability/recovery risks and must meet the token constructor's contract-address requirement.
