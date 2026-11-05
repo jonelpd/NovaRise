@@ -15,7 +15,7 @@ describe("NVRA immutable beneficiary vesting (local research only)", function ()
     const Vesting = await ethers.getContractFactory("NVRAImmutableBeneficiaryVestingDraft");
     const vesting = await Vesting.deploy(await token.getAddress(), beneficiary.address, start, cliff, linear);
     const amount = ethers.parseUnits("150000", 18);
-    await treasury.release(await token.getAddress(), await vesting.getAddress(), amount);
+    await treasury.sendToken(await token.getAddress(), await vesting.getAddress(), amount);
     return { beneficiary, outsider, treasury, token, vesting, amount, start, cliff, linear, Vesting };
   }
 
@@ -66,7 +66,7 @@ describe("NVRA immutable beneficiary vesting (local research only)", function ()
     await ethers.provider.send("evm_mine", []);
     await vesting.release();
     const extra = ethers.parseUnits("1", 18);
-    await treasury.release(await token.getAddress(), await vesting.getAddress(), extra);
+    await treasury.sendToken(await token.getAddress(), await vesting.getAddress(), extra);
     expect(await vesting.releasable()).to.equal(extra);
     await vesting.release();
     expect(await token.balanceOf(beneficiary.address)).to.equal(amount + extra);
