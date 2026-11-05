@@ -16,7 +16,7 @@
 | Bucket 2 | 200,000 NVRA |
 | Bucket 3 / team vesting | 150,000 NVRA |
 | Bucket 4 | 100,000 NVRA |
-| Safe governance | 5 owners, threshold 3 |
+| Safe governance | 3 independently secured owner keys, threshold 2 |
 | Solidity | 0.8.24; optimizer enabled, runs 200 |
 | Other compiler | 0.7.6 for legacy Safe sources, optimizer disabled |
 
@@ -63,3 +63,6 @@
 
 ## Scope
 No deployment, signature, fund transfer, contract merge or mainnet call is authorized by this template. The final populated manifest must be approved separately.
+
+## Governance change — 2026-11-05
+The project owner approved a Safe **2-of-3**, with all three independently secured signing keys controlled by one person. This is key-level redundancy, **not** multi-person governance. Do not reuse a single seed phrase across the three signers. The current `check-safe-3of5.cjs` preflight still enforces 3-of-5 and **must be replaced or adapted and retested before deployment**. No Safe has been created or verified. No on-chain deployment authorized.
