@@ -52,6 +52,8 @@ jobs:
           tar -xzf safe-source/safe-global-safe-contracts-1.4.1-2.tgz -C safe-source --no-same-owner --no-same-permissions
           cp -R safe-source/package/contracts node_modules/@safe-global/safe-contracts/contracts
           node -e 'const p=require("./safe-source/package/package.json");if(p.name!=="@safe-global/safe-contracts"||p.version!=="1.4.1-2")throw Error("Safe package metadata mismatch");require("fs").writeFileSync("node_modules/@safe-global/safe-contracts/package.json",JSON.stringify({name:p.name,version:p.version,license:p.license}));'
+      - name: Run Safe preflight negative tests
+        run: npm run test:safe-preflight
       - name: Compile Solidity
         run: npm run compile
       - name: Run contract tests
