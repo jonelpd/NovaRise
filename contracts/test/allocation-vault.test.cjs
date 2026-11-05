@@ -91,14 +91,14 @@ describe("NVRA allocation vault draft (local only)", function () {
     const cap = await vault.budget(3);
     await execute(3, recipient.address, cap);
     expect(await vault.remaining(3)).to.equal(0n);
-    // Return a small amount to the unrestricted mock treasury, then send directly.
-    // This deliberately demonstrates the limitation, not a production-approved flow.
-    await token.connect(recipient).transfer(await treasury.getAddress(), 1n);
+    // Funds released under a different budget can be rerouted by an unrestricted
+    // treasury. This demonstrates a bypass of economic allocation policy.
+    await execute(1, await treasury.getAddress(), 1n);
     await treasury.sendToken(await token.getAddress(), recipient.address, 1n);
     expect(await vault.remaining(3)).to.equal(0n);
-    expect(await vault.totalReleased()).to.equal(cap);
-    expect(await token.balanceOf(recipient.address)).to.equal(cap);
-    // The vault cannot observe or classify the direct treasury transfer.
+    expect(await vault.totalReleased()).to.equal(cap + 1n);
+    expect(await token.balanceOf(recipient.address)).to.equal(cap + 1n);
+    // Vault counters cannot classify or prevent this direct treasury transfer.
   });
 
 });
