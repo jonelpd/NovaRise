@@ -1,0 +1,57 @@
+"use strict";
+
+// Read-only Base Mainnet preflight; never deploys, signs, or sends a transaction.
+// Usage: BASE_RPC_URL=https://... SAFE_ADDRESS=0x... SAFE_OWNERS=0x...,0x...,0x...,0x...,0x... node contracts/scripts/check-safe-3of5.cjs
+const { ethers } = require("ethers");
+
+async function checkSafe({ provider, safeAddress, expectedOwners }) {
+  if (!ethers.isAddress(safeAddress)) throw new Error("Invalid SAFE_ADDRESS");
+  if (expectedOwners.length !== 5 || expectedOwners.some(a => !ethers.isAddress(a))) {
+    throw new Error("Exactly five valid SAFE_OWNERS required");
+  }
+  const normalized = expectedOwners.map(a => ethers.getAddress(a));
+  if (new Set(normalized).size !== 5) throw new Error("Duplicate expected owner");
+  const network = await provider.getNetwork();
+  if (network.chainId !== 8453n) throw new Error("Wrong chain: Base Mainnet (8453) required");
+  if (await provider.getCode(safeAddress) === "0x") throw new Error("Safe address has no code");
+  const safe = new ethers.Contract(safeAddress, [
+    "function getThreshold() view returns (uint256)",
+    "function getOwners() view returns (address[])",
+    "function getModulesPaginated(address,uint256) view returns (address[],address)",
+    "function getGuard() view returns (address)",
+    "function getFallbackHandler() view returns (address)",
+    "function VERSION() view returns (string)"
+  ], provider);
+  const [threshold, owners, version] = await Promise.all([
+    safe.getThreshold(), safe.getOwners(), safe.VERSION()
+  ]);
+  if (threshold !== 3n || owners.length !== 5) throw new Error("Safe threshold/owner count mismatch");
+  const actual = owners.map(a => ethers.getAddress(a)).sort();
+  if (actual.join(",") !== [...normalized].sort().join(",")) throw new Error("Safe owner identities mismatch");
+  // Safe 1.4.x exposes getStorageAt through compatibility handler in some deployments.
+  // Modules can be checked with the official paginated API, and must be empty for this policy.
+  const SENTINEL = "0x0000000000000000000000000000000000000001";
+  const [modules, next] = await safe.getModulesPaginated(SENTINEL, 100);
+  if (modules.length || ethers.getAddress(next) !== ethers.getAddress(SENTINEL)) {
+    throw new Error("Unexpected enabled Safe module(s)");
+  }
+  if (!version.startsWith("1.4.")) throw new Error("Unexpected Safe version: " + version);
+  return { chainId: Number(network.chainId), safe: ethers.getAddress(safeAddress), version,
+    threshold: Number(threshold), owners: actual, modules: [] };
+}
+
+async function main() {
+  const { BASE_RPC_URL, SAFE_ADDRESS, SAFE_OWNERS } = process.env;
+  if (!BASE_RPC_URL || !SAFE_ADDRESS || !SAFE_OWNERS) {
+    throw new Error("Provide BASE_RPC_URL, SAFE_ADDRESS, SAFE_OWNERS (five comma-separated addresses)");
+  }
+  const result = await checkSafe({
+    provider: new ethers.JsonRpcProvider(BASE_RPC_URL),
+    safeAddress: SAFE_ADDRESS,
+    expectedOwners: SAFE_OWNERS.split(",").map(x => x.trim())
+  });
+  process.stdout.write(JSON.stringify(result, null, 2) + "\n");
+  process.stdout.write("Read-only preflight passed; NOT an audit or deployment authorization.\n");
+}
+if (require.main === module) main().catch(e => { console.error(e.message); process.exitCode = 1; });
+module.exports = { checkSafe };
