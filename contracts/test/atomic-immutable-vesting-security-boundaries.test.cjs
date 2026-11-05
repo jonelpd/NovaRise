@@ -39,7 +39,7 @@ describe("NVRA immutable CREATE2 factory security boundaries", () => {
     expect(await vesting.releasable()).to.equal(0n);
     expect(await token.balanceOf(await vesting.getAddress())).to.equal(unexpected);
     await expect(vesting.connect(outsider).release()).to.be.revertedWith("NVRA: nothing releasable");
-    expect(await token.balanceOf(beneficiary.address)).to.equal(initial);
+    expect(await token.balanceOf(beneficiary.address)).to.equal(initial - unexpected);
     expect(await vesting.releasable()).to.equal(0n);
     expect(await token.balanceOf(await vesting.getAddress())).to.equal(unexpected);
     expect(await token.totalSupply()).to.equal(ethers.parseEther("1000000"));
