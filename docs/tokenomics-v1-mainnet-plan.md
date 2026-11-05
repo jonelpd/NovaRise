@@ -1,10 +1,10 @@
 # NovaRise — tokenomics V1 and execution plan
-Date: 2026-10-29
+Date: 2026-10-29; network decision updated 2026-11-05
 Status: design in progress; not a launch, sale, or investment offering.
 
 ## Decisions agreed
-- Proposed future **Polygon PoS mainnet** ERC-20: **1,000,000 NVRA** maximum supply, 18 decimals, no further minting planned.
-- This is a **separate** future deployment from the existing Polygon Amoy prototype, which has an initial 100,000,000 test NVRA.
+- Proposed future **Base Mainnet (chain ID 8453)** ERC-20: **1,000,000 NVRA** maximum supply, 18 decimals, no further minting planned.
+- This is a **separate** future deployment from the existing Polygon Amoy prototype, which has an initial 100,000,000 test NVRA. The earlier Polygon PoS mainnet proposal was superseded by the Base Mainnet decision; the Amoy prototype is not the production token.
 - No mainnet token or economic value has been established; mainnet deployment remains conditional on legal and security reviews.
 
 ## Allocation — provisionally accepted for planning (2026-10-29)
@@ -35,6 +35,12 @@ A fixed maximum supply is not a value guarantee. Token price depends on demand, 
 4. **AccessPass**: read-only ERC-20 balance-based eligibility; users retain their tokens. Clarify snapshot/flash-balance risks and off-chain access controls.
 5. **Participation**: controlled recording of verifiable participation; privacy minimization and anti-abuse policy.
 6. **Rewards**: capped payouts from pre-funded allocations; no automatic yield, guaranteed returns or unbounded issuance.
+
+## Base Mainnet implementation status (2026-11-05)
+- `contracts/src/NVRAMainnetCandidate.sol` already contains a separate, undeployed fixed-supply 1,000,000 NVRA candidate; do not replace it with the 100,000,000 test prototype in `contracts/NVRAToken.sol`.
+- `contracts/scripts/base-mainnet-readiness.cjs` performs read-only chain ID and optional Safe interface checks; it does not deploy or authorize transactions.
+- Treasury recipient contract validation alone does not establish a secure Safe; independent verification of the Safe implementation, ownership, threshold and operational controls remains necessary.
+- All allocations, beneficiary identities, enforceable release schedules and independent audits remain pending.
 
 ## Gates before mainnet
 - [ ] Validate actual user utility and whether ERC-20 is needed.
