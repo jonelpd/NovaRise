@@ -28,7 +28,8 @@ describe("NVRA team restricted vault and vesting (local only)", function () {
     expect(await vault.vesting()).to.equal(await vesting.getAddress());
     expect(vault.interface.hasFunction("release")).to.equal(false);
     await expect(vault.connect(outsider).releaseToVesting(1n)).to.be.revertedWith("NVRA: controller only");
-    await expect(vault.bindToken(await token.getAddress())).to.be.revertedWith("NVRA: factory only");
+    await expect(vault.bindToken(await token.getAddress())).to.be.revertedWith("NVRA: already bound");
+    await expect(vault.connect(outsider).bindToken(await token.getAddress())).to.be.revertedWith("NVRA: factory only");
     await expect(execute(amount + 1n)).to.be.revertedWith("NVRA: budget exceeded");
     await execute(amount);
     expect(await token.balanceOf(await vesting.getAddress())).to.equal(amount);
