@@ -31,3 +31,8 @@ BASE_RPC_URL="https://your-base-rpc" SAFE_ADDRESS="0x..." SAFE_OWNERS="0x...,0x.
 ```
 
 **Important limitations:** This is not yet wired as a mandatory deployment gate. It does not validate the Safe singleton implementation, guard, fallback handler, proxy bytecode hash or on-chain owner identity provenance. These remain deployment blockers. No production Safe address or owner addresses have been provided or verified.
+
+## Fixed 150,000 NVRA vesting entitlement (2026-11-05)
+The research vesting now uses a constant `TEAM_ALLOCATION = 150_000 ether` rather than `balanceOf(vesting) + released` for vesting mathematics. An unexpected direct transfer can no longer enlarge the beneficiary's vesting entitlement. Negative regression tests cover a late transfer after full release.
+
+**Explicit trade-off / unresolved P0:** unsolicited NVRA transfers can still reach any ERC20 recipient address, including this vesting contract. Because the vesting is immutable and intentionally has no rescue, those surplus tokens become permanently inaccessible through the vesting contract. Do not represent this as solved asset recovery. A recovery mechanism, if desired, needs separate security and governance review and must not weaken the immutable beneficiary or team allocation guarantee. The contract remains a research draft; no Mainnet deployment is authorized.
