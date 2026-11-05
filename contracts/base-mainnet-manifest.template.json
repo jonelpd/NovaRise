@@ -1,5 +1,5 @@
 {
-  "_notice": "TEMPLATE ONLY — no verified addresses, no deployment authorization. Never add private keys.",
+  "_notice": "TEMPLATE ONLY — no verified addresses, no deployment authorization. Never add private keys. Three independent keys under one operator; not three independent people.",
   "network": "base",
   "chainId": 8453,
   "token": {
@@ -7,12 +7,22 @@
     "symbol": "NVRA",
     "decimals": 18,
     "totalSupply": "1000000",
-    "allocations": ["300000", "250000", "200000", "150000", "100000"]
+    "allocations": [
+      "300000",
+      "250000",
+      "200000",
+      "150000",
+      "100000"
+    ]
   },
   "safe": {
     "address": null,
-    "owners": [null, null, null, null, null],
-    "threshold": 3,
+    "owners": [
+      null,
+      null,
+      null
+    ],
+    "threshold": 2,
     "singleton": null,
     "fallbackHandler": null,
     "expectedProxyRuntimeCodehash": null,
