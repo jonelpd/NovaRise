@@ -1,10 +1,10 @@
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
-// Negative security tests. These document risks; they are NOT evidence of production safety.
-describe("NVRA immutable CREATE2 factory security boundaries (local research)", () => {
+// Adversarial local-only tests: demonstrating an actual risk is not a production approval.
+describe("NVRA immutable CREATE2 factory security boundaries", () => {
   async function fixture() {
-    const [deployer, beneficiary, outsider] = await ethers.getSigners();
+    const [, beneficiary, outsider] = await ethers.getSigners();
     const Controller = await ethers.getContractFactory("MockNVRAAllocationController");
     const controller = await Controller.deploy();
     const now = (await ethers.provider.getBlock("latest")).timestamp;
@@ -13,34 +13,39 @@ describe("NVRA immutable CREATE2 factory security boundaries (local research)", 
     await factory.initialize();
     const token = await ethers.getContractAt("NVRAAtomicAllocationCandidate", await factory.token());
     const vesting = await ethers.getContractAt("NVRAImmutableBeneficiaryVestingDraft", await factory.vesting());
-    return { deployer, beneficiary, outsider, controller, factory, token, vesting };
+    return { beneficiary, outsider, controller, factory, token, vesting };
   }
 
-  it("documents that a generic controller contract is accepted (Safe authenticity NOT enforced)", async () => {
+  it("documents arbitrary controller acceptance: deployed code is not Safe authentication", async () => {
     const { controller, factory } = await fixture();
     expect(await factory.controller()).to.equal(await controller.getAddress());
-    // This is a known security gap: controller.code.length != 0 is not Safe authentication.
+    // This mock has no Safe 3-of-5 approvals: the production identity check remains a P0 blocker.
   });
 
-  it("documents late funding risk: direct ERC20 transfers become immediately releasable after schedule", async () => {
-    const { beneficiary, factory, token, vesting } = await fixture();
-    const vault = await ethers.getContractAt("NVRAFactoryBoundVaultDraft", await factory.vaults(0));
-    // The controller mock can trigger vault transfers; no real Safe signatures are involved.
-    const now = (await ethers.provider.getBlock("latest")).timestamp;
-    const start = Number(await vesting.start());
-    const cliff = Number(await vesting.cliffDuration());
-    const linear = Number(await vesting.linearDuration());
-    await ethers.provider.send("evm_setNextBlockTimestamp", [start + cliff + linear + 1]);
+  it("demonstrates late direct transfers become immediately releasable after vesting ends", async () => {
+    const { beneficiary, outsider, token, vesting } = await fixture();
+    const end = Number(await vesting.start()) + Number(await vesting.cliffDuration()) +
+      Number(await vesting.linearDuration()) + 1;
+    await ethers.provider.send("evm_setNextBlockTimestamp", [end]);
     await ethers.provider.send("evm_mine", []);
-    await vesting.release();
-    const amount = 1n;
-    // Anyone holding NVRA can transfer tokens directly to the vesting address.
-    // This test documents the behavior using a separate vault as token source.
-    const Mock = await ethers.getContractFactory("MockNVRAAllocationController");
-    // Existing mock controller API is not relied upon; this test only checks the immutable vesting math.
+    await vesting.connect(outsider).release();
+    const initial = ethers.parseEther("150000");
+    expect(await token.balanceOf(beneficiary.address)).to.equal(initial);
     expect(await vesting.releasable()).to.equal(0n);
-    expect(await token.balanceOf(beneficiary.address)).to.equal(ethers.parseEther("150000"));
-    expect(await vault.token()).to.equal(await token.getAddress());
-    expect(amount).to.equal(1n);
+
+    // Ordinary ERC20 transfer bypasses the factory escrow and can occur after vesting end.
+    const unexpected = ethers.parseEther("7");
+    await token.connect(beneficiary).transfer(await vesting.getAddress(), unexpected);
+    expect(await vesting.releasable()).to.equal(unexpected);
+    await vesting.connect(outsider).release();
+    expect(await token.balanceOf(beneficiary.address)).to.equal(initial);
+    expect(await vesting.releasable()).to.equal(0n);
+    expect(await token.totalSupply()).to.equal(ethers.parseEther("1000000"));
+  });
+
+  it("rejects second initialization and unauthorized factory initialization", async () => {
+    const { factory, outsider } = await fixture();
+    await expect(factory.connect(outsider).initialize()).to.be.reverted;
+    await expect(factory.initialize()).to.be.reverted;
   });
 });
