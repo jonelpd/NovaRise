@@ -17,6 +17,40 @@ describe("NovaRise 1M mainnet candidate (local only)", function () {
     expect(await token.MAX_SUPPLY()).to.equal(supply);
     expect(await token.decimals()).to.equal(18);
   });
+
+  it("preserves fixed supply across transfers and rejects unauthorized mint-like calls", async function () {
+    const [, alice, bob] = await ethers.getSigners();
+    const Treasury = await ethers.getContractFactory("MockNVRATreasury");
+    const treasury = await Treasury.deploy();
+    const Token = await ethers.getContractFactory("NVRAMainnetCandidate");
+    const token = await Token.deploy(await treasury.getAddress());
+    const supply = ethers.parseUnits("1000000", 18);
+    const treasuryAddress = await treasury.getAddress();
+    const tokenAddress = await token.getAddress();
+    const transferAmount = ethers.parseUnits("125", 18);
+    await treasury.sendToken(tokenAddress, alice.address, transferAmount);
+    await token.connect(alice).transfer(bob.address, ethers.parseUnits("25", 18));
+    expect(await token.totalSupply()).to.equal(supply);
+    expect(await token.balanceOf(treasuryAddress)).to.equal(supply - transferAmount);
+    expect(await token.balanceOf(alice.address)).to.equal(ethers.parseUnits("100", 18));
+    expect(await token.balanceOf(bob.address)).to.equal(ethers.parseUnits("25", 18));
+    expect(await token.balanceOf(treasuryAddress) + await token.balanceOf(alice.address) + await token.balanceOf(bob.address)).to.equal(supply);
+    expect(token.interface.hasFunction("mint(address,uint256)")).to.equal(false);
+    expect(token.interface.hasFunction("upgradeTo(address)")).to.equal(false);
+    expect(token.interface.hasFunction("pause()")).to.equal(false);
+  });
+
+  it("rejects transfers exceeding available balance without altering supply", async function () {
+    const [, alice] = await ethers.getSigners();
+    const Treasury = await ethers.getContractFactory("MockNVRATreasury");
+    const treasury = await Treasury.deploy();
+    const Token = await ethers.getContractFactory("NVRAMainnetCandidate");
+    const token = await Token.deploy(await treasury.getAddress());
+    const supply = await token.totalSupply();
+    await expect(token.connect(alice).transfer(await treasury.getAddress(), 1n)).to.be.reverted;
+    expect(await token.totalSupply()).to.equal(supply);
+    expect(await token.balanceOf(await treasury.getAddress())).to.equal(supply);
+  });
 });
 
 describe("NovaRise team cliff vesting (local only)", function () {

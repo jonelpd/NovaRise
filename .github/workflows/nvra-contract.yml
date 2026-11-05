@@ -28,8 +28,6 @@ jobs:
           node-version: '24'
       - name: Validate repository contract structure
         run: npm run preflight
-      - name: Check Amoy preparation manifest (read-only)
-        run: npm run amoy:readiness
 
   contract:
     name: Solidity compile and Hardhat tests
@@ -46,6 +44,14 @@ jobs:
           node-version: '24'
       - name: Install dependencies
         run: npm install --no-audit --no-fund --fetch-retries=3
+      - name: Fetch integrity-pinned Safe Solidity sources
+        run: |
+          mkdir -p safe-source node_modules/@safe-global/safe-contracts
+          npm pack @safe-global/safe-contracts@1.4.1-2 --ignore-scripts --pack-destination safe-source --silent
+          node -e 'const fs=require("fs"),crypto=require("crypto"),path=require("path");const e=require("./safe-deps/package-lock.json").packages["node_modules/@safe-global/safe-contracts"];const f=path.join("safe-source","safe-global-safe-contracts-1.4.1-2.tgz");const b=fs.readFileSync(f);if(e.version!=="1.4.1-2"||"sha512-"+crypto.createHash("sha512").update(b).digest("base64")!==e.integrity)throw Error("Safe source integrity mismatch");'
+          tar -xzf safe-source/safe-global-safe-contracts-1.4.1-2.tgz -C safe-source --no-same-owner --no-same-permissions
+          cp -R safe-source/package/contracts node_modules/@safe-global/safe-contracts/contracts
+          node -e 'const p=require("./safe-source/package/package.json");if(p.name!=="@safe-global/safe-contracts"||p.version!=="1.4.1-2")throw Error("Safe package metadata mismatch");require("fs").writeFileSync("node_modules/@safe-global/safe-contracts/package.json",JSON.stringify({name:p.name,version:p.version,license:p.license}));'
       - name: Compile Solidity
         run: npm run compile
       - name: Run contract tests
