@@ -196,4 +196,46 @@ describe("NovaRise team cliff vesting (local only)", function () {
     await expect(Vesting.deploy(beneficiary.address, 2000000000, 1, 0)).to.be.revertedWith("NVRA: invalid durations");
   });
 
+  it("does not release prefunded team allocation before the cliff", async function () {
+    const [, beneficiary] = await ethers.getSigners();
+    const Treasury = await ethers.getContractFactory("MockNVRATreasury");
+    const treasury = await Treasury.deploy();
+    const Token = await ethers.getContractFactory("NVRAMainnetCandidate");
+    const token = await Token.deploy(await treasury.getAddress());
+    const Vesting = await ethers.getContractFactory("NVRATeamVesting");
+    const latest = await ethers.provider.getBlock("latest");
+    const start = latest.timestamp + 3600;
+    const cliff = 86400;
+    const linear = 86400 * 3;
+    const vest = await Vesting.deploy(beneficiary.address, start, cliff, linear);
+    const allocation = ethers.parseUnits("150000", 18);
+    const tokenAddress = await token.getAddress();
+    await treasury.sendToken(tokenAddress, await vest.getAddress(), allocation);
+    await ethers.provider.send("evm_setNextBlockTimestamp", [start + cliff - 2]);
+    await ethers.provider.send("evm_mine", []);
+    await vest["release(address)"](tokenAddress);
+    expect(await token.balanceOf(beneficiary.address)).to.equal(0n);
+    expect(await token.balanceOf(await vest.getAddress())).to.equal(allocation);
+    expect(await token.totalSupply()).to.equal(ethers.parseUnits("1000000", 18));
+  });
+
+  it("documents that incremental funding increases the vesting allocation, not a hard cap", async function () {
+    const [, beneficiary] = await ethers.getSigners();
+    const Treasury = await ethers.getContractFactory("MockNVRATreasury");
+    const treasury = await Treasury.deploy();
+    const Token = await ethers.getContractFactory("NVRAMainnetCandidate");
+    const token = await Token.deploy(await treasury.getAddress());
+    const Vesting = await ethers.getContractFactory("NVRATeamVesting");
+    const latest = await ethers.provider.getBlock("latest");
+    const vest = await Vesting.deploy(beneficiary.address, latest.timestamp + 3600, 86400, 86400 * 3);
+    const tokenAddress = await token.getAddress();
+    const first = ethers.parseUnits("150000", 18);
+    const extra = ethers.parseUnits("1", 18);
+    await treasury.sendToken(tokenAddress, await vest.getAddress(), first);
+    await treasury.sendToken(tokenAddress, await vest.getAddress(), extra);
+    expect(await token.balanceOf(await vest.getAddress())).to.equal(first + extra);
+    expect(await vest["vestedAmount(address,uint64)"](tokenAddress, latest.timestamp + 3600 + 86400 + 86400 * 3)).to.equal(first + extra);
+    // Production allocation caps require a separately reviewed funding controller.
+  });
+
 });
