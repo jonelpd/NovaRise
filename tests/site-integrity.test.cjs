@@ -150,3 +150,6 @@ assert.ok(fs.readFileSync('robots.txt','utf8').includes('sitemap.xml'),'Missing 
 
 // Phase 4: bilingual prelaunch gates are explicitly pending and do not expose GitHub links.
 for(const file of ['tokenomics.html','tokenomics-en.html']){const page=fs.readFileSync(file,'utf8');assert.ok(page.includes('id="launch-checklist"'),file+' missing launch prerequisites');assert.ok(page.includes('3 de 5')||page.includes('3-of-5'),file+' missing treasury threshold');assert.ok(page.includes('Mainnet'),file+' missing mainnet launch gate');assert.ok(!page.includes('github.com/'),file+' exposes repository link');}
+
+// Phase 4: current internal mainnet plan must match the Base decision, not obsolete Polygon proposal.
+const tokenPlan=fs.readFileSync('docs/tokenomics-v1-mainnet-plan.md','utf8');assert.ok(tokenPlan.includes('Base Mainnet (chain ID 8453)'),'Token plan must identify Base Mainnet');assert.ok(!tokenPlan.includes('Proposed future **Polygon PoS mainnet**'),'Token plan still claims Polygon mainnet');assert.ok(tokenPlan.includes('NVRAMainnetCandidate.sol'),'Token plan must identify the undeployed 1m candidate');
