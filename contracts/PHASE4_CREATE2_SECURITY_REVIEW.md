@@ -21,3 +21,13 @@ Status: EXPERIMENTAL. No merge or Base Mainnet deployment authorized. This is no
 - Verify whether governance permits subsequent Safe owner/threshold/module changes.
 
 CI passing is not an independent security audit. Keep PR #93 as draft and PR #92 unmerged.
+
+## Read-only Safe preflight implemented (2026-11-05)
+The script `contracts/scripts/check-safe-3of5.cjs` rejects the wrong chain, missing code, wrong Safe 1.4.x version, non-3-of-5 threshold, owner mismatch/duplicates and enabled modules. It uses a read-only RPC provider and never signs or sends transactions.
+
+Run only with independently verified addresses and an independently trusted Base RPC:
+```sh
+BASE_RPC_URL="https://your-base-rpc" SAFE_ADDRESS="0x..." SAFE_OWNERS="0x...,0x...,0x...,0x...,0x..." node contracts/scripts/check-safe-3of5.cjs
+```
+
+**Important limitations:** This is not yet wired as a mandatory deployment gate. It does not validate the Safe singleton implementation, guard, fallback handler, proxy bytecode hash or on-chain owner identity provenance. These remain deployment blockers. No production Safe address or owner addresses have been provided or verified.
