@@ -34,6 +34,7 @@ describe("NVRA immutable beneficiary vesting (local research only)", function ()
     await ethers.provider.send("evm_setNextBlockTimestamp", [start + cliff]);
     await ethers.provider.send("evm_mine", []);
     expect(await vesting.releasable()).to.equal(0n);
+    await ethers.provider.send("evm_setNextBlockTimestamp", [start + cliff]);
     await expect(vesting.release()).to.be.revertedWith("NVRA: nothing releasable");
     await ethers.provider.send("evm_setNextBlockTimestamp", [start + cliff + Math.floor(linear / 2)]);
     await ethers.provider.send("evm_mine", []);
