@@ -31,7 +31,7 @@ describe("NVRA immutable beneficiary vesting (local research only)", function ()
 
   it("locks the full team allocation through cliff, releases linearly and fully at end", async function () {
     const { beneficiary, outsider, token, vesting, amount, start, cliff, linear } = await setup();
-    await ethers.provider.send("evm_setNextBlockTimestamp", [start + cliff]);
+    await ethers.provider.send("evm_setNextBlockTimestamp", [start + cliff - 1]);
     await ethers.provider.send("evm_mine", []);
     expect(await vesting.releasable()).to.equal(0n);
     await ethers.provider.send("evm_setNextBlockTimestamp", [start + cliff]);
