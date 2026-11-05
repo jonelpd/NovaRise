@@ -38,6 +38,12 @@ These are planning amounts, **not** token balances, guaranteed rewards, commitme
 - Funding after vesting time has elapsed can make tokens immediately releasable. Review funding deadlines, cap enforcement and allocation isolation.
 - Define beneficiary eligibility, revocation policy, departures, recovery and emergency handling before any real funding.
 
+## Experimental allocation vault (NOT approved for deployment)
+
+`src/NVRAAllocationVaultDraft.sol` is a local-only prototype enforcing five independent, immutable cumulative release ceilings (300k / 250k / 200k / 150k / 100k NVRA). A controller contract authorizes transfers **only of tokens held in the vault**. The draft requires full, separately approved funding and has no timelocks, per-beneficiary restrictions, emergency recovery, cancellation or role rotation. It does not enforce a real Safe threshold: the controller address must be independently verified.
+
+**Critical limitation:** tokens sent directly from the original treasury, or directly to a vesting wallet, bypass these ceilings entirely. Likewise, tokens transferred into the vault after a cap is exhausted may become stuck. A production design must decide whether all allocations are held exclusively in independently reviewed vaults, how funding is restricted, how vesting is funded, and whether emergency recovery is permitted. The `MockNVRAAllocationController.sol` test helper lets anyone invoke calls and **must never be deployed or funded in production**.
+
 ## Verification and launch gates
 
 - [ ] Confirm the responsible legal entity and complete independent legal/regulatory assessment.
