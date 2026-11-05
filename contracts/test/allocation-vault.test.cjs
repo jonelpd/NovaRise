@@ -61,4 +61,44 @@ describe("NVRA allocation vault draft (local only)", function () {
     await expect(execute(0, recipient.address, 0n)).to.be.revertedWith("NVRA: zero amount");
     expect(await vault.totalReleased()).to.equal(0n);
   });
+  it("routes the team bucket into vesting and enforces its 150k vault release ceiling", async function () {
+    const { token, vault, recipient, execute } = await fixture();
+    const Vesting = await ethers.getContractFactory("NVRATeamVesting");
+    const latest = await ethers.provider.getBlock("latest");
+    const start = latest.timestamp + 3600;
+    const cliff = 86400;
+    const linear = 86400 * 3;
+    const vesting = await Vesting.deploy(recipient.address, start, cliff, linear);
+    const allocation = ethers.parseUnits("150000", 18);
+    await execute(3, await vesting.getAddress(), allocation);
+    expect(await vault.remaining(3)).to.equal(0n);
+    expect(await token.balanceOf(await vesting.getAddress())).to.equal(allocation);
+    expect(await token.balanceOf(recipient.address)).to.equal(0n);
+    await expect(execute(3, await vesting.getAddress(), 1n)).to.be.revertedWith("NVRA: allocation exceeded");
+    await ethers.provider.send("evm_setNextBlockTimestamp", [start + cliff - 2]);
+    await ethers.provider.send("evm_mine", []);
+    await vesting["release(address)"](await token.getAddress());
+    expect(await token.balanceOf(recipient.address)).to.equal(0n);
+    await ethers.provider.send("evm_setNextBlockTimestamp", [start + cliff + linear]);
+    await ethers.provider.send("evm_mine", []);
+    await vesting["release(address)"](await token.getAddress());
+    expect(await token.balanceOf(recipient.address)).to.equal(allocation);
+    expect(await token.totalSupply()).to.equal(ethers.parseUnits("1000000", 18));
+  });
+
+  it("demonstrates that treasury transfers bypass vault caps and must be separately governed", async function () {
+    const { token, treasury, vault, recipient, execute } = await fixture();
+    const cap = await vault.budget(3);
+    await execute(3, recipient.address, cap);
+    expect(await vault.remaining(3)).to.equal(0n);
+    // Funds released under a different budget can be rerouted by an unrestricted
+    // treasury. This demonstrates a bypass of economic allocation policy.
+    await execute(1, await treasury.getAddress(), 1n);
+    await treasury.sendToken(await token.getAddress(), recipient.address, 1n);
+    expect(await vault.remaining(3)).to.equal(0n);
+    expect(await vault.totalReleased()).to.equal(cap + 1n);
+    expect(await token.balanceOf(recipient.address)).to.equal(cap + 1n);
+    // Vault counters cannot classify or prevent this direct treasury transfer.
+  });
+
 });
