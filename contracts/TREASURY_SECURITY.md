@@ -44,6 +44,8 @@ These are planning amounts, **not** token balances, guaranteed rewards, commitme
 
 **Critical limitation:** tokens sent directly from the original treasury, or directly to a vesting wallet, bypass these ceilings entirely. Likewise, tokens transferred into the vault after a cap is exhausted may become stuck. A production design must decide whether all allocations are held exclusively in independently reviewed vaults, how funding is restricted, how vesting is funded, and whether emergency recovery is permitted. The `MockNVRAAllocationController.sol` test helper lets anyone invoke calls and **must never be deployed or funded in production**.
 
+See also [treasury funding and release policy](../docs/nvra-treasury-funding-policy-v1.md) for the cross-bucket bypass threat model, two competing custody architectures and the unapproved launch gates.
+
 ## Verification and launch gates
 
 - [ ] Confirm the responsible legal entity and complete independent legal/regulatory assessment.
