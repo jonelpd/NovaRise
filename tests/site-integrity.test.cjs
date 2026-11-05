@@ -153,3 +153,6 @@ for(const file of ['tokenomics.html','tokenomics-en.html']){const page=fs.readFi
 
 // Phase 4: current internal mainnet plan must match the Base decision, not obsolete Polygon proposal.
 const tokenPlan=fs.readFileSync('docs/tokenomics-v1-mainnet-plan.md','utf8');assert.ok(tokenPlan.includes('Base Mainnet (chain ID 8453)'),'Token plan must identify Base Mainnet');assert.ok(!tokenPlan.includes('Proposed future **Polygon PoS mainnet**'),'Token plan still claims Polygon mainnet');assert.ok(tokenPlan.includes('NVRAMainnetCandidate.sol'),'Token plan must identify the undeployed 1m candidate');
+
+// Phase 4: treasury security guidance must match Base, 1m supply and 3-of-5 custody.
+const treasurySecurity=fs.readFileSync('contracts/TREASURY_SECURITY.md','utf8');assert.ok(treasurySecurity.includes('Base Mainnet (chain ID 8453)'));assert.ok(treasurySecurity.includes('1,000,000 NVRA'));assert.ok(treasurySecurity.includes('Safe 3-of-5'));assert.ok(treasurySecurity.includes('MockNVRATreasury.sol'));assert.ok(!treasurySecurity.includes('45% ecosystem utility/incentives'));
