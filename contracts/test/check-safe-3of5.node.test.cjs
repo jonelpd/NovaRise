@@ -33,3 +33,60 @@ test("preflight refuses non-Base chain", async()=>{
 test("preflight refuses a controller address without code", async()=>{
   await assert.rejects(checkSafe(args(fakeProvider(8453n,"0x"))),/no code/);
 });
+
+const { ethers } = require("ethers");
+const ABI = [
+  "function getThreshold() view returns (uint256)",
+  "function getOwners() view returns (address[])",
+  "function getModulesPaginated(address,uint256) view returns (address[],address)",
+  "function VERSION() view returns (string)"
+];
+const iface = new ethers.Interface(ABI);
+const SENTINEL = "0x0000000000000000000000000000000000000001";
+const guardSlot = ethers.keccak256(ethers.toUtf8Bytes("guard_manager.guard.address"));
+const fallbackSlot = ethers.keccak256(ethers.toUtf8Bytes("fallback_manager.handler.address"));
+const word = (a) => ethers.zeroPadValue(a,32);
+function simulatedSafe(overrides={}) {
+  const state = {chainId:8453n, threshold:3n, owners:A, version:"1.4.1",
+    modules:[], next:SENTINEL, singleton:expectedSingleton, guard:ethers.ZeroAddress,
+    fallback:expectedFallbackHandler, code:"0x6000", singletonCode:"0x6001", ...overrides};
+  return {
+    getNetwork:async()=>({chainId:state.chainId}),
+    getCode:async(address)=> address.toLowerCase()===expectedSingleton.toLowerCase()?state.singletonCode:state.code,
+    getStorage:async(_address,slot)=>{
+      if (BigInt(slot)===0n) return word(state.singleton);
+      if (slot===guardSlot) return word(state.guard);
+      if (slot===fallbackSlot) return word(state.fallback);
+      throw new Error("Unexpected storage slot");
+    },
+    call:async({data})=>{
+      const parsed=iface.parseTransaction({data});
+      if (!parsed) throw new Error("Unexpected call");
+      const results={
+        getThreshold:[state.threshold],getOwners:[state.owners],
+        getModulesPaginated:[state.modules,state.next],VERSION:[state.version]
+      };
+      return iface.encodeFunctionResult(parsed.name,results[parsed.name]);
+    }
+  };
+}
+test("preflight accepts a matching simulated Safe state",async()=>{
+  const result=await checkSafe(args(simulatedSafe()));
+  assert.equal(result.threshold,3);
+  assert.equal(result.singleton,expectedSingleton);
+  assert.equal(result.fallbackHandler,expectedFallbackHandler);
+});
+for (const [name,mutation,pattern] of [
+  ["threshold",{threshold:2n},/threshold\/owner count mismatch/],
+  ["owner identity",{owners:[...A.slice(0,4),safeAddress]},/owner identities mismatch/],
+  ["enabled module",{modules:[safeAddress]},/Unexpected enabled Safe module/],
+  ["version",{version:"1.3.0"},/Unexpected Safe version/],
+  ["singleton",{singleton:safeAddress},/Safe singleton mismatch/],
+  ["missing singleton bytecode",{singletonCode:"0x"},/Singleton missing code/],
+  ["guard",{guard:safeAddress},/Unexpected Safe guard/],
+  ["fallback handler",{fallback:safeAddress},/Fallback handler mismatch/]
+]) {
+  test("preflight rejects unexpected "+name,async()=>{
+    await assert.rejects(checkSafe(args(simulatedSafe(mutation))),pattern);
+  });
+}
