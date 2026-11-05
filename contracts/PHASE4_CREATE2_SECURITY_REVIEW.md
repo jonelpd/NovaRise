@@ -10,7 +10,7 @@ Status: EXPERIMENTAL. No merge or Base Mainnet deployment authorized. This is no
 
 ## P0 blockers
 1. **Safe identity not authenticated.** Factory accepts any deployed contract as controller. A code-length check is not evidence of a Safe 3-of-5. Existing official-Safe tests prove compatibility only. Before deployment require a reviewed chain-specific manifest: Safe proxy, singleton, five owners, threshold three, modules, guard, fallback handler, and deployment chain ID. Verify on-chain state before any production operation.
-2. **Late direct ERC-20 transfers.** The factory's escrow can only fund once, but third parties can send tokens directly to vesting. After the schedule, those tokens may become immediately releasable. Ordinary ERC-20 recipients cannot universally reject transfers. Decide whether this is acceptable; consider fixed-allocation vesting accounting with explicit surplus handling and tests.
+2. **Unrecoverable ERC-20 surplus remains a policy blocker.** The immutable vesting entitlement is now fixed at 150,000 NVRA, so late direct transfers cannot increase beneficiary release rights. However, arbitrary ERC-20 transfers can still reach vesting and any surplus remains stranded without a recovery method. An explicit accept-or-redesign decision is required before deployment.
 3. **Independent audit and deployment authorization absent.** Do not merge or deploy.
 
 ## P1 issues
@@ -27,12 +27,24 @@ The script `contracts/scripts/check-safe-3of5.cjs` rejects the wrong chain, miss
 
 Run only with independently verified addresses and an independently trusted Base RPC:
 ```sh
-BASE_RPC_URL="https://your-base-rpc" SAFE_ADDRESS="0x..." SAFE_OWNERS="0x...,0x...,0x...,0x...,0x..." node contracts/scripts/check-safe-3of5.cjs
+BASE_RPC_URL="https://your-base-rpc" SAFE_ADDRESS="0x..." SAFE_OWNERS="0x...,0x...,0x...,0x...,0x..." SAFE_SINGLETON="0x..." SAFE_FALLBACK_HANDLER="0x..." node contracts/scripts/check-safe-3of5.cjs
 ```
 
-**Important limitations:** This is not yet wired as a mandatory deployment gate. It does not validate the Safe singleton implementation, guard, fallback handler, proxy bytecode hash or on-chain owner identity provenance. These remain deployment blockers. No production Safe address or owner addresses have been provided or verified.
+**Important limitations:** This is not yet wired as a mandatory deployment gate. It checks configured singleton address, zero guard and configured fallback handler using on-chain storage, but does not validate independently trusted implementation codehashes, proxy bytecode hash, owner identity provenance or mandatory deployment gating. These remain deployment blockers. No production Safe address or owner addresses have been provided or verified.
 
 ## Fixed 150,000 NVRA vesting entitlement (2026-11-05)
 The research vesting now uses a constant `TEAM_ALLOCATION = 150_000 ether` rather than `balanceOf(vesting) + released` for vesting mathematics. An unexpected direct transfer can no longer enlarge the beneficiary's vesting entitlement. Negative regression tests cover a late transfer after full release.
 
 **Explicit trade-off / unresolved P0:** unsolicited NVRA transfers can still reach any ERC20 recipient address, including this vesting contract. Because the vesting is immutable and intentionally has no rescue, those surplus tokens become permanently inaccessible through the vesting contract. Do not represent this as solved asset recovery. A recovery mechanism, if desired, needs separate security and governance review and must not weaken the immutable beneficiary or team allocation guarantee. The contract remains a research draft; no Mainnet deployment is authorized.
+
+## Surplus handling policy — provisional, not production authorization (2026-11-05)
+**Current research design: strict fixed entitlement, no recovery function.**
+- The vesting beneficiary may receive at most 150,000 NVRA from this vesting contract across its lifetime, subject to the cliff and linear schedule.
+- Any tokens sent directly to vesting outside the atomic 150,000 NVRA prefund do **not** increase the beneficiary's claim.
+- Excess balances are **not** treasury assets under a callable recovery mechanism. They can remain permanently locked. Neither a beneficiary nor a Safe administrator can rescue them using this contract.
+- No mint, burn, arbitrary transfer, owner or upgrade function is introduced to solve this problem.
+- Operational mitigation: prominent irreversible-transfer warnings, blocklisted vesting address in first-party transfer interfaces, and post-deployment monitoring of `balanceOf(vesting) + released - TEAM_ALLOCATION`. Interface blocking cannot prevent direct on-chain transfers.
+- **Go/no-go decision pending:** either explicitly accept irrecoverable surplus with documented risk and legal review, or design and independently audit a replacement architecture before any deployment. Do not add privileged sweeping to the existing immutable vesting without a new threat model.
+
+## CI evidence and next security gates
+As of commit `838b800`, the three GitHub workflows succeeded after updating the fixed-entitlement regression tests. This is automated testing, not an independent audit. Remaining gates: independently verify actual Safe owners, proxy bytecode and singleton codehash; add positive/negative storage-layout verification tests for the read-only Safe preflight; pin a deployment manifest; audit and approve the surplus policy; obtain explicit deployment authorization. No deployment has taken place.
