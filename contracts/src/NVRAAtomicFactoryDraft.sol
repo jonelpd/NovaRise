@@ -12,11 +12,19 @@ import {NVRAAtomicAllocationCandidate} from "./NVRAAtomicAllocationCandidate.sol
  *      Does not authenticate the controller as a real Safe.
  */
 contract NVRAAtomicFactoryDraft {
+    address public immutable initializer;
+    address public immutable controller;
     bool public initialized;
+
+    constructor(address controller_) {
+        require(controller_ != address(0) && controller_.code.length != 0, "NVRA: invalid controller");
+        initializer = msg.sender;
+        controller = controller_;
+    }
     address public token;
     address[5] public vaults;
 
-    function predictVault(address controller, uint8 bucket) public view returns (address) {
+    function predictVault(uint8 bucket) public view returns (address) {
         require(bucket < 5, "NVRA: invalid bucket");
         bytes32 salt = keccak256(abi.encodePacked("NVRA-vault-v1", bucket));
         bytes32 initHash = keccak256(abi.encodePacked(
@@ -28,16 +36,16 @@ contract NVRAAtomicFactoryDraft {
         )))));
     }
 
-    function initialize(address controller) external returns (address tokenAddress) {
+    function initialize() external returns (address tokenAddress) {
+        require(msg.sender == initializer, "NVRA: initializer only");
         require(!initialized, "NVRA: already initialized");
-        require(controller != address(0) && controller.code.length != 0, "NVRA: invalid controller");
         initialized = true;
         address[5] memory recipients;
         for (uint8 i = 0; i < 5; ++i) {
             bytes32 salt = keccak256(abi.encodePacked("NVRA-vault-v1", i));
             NVRAFactoryBoundVaultDraft vault = new NVRAFactoryBoundVaultDraft{salt: salt}(controller, i);
             recipients[i] = address(vault);
-            require(address(vault) == predictVault(controller, i), "NVRA: address mismatch");
+            require(address(vault) == predictVault(i), "NVRA: address mismatch");
             vaults[i] = address(vault);
         }
         NVRAAtomicAllocationCandidate candidate = new NVRAAtomicAllocationCandidate(recipients);
