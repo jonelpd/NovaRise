@@ -17,7 +17,7 @@ describe("NVRA team restricted vault and vesting (local only)", function () {
     const Token = await ethers.getContractFactory("NVRAMainnetCandidate");
     const token = await Token.deploy(await vault.getAddress());
     await vault.bindToken(await token.getAddress());
-    const execute = amount => controller.execute(await vault.getAddress(),
+    const execute = async amount => controller.execute(await vault.getAddress(),
       vault.interface.encodeFunctionData("releaseToVesting", [amount]));
     return { owner, beneficiary, outsider, controller, vault, vesting, token, execute, start, cliff, linear };
   }
