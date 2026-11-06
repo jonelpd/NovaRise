@@ -38,3 +38,9 @@ Solo marcar verificado tras comprobación real y evidencia independiente de impl
 
 ## Riesgos restantes
 Custodia: evaluar independencia de las tres claves y copias de seguridad; posible concentración en un solo ordenador. Auditoría independiente y revisión legal siguen pendientes.
+
+## Evidencia oficial adicional (2026-11-06)
+- Safe confirma que 1.5.0 es la versión actual y que un Safe 1.3.0/1.4.1 puede actualizarse sin cambiar dirección, owners ni umbral: https://help.safe.global/articles/7628867084-how-to-upgrade-your-safe-to-contract-version-1-5-0
+- El fallback handler merece verificación independiente porque Safe advierte que los handlers externos pueden ampliar la superficie de ejecución: https://docs.safe.global/advanced/smart-account-fallback-handler
+- No inferir que la tesorería NovaRise ya usa 1.5.0: hace falta leer `VERSION()`, slot 0, código, owners, threshold, guard, módulos y fallback desde Base RPC y contrastar hashes con los artefactos oficiales de https://github.com/safe-global/safe-deployments .
+- El script local `check-safe-2of3.cjs` ya acepta 1.4.x/1.5.x; sus resultados simulados y CI no sustituyen comprobación on-chain.
