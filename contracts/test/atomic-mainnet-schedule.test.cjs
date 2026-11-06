@@ -40,6 +40,9 @@ describe("NVRA atomic mainnet schedule regression", function () {
     const vesting = await ethers.getContractAt("NVRAImmutableBeneficiaryVestingDraft", await factory.vesting());
     expect(await token.totalSupply()).to.equal(SUPPLY);
     expect(await vesting.beneficiary()).to.equal(beneficiary.address);
+    const bounded = await ethers.getContractAt("NVRABoundedSurplusVestingDraft", await factory.vesting());
+    expect(await bounded.controller()).to.equal(await factory.controller());
+    expect(await bounded.recoverableSurplus()).to.equal(0n);
     expect(await vesting.start()).to.equal(BigInt(block.timestamp));
     expect(await factory.actualVestingStart()).to.equal(BigInt(block.timestamp));
     expect(await vesting.cliffDuration()).to.equal(BigInt(cliff));
