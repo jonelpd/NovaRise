@@ -56,3 +56,10 @@ Al terminar cada ejecución, mostrar: fase actual, completado en esa ejecución,
 - CI del commit `74c52f7` confirmado: cuatro workflows verdes.
 - Documentados cuatro candidatos oficiales de singleton Safe/SafeL2 1.4.1/1.5.0 para Base (8453) en `BASE_MAINNET_SAFE_VERIFICATION_RUNBOOK.md`.
 - No se ha leído el proxy real; NO se ha elegido singleton ni verificado hashes. Próximo paso: lectura RPC de solo lectura del Safe y contraste independiente del bytecode.
+
+## Registro 2026-11-06 — Safe discovery automatizado
+- CI del commit `abed43a` confirmado: cuatro flujos verdes.
+- RPC público Base desde entorno local sigue inaccesible por DNS; también se probaron proveedores alternativos, sin conexión. No hay verificación on-chain.
+- Añadido script `contracts/scripts/discover-base-safe-readonly.cjs`: lee chainId, bloque, owners, threshold, version, módulos, guard, singleton, fallback y hashes runtime (solo lectura). Los hashes observados NO equivalen a comparación con referencias independientes.
+- Añadido workflow manual `.github/workflows/nvra-safe-readonly-discovery.yml` para ejecución desde GitHub Actions; **NO se ha ejecutado** y no debe confundirse con CI de tests.
+- Siguiente: confirmar CI del HEAD, ejecutar workflow de descubrimiento read-only cuando esté disponible y evaluar resultados, luego contrastar hashes con artefactos oficiales. Sin transacciones ni autorización de despliegue.
