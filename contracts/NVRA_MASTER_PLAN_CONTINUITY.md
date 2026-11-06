@@ -118,3 +118,9 @@ Al terminar cada ejecución, mostrar: fase actual, completado en esa ejecución,
 - Referencia pública Base 2026-11-06: 0.0062 gwei, solo ejecución: 8,009,857 * 0.0062 gwei = 0.0000496611134 ETH (~USD 0.11 si ETH ~USD 2,230). No es precio vinculante.
 - **Pendiente** estimación exacta de Base L1 data fee por bytecode de factory (transacción grande), variación de gas y comisiones de compra/retiro. No recomendar comprar un importe exacto ni desplegar hasta cotejar total en wallet. Saldo usuario cero, MetaMask Base instalada.
 - Siguiente paso: construir transacciones sin firmar para cotizar con wallet/Base RPC, preservando la identidad del inicializador entre ambas operaciones; nunca solicitar secretos.
+
+## Registro 2026-11-06 — preparación de transacciones sin firma
+- Creado `contracts/scripts/prepare-base-unsigned-launch.cjs` (commit `2f80479b0f69d23660cd4a355a6013c536da63e3`), que genera payload de despliegue de fábrica y calldata de `initialize()` usando artefactos compilados, sin RPC, firma ni fondos.
+- Uso tras compilar: `node scripts/prepare-base-unsigned-launch.cjs <start_unix_seconds> <deployer_eoa_address>` desde `contracts`. El inicio se escoge explícitamente; la dirección factory de tx2 se obtiene únicamente del recibo minado de tx1.
+- **Decisión operativa pendiente:** usuario debe confirmar si usará su EOA de MetaMask como desplegador e inicializador (ambas transacciones requieren misma dirección). El Safe sigue siendo controlador de vaults y vesting, no firmante de estas transacciones EOA.
+- Pendiente estimación de comisión L1 datos de Base, gas real y compra ETH. No ejecutar ni firmar transacciones sin autorización concreta. El nuevo script aún no está validado en CI.
