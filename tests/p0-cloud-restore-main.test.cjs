@@ -20,7 +20,7 @@ async function scenario(failKey){
    setItem:(key,value)=>{if(key===failKey)throw Error('storage blocked');values.set(key,value)},
    removeItem:key=>values.delete(key)
   },
-  OWNER:'OWNER',SAVE:'SAVE',confirm:()=>true,
+  OWNER:'OWNER',SAVE:'SAVE',realmConfirm:async()=>true,
   location:{reload:()=>{reloaded=true}},
   run:async fn=>{try{await fn()}catch(e){error=e}}
  };
