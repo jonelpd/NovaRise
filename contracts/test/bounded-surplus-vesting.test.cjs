@@ -4,7 +4,7 @@ const { ethers } = require("hardhat");
 describe("NVRA bounded surplus vesting draft", () => {
   async function fixture() {
     const [beneficiary, outsider] = await ethers.getSigners();
-    const Controller = await ethers.getContractFactory("MockNVRATreasury");
+    const Controller = await ethers.getContractFactory("MockNVRASurplusController");
     const controller = await Controller.deploy();
     const Token = await ethers.getContractFactory("NVRAMainnetCandidate");
     const token = await Token.deploy(await controller.getAddress());
@@ -42,6 +42,17 @@ describe("NVRA bounded surplus vesting draft", () => {
     await vesting.release();
     expect(await token.balanceOf(beneficiary.address)).to.equal(allocation);
     expect(await vesting.recoverableSurplus()).to.equal(extra);
+  });
+
+  it("allows the controller to recover only genuine surplus back to itself", async () => {
+    const { vesting, controller, token, allocation } = await fixture();
+    const extra = ethers.parseEther("9");
+    await controller.sendToken(await token.getAddress(), await vesting.getAddress(), extra);
+    await expect(controller.recover(await vesting.getAddress(), extra + 1n)).to.be.revertedWith("NVRA: exceeds surplus");
+    await controller.recover(await vesting.getAddress(), extra);
+    expect(await vesting.recoverableSurplus()).to.equal(0n);
+    expect(await token.balanceOf(await vesting.getAddress())).to.equal(allocation);
+    await expect(controller.recover(await vesting.getAddress(), 1)).to.be.revertedWith("NVRA: exceeds surplus");
   });
 
   it("rejects recovering more than the surplus", async () => {
