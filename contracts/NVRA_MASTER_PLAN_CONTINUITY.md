@@ -69,3 +69,9 @@ Al terminar cada ejecución, mostrar: fase actual, completado en esa ejecución,
 - El conector GitHub disponible permite consultar resultados pero no lanzar `workflow_dispatch`; flujo manual de descubrimiento **no ejecutado**.
 - Procedimiento manual y alternativa de ejecución local documentados en `BASE_MAINNET_SAFE_VERIFICATION_RUNBOOK.md`. Puede ser necesario que GitHub reconozca el workflow desde la rama predeterminada; no fusionar PR para habilitarlo sin permiso.
 - Próximo paso: ejecutar descubrimiento read-only en entorno con red, verificar resultados y comparar hashes contra artefactos independientes; auditoría y revisión legal después. Sin despliegues.
+
+## Registro 2026-11-06 — habilitación workflow en rama predeterminada
+- Usuario autorizó expresamente incorporar **solo** el workflow manual a rama principal.
+- Archivo `.github/workflows/nvra-safe-readonly-discovery.yml` creado en rama predeterminada, commit `dec4c31bf0bf61e150ca9ca2d5df9f19268e5080`. Hace checkout explícito de `feat/phase4-create2-vesting-integration` sin persistir credenciales y ejecuta consultas de solo lectura.
+- PR #93 sin fusionar, sin contratos desplegados, sin transacciones. El flujo no se ha ejecutado ni se ha confirmado todavía que aparezca en la UI.
+- Siguiente: abrir Actions, localizar `NVRA Base Safe read-only discovery`, ejecutarlo manualmente, revisar logs y cotejar hashes con referencias oficiales.
