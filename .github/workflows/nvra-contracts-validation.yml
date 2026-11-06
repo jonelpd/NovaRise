@@ -24,6 +24,9 @@ jobs:
           cache: npm
           cache-dependency-path: contracts/package-lock.json
       - run: npm ci
+      # Safe 1.4.1 is a test-only Solidity fixture with an ethers v5 peer;
+      # install it without altering the locked Hardhat/ethers v6 toolchain.
+      - run: npm install --no-save --package-lock=false --legacy-peer-deps --ignore-scripts @safe-global/safe-contracts@1.4.1
       - run: npm run compile
       - run: npm test
       - run: npm run test:safe-preflight
