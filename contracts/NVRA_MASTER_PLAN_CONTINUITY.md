@@ -170,3 +170,9 @@ Al terminar cada ejecución, mostrar: fase actual, completado en esa ejecución,
 - RPC Base Mainnet chain 8453, deployer nonce 0, tamaño serializado unsigned tx1 15.010 bytes; maxFeePerGas 0.011 gwei; gas deploy estimado RPC 3.085.815; gas initialize local 3.101.070; L1 fee deploy estimada 0.00000007579967954 ETH; L1 upper bound deploy 0.00000013902368518 ETH; operator fees estimadas 0 ETH; **presupuesto provisional ambas tx con buffers = 0.00008875049737036 ETH**.
 - Comparación: 0.002 ETH / presupuesto provisional ≈22.5 veces. 0.002 ETH es **reserva sugerida**, no gasto ni coste fijo; excluir comisiones exchange/puente y no prometer precio de adquisición. L1 de segunda tx aproximada con upper bound de primera; requerirá recotización al desplegar.
 - Próximo paso: seleccionar y verificar interfaz MetaMask móvil para firmar tx1 creación contrato, recotizar antes de cada firma, validar bytecode y parámetros, obtener autorización explícita antes de gastar. No hay transacciones on-chain.
+
+## Registro 2026-11-06 — método candidato de firma MetaMask móvil
+- Se ha documentado flujo **candidato** con Remix IDE oficial desde navegador integrado MetaMask Android, dos firmas secuenciales y verificaciones de dirección, chainId, compilador, bytecode y recibos, en `contracts/BASE_MAINNET_MOBILE_METAMASK_LAUNCH_RUNBOOK.md` (commit `15faa22c9cfdc1e653e2327fc3f636c3f8e8d6e3`).
+- Configuración Hardhat confirmada: Solidity **0.8.24**, optimizer **200 runs** para contrato principal. Remix debe reproducir configuración y bytecode; no asumir equivalencia por compilar.
+- Cotización CI válida: **0.00008875049737036 ETH** provisional para ambas tx; **0.002 ETH** reserva propuesta, no coste exacto. No incluye adquisición/puente ni cambios futuros de tarifa.
+- Pendiente validar que Remix móvil resuelve imports y produce bytecode idéntico, conectar MetaMask sin firmar, recotizar. Ninguna firma ni transacción efectuada.
