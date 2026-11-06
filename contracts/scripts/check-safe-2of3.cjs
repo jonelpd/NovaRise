@@ -36,7 +36,7 @@ async function checkSafe({ provider, safeAddress, expectedOwners, expectedSingle
   if (modules.length || ethers.getAddress(next) !== ethers.getAddress(SENTINEL)) {
     throw new Error("Unexpected enabled Safe module(s)");
   }
-  if (!version.startsWith("1.4.")) throw new Error("Unexpected Safe version: " + version);
+  if (!/^(1\\.4\\.|1\\.5\\.)/.test(version)) throw new Error("Unexpected Safe version: " + version);
   const singletonWord = await provider.getStorage(safeAddress, 0n);
   const singleton = ethers.getAddress("0x" + singletonWord.slice(-40));
   if (singleton !== ethers.getAddress(expectedSingleton)) throw new Error("Safe singleton mismatch");
