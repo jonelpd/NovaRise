@@ -72,3 +72,9 @@ The project owner approved a Safe **2-of-3**, with all three independently secur
 - Owners shown by BaseScan and Safe setup UI: `0x89316a3553Da9315a720e25915d731AfD11d0B16`, `0xe697351daE40E770769B35852C1e05737015b6B7`, `0x5927b6f05c4CdD16Cce6Cc429650c0b767137245`.
 - Safe UI shows **2 out of 3** required confirmations; BaseScan identifies address as a Safe smart contract. Evidence is screenshots, **not** an independent read-only RPC attestation.
 - **Still pending:** singleton/fallback codehashes, guard, modules, independent RPC preflight, owner key isolation, deployment approval. Do not fund or deploy based solely on screenshots.
+
+## Safe 2-of-3 preflight validation (2026-11-06)
+- Commit `921d2e7` corrected the read-only Safe preflight to enforce threshold 2, owner count 3; three CI workflows completed successfully for that commit.
+- Expected Safe address and three owners are recorded in `base-mainnet-manifest.template.json` from operator-provided public information.
+- **Still not independently attested via Base RPC:** actual owner list/threshold, Safe singleton bytecode and allowlisted hash, fallback handler, zero guard, empty enabled modules and proxy runtime hash. The CLI requires independently sourced singleton and fallback handler addresses. Do not substitute guesses or silently mark these checks complete.
+- Safe UI check: Settings → Modules should show no unexpected enabled modules; Settings → Security should show no unexpected guard or spending-limit/delegate permissions. Screenshots are supplemental evidence, not a substitute for on-chain checks.
