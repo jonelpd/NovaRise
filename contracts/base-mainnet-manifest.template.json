@@ -48,7 +48,10 @@
     "scheduleApproved": true,
     "scheduleApprovedDate": "2026-11-06",
     "beneficiaryApproved": true,
-    "beneficiaryApprovedDate": "2026-11-06"
+    "beneficiaryApprovedDate": "2026-11-06",
+    "startPolicy": "Start at actual successful Base Mainnet vesting deployment with atomic prefunding of exactly 150000 NVRA; timestamp to be recorded from confirmed on-chain deployment; no predeployment clock start",
+    "startPolicyApproved": true,
+    "startPolicyApprovedDate": "2026-11-06"
   },
   "deployment": {
     "frozenCommit": null,
