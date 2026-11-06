@@ -25,7 +25,7 @@ describe("NVRA unsigned Base launch payload regression", function () {
     expect(p.tx1.valueWei).to.equal("0");
     expect(p.tx2.valueWei).to.equal("0");
     const Factory = await ethers.getContractFactory("NVRAAtomicImmutableVestingFactoryDraft");
-    const parsed = Factory.interface.parseDeploy(p.tx1.data);
+    const parsed = Factory.interface.decodeDeploy("0x" + p.tx1.data.slice(Factory.bytecode.length));
     expect(parsed[0]).to.equal(ethers.getAddress(safe));
     expect(parsed[1]).to.equal(ethers.getAddress(deployer));
     expect(parsed[2]).to.equal(BigInt(start));
