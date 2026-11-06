@@ -105,3 +105,9 @@ Al terminar cada ejecución, mostrar: fase actual, completado en esa ejecución,
 - Añadido `contracts/scripts/estimate-atomic-launch-gas.cjs`, que mide gas local de despliegue de fábrica y llamada `initialize()`; verifica suministro 1M y vesting 150k. Emplea código Safe ficticio **solo local** para satisfacer `code.length`; no simula comportamiento real del Safe.
 - Script todavía sin ejecución ni resultados de gas verificados. Ejecución: `cd contracts && npm ci && npx hardhat run scripts/estimate-atomic-launch-gas.cjs --network hardhat`.
 - Antes de compra, obtener gas usado de ambas transacciones, tarifas Base recientes, coste L1 de datos, colchón y comisiones de adquisición de ETH. Nunca solicitar frase semilla.
+
+## Registro 2026-11-06 — medición gas por CI
+- Añadida prueba `contracts/test/atomic-launch-gas-report.test.cjs` que despliega fábrica e inicializa NVRA en Hardhat local, comprueba 1M de suministro y 150k vesting, imprime `NVRA_LOCAL_GAS_REPORT` con gas de cada tx y margen del 30%.
+- Commit `ddc732e3893a86500adcfd341c178606117491a1`: CI al último control: estáticas verde, tres flujos aún en progreso; **no se han obtenido ni validado cifras de gas todavía**.
+- Próximo paso: esperar CI, extraer `NVRA_LOCAL_GAS_REPORT` del job, contrastar tarifas de Base y L1 data fees; solo entonces recomendar importe de ETH para MetaMask.
+- Sin fondos ni despliegue; el usuario tiene MetaMask con Base, saldo cero.
