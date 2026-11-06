@@ -55,6 +55,29 @@ describe("NVRA bounded surplus vesting draft", () => {
     await expect(controller.recover(await vesting.getAddress(), 1)).to.be.revertedWith("NVRA: exceeds surplus");
   });
 
+  it("allows only surplus recovery after a partial vesting release", async () => {
+    const { vesting, controller, token, beneficiary, start, cliff, linear, allocation } = await fixture();
+    const extra = ethers.parseEther("5");
+    await controller.sendToken(await token.getAddress(), await vesting.getAddress(), extra);
+    await ethers.provider.send("evm_setNextBlockTimestamp", [start + cliff + Math.floor(linear / 2)]);
+    await ethers.provider.send("evm_mine", []);
+    await vesting.release();
+    const released = await vesting.released();
+    expect(released).to.equal(allocation / 2n);
+    expect(await vesting.recoverableSurplus()).to.equal(extra);
+    await expect(controller.recover(await vesting.getAddress(), extra + 1n)).to.be.revertedWith("NVRA: exceeds surplus");
+    await controller.recover(await vesting.getAddress(), extra);
+    expect(await token.balanceOf(await vesting.getAddress())).to.equal(allocation - released);
+    expect(await token.balanceOf(beneficiary.address)).to.equal(released);
+    expect(await vesting.recoverableSurplus()).to.equal(0n);
+  });
+
+  it("rejects zero-amount recovery and preserves full allocation", async () => {
+    const { vesting, controller, token, allocation } = await fixture();
+    await expect(controller.recover(await vesting.getAddress(), 0)).to.be.revertedWith("NVRA: exceeds surplus");
+    expect(await token.balanceOf(await vesting.getAddress())).to.equal(allocation);
+  });
+
   it("rejects recovering more than the surplus", async () => {
     const { vesting, outsider } = await fixture();
     await expect(vesting.connect(outsider).recoverSurplus(ethers.parseEther("1"))).to.be.revertedWith("NVRA: controller only");
