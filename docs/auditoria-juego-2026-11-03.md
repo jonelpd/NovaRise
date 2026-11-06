@@ -56,3 +56,14 @@ La rutina render() reconstruye los botones de todas las casillas y persiste el e
 
 ### Estado de esta revisión
 Los dos arreglos se han integrado en main; siguen sin ejecutarse pruebas en navegador o Node. No se declara finalizada la auditoría.
+
+## Tercera revisión — 2026-11-06
+
+### P1 — CORREGIDO: orden de registro de recompensas
+El código registraba `s.taken.push(k)` y `recordMapTreasure(k)` antes de esperar la elección asíncrona de oro o experiencia. Se trasladaron ambas operaciones después de resolver la elección, antes de otorgar los recursos. Esto evita consumir un cofre si la página se cierra antes de que el usuario elija. Commits: 659afd9 (principal), c06afc1 (demo).
+
+### P1 — CORREGIDO: movimiento durante diálogos
+La función move() comprueba ahora la presencia de `.realm-dialog` y rechaza nuevos movimientos mientras esté abierto un diálogo, evitando que una interacción externa interfiera con la selección.
+
+### P1 — pendiente de verificación funcional
+Comprobar con navegador real: cerrar la pestaña durante una elección, reabrir, volver al cofre, elegir oro o experiencia, guardar y recargar; verificar que no se duplica ni pierde recompensa. Ejecutar pruebas de importación, nube, asedios y combates. La inspección del código no equivale a pruebas ejecutadas.
