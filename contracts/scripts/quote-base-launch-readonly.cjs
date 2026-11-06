@@ -32,7 +32,8 @@ async function main() {
   }).unsignedSerialized;
   const oracle = new ethers.Contract(ORACLE, [
     "function getL1Fee(bytes) view returns (uint256)",
-    "function getL1FeeUpperBound(uint256) view returns (uint256)"
+    "function getL1FeeUpperBound(uint256) view returns (uint256)",
+    "function getOperatorFee(uint256) view returns (uint256)"
   ], provider);
   const byteLength = ethers.getBytes(unsigned).length;
   const [l1Estimate, l1UpperBound, l2GasEstimate] = await Promise.all([
@@ -43,7 +44,9 @@ async function main() {
   const bufferedDeployGas = l2GasEstimate * 130n / 100n;
   const bufferedInitializeGas = GAS_LOCAL_INIT * 130n / 100n;
   const bufferedL2Cost = (bufferedDeployGas + bufferedInitializeGas) * fee.maxFeePerGas;
-  const provisionalTotal = bufferedL2Cost + l1UpperBound * 2n;
+  const operatorDeploy = await oracle.getOperatorFee(bufferedDeployGas);
+  const operatorInitialize = await oracle.getOperatorFee(bufferedInitializeGas);
+  const provisionalTotal = bufferedL2Cost + l1UpperBound * 2n + operatorDeploy + operatorInitialize;
   console.log(JSON.stringify({
     mode: "READ_ONLY_PROVISIONAL_QUOTE", chainId: 8453,
     from: FROM, deployerNonce: nonce, tx1UnsignedBytes: byteLength,
@@ -52,6 +55,7 @@ async function main() {
     l2InitializeLocalGas: GAS_LOCAL_INIT.toString(),
     l1DeployFeeEth: ethers.formatEther(l1Estimate),
     l1DeployUpperBoundEth: ethers.formatEther(l1UpperBound),
+    operatorFeesEth: ethers.formatEther(operatorDeploy + operatorInitialize),
     provisionalTwoTxBudgetEth: ethers.formatEther(provisionalTotal),
     caveats: [
       "Tx2 cannot be simulated on Base until the factory exists; uses local gas measurement",
