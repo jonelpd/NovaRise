@@ -67,3 +67,24 @@ La función move() comprueba ahora la presencia de `.realm-dialog` y rechaza nue
 
 ### P1 — pendiente de verificación funcional
 Comprobar con navegador real: cerrar la pestaña durante una elección, reabrir, volver al cofre, elegir oro o experiencia, guardar y recargar; verificar que no se duplica ni pierde recompensa. Ejecutar pruebas de importación, nube, asedios y combates. La inspección del código no equivale a pruebas ejecutadas.
+
+## Cuarta revisión — 2026-11-06: integridad de guardados
+
+### P0 — CORREGIDO EN CÓDIGO: guardado local inválido
+La rutina anterior de load() invocaba start() cuando el JSON no cumplía las condiciones. start() llamaba render(), que escribía el estado nuevo sobre el guardado original. Ahora, ante datos inválidos, intenta guardar una copia con sufijo de recuperación y fecha, anula STORE durante la sesión y muestra una advertencia. El guardado original no se sobrescribe automáticamente. Nota: la copia de recuperación es adicional y puede fallar si el almacenamiento está lleno; el original permanece sin sobrescribir. Commits: 26cfde1 y b249c25.
+
+### P1 — CORREGIDO EN CÓDIGO: validadores inconsistentes
+En la página principal se unificó validGame para carga local, importación v10 y restauración en nube, comprobando límites de turnos, recursos, tropas, colecciones y facción. En la demo se incorporó el mismo criterio y validImport. Commit adicional: d293372.
+
+### Riesgos que permanecen
+- Validación estática: todavía no se ha ejecutado un navegador con archivos válidos e inválidos ni las pruebas Node.
+- Compatibilidad histórica: las partidas antiguas que no incluyan campos exigidos podrían rechazarse y requerir recuperación o migración. Se conservan sin sobrescribir, pero no se migran automáticamente.
+- La restauración en nube requiere pruebas con fallo de escritura y rollback, además de verificar titularidad por usuario.
+- Los datos de la nube se validan antes de restaurarse, pero no se ha hecho una auditoría de políticas RLS ni de permisos de Supabase.
+
+### Pruebas manuales necesarias
+1. Cargar una partida válida, mover héroe, guardar, recargar y comprobar recursos y ubicación.
+2. Introducir JSON inválido en la clave local de prueba y comprobar que no se sobrescribe.
+3. Importar una partida v10 válida y una con valores fuera de límites; confirmar que la inválida se rechaza.
+4. Restaurar una partida desde la nube y comprobar la copia local de seguridad previa.
+5. Repetir en móvil y escritorio con cuentas de prueba y sin afectar campañas reales.
