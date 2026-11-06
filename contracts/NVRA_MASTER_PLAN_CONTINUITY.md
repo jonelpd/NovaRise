@@ -46,3 +46,8 @@ Al terminar cada ejecución, mostrar: fase actual, completado en esa ejecución,
 - CI del commit `86d877d` confirmado: cuatro workflows exitosos.
 - Se intentó consulta JSON-RPC de solo lectura `eth_chainId` a `https://mainnet.base.org`, pero el entorno no resolvió DNS. No se realizó consulta real al Safe ni se obtuvo bloque o código.
 - Próxima acción: conseguir acceso a RPC Base Mainnet en entorno habilitado y ejecutar preflight read-only, contrastar singleton/version/bytecode y hashes contra fuentes independientes. No marcar Safe verificado hasta contar con evidencia.
+
+## Registro 2026-11-06 — documentación Safe
+- Confirmados cuatro workflows verdes del commit `efee96dbef8ec28110dede232234f1d956c2924c`.
+- Se añadieron referencias oficiales de Safe 1.5.0 y riesgos de fallback handlers a `contracts/BASE_MAINNET_SAFE_VERIFICATION_RUNBOOK.md`.
+- Sigue pendiente leer estado real del Safe de NovaRise por Base RPC, contrastar bytecode/hashes con `safe-deployments`, realizar auditoría independiente, revisión legal y aprobación expresa de despliegue.
