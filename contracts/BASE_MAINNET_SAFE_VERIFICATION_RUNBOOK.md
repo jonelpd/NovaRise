@@ -10,7 +10,7 @@ Validar el Safe de tesorería `0xdbB84E6279F56EcF39E35F56a5A259DFD026E7fd` antes
 - Umbral: 2 de 3.
 - Owners esperados: `0x89316a3553Da9315a720e25915d731AfD11d0B16`, `0xe697351daE40E770769B35852C1e05737015b6B7`, `0x5927b6f05c4CdD16Cce6Cc429650c0b767137245`.
 - Fallback handler esperado: `0x3EfCBb83A4A7AfcB4F68D501E2c2203a38be77f4`.
-- Singleton esperado: **NO CONFIRMADO**. Obtener de una referencia oficial y verificar por separado antes de ejecutar la comprobación estricta. No inventar este dato.
+- Singleton del Safe concreto: **NO CONFIRMADO**. El catálogo público de Safe para Base incluye candidatos conocidos de versión 1.4.1: `0x41675C099F32341bf84BFc5382aF534df5C7461a` (Safe) y `0x29fcB43b46531BcA003ddC8FCB67FFE91900C762` (Safe L2). También existen versiones 1.5.0; **no suponer versión** antes de leer slot 0 y VERSION() del Safe objetivo. Fuente de referencia: https://github.com/safe-global/safe-eth-py/blob/main/safe_eth/safe/addresses.py .
 
 ## Procedimiento
 1. Obtener un endpoint HTTPS RPC fiable de Base Mainnet. Evitar imprimir credenciales/API keys en logs.
@@ -19,7 +19,7 @@ Validar el Safe de tesorería `0xdbB84E6279F56EcF39E35F56a5A259DFD026E7fd` antes
    BASE_MAINNET_RPC_URL="https://RPC-DE-BASE" npm run base:readiness
    ```
    Esto comprueba cadena, código presente, umbral y owners. **No comprueba implementación ni hashes**.
-3. Identificar por fuente fiable el singleton esperado; contrastar el singleton leído del slot 0 y el código en Base. Comprobar versión Safe, módulos, guard y fallback. Con variables de entorno locales:
+3. Identificar por fuente fiable el singleton esperado y su versión; contrastar el singleton leído del slot 0 y el código en Base. **Atención:** el fallback handler comunicado (`0x3EfCBb83A4A7AfcB4F68D501E2c2203a38be77f4`) figura en referencias públicas como v1.5.0; no combinar automáticamente ese dato con una expectativa rígida de Safe v1.4.x. El script `check-safe-2of3.cjs` exige actualmente VERSION() 1.4.x y puede requerir una revisión para reconocer 1.5.0 si esa es la versión verificada. Comprobar versión Safe, módulos, guard y fallback. Con variables de entorno locales:
    ```bash
    BASE_RPC_URL="https://RPC-DE-BASE" \
    SAFE_ADDRESS="0xdbB84E6279F56EcF39E35F56a5A259DFD026E7fd" \
