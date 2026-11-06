@@ -1,0 +1,30 @@
+name: NVRA Base Safe read-only discovery
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  safe-discovery:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: contracts
+    steps:
+      - name: Checkout NVRA development branch (read only)
+        uses: actions/checkout@v4
+        with:
+          ref: feat/phase4-create2-vesting-integration
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: contracts/package-lock.json
+      - run: npm ci
+      - name: Read Base Safe configuration (no signatures or transactions)
+        env:
+          BASE_MAINNET_RPC_URL: https://mainnet.base.org
+        run: node scripts/discover-base-safe-readonly.cjs
