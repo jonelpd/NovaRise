@@ -1,0 +1,29 @@
+name: NVRA contracts validation
+on:
+  push:
+    branches:
+      - feat/phase4-create2-vesting-integration
+  pull_request:
+    paths:
+      - 'contracts/**'
+      - '.github/workflows/nvra-contracts-validation.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: contracts
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: contracts/package-lock.json
+      - run: npm ci
+      - run: npm run compile
+      - run: npm test
+      - run: npm run test:safe-preflight
