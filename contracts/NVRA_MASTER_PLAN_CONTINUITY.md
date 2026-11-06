@@ -159,3 +159,8 @@ Al terminar cada ejecución, mostrar: fase actual, completado en esa ejecución,
 - Conforme documentación Base actual, coste total incluye L2 + L1 + operator fee. Añadida consulta `getOperatorFee(uint256)` para ambas operaciones al script de cotización (commit `ef20637`).
 - **Sin resultado RPC todavía:** ni workflow nuevo confirmado ni ejecución local de RPC (entorno local sin resolución DNS). No asegurar que 0.002 ETH basta ni solicitar compra aún.
 - Próximo: recuperar log del job de cotización, depurar errores si aparecen y validar presupuesto. Último commit anterior a esta actualización `ef206378167f9048b9ea822b6591f59099e7b176`.
+
+## Registro 2026-11-06 — cotización integrada en workflow existente
+- Dado que el workflow nuevo no generó ejecuciones observables, se añadió el paso de cotización read-only al workflow **ya activo** `.github/workflows/nvra-contracts-validation.yml` tras compilación y tests (commit `b9aebf128119ce90f3dd8032f42d8d76ce341796`).
+- El paso usa `BASE_MAINNET_RPC_URL=https://mainnet.base.org`, no requiere claves ni envía transacciones, y es `continue-on-error` para no bloquear validación si RPC público falla.
+- Pendiente observar ejecución y logs, verificar el cálculo de L1, L2 y operador. No existe todavía presupuesto exacto ni autorización para comprar ETH o desplegar.
