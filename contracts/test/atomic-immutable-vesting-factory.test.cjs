@@ -38,7 +38,8 @@ describe("NVRA atomic immutable vesting factory (local only)", function () {
   });
 
   it("prevents anyone from using the escrow to redirect team tokens", async () => {
-    const { factory, outsider } = await setup();
+    const { factory, outsider, start } = await setup();
+    await ethers.provider.send("evm_setNextBlockTimestamp", [start]);
     await factory.initialize();
     const escrow = await ethers.getContractAt("NVRATeamPrefundEscrowDraft", await factory.vaults(3));
     await expect(escrow.connect(outsider).fund(await factory.token(), outsider.address)).to.be.reverted;
