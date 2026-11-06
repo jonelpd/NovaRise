@@ -1,0 +1,33 @@
+name: NVRA Base launch read-only fee quote
+on:
+  push:
+    branches: [feat/phase4-create2-vesting-integration]
+    paths:
+      - 'contracts/scripts/quote-base-launch-readonly.cjs'
+      - '.github/workflows/nvra-base-fee-quote.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  quote:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: contracts/package-lock.json
+      - name: Install and compile
+        working-directory: contracts
+        run: |
+          npm ci
+          npx hardhat compile
+      - name: Read-only Base L1 and L2 fee quote
+        working-directory: contracts
+        env:
+          BASE_MAINNET_RPC_URL: https://mainnet.base.org
+        run: node scripts/quote-base-launch-readonly.cjs
