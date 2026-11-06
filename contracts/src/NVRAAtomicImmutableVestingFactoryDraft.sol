@@ -11,7 +11,7 @@ import {NVRAImmutableBeneficiaryVestingDraft} from "./NVRAImmutableBeneficiaryVe
  *         vesting and prefunding in one reverting transaction.
  * @dev Token is created before vesting to satisfy vesting's code-length check.
  *      The team escrow exists before token mint; only factory can fund vesting.
- *      Controller authenticity as a Safe 3-of-5 remains UNVERIFIED.
+ *      Controller authenticity as the approved Safe 2-of-3 remains UNVERIFIED.
  */
 contract NVRAAtomicImmutableVestingFactoryDraft {
     address public immutable initializer;
@@ -23,12 +23,13 @@ contract NVRAAtomicImmutableVestingFactoryDraft {
     bool public initialized;
     address public token;
     address public vesting;
+    uint64 public actualVestingStart;
     address[5] public vaults;
 
     constructor(address controller_, address beneficiary_, uint64 start_, uint64 cliff_, uint64 linear_) {
         require(controller_.code.length != 0, "NVRA: invalid controller");
         require(beneficiary_ != address(0), "NVRA: zero beneficiary");
-        require(start_ > block.timestamp && cliff_ != 0 && linear_ != 0, "NVRA: invalid schedule");
+        require(start_ != 0 && cliff_ != 0 && linear_ != 0, "NVRA: invalid schedule");
         require(uint256(start_) + cliff_ + linear_ <= type(uint64).max, "NVRA: overflow");
         initializer = msg.sender;
         controller = controller_;
@@ -49,7 +50,7 @@ contract NVRAAtomicImmutableVestingFactoryDraft {
 
     function initialize() external returns (address tokenAddress, address vestingAddress) {
         require(msg.sender == initializer && !initialized, "NVRA: unauthorized / initialized");
-        require(block.timestamp < start, "NVRA: funding too late");
+        require(block.timestamp >= start, "NVRA: before launch date");
         initialized = true;
         address[5] memory recipients;
         for (uint8 i; i < 5; ++i) {
@@ -62,12 +63,13 @@ contract NVRAAtomicImmutableVestingFactoryDraft {
         }
         tokenAddress = address(new NVRAAtomicAllocationCandidate(recipients));
         vestingAddress = address(new NVRAImmutableBeneficiaryVestingDraft(
-            tokenAddress, beneficiary, start, cliffDuration, linearDuration
+            tokenAddress, beneficiary, uint64(block.timestamp), cliffDuration, linearDuration
         ));
         require(NVRAImmutableBeneficiaryVestingDraft(vestingAddress).beneficiary() == beneficiary, "NVRA: beneficiary mismatch");
         require(address(NVRAImmutableBeneficiaryVestingDraft(vestingAddress).token()) == tokenAddress, "NVRA: token mismatch");
         token = tokenAddress;
         vesting = vestingAddress;
+        actualVestingStart = uint64(block.timestamp);
         for (uint8 i; i < 5; ++i) {
             if (i != 3) NVRAFactoryBoundVaultDraft(recipients[i]).bindToken(tokenAddress);
         }
