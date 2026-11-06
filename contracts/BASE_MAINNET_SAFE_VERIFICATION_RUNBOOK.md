@@ -44,3 +44,12 @@ Custodia: evaluar independencia de las tres claves y copias de seguridad; posibl
 - El fallback handler merece verificación independiente porque Safe advierte que los handlers externos pueden ampliar la superficie de ejecución: https://docs.safe.global/advanced/smart-account-fallback-handler
 - No inferir que la tesorería NovaRise ya usa 1.5.0: hace falta leer `VERSION()`, slot 0, código, owners, threshold, guard, módulos y fallback desde Base RPC y contrastar hashes con los artefactos oficiales de https://github.com/safe-global/safe-deployments .
 - El script local `check-safe-2of3.cjs` ya acepta 1.4.x/1.5.x; sus resultados simulados y CI no sustituyen comprobación on-chain.
+
+## Referencias verificadas del registro público Safe para Base (8453)
+El catálogo `safe-global/safe-eth-py` enumera estos singleton en Base; son **candidatos oficiales**, no una lectura de nuestro proxy:
+- Safe 1.4.1: `0x41675C099F32341bf84BFc5382aF534df5C7461a`
+- Safe L2 1.4.1: `0x29fcB43b46531BcA003ddC8FCB67FFE91900C762`
+- Safe 1.5.0: `0xFf51A5898e281Db6DfC7855790607438dF2ca44b`
+- Safe L2 1.5.0: `0xEdd160fEBBD92E350D4D398fb636302fccd67C7e`
+Fuente: https://github.com/safe-global/safe-eth-py/blob/main/safe_eth/safe/addresses.py y registro https://github.com/safe-global/safe-deployments .
+**No seleccionar uno arbitrariamente.** Primero leer el singleton del proxy y contrastar versión y runtime bytecode. Si el proxy usa otra versión o un singleton no registrado, detener el proceso y revisar.
