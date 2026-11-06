@@ -31,3 +31,16 @@
 - Avoid unverified third-party deployment sites and blind signing. A wallet confirmation is not evidence that arbitrary bytecode is safe.
 - The current factory and dependencies are **Draft/Candidate**, not independently audited. The user chose to prioritize deployment but this risk remains.
 - No ETH purchase or broadcast is authorized by this runbook. No real NVRA deployment has occurred.
+
+## Candidate mobile signing workflow: official Remix IDE (not yet end-to-end tested)
+- Open **https://remix.ethereum.org** in the **MetaMask mobile in-app browser** (not a search-ad link). MetaMask must inject a provider and Remix must offer an injected provider. Do not proceed if provider is missing.
+- Import the reviewed factory source and its full import dependency tree into Remix. **Do not use a hand-copied or modified factory**. Set the exact compiler version, EVM target and optimizer configuration from `contracts/hardhat.config.cjs`; verify that Remix deployment bytecode matches the bytecode of the reviewed Hardhat artifact (including library linking and metadata). If they differ, STOP. Using only the source filename without reproducing its build configuration is insufficient.
+- Set environment to **Injected Provider - MetaMask**, verify **Base Mainnet chain ID 8453** and EOA `0x89316a3553Da9315a720e25915d731AfD11d0B16`. Never use Remix VM or testnet.
+- Select **NVRAAtomicImmutableVestingFactoryDraft**, not `NVRAToken` or the candidate token directly. Constructor args in order: `controller_ = 0xdbB84E6279F56EcF39E35F56a5A259DFD026E7fd`, `beneficiary_ = 0x89316a3553Da9315a720e25915d731AfD11d0B16`, `start_ = 1793923200`, `cliff_ = 31536000`, `linear_ = 94608000`.
+- Before approving deployment, inspect wallet **contract creation** transaction and fee quote. Approve only after user confirms all parameters and adequate ETH.
+- Wait for successful receipt, verify factory contract address and immutable parameters on-chain. Then attach the verified factory address in Remix, call `initialize()` from the same MetaMask EOA, with zero ETH. Approve only after fresh quote and explicit user confirmation.
+- Confirm transaction 2 receipt and on-chain token, vesting, vault balances and supply. Do not confuse Remix's contract-creation address with token address; token is deployed inside transaction 2.
+- **Limitation:** Remix + MetaMask mobile compatibility, import resolution, and bytecode parity have not been independently validated in this project. This is a candidate procedure, not a confirmed ready-to-sign interface. No automatic deployment.
+
+## Pre-signature stop conditions
+STOP if Remix shows a different chain/account, compiler mismatch, contract source mismatch, suspicious wallet permissions, nonzero transaction value, failed gas estimation, or unclear gas fees. Never sign a transaction that has not been independently decoded and verified.
