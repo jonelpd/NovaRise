@@ -55,7 +55,17 @@
     "targetLaunchDateUTC": "2026-11-06",
     "startDateNote": "2026-11-06 was the target launch date only. Factory start is the earliest permitted initialization timestamp, not the effective vesting start. Actual vesting starts at block.timestamp of successful atomic initialization and prefunding; never backdate.",
     "earliestInitializationUnix": null,
-    "effectiveStartSource": "NVRAAtomicImmutableVestingFactoryDraft.actualVestingStart, verified against the successful initialize transaction block timestamp"
+    "effectiveStartSource": "NVRAAtomicImmutableVestingFactoryDraft.actualVestingStart, verified against the successful initialize transaction block timestamp",
+    "surplusPolicy": "OPTION_A_BOUNDED_RECOVERY_DESIGN_PENDING_AUDIT",
+    "surplusRecoveryDesign": {
+      "status": "PROPOSED_NOT_IMPLEMENTED",
+      "authorizedCaller": "approved Safe 2-of-3 controller only",
+      "recipient": "same approved Safe controller only",
+      "maximumRecoverable": "max(0, tokenBalance - (150000e18 - released))",
+      "teamEntitlementUnchanged": true,
+      "cliffAndLinearScheduleUnchanged": true,
+      "requiresTestsAndIndependentReview": true
+    }
   },
   "deployment": {
     "frozenCommit": null,
