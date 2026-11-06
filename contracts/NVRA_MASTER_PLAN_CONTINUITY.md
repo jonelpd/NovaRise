@@ -140,3 +140,9 @@ Al terminar cada ejecución, mostrar: fase actual, completado en esa ejecución,
 - Commit `ac97dd5e6f1cf421267e09a4184a5900e2dc4162`: 4/4 workflows GitHub Actions verdes.
 - Creada guía `contracts/BASE_MAINNET_MOBILE_METAMASK_LAUNCH_RUNBOOK.md` commit `51b64b015624812bafdc32819034553b442528e1`, con EOA confirmada, Safe, umbral de fecha, pasos de firma separada, verificaciones de recibos y prohibición de secretos.
 - Todavía **no** hay método de firma móvil comprobado ni cotización completa de L1 data fees; no se ha solicitado compra de ETH ni enviado transacción. Próximo paso: elegir un método fiable de interacción con MetaMask móvil y estimar gas L1 antes de financiar.
+
+## Registro 2026-11-06 — cotización Base L1/L2 sin firma
+- Creado `contracts/scripts/quote-base-launch-readonly.cjs` (commit `95c9d172ec96336faf455c86bfc85e765ae89a7f`), consulta por RPC HTTPS Base Mainnet: gas estimado de creación, tarifas EIP-1559, `GasPriceOracle.getL1Fee` y `getL1FeeUpperBound` sobre transacción serializada **sin firma**.
+- Requiere `BASE_MAINNET_RPC_URL` y artefactos Hardhat compilados. No envía transacciones ni necesita ETH. No se ha ejecutado aún contra RPC en este turno; sin cifra final verificada.
+- Para segunda tx, sin factory desplegada no puede obtenerse estimación L1 exacta en mainnet: el script usa límite L1 de primera tx para ambas y gas local de initialize; esta cifra es **provisional** y debe revisarse en MetaMask.
+- Último CI verificado 4/4 verde en commit `ac97dd5`. Mantener ETH sin comprar hasta validar cotización. Siguiente paso: ejecutar script en entorno con RPC Base y validar resultado, luego escoger interfaz segura de firma móvil.
