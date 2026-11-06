@@ -58,7 +58,7 @@
     "effectiveStartSource": "NVRAAtomicImmutableVestingFactoryDraft.actualVestingStart, verified against the successful initialize transaction block timestamp",
     "surplusPolicy": "OPTION_A_BOUNDED_RECOVERY_DESIGN_PENDING_AUDIT",
     "surplusRecoveryDesign": {
-      "status": "PROTOTYPE_ADDED_TESTS_PENDING_CI_NOT_FACTORY_INTEGRATED",
+      "status": "FACTORY_INTEGRATED_LOCAL_CI_PASSED_INDEPENDENT_AUDIT_PENDING",
       "authorizedCaller": "approved Safe 2-of-3 controller only",
       "recipient": "same approved Safe controller only",
       "maximumRecoverable": "max(0, tokenBalance - (150000e18 - released))",
@@ -66,7 +66,8 @@
       "cliffAndLinearScheduleUnchanged": true,
       "requiresTestsAndIndependentReview": true,
       "contract": "contracts/src/NVRABoundedSurplusVestingDraft.sol",
-      "tests": "contracts/test/bounded-surplus-vesting.test.cjs"
+      "tests": "contracts/test/bounded-surplus-vesting.test.cjs",
+      "integrationTest": "contracts/test/atomic-bounded-surplus-integration.test.cjs"
     }
   },
   "deployment": {
@@ -77,6 +78,6 @@
     "independentSecurityReviewApproved": false,
     "legalReviewApproved": false,
     "explicitDeploymentApproval": false,
-    "validationStatus": "Four GitHub Actions workflows passed on commit ccdb56399e8955395ae101932a6890c1a940dfa9; this does not constitute an independent audit."
+    "validationStatus": "Four GitHub Actions workflows passed at commit 7caa08dd457550785f2d10590ecd04c9112142d1 (local automated tests only; no independent audit or live Safe attestation)."
   }
 }
