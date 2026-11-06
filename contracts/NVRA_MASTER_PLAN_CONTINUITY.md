@@ -124,3 +124,8 @@ Al terminar cada ejecución, mostrar: fase actual, completado en esa ejecución,
 - Uso tras compilar: `node scripts/prepare-base-unsigned-launch.cjs <start_unix_seconds> <deployer_eoa_address>` desde `contracts`. El inicio se escoge explícitamente; la dirección factory de tx2 se obtiene únicamente del recibo minado de tx1.
 - **Decisión operativa pendiente:** usuario debe confirmar si usará su EOA de MetaMask como desplegador e inicializador (ambas transacciones requieren misma dirección). El Safe sigue siendo controlador de vaults y vesting, no firmante de estas transacciones EOA.
 - Pendiente estimación de comisión L1 datos de Base, gas real y compra ETH. No ejecutar ni firmar transacciones sin autorización concreta. El nuevo script aún no está validado en CI.
+
+## Registro 2026-11-06 — EOA de despliegue confirmada
+- Usuario confirma usar la misma MetaMask EOA `0x89316a3553Da9315a720e25915d731AfD11d0B16` para desplegar fábrica y llamar `initialize()`; coincide con beneficiario vesting y propietario 1 del Safe 2/3.
+- Añadida prueba `contracts/test/unsigned-base-launch-payload.test.cjs` para validar dirección EOA, controlador Safe, constructor, plazos y calldata `initialize` sin firmar ni enviar; último commit de prueba `971ccb8ac6032ceff51772fc16d3c117b326b7e4`.
+- Pendiente CI del test, fijar fecha mínima `start` explícita y calcular L1 data fee Base + coste real. No se solicita clave privada ni fondos todavía. Despliegue real no realizado.
