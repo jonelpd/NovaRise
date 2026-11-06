@@ -78,3 +78,6 @@ The project owner approved a Safe **2-of-3**, with all three independently secur
 - Expected Safe address and three owners are recorded in `base-mainnet-manifest.template.json` from operator-provided public information.
 - **Still not independently attested via Base RPC:** actual owner list/threshold, Safe singleton bytecode and allowlisted hash, fallback handler, zero guard, empty enabled modules and proxy runtime hash. The CLI requires independently sourced singleton and fallback handler addresses. Do not substitute guesses or silently mark these checks complete.
 - Safe UI check: Settings → Modules should show no unexpected enabled modules; Settings → Security should show no unexpected guard or spending-limit/delegate permissions. Screenshots are supplemental evidence, not a substitute for on-chain checks.
+
+## Safe UI modules screen evidence (2026-11-06)
+Operator screenshot of Safe Settings > Modules for NovaRise Treasury shows **No modules enabled**, **No transaction guard set**, and a displayed **Safe: CompatibilityFallbackHandler 1.5.0**. Exact handler address intentionally not transcribed from screenshot; must be copied and verified independently via Base RPC before adding it to the manifest. This is UI evidence only, not an independent RPC security attestation. No Safe settings changed.
