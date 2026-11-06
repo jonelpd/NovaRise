@@ -14,11 +14,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Determine Madrid publication date
+        id: date
+        run: echo "today=$(TZ=Europe/Madrid date +%F)" >> "$GITHUB_OUTPUT"
+      - name: Check previously published date
+        id: published
+        uses: actions/cache/restore@v4
+        with:
+          path: .telegram-published
+          key: novarise-telegram-v1-${{ steps.date.outputs.today }}
+          lookup-only: true
       - name: Publish today's approved post
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHANNEL: "@NovaRiseNVRA"
           EVENT_NAME: ${{ github.event_name }}
+          ALREADY_PUBLISHED: ${{ steps.published.outputs.cache-hit }}
         run: |
           python3 - <<'PY'
           import json, os, urllib.request, urllib.parse, datetime, zoneinfo, sys
@@ -45,6 +56,9 @@ jobs:
                   sys.exit("Bot lacks channel permission to post messages")
               print("Validation successful: bot can post to the channel. No message was sent.")
               sys.exit(0)
+          if os.environ.get("ALREADY_PUBLISHED") == "true":
+              print("SKIPPED_ALREADY_PUBLISHED: today's Telegram post was previously confirmed.")
+              sys.exit(0)
           today = datetime.datetime.now(zoneinfo.ZoneInfo("Europe/Madrid")).date().isoformat()
           with open("telegram/posts.json", encoding="utf-8") as f:
               posts = json.load(f)["posts"]
@@ -66,5 +80,14 @@ jobs:
               raise
           if not data.get("ok"):
               sys.exit("Telegram rejected publication")
-          print(f"Telegram publication successful for {today}.")
+          os.makedirs(".telegram-published", exist_ok=True)
+          with open(".telegram-published/receipt.json", "w", encoding="utf-8") as receipt:
+              json.dump({"date": today, "message_id": data["result"]["message_id"], "chat_id": data["result"]["chat"]["id"]}, receipt)
+          print(f"PUBLISHED: Telegram accepted the post for {today}; message_id={data['result']['message_id']}.")
           PY
+      - name: Record successful publication to prevent reruns
+        if: ${{ github.event_name == 'schedule' && steps.published.outputs.cache-hit != 'true' && success() }}
+        uses: actions/cache/save@v4
+        with:
+          path: .telegram-published
+          key: novarise-telegram-v1-${{ steps.date.outputs.today }}
