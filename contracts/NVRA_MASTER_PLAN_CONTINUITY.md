@@ -51,3 +51,8 @@ Al terminar cada ejecución, mostrar: fase actual, completado en esa ejecución,
 - Confirmados cuatro workflows verdes del commit `efee96dbef8ec28110dede232234f1d956c2924c`.
 - Se añadieron referencias oficiales de Safe 1.5.0 y riesgos de fallback handlers a `contracts/BASE_MAINNET_SAFE_VERIFICATION_RUNBOOK.md`.
 - Sigue pendiente leer estado real del Safe de NovaRise por Base RPC, contrastar bytecode/hashes con `safe-deployments`, realizar auditoría independiente, revisión legal y aprobación expresa de despliegue.
+
+## Registro 2026-11-06 — catálogo Safe Base
+- CI del commit `74c52f7` confirmado: cuatro workflows verdes.
+- Documentados cuatro candidatos oficiales de singleton Safe/SafeL2 1.4.1/1.5.0 para Base (8453) en `BASE_MAINNET_SAFE_VERIFICATION_RUNBOOK.md`.
+- No se ha leído el proxy real; NO se ha elegido singleton ni verificado hashes. Próximo paso: lectura RPC de solo lectura del Safe y contraste independiente del bytecode.
