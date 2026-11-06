@@ -33,10 +33,12 @@ async function main() {
       assert.notEqual(await provider.getCode(address), "0x", "No contract at Safe address");
       const safe = new ethers.Contract(address, SAFE_ABI, provider);
       const [threshold, owners] = await Promise.all([safe.getThreshold(), safe.getOwners()]);
-      assert.equal(threshold, 3n, "Safe threshold must be 3");
-      assert.equal(owners.length, 5, "Safe must have 5 owners");
-      assert.equal(new Set(owners.map(x => x.toLowerCase())).size, 5, "Duplicate Safe owners");
-      result.safe = { address: ethers.getAddress(address), threshold: 3, owners };
+      assert.equal(threshold, 2n, "Safe threshold must be 2");
+      assert.equal(owners.length, 3, "Safe must have 3 owners");
+      assert.equal(new Set(owners.map(x => x.toLowerCase())).size, 3, "Duplicate Safe owners");
+      const expectedOwners = ["0x89316a3553Da9315a720e25915d731AfD11d0B16", "0xe697351daE40E770769B35852C1e05737015b6B7", "0x5927b6f05c4CdD16Cce6Cc429650c0b767137245"];
+      assert.deepEqual(owners.map(x => x.toLowerCase()).sort(), expectedOwners.map(x => x.toLowerCase()).sort(), "Unexpected Safe owners");
+      result.safe = { address: ethers.getAddress(address), threshold: 2, owners };
       result.safeNote = "Interface checks only; verify Safe proxy and singleton implementation independently";
     }
     console.log(JSON.stringify(result, null, 2));
