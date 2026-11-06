@@ -14,8 +14,9 @@ describe("NVRA atomic immutable vesting factory (local only)", function () {
   }
 
   it("predicts CREATE2 vaults, mints one million, and funds the immutable vesting atomically", async () => {
-    const { factory, beneficiary } = await setup();
+    const { factory, beneficiary, start } = await setup();
     const predicted = await Promise.all([0,1,2,3,4].map(i => factory.predictVault(i)));
+    await ethers.provider.send("evm_setNextBlockTimestamp", [start]);
     await factory.initialize();
     for (let i=0;i<5;i++) expect(await factory.vaults(i)).to.equal(predicted[i]);
     const token = await ethers.getContractAt("NVRAAtomicAllocationCandidate", await factory.token());
@@ -29,12 +30,10 @@ describe("NVRA atomic immutable vesting factory (local only)", function () {
     await expect(factory.initialize()).to.be.reverted;
   });
 
-  it("rejects outsider initialization and initialization after vesting start", async () => {
+  it("rejects outsider initialization and initialization before target date", async () => {
     const { factory, outsider, start } = await setup();
     await expect(factory.connect(outsider).initialize()).to.be.reverted;
-    await ethers.provider.send("evm_setNextBlockTimestamp", [start]);
-    await ethers.provider.send("evm_mine", []);
-    await expect(factory.initialize()).to.be.revertedWith("NVRA: funding too late");
+    await expect(factory.initialize()).to.be.revertedWith("NVRA: before launch date");
     expect(await factory.initialized()).to.equal(false);
   });
 
