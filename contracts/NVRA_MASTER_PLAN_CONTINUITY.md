@@ -23,9 +23,10 @@ Actualizado: 2026-11-06. Este documento es el punto de partida para retomar el t
 - Nuevo contrato NVRABoundedSurplusVestingDraft y conexión a NVRAAtomicImmutableVestingFactoryDraft.
 - Pruebas de acceso, límites de excedente, liberación parcial, protección de 150.000 NVRA y flujo integral local. CI verde en 7caa08d.
 - Manifiesto de Base con decisiones y bloqueos explícitos.
+- Guía de verificación de Safe en `contracts/BASE_MAINNET_SAFE_VERIFICATION_RUNBOOK.md`; aún NO ejecutada contra RPC real.
 
 ### Pendiente — orden recomendado
-1. Confirmar CI del HEAD más reciente y corregir regresiones; añadir pruebas de reversiones atómicas y controles de Safe 2-de-3 reales en simulación local.
+1. Confirmar CI del HEAD más reciente y corregir regresiones; añadir pruebas de reversiones atómicas y controles de Safe 2-de-3 reales en simulación local. CI confirmado verde para commit 82e05a11798ec696b98121b4c1147a69354291b1.
 2. Ejecutar comprobación SOLO LECTURA del Safe en Base RPC 8453: dirección, código, propietarios, umbral, singleton, fallback handler y hashes contra referencias fiables. Scripts contracts/scripts/base-mainnet-readiness.cjs y check-safe-2of3.cjs. No afirmar verificación on-chain hasta ejecutarla.
 3. Auditoría de seguridad independiente, resolver hallazgos y congelar bytecode, dependencias y commit.
 4. Revisión legal/regulatoria, custodia independiente de firmantes y presupuesto de gas.
