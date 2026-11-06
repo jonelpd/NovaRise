@@ -81,3 +81,6 @@ The project owner approved a Safe **2-of-3**, with all three independently secur
 
 ## Safe UI modules screen evidence (2026-11-06)
 Operator screenshot of Safe Settings > Modules for NovaRise Treasury shows **No modules enabled**, **No transaction guard set**, and a displayed **Safe: CompatibilityFallbackHandler 1.5.0**. Exact handler address intentionally not transcribed from screenshot; must be copied and verified independently via Base RPC before adding it to the manifest. This is UI evidence only, not an independent RPC security attestation. No Safe settings changed.
+
+## Operator decision — fixed token distribution (2026-11-06)
+The operator explicitly confirmed **1,000,000 NVRA** fixed total supply with five allocations **300,000 / 250,000 / 200,000 / 150,000 / 100,000** NVRA (30% / 25% / 20% / 15% / 10%). This approves quantities only, **not** the economic purpose, vault beneficiaries, team vesting schedule, treasury transfers, contract deployment or token issuance. Do not infer approval of any unassigned recipient or production transaction.
