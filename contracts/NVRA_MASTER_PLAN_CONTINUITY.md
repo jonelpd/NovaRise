@@ -152,3 +152,10 @@ Al terminar cada ejecución, mostrar: fase actual, completado en esa ejecución,
 - Aún **no** aparece una ejecución del nuevo workflow asociada al commit; GitHub puede requerir que workflow esté en rama por defecto para despacho manual. No se dispone de resultados de L1 ni presupuesto exacto. No inferir que 0.002 ETH es suficiente.
 - Consulta de documentación Base: tarifas incluyen L2 y L1; Oracle en `0x420000000000000000000000000000000000000F` con `getL1Fee(bytes)` y `getL1FeeUpperBound(uint256)`.
 - Próximo paso: verificar si se dispara workflow y obtener log; si no, habilitar ejecución mediante un workflow ya autorizado sin tocar web pública ni credenciales. No se ha firmado ni desplegado token.
+
+## Registro 2026-11-06 — intento de ejecución de cotización Base
+- Verificado: 4 workflows existentes del commit `f1548e7` en verde, pero workflow nuevo de tarifas no figuraba entre ejecuciones.
+- Añadido trigger `pull_request` al `.github/workflows/nvra-base-fee-quote.yml` (commit `76d0b84`) para activar el job desde PR abierto.
+- Conforme documentación Base actual, coste total incluye L2 + L1 + operator fee. Añadida consulta `getOperatorFee(uint256)` para ambas operaciones al script de cotización (commit `ef20637`).
+- **Sin resultado RPC todavía:** ni workflow nuevo confirmado ni ejecución local de RPC (entorno local sin resolución DNS). No asegurar que 0.002 ETH basta ni solicitar compra aún.
+- Próximo: recuperar log del job de cotización, depurar errores si aparecen y validar presupuesto. Último commit anterior a esta actualización `ef206378167f9048b9ea822b6591f59099e7b176`.
