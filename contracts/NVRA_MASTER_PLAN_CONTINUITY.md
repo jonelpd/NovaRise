@@ -91,3 +91,10 @@ Al terminar cada ejecución, mostrar: fase actual, completado en esa ejecución,
 - Runtime codehash fallback `0x3c6a85bcf7b563daa624b884b4e9a1b9fa5371edde7be945d998071a48f28bbc`.
 - **IMPORTANTE:** estos son hashes observados, aún NO comparados con artefactos oficiales independientes; no hay auditoría ni autorización de despliegue.
 - Siguiente paso: contraste reproducible con `safe-global/safe-deployments`, revisión de seguridad de scripts y expediente de auditoría.
+
+## Decisión del usuario 2026-11-06 — priorizar despliegue real NVRA
+- Usuario solicita comenzar **ya** el despliegue de NVRA en Base Mainnet y posponer las demás comprobaciones hasta disponer del token. Se acepta priorizar preparación de lanzamiento, dejando riesgos explícitos y sin declarar auditoría superada.
+- Revisión de código: `NVRAAtomicImmutableVestingFactoryDraft` requiere **dos transacciones on-chain**: (1) desplegar fábrica con controller Safe, beneficiary, start, cliff y linearDuration; (2) llamar `initialize()` desde el **mismo deployer** (`initializer`), en timestamp >= start. Solo la segunda crea y financia token, vaults y vesting de forma atómica. No afirmar que ambas transacciones sean atómicas.
+- `contracts/hardhat.config.cjs` tiene `accounts: []` en Base; **no existe firmante configurado ni despliegue posible desde el conector actual**. El script `simulate-deployment.cjs` es legado, usa `NVRAToken` con 100 millones y **NO es apto para NVRA de 1 millón**; no ejecutarlo como despliegue final.
+- Preparar procedimiento de despliegue final con firma desde cartera bajo control del usuario, gas ETH en Base, validación de parámetros de constructor y captura de tx hash/contrato. Nunca pedir claves privadas/frases semilla en chat. Se requiere autorización para cada transacción concreta y explicación de riesgos de omitir auditoría/legal.
+- Estado actual: **sin despliegue**. Siguiente: preparar scripts de despliegue controlados y revisarlos en simulación local; después solicitar firma del usuario en cartera, sin transmitir secretos.
