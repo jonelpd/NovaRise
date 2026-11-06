@@ -1,5 +1,5 @@
 {
-  "_notice": "TEMPLATE ONLY — no verified addresses, no deployment authorization. Never add private keys. Three independent keys under one operator; not three independent people.",
+  "_notice": "PUBLIC ADDRESS CANDIDATES PROVIDED BY USER; not independently verified on-chain. No keys or deployment authorization.",
   "network": "base",
   "chainId": 8453,
   "token": {
@@ -16,11 +16,11 @@
     ]
   },
   "safe": {
-    "address": null,
+    "address": "0xdbB84E6279F56EcF39E35F56a5A259DFD026E7fd",
     "owners": [
-      null,
-      null,
-      null
+      "0x89316a3553Da9315a720e25915d731AfD11d0B16",
+      "0xe697351daE40E770769B35852C1e05737015b6B7",
+      "0x5927b6f05c4CdD16Cce6Cc429650c0b767137245"
     ],
     "threshold": 2,
     "singleton": null,
