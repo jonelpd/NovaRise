@@ -13,7 +13,16 @@
       "200000",
       "150000",
       "100000"
-    ]
+    ],
+    "allocationPurposes": [
+      "Game rewards, mining and participation",
+      "Ecosystem development and applications",
+      "Liquidity and project expansion",
+      "Founding team (vesting)",
+      "Strategic reserve"
+    ],
+    "allocationPolicyApproved": true,
+    "allocationPolicyApprovedDate": "2026-11-06"
   },
   "safe": {
     "address": "0xdbB84E6279F56EcF39E35F56a5A259DFD026E7fd",
