@@ -129,3 +129,9 @@ Al terminar cada ejecución, mostrar: fase actual, completado en esa ejecución,
 - Usuario confirma usar la misma MetaMask EOA `0x89316a3553Da9315a720e25915d731AfD11d0B16` para desplegar fábrica y llamar `initialize()`; coincide con beneficiario vesting y propietario 1 del Safe 2/3.
 - Añadida prueba `contracts/test/unsigned-base-launch-payload.test.cjs` para validar dirección EOA, controlador Safe, constructor, plazos y calldata `initialize` sin firmar ni enviar; último commit de prueba `971ccb8ac6032ceff51772fc16d3c117b326b7e4`.
 - Pendiente CI del test, fijar fecha mínima `start` explícita y calcular L1 data fee Base + coste real. No se solicita clave privada ni fondos todavía. Despliegue real no realizado.
+
+## Registro 2026-11-06 — inicio inmediato autorizado
+- Usuario autoriza lanzamiento en cuanto haya ETH, sin espera por fecha futura. Para constructor se fija umbral mínimo `1793923200` (2026-11-06 00:00 UTC), ya transcurrido, **no** es fecha efectiva de vesting. El vesting empieza al minarse `initialize()`.
+- Se detectó y corrigió fallo de prueba en CI (`decodeDeploy` no existe en ethers v6); ahora se usa `AbiCoder.defaultAbiCoder().decode` para argumentos de constructor.
+- Script `prepare-base-unsigned-launch.cjs` acepta `deployer_eoa_address` como primer argumento, inicio opcional por defecto al umbral fijo. La prueba usa dirección MetaMask confirmada y comprueba umbral.
+- Último commit de cambios `81a4aa9590f3420181f874207838e41b6110336a`. CI pendiente. No se ha enviado ni firmado transacción. Pendiente L1 fee y método seguro de firma en MetaMask móvil.
