@@ -146,3 +146,9 @@ Al terminar cada ejecución, mostrar: fase actual, completado en esa ejecución,
 - Requiere `BASE_MAINNET_RPC_URL` y artefactos Hardhat compilados. No envía transacciones ni necesita ETH. No se ha ejecutado aún contra RPC en este turno; sin cifra final verificada.
 - Para segunda tx, sin factory desplegada no puede obtenerse estimación L1 exacta en mainnet: el script usa límite L1 de primera tx para ambas y gas local de initialize; esta cifra es **provisional** y debe revisarse en MetaMask.
 - Último CI verificado 4/4 verde en commit `ac97dd5`. Mantener ETH sin comprar hasta validar cotización. Siguiente paso: ejecutar script en entorno con RPC Base y validar resultado, luego escoger interfaz segura de firma móvil.
+
+## Registro 2026-11-06 — ejecución automatizada de cotización L1/L2
+- Creado workflow `.github/workflows/nvra-base-fee-quote.yml` commit `f1548e7ecf2faa93d219ca62b3fdb6fb70ae67ee`, que instala dependencias, compila y consulta en solo lectura el GasPriceOracle en Base RPC público `https://mainnet.base.org`.
+- Aún **no** aparece una ejecución del nuevo workflow asociada al commit; GitHub puede requerir que workflow esté en rama por defecto para despacho manual. No se dispone de resultados de L1 ni presupuesto exacto. No inferir que 0.002 ETH es suficiente.
+- Consulta de documentación Base: tarifas incluyen L2 y L1; Oracle en `0x420000000000000000000000000000000000000F` con `getL1Fee(bytes)` y `getL1FeeUpperBound(uint256)`.
+- Próximo paso: verificar si se dispara workflow y obtener log; si no, habilitar ejecución mediante un workflow ya autorizado sin tocar web pública ni credenciales. No se ha firmado ni desplegado token.
