@@ -70,6 +70,11 @@ function simulatedSafe(overrides={}) {
     }
   };
 }
+test("preflight accepts a matching simulated Safe 1.5.0 state",async()=>{
+  const result=await checkSafe(args(simulatedSafe({version:"1.5.0"})));
+  assert.equal(result.version,"1.5.0");
+  assert.equal(result.threshold,2);
+});
 test("preflight accepts a matching simulated Safe state",async()=>{
   const result=await checkSafe(args(simulatedSafe()));
   assert.equal(result.threshold,2);
