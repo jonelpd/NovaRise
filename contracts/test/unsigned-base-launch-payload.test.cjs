@@ -8,10 +8,10 @@ describe("NVRA unsigned Base launch payload regression", function () {
   it("encodes the confirmed MetaMask EOA, Safe and immutable vesting schedule", async function () {
     const deployer = "0x89316a3553Da9315a720e25915d731AfD11d0B16";
     const safe = "0xdbB84E6279F56EcF39E35F56a5A259DFD026E7fd";
-    const start = 1800000000;
+    const start = 1793923200;
     const stdout = execFileSync(process.execPath, [
       path.resolve(__dirname, "../scripts/prepare-base-unsigned-launch.cjs"),
-      String(start), deployer
+      deployer
     ], { encoding: "utf8" });
     const p = JSON.parse(stdout);
     expect(p.mode).to.equal("UNSIGNED_PREPARATION_ONLY");
