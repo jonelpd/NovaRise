@@ -52,7 +52,7 @@ async function main() {
     if (moduleData[0].length || moduleData[1].toLowerCase()!==SENTINEL.toLowerCase()) throw Error("Unexpected modules");
     if (guard!==ethers.ZeroAddress) throw Error("Unexpected guard");
     if (fallback.toLowerCase()!==EXPECTED_FALLBACK.toLowerCase()) throw Error("Unexpected fallback");
-    if (!/^1\\.(4|5)\\./.test(version)) throw Error("Unexpected version");
+    if (!(version.startsWith("1.4.") || version.startsWith("1.5."))) throw Error("Unexpected version");
     if (!hash(singletonCode) || !hash(fallbackCode)) throw Error("Missing singleton/fallback code");
     console.log("DISCOVERY_CHECKS_PASSED; independent bytecode reference comparison still required.");
   } finally { provider.destroy(); }
