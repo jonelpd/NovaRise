@@ -24,7 +24,7 @@ jobs:
           cache: npm
           cache-dependency-path: contracts/package-lock.json
       - run: npm ci
-      - run: npm install --no-save --package-lock=false @safe-global/safe-contracts@1.4.1
+      - run: npm install --no-save --package-lock=false --legacy-peer-deps @safe-global/safe-contracts@1.4.1
       - run: npm run compile
       - run: npm test
       - run: npm run test:safe-preflight
