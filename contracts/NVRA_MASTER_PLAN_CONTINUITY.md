@@ -28,13 +28,13 @@ Actualizado: 2026-11-06. Este documento es el punto de partida para retomar el t
 ### Pendiente — orden recomendado
 1. Confirmar CI del HEAD más reciente y corregir regresiones; añadir pruebas de reversiones atómicas y controles de Safe 2-de-3 reales en simulación local. CI confirmado verde para commit 82e05a11798ec696b98121b4c1147a69354291b1.
 2. Ejecutar comprobación SOLO LECTURA del Safe en Base RPC 8453: dirección, código, propietarios, umbral, singleton, fallback handler y hashes contra referencias fiables. Scripts contracts/scripts/base-mainnet-readiness.cjs y check-safe-2of3.cjs. No afirmar verificación on-chain hasta ejecutarla.
-3. Resolver incompatibilidad del script estricto: actualmente exige Safe 1.4.x, pero el fallback handler esperado corresponde a referencias públicas de Safe 1.5.0. Confirmar primero versión y singleton reales vía RPC, y adaptar comprobación y pruebas sin asumir versión. Después: auditoría de seguridad independiente, resolver hallazgos y congelar bytecode, dependencias y commit.
+3. El script estricto ya admite Safe 1.4.x y 1.5.x y cuenta con prueba simulada 1.5.0; **aún falta** identificar la versión y singleton reales por RPC y contrastar codehashes independientes. Después: auditoría de seguridad independiente, resolver hallazgos y congelar bytecode, dependencias y commit.
 4. Revisión legal/regulatoria, custodia independiente de firmantes y presupuesto de gas.
 5. Preparar checklist go/no-go y pedir autorización expresa para cada transacción real. No firmar, desplegar, fondear ni fusionar sin dicha autorización.
 6. Tras despliegue autorizado: verificar contratos en BaseScan, registrar direcciones/hashes y actualizar web/libro blanco; después desarrollar utilidades de juegos/minería y aplicaciones según su plan separado.
 
 ## Bloqueos actuales
-- Safe aún NO verificado independientemente contra Base Mainnet RPC; singleton y codehashes desconocidos. Riesgo identificado: preflight estricto asume versión 1.4.x, mientras fallback handler esperado aparece asociado a 1.5.0 en referencias públicas.
+- Safe aún NO verificado independientemente contra Base Mainnet RPC; singleton y codehashes desconocidos. Riesgo identificado y mitigado a nivel de compatibilidad local: el preflight acepta versiones 1.4.x/1.5.x; falta comprobación en Base y hashes confiables.
 - Sin auditoría independiente ni revisión legal aprobada.
 - No existe autorización concreta para una transacción de despliegue o financiación.
 - Tres firmantes pueden estar bajo un mismo dispositivo: revisar custodia.
