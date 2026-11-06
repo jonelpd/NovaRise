@@ -41,9 +41,12 @@
   "vesting": {
     "beneficiary": null,
     "startUnix": null,
-    "cliffSeconds": null,
-    "linearSeconds": null,
-    "surplusPolicyAccepted": false
+    "cliffSeconds": 31536000,
+    "linearSeconds": 94608000,
+    "surplusPolicyAccepted": false,
+    "schedulePolicy": "12-month cliff followed by 36-month linear release; 365-day years, subject to contract schedule implementation",
+    "scheduleApproved": true,
+    "scheduleApprovedDate": "2026-11-06"
   },
   "deployment": {
     "frozenCommit": null,
