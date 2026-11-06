@@ -81,3 +81,13 @@ Al terminar cada ejecución, mostrar: fase actual, completado en esa ejecución,
 - Salida visible: `mode=READ_ONLY_DISCOVERY_NOT_ATTESTATION`, `chainId=8453`, bloque `53884969`, Safe `0xdbB84E6279F56EcF39E35F56a5A259DFD026E7fd`, `VERSION()=1.5.0`, threshold=2, owners coincidentes con las tres direcciones previstas, módulos vacíos, singleton `0xEdd160fEBBD92E350D4D398fb636302fccd67C7e` (Safe L2 1.5.0).
 - La captura corta el valor completo de guard y no muestra fallback ni codehashes. Aunque el job terminó verde, falta guardar/inspeccionar el registro completo y contrastar hashes contra referencias oficiales. No se declara auditoría ni attestation independiente.
 - Siguiente: solicitar captura de parte inferior del mismo log (guard, fallback, codehashes, mensaje final) y verificar hashes. No hay autorización de despliegue.
+
+## Registro 2026-11-06 — resultados completos de descubrimiento Safe
+- Captura del usuario de workflow `NVRA Base Safe read-only discovery #1`, job verde. Resultado `DISCOVERY_CHECKS_PASSED`.
+- Bloque Base 53884969; versión 1.5.0, owners esperados 3, threshold 2, módulos vacíos, singleton Safe L2 `0xEdd160fEBBD92E350D4D398fb636302fccd67C7e`.
+- Guard `0x0000000000000000000000000000000000000000`; fallback `0x3EfCBb83A4A7AfcB4F68D501E2c2203a38be77f4`.
+- Runtime codehash proxy `0x4e381985ca68b3e5d27b4425fa581c19cf33146d3f887a3cfca96f55528ea46f`.
+- Runtime codehash singleton `0x180193227186ccb85316c94db1f0d156ed932b14712cfaac78901899178572dc`.
+- Runtime codehash fallback `0x3c6a85bcf7b563daa624b884b4e9a1b9fa5371edde7be945d998071a48f28bbc`.
+- **IMPORTANTE:** estos son hashes observados, aún NO comparados con artefactos oficiales independientes; no hay auditoría ni autorización de despliegue.
+- Siguiente paso: contraste reproducible con `safe-global/safe-deployments`, revisión de seguridad de scripts y expediente de auditoría.
