@@ -164,3 +164,9 @@ Al terminar cada ejecución, mostrar: fase actual, completado en esa ejecución,
 - Dado que el workflow nuevo no generó ejecuciones observables, se añadió el paso de cotización read-only al workflow **ya activo** `.github/workflows/nvra-contracts-validation.yml` tras compilación y tests (commit `b9aebf128119ce90f3dd8032f42d8d76ce341796`).
 - El paso usa `BASE_MAINNET_RPC_URL=https://mainnet.base.org`, no requiere claves ni envía transacciones, y es `continue-on-error` para no bloquear validación si RPC público falla.
 - Pendiente observar ejecución y logs, verificar el cálculo de L1, L2 y operador. No existe todavía presupuesto exacto ni autorización para comprar ETH o desplegar.
+
+## Registro 2026-11-06 — cotización real RPC Base obtenida
+- Workflow `NVRA contracts validation` run **42289829058**, job **128140025951**, commit `e69c459fe9a5b403ee0d174a89e0a26c6da66916`, completado **success**, incluido paso `Quote Base Mainnet fees (read-only, non-blocking)` **success**. Los cuatro workflows del commit finalizaron en verde.
+- RPC Base Mainnet chain 8453, deployer nonce 0, tamaño serializado unsigned tx1 15.010 bytes; maxFeePerGas 0.011 gwei; gas deploy estimado RPC 3.085.815; gas initialize local 3.101.070; L1 fee deploy estimada 0.00000007579967954 ETH; L1 upper bound deploy 0.00000013902368518 ETH; operator fees estimadas 0 ETH; **presupuesto provisional ambas tx con buffers = 0.00008875049737036 ETH**.
+- Comparación: 0.002 ETH / presupuesto provisional ≈22.5 veces. 0.002 ETH es **reserva sugerida**, no gasto ni coste fijo; excluir comisiones exchange/puente y no prometer precio de adquisición. L1 de segunda tx aproximada con upper bound de primera; requerirá recotización al desplegar.
+- Próximo paso: seleccionar y verificar interfaz MetaMask móvil para firmar tx1 creación contrato, recotizar antes de cada firma, validar bytecode y parámetros, obtener autorización explícita antes de gastar. No hay transacciones on-chain.
