@@ -75,3 +75,9 @@ Al terminar cada ejecución, mostrar: fase actual, completado en esa ejecución,
 - Archivo `.github/workflows/nvra-safe-readonly-discovery.yml` creado en rama predeterminada, commit `dec4c31bf0bf61e150ca9ca2d5df9f19268e5080`. Hace checkout explícito de `feat/phase4-create2-vesting-integration` sin persistir credenciales y ejecuta consultas de solo lectura.
 - PR #93 sin fusionar, sin contratos desplegados, sin transacciones. El flujo no se ha ejecutado ni se ha confirmado todavía que aparezca en la UI.
 - Siguiente: abrir Actions, localizar `NVRA Base Safe read-only discovery`, ejecutarlo manualmente, revisar logs y cotejar hashes con referencias oficiales.
+
+## Registro 2026-11-06 — primera ejecución real de Safe discovery
+- Usuario mostró capturas del workflow manual `NVRA Base Safe read-only discovery #1`, exitoso (27 s total; job 21 s), en `main` commit `dec4c31`.
+- Salida visible: `mode=READ_ONLY_DISCOVERY_NOT_ATTESTATION`, `chainId=8453`, bloque `53884969`, Safe `0xdbB84E6279F56EcF39E35F56a5A259DFD026E7fd`, `VERSION()=1.5.0`, threshold=2, owners coincidentes con las tres direcciones previstas, módulos vacíos, singleton `0xEdd160fEBBD92E350D4D398fb636302fccd67C7e` (Safe L2 1.5.0).
+- La captura corta el valor completo de guard y no muestra fallback ni codehashes. Aunque el job terminó verde, falta guardar/inspeccionar el registro completo y contrastar hashes contra referencias oficiales. No se declara auditoría ni attestation independiente.
+- Siguiente: solicitar captura de parte inferior del mismo log (guard, fallback, codehashes, mensaje final) y verificar hashes. No hay autorización de despliegue.
