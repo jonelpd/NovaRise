@@ -98,3 +98,10 @@ Al terminar cada ejecución, mostrar: fase actual, completado en esa ejecución,
 - `contracts/hardhat.config.cjs` tiene `accounts: []` en Base; **no existe firmante configurado ni despliegue posible desde el conector actual**. El script `simulate-deployment.cjs` es legado, usa `NVRAToken` con 100 millones y **NO es apto para NVRA de 1 millón**; no ejecutarlo como despliegue final.
 - Preparar procedimiento de despliegue final con firma desde cartera bajo control del usuario, gas ETH en Base, validación de parámetros de constructor y captura de tx hash/contrato. Nunca pedir claves privadas/frases semilla en chat. Se requiere autorización para cada transacción concreta y explicación de riesgos de omitir auditoría/legal.
 - Estado actual: **sin despliegue**. Siguiente: preparar scripts de despliegue controlados y revisarlos en simulación local; después solicitar firma del usuario en cartera, sin transmitir secretos.
+
+## Registro 2026-11-06 — medición de gas de lanzamiento
+- Usuario confirma MetaMask móvil con Base disponible, saldo cripto cero. **No comprar ETH todavía** sin estimación de ejecución y L1 data fees.
+- Cuatro CI de `e111633` confirmados exitosos.
+- Añadido `contracts/scripts/estimate-atomic-launch-gas.cjs`, que mide gas local de despliegue de fábrica y llamada `initialize()`; verifica suministro 1M y vesting 150k. Emplea código Safe ficticio **solo local** para satisfacer `code.length`; no simula comportamiento real del Safe.
+- Script todavía sin ejecución ni resultados de gas verificados. Ejecución: `cd contracts && npm ci && npx hardhat run scripts/estimate-atomic-launch-gas.cjs --network hardhat`.
+- Antes de compra, obtener gas usado de ambas transacciones, tarifas Base recientes, coste L1 de datos, colchón y comisiones de adquisición de ETH. Nunca solicitar frase semilla.
