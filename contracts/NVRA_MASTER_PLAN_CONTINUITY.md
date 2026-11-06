@@ -135,3 +135,8 @@ Al terminar cada ejecución, mostrar: fase actual, completado en esa ejecución,
 - Se detectó y corrigió fallo de prueba en CI (`decodeDeploy` no existe en ethers v6); ahora se usa `AbiCoder.defaultAbiCoder().decode` para argumentos de constructor.
 - Script `prepare-base-unsigned-launch.cjs` acepta `deployer_eoa_address` como primer argumento, inicio opcional por defecto al umbral fijo. La prueba usa dirección MetaMask confirmada y comprueba umbral.
 - Último commit de cambios `81a4aa9590f3420181f874207838e41b6110336a`. CI pendiente. No se ha enviado ni firmado transacción. Pendiente L1 fee y método seguro de firma en MetaMask móvil.
+
+## Registro 2026-11-06 — CI verde y guía firma móvil
+- Commit `ac97dd5e6f1cf421267e09a4184a5900e2dc4162`: 4/4 workflows GitHub Actions verdes.
+- Creada guía `contracts/BASE_MAINNET_MOBILE_METAMASK_LAUNCH_RUNBOOK.md` commit `51b64b015624812bafdc32819034553b442528e1`, con EOA confirmada, Safe, umbral de fecha, pasos de firma separada, verificaciones de recibos y prohibición de secretos.
+- Todavía **no** hay método de firma móvil comprobado ni cotización completa de L1 data fees; no se ha solicitado compra de ETH ni enviado transacción. Próximo paso: elegir un método fiable de interacción con MetaMask móvil y estimar gas L1 antes de financiar.
