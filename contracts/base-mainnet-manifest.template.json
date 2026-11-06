@@ -58,13 +58,15 @@
     "effectiveStartSource": "NVRAAtomicImmutableVestingFactoryDraft.actualVestingStart, verified against the successful initialize transaction block timestamp",
     "surplusPolicy": "OPTION_A_BOUNDED_RECOVERY_DESIGN_PENDING_AUDIT",
     "surplusRecoveryDesign": {
-      "status": "PROPOSED_NOT_IMPLEMENTED",
+      "status": "PROTOTYPE_ADDED_TESTS_PENDING_CI_NOT_FACTORY_INTEGRATED",
       "authorizedCaller": "approved Safe 2-of-3 controller only",
       "recipient": "same approved Safe controller only",
       "maximumRecoverable": "max(0, tokenBalance - (150000e18 - released))",
       "teamEntitlementUnchanged": true,
       "cliffAndLinearScheduleUnchanged": true,
-      "requiresTestsAndIndependentReview": true
+      "requiresTestsAndIndependentReview": true,
+      "contract": "contracts/src/NVRABoundedSurplusVestingDraft.sol",
+      "tests": "contracts/test/bounded-surplus-vesting.test.cjs"
     }
   },
   "deployment": {
