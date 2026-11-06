@@ -1,7 +1,7 @@
 "use strict";
 
 // Read-only Base Mainnet preflight; never deploys, signs, or sends a transaction.
-// Usage: BASE_RPC_URL=https://... SAFE_ADDRESS=0x... SAFE_OWNERS=0x...,0x...,0x...,0x...,0x... node contracts/scripts/check-safe-2of3.cjs
+// Usage: BASE_RPC_URL=https://... SAFE_ADDRESS=0x... SAFE_OWNERS=0x...,0x...,0x... node contracts/scripts/check-safe-2of3.cjs
 const { ethers } = require("ethers");
 
 async function checkSafe({ provider, safeAddress, expectedOwners, expectedSingleton, expectedFallbackHandler }) {
@@ -26,7 +26,7 @@ async function checkSafe({ provider, safeAddress, expectedOwners, expectedSingle
   const [threshold, owners, version] = await Promise.all([
     safe.getThreshold(), safe.getOwners(), safe.VERSION()
   ]);
-  if (threshold !== 3n || owners.length !== 3) throw new Error("Safe threshold/owner count mismatch");
+  if (threshold !== 2n || owners.length !== 3) throw new Error("Safe threshold/owner count mismatch");
   const actual = owners.map(a => ethers.getAddress(a)).sort();
   if (actual.join(",") !== [...normalized].sort().join(",")) throw new Error("Safe owner identities mismatch");
   // Safe 1.4.x exposes getStorageAt through compatibility handler in some deployments.
