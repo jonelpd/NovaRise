@@ -48,3 +48,10 @@ The research vesting now uses a constant `TEAM_ALLOCATION = 150_000 ether` rathe
 
 ## CI evidence and next security gates
 As of commit `838b800`, the three GitHub workflows succeeded after updating the fixed-entitlement regression tests. This is automated testing, not an independent audit. Remaining gates: independently verify actual Safe owners, proxy bytecode and singleton codehash; add positive/negative storage-layout verification tests for the read-only Safe preflight; pin a deployment manifest; audit and approve the surplus policy; obtain explicit deployment authorization. No deployment has taken place.
+
+## Mainnet launch path — scope freeze (2026-11-06)
+Operator requested to stop repetitive manual BaseScan code inspection and prioritize creation of NVRA on Base Mainnet. Safe 2-of-3 at `0xdbB84E6279F56EcF39E35F56a5A259DFD026E7fd` has UI evidence for owners, threshold, no modules and no guard. The updated `check-safe-2of3.cjs` test suite is green as of commit `921d2e7`; **production RPC attestation remains incomplete**.
+
+**Minimum sequence (no further manual BaseScan walkthroughs):** (1) freeze final allocations, vesting beneficiary/schedule and surplus policy; (2) automate independent read-only Safe/bytecode/chain checks and run full contract CI; (3) obtain external security/legal sign-off or explicitly record launch blockers; (4) prepare a deterministic deployment transaction with verified addresses and a bounded fee; (5) request explicit authorization for the exact irreversible Base Mainnet transaction. Do not deploy, fund, merge draft contracts or imply production readiness before gates are satisfied.
+
+The prior 3-of-5 examples in this historical review are superseded by the approved 2-of-3 policy and `check-safe-2of3.cjs`. Avoid presenting the older command as the current deployment procedure.
