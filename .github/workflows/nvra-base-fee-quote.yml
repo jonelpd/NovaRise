@@ -1,5 +1,7 @@
 name: NVRA Base launch read-only fee quote
 on:
+  pull_request:
+    branches: [main]
   push:
     branches: [feat/phase4-create2-vesting-integration]
     paths:
