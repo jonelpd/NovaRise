@@ -111,3 +111,10 @@ Al terminar cada ejecución, mostrar: fase actual, completado en esa ejecución,
 - Commit `ddc732e3893a86500adcfd341c178606117491a1`: CI al último control: estáticas verde, tres flujos aún en progreso; **no se han obtenido ni validado cifras de gas todavía**.
 - Próximo paso: esperar CI, extraer `NVRA_LOCAL_GAS_REPORT` del job, contrastar tarifas de Base y L1 data fees; solo entonces recomendar importe de ETH para MetaMask.
 - Sin fondos ni despliegue; el usuario tiene MetaMask con Base, saldo cero.
+
+## Registro 2026-11-06 — resultado de gas confirmado
+- CI de commit `9d4cc054de7889d9804f41e5f30bbbc970f127df`: 4/4 workflows verdes.
+- En logs de jobs `127893988453` y `127894059609` aparece el mismo `NVRA_LOCAL_GAS_REPORT`: despliegue fábrica 3,060,359 gas; initialize 3,101,070 gas; total 6,161,429 gas; con colchón 30% 8,009,857 gas.
+- Referencia pública Base 2026-11-06: 0.0062 gwei, solo ejecución: 8,009,857 * 0.0062 gwei = 0.0000496611134 ETH (~USD 0.11 si ETH ~USD 2,230). No es precio vinculante.
+- **Pendiente** estimación exacta de Base L1 data fee por bytecode de factory (transacción grande), variación de gas y comisiones de compra/retiro. No recomendar comprar un importe exacto ni desplegar hasta cotejar total en wallet. Saldo usuario cero, MetaMask Base instalada.
+- Siguiente paso: construir transacciones sin firmar para cotizar con wallet/Base RPC, preservando la identidad del inicializador entre ambas operaciones; nunca solicitar secretos.
