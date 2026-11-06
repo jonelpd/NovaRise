@@ -53,3 +53,12 @@ El catálogo `safe-global/safe-eth-py` enumera estos singleton en Base; son **ca
 - Safe L2 1.5.0: `0xEdd160fEBBD92E350D4D398fb636302fccd67C7e`
 Fuente: https://github.com/safe-global/safe-eth-py/blob/main/safe_eth/safe/addresses.py y registro https://github.com/safe-global/safe-deployments .
 **No seleccionar uno arbitrariamente.** Primero leer el singleton del proxy y contrastar versión y runtime bytecode. Si el proxy usa otra versión o un singleton no registrado, detener el proceso y revisar.
+
+## Ejecución manual del descubrimiento desde GitHub Actions
+1. Abrir el repositorio privado en GitHub, pestaña **Actions**.
+2. Buscar **NVRA Base Safe read-only discovery**. Si el flujo no aparece, comprobar si GitHub exige que el archivo de workflow exista en la rama predeterminada antes de permitir `workflow_dispatch`; **no fusionar PR #93 solo para habilitarlo sin autorización**.
+3. Si está disponible, elegir **Run workflow**, seleccionar `feat/phase4-create2-vesting-integration` y confirmar. El job solo consulta `https://mainnet.base.org` y no firma ni transmite transacciones.
+4. Revisar logs y conservar `chainId`, `block`, `version`, `threshold`, `owners`, `singleton`, `fallback`, `guard`, `modules` y `codehashes`. Si falla, no declarar verificado.
+5. Contrastar singleton y hashes con `safe-global/safe-deployments` antes de marcar autenticación. Si no está disponible el workflow, ejecutar localmente `BASE_MAINNET_RPC_URL=https://mainnet.base.org node contracts/scripts/discover-base-safe-readonly.cjs` desde un entorno con dependencias instaladas y red funcional.
+
+**Advertencia:** el script de descubrimiento valida configuración básica y calcula hashes observados, pero todavía no compara esos hashes con valores de referencia aprobados. No es auditoría ni aprobación de despliegue.
