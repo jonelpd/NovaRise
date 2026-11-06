@@ -2,7 +2,7 @@
 "use strict";
 /**
  * Prepare UNSIGNED Base Mainnet deployment payloads. No RPC calls, wallet or secrets.
- * Usage: node scripts/prepare-base-unsigned-launch.cjs <start_unix_seconds> <deployer_eoa_address>
+ * Usage: node scripts/prepare-base-unsigned-launch.cjs <deployer_eoa_address> [start_unix_seconds]
  * The deployer EOA must sign both transactions. Tx 2 'to' is unknown until tx 1 is mined.
  * DO NOT broadcast automatically or treat the payload as audited.
  */
@@ -13,10 +13,11 @@ const SAFE = "0xdbB84E6279F56EcF39E35F56a5A259DFD026E7fd";
 const BENEFICIARY = "0x89316a3553Da9315a720e25915d731AfD11d0B16";
 const DAY = 86400;
 const artifact = JSON.parse(fs.readFileSync(path.join(__dirname, "../artifacts/src/NVRAAtomicImmutableVestingFactoryDraft.sol/NVRAAtomicImmutableVestingFactoryDraft.json"), "utf8"));
-const [startArg, deployerArg] = process.argv.slice(2);
+const [deployerArg, startArg = "1793923200"] = process.argv.slice(2);
+// Fixed earliest date: 2026-11-06 00:00 UTC, already elapsed. Vesting starts only on successful initialize().
 const start = Number(startArg);
 if (!Number.isSafeInteger(start) || start <= 0 || !deployerArg || !ethers.isAddress(deployerArg)) {
-  console.error("Usage: node scripts/prepare-base-unsigned-launch.cjs <start_unix_seconds> <deployer_eoa_address>");
+  console.error("Usage: node scripts/prepare-base-unsigned-launch.cjs <deployer_eoa_address> [start_unix_seconds]");
   process.exit(1);
 }
 const deployer = ethers.getAddress(deployerArg);
