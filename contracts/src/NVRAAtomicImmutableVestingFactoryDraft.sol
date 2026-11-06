@@ -4,7 +4,7 @@ pragma solidity ^0.8.24;
 import {NVRAFactoryBoundVaultDraft} from "./NVRAFactoryBoundVaultDraft.sol";
 import {NVRATeamPrefundEscrowDraft} from "./NVRATeamPrefundEscrowDraft.sol";
 import {NVRAAtomicAllocationCandidate} from "./NVRAAtomicAllocationCandidate.sol";
-import {NVRAImmutableBeneficiaryVestingDraft} from "./NVRAImmutableBeneficiaryVestingDraft.sol";
+import {NVRABoundedSurplusVestingDraft} from "./NVRABoundedSurplusVestingDraft.sol";
 
 /**
  * @notice UNDEPLOYED local-only research: CREATE2 vaults, token, immutable
@@ -62,11 +62,12 @@ contract NVRAAtomicImmutableVestingFactoryDraft {
             vaults[i] = recipients[i];
         }
         tokenAddress = address(new NVRAAtomicAllocationCandidate(recipients));
-        vestingAddress = address(new NVRAImmutableBeneficiaryVestingDraft(
-            tokenAddress, beneficiary, uint64(block.timestamp), cliffDuration, linearDuration
+        vestingAddress = address(new NVRABoundedSurplusVestingDraft(
+            tokenAddress, beneficiary, controller, uint64(block.timestamp), cliffDuration, linearDuration
         ));
-        require(NVRAImmutableBeneficiaryVestingDraft(vestingAddress).beneficiary() == beneficiary, "NVRA: beneficiary mismatch");
-        require(address(NVRAImmutableBeneficiaryVestingDraft(vestingAddress).token()) == tokenAddress, "NVRA: token mismatch");
+        require(NVRABoundedSurplusVestingDraft(vestingAddress).beneficiary() == beneficiary, "NVRA: beneficiary mismatch");
+        require(address(NVRABoundedSurplusVestingDraft(vestingAddress).token()) == tokenAddress, "NVRA: token mismatch");
+        require(NVRABoundedSurplusVestingDraft(vestingAddress).controller() == controller, "NVRA: controller mismatch");
         token = tokenAddress;
         vesting = vestingAddress;
         actualVestingStart = uint64(block.timestamp);
