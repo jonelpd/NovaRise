@@ -86,7 +86,7 @@ jobs:
           print(f"PUBLISHED: Telegram accepted the post for {today}; message_id={data['result']['message_id']}.")
           PY
       - name: Record successful publication to prevent reruns
-        if: ${{ github.event_name == 'schedule' && steps.published.outputs.cache-hit != 'true' && success() }}
+        if: ${{ github.event_name == 'schedule' && steps.published.outputs.cache-hit != 'true' && hashFiles('.telegram-published/receipt.json') != '' && success() }}
         uses: actions/cache/save@v4
         with:
           path: .telegram-published
