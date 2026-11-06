@@ -63,3 +63,9 @@ Al terminar cada ejecución, mostrar: fase actual, completado en esa ejecución,
 - Añadido script `contracts/scripts/discover-base-safe-readonly.cjs`: lee chainId, bloque, owners, threshold, version, módulos, guard, singleton, fallback y hashes runtime (solo lectura). Los hashes observados NO equivalen a comparación con referencias independientes.
 - Añadido workflow manual `.github/workflows/nvra-safe-readonly-discovery.yml` para ejecución desde GitHub Actions; **NO se ha ejecutado** y no debe confundirse con CI de tests.
 - Siguiente: confirmar CI del HEAD, ejecutar workflow de descubrimiento read-only cuando esté disponible y evaluar resultados, luego contrastar hashes con artefactos oficiales. Sin transacciones ni autorización de despliegue.
+
+## Registro 2026-11-06 — CI de Safe discovery
+- Commit `eb90962` comprobado: cuatro GitHub Actions exitosas.
+- El conector GitHub disponible permite consultar resultados pero no lanzar `workflow_dispatch`; flujo manual de descubrimiento **no ejecutado**.
+- Procedimiento manual y alternativa de ejecución local documentados en `BASE_MAINNET_SAFE_VERIFICATION_RUNBOOK.md`. Puede ser necesario que GitHub reconozca el workflow desde la rama predeterminada; no fusionar PR para habilitarlo sin permiso.
+- Próximo paso: ejecutar descubrimiento read-only en entorno con red, verificar resultados y comparar hashes contra artefactos independientes; auditoría y revisión legal después. Sin despliegues.
