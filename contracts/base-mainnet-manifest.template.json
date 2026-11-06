@@ -51,7 +51,9 @@
     "beneficiaryApprovedDate": "2026-11-06",
     "startPolicy": "Start at actual successful Base Mainnet vesting deployment with atomic prefunding of exactly 150000 NVRA; timestamp to be recorded from confirmed on-chain deployment; no predeployment clock start",
     "startPolicyApproved": true,
-    "startPolicyApprovedDate": "2026-11-06"
+    "startPolicyApprovedDate": "2026-11-06",
+    "targetLaunchDateUTC": "2026-11-06",
+    "startDateNote": "2026-11-06 is target date only. Do not backdate; effective start requires successful atomic deployment/prefund. Factory currently requires future start and must be adapted/tested before mainnet."
   },
   "deployment": {
     "frozenCommit": null,
