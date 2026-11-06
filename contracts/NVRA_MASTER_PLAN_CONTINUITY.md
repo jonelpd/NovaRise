@@ -176,3 +176,9 @@ Al terminar cada ejecución, mostrar: fase actual, completado en esa ejecución,
 - Configuración Hardhat confirmada: Solidity **0.8.24**, optimizer **200 runs** para contrato principal. Remix debe reproducir configuración y bytecode; no asumir equivalencia por compilar.
 - Cotización CI válida: **0.00008875049737036 ETH** provisional para ambas tx; **0.002 ETH** reserva propuesta, no coste exacto. No incluye adquisición/puente ni cambios futuros de tarifa.
 - Pendiente validar que Remix móvil resuelve imports y produce bytecode idéntico, conectar MetaMask sin firmar, recotizar. Ninguna firma ni transacción efectuada.
+
+## Registro 2026-11-06 — plan maestro integral y coherencia web bilingüe
+- Nuevo documento consolidado: `contracts/NVRA_PLAN_MAESTRO_INTEGRAL_2026-11-06.md`, commit `1ed6625b9ab6a35a6905c4ec78a43270b1a56c29`. Contiene decisiones vigentes, logros, riesgos, backlog P0-P3 y secuencia de despliegue desde ordenador.
+- Detectadas discrepancias en páginas públicas existentes (distribución antigua 30/25/20/15/10 con categorías obsoletas y Safe 3-de-5). Corregidas en rama experimental `tokenomics.html`, `tokenomics-en.html`, `libro-blanco.html`, `whitepaper-en.html`, `index.html`, `en.html`: cinco asignaciones vigentes, Safe 2-de-3, estado **no lanzado**, historial editorial 2026-11-06.
+- No se han modificado enlaces de navegación para dirigir visitantes a GitHub. Cambios **solo en rama experimental**, NO publicados en rama principal. PR #93 sigue borrador; no fusionar sin autorización. Antes de publicar la web, revisar y promover los cambios de contenido por vía independiente del PR de contratos.
+- El usuario pospuso la interacción con Remix hasta estar ante un ordenador. Próxima sesión: validar bytecode, conectar MetaMask, recotizar y decidir firma con autorización explícita. No hay token on-chain.
