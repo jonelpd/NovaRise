@@ -88,3 +88,12 @@ En la página principal se unificó validGame para carga local, importación v10
 3. Importar una partida v10 válida y una con valores fuera de límites; confirmar que la inválida se rechaza.
 4. Restaurar una partida desde la nube y comprobar la copia local de seguridad previa.
 5. Repetir en móvil y escritorio con cuentas de prueba y sin afectar campañas reales.
+
+## Quinta revisión — 2026-11-06: automatización de regresiones
+
+- Se adaptó tests/p0-import.test.cjs para cargar el validador compartido validGame junto con validImport (commit eff8963).
+- Se adaptó tests/p0-cloud-restore-main.test.cjs a realmConfirm asíncrono (commit 7a140e7).
+- Se añadió .github/workflows/game-regression.yml para ejecutar node --test tests/p0-*.test.cjs en push y pull requests relevantes (commit e83392f).
+- Se añadió tests/p0-local-save-integrity.test.cjs para comprobar conservación del JSON inválido y restauración de partida válida en ambas páginas (commit 916597d).
+
+**Limitación:** el flujo está configurado, pero no se han obtenido ni revisado registros de ejecución; no se puede afirmar que las pruebas hayan pasado. Próximo paso: inspeccionar los resultados de GitHub Actions, corregir cualquier fallo, y realizar pruebas manuales de nube, combate y visualización.
