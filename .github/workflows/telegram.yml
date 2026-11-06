@@ -14,6 +14,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Validate Telegram calendar
+        run: python3 telegram/validate_posts.py
       - name: Determine Madrid publication date
         id: date
         run: echo "today=$(TZ=Europe/Madrid date +%F)" >> "$GITHUB_OUTPUT"
