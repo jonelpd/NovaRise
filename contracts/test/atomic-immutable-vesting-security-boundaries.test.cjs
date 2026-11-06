@@ -10,6 +10,7 @@ describe("NVRA immutable CREATE2 factory security boundaries", () => {
     const now = (await ethers.provider.getBlock("latest")).timestamp;
     const Factory = await ethers.getContractFactory("NVRAAtomicImmutableVestingFactoryDraft");
     const factory = await Factory.deploy(await controller.getAddress(), beneficiary.address, now + 3600, 86400, 259200);
+    await ethers.provider.send("evm_setNextBlockTimestamp", [now + 3600]);
     await factory.initialize();
     const token = await ethers.getContractAt("NVRAAtomicAllocationCandidate", await factory.token());
     const vesting = await ethers.getContractAt("NVRAImmutableBeneficiaryVestingDraft", await factory.vesting());
