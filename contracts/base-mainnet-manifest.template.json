@@ -53,7 +53,9 @@
     "startPolicyApproved": true,
     "startPolicyApprovedDate": "2026-11-06",
     "targetLaunchDateUTC": "2026-11-06",
-    "startDateNote": "2026-11-06 is target date only. Do not backdate; effective start requires successful atomic deployment/prefund. Factory currently requires future start and must be adapted/tested before mainnet."
+    "startDateNote": "2026-11-06 was the target launch date only. Factory start is the earliest permitted initialization timestamp, not the effective vesting start. Actual vesting starts at block.timestamp of successful atomic initialization and prefunding; never backdate.",
+    "earliestInitializationUnix": null,
+    "effectiveStartSource": "NVRAAtomicImmutableVestingFactoryDraft.actualVestingStart, verified against the successful initialize transaction block timestamp"
   },
   "deployment": {
     "frozenCommit": null,
@@ -62,6 +64,7 @@
     "factoryCreationCodehash": null,
     "independentSecurityReviewApproved": false,
     "legalReviewApproved": false,
-    "explicitDeploymentApproval": false
+    "explicitDeploymentApproval": false,
+    "validationStatus": "Four GitHub Actions workflows passed on commit ccdb56399e8955395ae101932a6890c1a940dfa9; this does not constitute an independent audit."
   }
 }
