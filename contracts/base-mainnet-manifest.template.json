@@ -39,14 +39,16 @@
     "expectedFallbackRuntimeCodehash": null
   },
   "vesting": {
-    "beneficiary": null,
+    "beneficiary": "0x89316a3553Da9315a720e25915d731AfD11d0B16",
     "startUnix": null,
     "cliffSeconds": 31536000,
     "linearSeconds": 94608000,
     "surplusPolicyAccepted": false,
     "schedulePolicy": "12-month cliff followed by 36-month linear release; 365-day years, subject to contract schedule implementation",
     "scheduleApproved": true,
-    "scheduleApprovedDate": "2026-11-06"
+    "scheduleApprovedDate": "2026-11-06",
+    "beneficiaryApproved": true,
+    "beneficiaryApprovedDate": "2026-11-06"
   },
   "deployment": {
     "frozenCommit": null,
