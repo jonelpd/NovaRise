@@ -66,3 +66,9 @@ No deployment, signature, fund transfer, contract merge or mainnet call is autho
 
 ## Governance change — 2026-11-05
 The project owner approved a Safe **2-of-3**, with all three independently secured signing keys controlled by one person. This is key-level redundancy, **not** multi-person governance. Do not reuse a single seed phrase across the three signers. The current `check-safe-3of5.cjs` preflight still enforces 3-of-5 and **must be replaced or adapted and retested before deployment**. No Safe has been created or verified. No on-chain deployment authorized.
+
+## Safe evidence from operator screenshots (2026-11-06)
+- Safe proxy: `0xdbB84E6279F56EcF39E35F56a5A259DFD026E7fd` on Base Mainnet.
+- Owners shown by BaseScan and Safe setup UI: `0x89316a3553Da9315a720e25915d731AfD11d0B16`, `0xe697351daE40E770769B35852C1e05737015b6B7`, `0x5927b6f05c4CdD16Cce6Cc429650c0b767137245`.
+- Safe UI shows **2 out of 3** required confirmations; BaseScan identifies address as a Safe smart contract. Evidence is screenshots, **not** an independent read-only RPC attestation.
+- **Still pending:** singleton/fallback codehashes, guard, modules, independent RPC preflight, owner key isolation, deployment approval. Do not fund or deploy based solely on screenshots.
