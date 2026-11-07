@@ -134,3 +134,35 @@ No reutilizar la distribución anterior «30 % ecosistema, 25 % tesorería, 20 %
 
 ### Separación de ramas
 Los archivos de web pública se actualizaron directamente en `main` sin fusionar PR #93 ni introducir enlaces públicos a GitHub. La rama experimental `feat/phase4-create2-vesting-integration` conserva el desarrollo de contratos; este plan maestro permanece en ella. No confundir publicación de contenidos con validación técnica de contratos.
+
+
+## 9. Nueva meta estratégica — Educación digital inclusiva (2026-11-07)
+
+**Decisión:** incorporar al ecosistema NovaRise una línea de **juegos y aplicaciones didácticas para niños y personas con discapacidad**. El objetivo es accesibilidad, aprendizaje y autonomía, no especulación con NVRA. Esta línea se suma a Reinos de Leyenda, analítica y otras aplicaciones; no modifica el suministro fijo de 1.000.000 NVRA ni la distribución ya ejecutada.
+
+### Cartera inicial de productos (propuesta; no implementados)
+1. **Aprende jugando:** alfabetización, lectura, escritura y matemáticas con dificultad graduable.
+2. **Comunica y descubre:** vocabulario, pictogramas, instrucciones visuales y apoyos multimodales adaptables.
+3. **Mi día a día:** rutinas, orientación temporal, habilidades prácticas y autonomía.
+4. **Entrena tu mente:** memoria, atención y resolución de problemas sin clasificaciones competitivas ni presión de tiempo obligatoria.
+
+### Requisitos transversales
+- Diseño universal y personalización; personas con discapacidad no forman un grupo homogéneo.
+- Objetivo WCAG 2.2 AA donde resulte aplicable; navegación por teclado, lector de pantalla, subtítulos, textos alternativos, contraste, tamaño de letra, lenguaje claro, controles de movimiento/sonido.
+- Codiseño y validación con educadores, terapeutas cuando proceda, familias y personas con discapacidad; evaluar eficacia didáctica sin hacer afirmaciones terapéuticas no demostradas.
+- Privacidad y seguridad de menores: minimizar datos, evitar perfiles públicos, publicidad financiera, seguimiento invasivo y compras dentro de los módulos infantiles. Revisar RGPD, protección de menores y consentimiento antes del piloto.
+- **Separación obligatoria:** acceso educativo infantil sin comprar NVRA, conectar carteras, firmar transacciones, recibir recompensas tokenizadas o participar en mercados. Utilidad opcional futura de NVRA para adultos/instituciones sujeta a revisión legal y técnica, sin barreras de acceso educativo.
+
+### Hoja de ruta educativa
+| Fase | Entregable | Estado |
+|---|---|---|
+| E0 | Visión, cartera inicial, salvaguardas y documentación pública bilingüe | **Completado (2026-11-07)** |
+| E1 | Investigación de necesidades con usuarios y especialistas; requisitos y métricas | Pendiente |
+| E2 | Prototipo web accesible de alfabetización/matemáticas, sin wallet ni token | Pendiente |
+| E3 | Auditoría de accesibilidad, privacidad, usabilidad y revisión de contenido | Pendiente |
+| E4 | Piloto supervisado, recogida mínima de datos y evaluación de aprendizaje | Pendiente |
+| E5 | Extensión a comunicación, autonomía y apps móviles | Pendiente |
+
+**Integración con Reinos de Leyenda:** explorar posteriormente modos de aprendizaje opcionales y accesibles, sin cambiar su jugabilidad principal ni conectar recompensas reales hasta contar con diseño, seguridad y revisión regulatoria. No afirmar que exista minería NVRA funcional en el juego.
+
+**Publicación:** páginas `educacion-inclusiva.html` y `inclusive-education.html` en `main`, enlaces desde portada ES/EN y nueva sección en libro blanco bilingüe. El trabajo de producto y pruebas sigue pendiente.
