@@ -182,3 +182,13 @@ Al terminar cada ejecución, mostrar: fase actual, completado en esa ejecución,
 - Detectadas discrepancias en páginas públicas existentes (distribución antigua 30/25/20/15/10 con categorías obsoletas y Safe 3-de-5). Corregidas en rama experimental `tokenomics.html`, `tokenomics-en.html`, `libro-blanco.html`, `whitepaper-en.html`, `index.html`, `en.html`: cinco asignaciones vigentes, Safe 2-de-3, estado **no lanzado**, historial editorial 2026-11-06.
 - No se han modificado enlaces de navegación para dirigir visitantes a GitHub. Cambios **solo en rama experimental**, NO publicados en rama principal. PR #93 sigue borrador; no fusionar sin autorización. Antes de publicar la web, revisar y promover los cambios de contenido por vía independiente del PR de contratos.
 - El usuario pospuso la interacción con Remix hasta estar ante un ordenador. Próxima sesión: validar bytecode, conectar MetaMask, recotizar y decidir firma con autorización explícita. No hay token on-chain.
+
+
+## Registro 2026-11-07 — emisión NVRA confirmada y web actualizada
+- **HITO:** NVRA emitido en Base Mainnet (8453) mediante MetaMask + Remix; usuario mostró ejecución exitosa de `initialize()` y BaseScan identificó NovaRise Utility Token (NVRA), 18 decimales, **1.000.000 NVRA** y **5 holders**.
+- Dirección oficial token: `0xa1128B1F4CB8394c179eb2558608a7302972EcBF`; explorador: https://basescan.org/token/0xa1128B1F4CB8394c179eb2558608a7302972EcBF
+- Contrato fábrica `NVRAAtomicImmutableVestingFactoryDraft` desplegado; dirección abreviada vista en Remix `0xC45...3cE65`. Pendiente dirección completa, hashes de ambas transacciones, direcciones de vaults y vesting y cotejo de sus saldos.
+- Parámetros usados: Safe controlador `0xdbB84E6279F56EcF39E35F56a5A259DFD026E7fd`, beneficiary `0x89316a3553Da9315a720e25915d731AfD11d0B16`, start mínimo 1793923200, cliff 31536000, linear 94608000.
+- Distribución programada 300k juegos/minería/participación; 250k ecosistema/apps; 200k liquidez/expansión; 150k equipo vesting; 100k reserva. No asumir liquidez o minería operativa.
+- Web pública `main`: actualizados `index.html`, `en.html`, `libro-blanco.html`, `whitepaper-en.html`, `tokenomics.html`, `tokenomics-en.html` con dirección real y estado de emisión; sin fusionar PR #93.
+- Plan maestro integral actualizado en la rama experimental, con prioridades posteriores y riesgos pendientes. **No repetir despliegue ni inicialización.** Sin auditoría independiente, revisión legal definitiva ni precio de mercado establecido.
