@@ -3,7 +3,7 @@
 /**
  * Base mainnet read-only preflight. No signing, deployment or transactions.
  * Usage: BASE_MAINNET_RPC_URL=https://... npm run base:readiness
- * Optional: BASE_SAFE_ADDRESS=0x... to verify existing deployed Safe.
+ * Verifies the approved NovaRise Safe by default; no signing or funds transfer.
  */
 const assert = require("node:assert/strict");
 const { ethers } = require("ethers");
@@ -27,17 +27,19 @@ async function main() {
       tokenStatus: "NOT_DEPLOYED_BY_THIS_SCRIPT",
       explorer: "https://basescan.org"
     };
-    if (process.env.BASE_SAFE_ADDRESS) {
-      const address = process.env.BASE_SAFE_ADDRESS;
+    {
+      const address = "0xdbB84E6279F56EcF39E35F56a5A259DFD026E7fd";
       assert.ok(ethers.isAddress(address), "Invalid Safe address");
       assert.notEqual(await provider.getCode(address), "0x", "No contract at Safe address");
       const safe = new ethers.Contract(address, SAFE_ABI, provider);
       const [threshold, owners] = await Promise.all([safe.getThreshold(), safe.getOwners()]);
-      assert.equal(threshold, 3n, "Safe threshold must be 3");
-      assert.equal(owners.length, 5, "Safe must have 5 owners");
-      assert.equal(new Set(owners.map(x => x.toLowerCase())).size, 5, "Duplicate Safe owners");
-      result.safe = { address: ethers.getAddress(address), threshold: 3, owners };
-      result.safeNote = "Interface checks only; verify Safe proxy and singleton implementation independently";
+      assert.equal(threshold, 2n, "Safe threshold must be 2");
+      assert.equal(owners.length, 3, "Safe must have 3 owners");
+      assert.equal(new Set(owners.map(x => x.toLowerCase())).size, 3, "Duplicate Safe owners");
+      const expectedOwners = ["0x89316a3553Da9315a720e25915d731AfD11d0B16", "0xe697351daE40E770769B35852C1e05737015b6B7", "0x5927b6f05c4CdD16Cce6Cc429650c0b767137245"];
+      assert.deepEqual(owners.map(x => x.toLowerCase()).sort(), expectedOwners.map(x => x.toLowerCase()).sort(), "Unexpected Safe owners");
+      result.safe = { address: ethers.getAddress(address), threshold: 2, owners };
+      result.safeNote = "Read-only on-chain threshold/owners checks; bytecode and implementation attestation still required before deployment";
     }
     console.log(JSON.stringify(result, null, 2));
   } finally {

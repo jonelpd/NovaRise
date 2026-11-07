@@ -64,6 +64,8 @@ jobs:
         run: |
           test -f node_modules/@safe-global/safe-contracts/contracts/Safe.sol
           test ! -d safe-deps/node_modules
+      - name: Run read-only Safe preflight negative tests
+        run: npm run test:safe-preflight
       - name: Compile Solidity contracts
         run: npx hardhat compile
       - name: Run all local Hardhat tests

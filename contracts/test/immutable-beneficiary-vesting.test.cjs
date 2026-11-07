@@ -61,15 +61,16 @@ describe("NVRA immutable beneficiary vesting (local research only)", function ()
       .to.be.revertedWith("NVRA: schedule overflow");
   });
 
-  it("shows that late funding can unlock immediately, a remaining policy risk", async function () {
+  it("keeps late unsolicited funding outside the fixed team entitlement", async function () {
     const { beneficiary, treasury, token, vesting, amount, start, cliff, linear } = await setup();
     await ethers.provider.send("evm_setNextBlockTimestamp", [start + cliff + linear + 1]);
     await ethers.provider.send("evm_mine", []);
     await vesting.release();
     const extra = ethers.parseUnits("1", 18);
     await treasury.sendToken(await token.getAddress(), await vesting.getAddress(), extra);
-    expect(await vesting.releasable()).to.equal(extra);
-    await vesting.release();
-    expect(await token.balanceOf(beneficiary.address)).to.equal(amount + extra);
+    expect(await vesting.releasable()).to.equal(0n);
+    await expect(vesting.release()).to.be.revertedWith("NVRA: nothing releasable");
+    expect(await token.balanceOf(beneficiary.address)).to.equal(amount);
+    expect(await token.balanceOf(await vesting.getAddress())).to.equal(extra);
   });
 });

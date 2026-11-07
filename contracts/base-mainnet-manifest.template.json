@@ -1,0 +1,83 @@
+{
+  "_notice": "Public Safe and signer addresses and fallback handler supplied by user and Safe screenshots; not independently attested via Base RPC. No deployment authorization or private keys.",
+  "network": "base",
+  "chainId": 8453,
+  "token": {
+    "name": "NovaRise Utility Token",
+    "symbol": "NVRA",
+    "decimals": 18,
+    "totalSupply": "1000000",
+    "allocations": [
+      "300000",
+      "250000",
+      "200000",
+      "150000",
+      "100000"
+    ],
+    "allocationPurposes": [
+      "Game rewards, mining and participation",
+      "Ecosystem development and applications",
+      "Liquidity and project expansion",
+      "Founding team (vesting)",
+      "Strategic reserve"
+    ],
+    "allocationPolicyApproved": true,
+    "allocationPolicyApprovedDate": "2026-11-06"
+  },
+  "safe": {
+    "address": "0xdbB84E6279F56EcF39E35F56a5A259DFD026E7fd",
+    "owners": [
+      "0x89316a3553Da9315a720e25915d731AfD11d0B16",
+      "0xe697351daE40E770769B35852C1e05737015b6B7",
+      "0x5927b6f05c4CdD16Cce6Cc429650c0b767137245"
+    ],
+    "threshold": 2,
+    "singleton": null,
+    "fallbackHandler": "0x3EfCBb83A4A7AfcB4F68D501E2c2203a38be77f4",
+    "expectedProxyRuntimeCodehash": null,
+    "expectedSingletonRuntimeCodehash": null,
+    "expectedFallbackRuntimeCodehash": null
+  },
+  "vesting": {
+    "beneficiary": "0x89316a3553Da9315a720e25915d731AfD11d0B16",
+    "startUnix": null,
+    "cliffSeconds": 31536000,
+    "linearSeconds": 94608000,
+    "surplusPolicyAccepted": false,
+    "schedulePolicy": "12-month cliff followed by 36-month linear release; 365-day years, subject to contract schedule implementation",
+    "scheduleApproved": true,
+    "scheduleApprovedDate": "2026-11-06",
+    "beneficiaryApproved": true,
+    "beneficiaryApprovedDate": "2026-11-06",
+    "startPolicy": "Start at actual successful Base Mainnet vesting deployment with atomic prefunding of exactly 150000 NVRA; timestamp to be recorded from confirmed on-chain deployment; no predeployment clock start",
+    "startPolicyApproved": true,
+    "startPolicyApprovedDate": "2026-11-06",
+    "targetLaunchDateUTC": "2026-11-06",
+    "startDateNote": "2026-11-06 was the target launch date only. Factory start is the earliest permitted initialization timestamp, not the effective vesting start. Actual vesting starts at block.timestamp of successful atomic initialization and prefunding; never backdate.",
+    "earliestInitializationUnix": null,
+    "effectiveStartSource": "NVRAAtomicImmutableVestingFactoryDraft.actualVestingStart, verified against the successful initialize transaction block timestamp",
+    "surplusPolicy": "OPTION_A_BOUNDED_RECOVERY_DESIGN_PENDING_AUDIT",
+    "surplusRecoveryDesign": {
+      "status": "FACTORY_INTEGRATED_LOCAL_CI_PASSED_INDEPENDENT_AUDIT_PENDING",
+      "authorizedCaller": "approved Safe 2-of-3 controller only",
+      "recipient": "same approved Safe controller only",
+      "maximumRecoverable": "max(0, tokenBalance - (150000e18 - released))",
+      "teamEntitlementUnchanged": true,
+      "cliffAndLinearScheduleUnchanged": true,
+      "requiresTestsAndIndependentReview": true,
+      "contract": "contracts/src/NVRABoundedSurplusVestingDraft.sol",
+      "tests": "contracts/test/bounded-surplus-vesting.test.cjs",
+      "integrationTest": "contracts/test/atomic-bounded-surplus-integration.test.cjs"
+    }
+  },
+  "deployment": {
+    "frozenCommit": null,
+    "factoryDeployer": null,
+    "factoryAddress": null,
+    "factoryCreationCodehash": null,
+    "independentSecurityReviewApproved": false,
+    "legalReviewApproved": false,
+    "explicitDeploymentApproval": false,
+    "validationStatus": "Four GitHub Actions workflows passed at commit 7caa08dd457550785f2d10590ecd04c9112142d1 (local automated tests only; no independent audit or live Safe attestation)."
+  }
+}
