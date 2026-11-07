@@ -1,5 +1,5 @@
 # NOVARISE NVRA — PLAN MAESTRO INTEGRAL
-**Corte:** 6 de noviembre de 2026 · **Estado:** preparación del lanzamiento, sin token NVRA desplegado · **Versión:** 1.0
+**Corte:** 7 de noviembre de 2026 · **Estado:** NVRA emitido en Base Mainnet; utilidades y verificaciones posteriores pendientes · **Versión:** 1.1
 
 > Documento de gestión del proyecto, no promesa de rentabilidad, oferta pública ni informe de auditoría. Los contratos siguen siendo candidatos (Draft/Candidate) y la rama es experimental. Este documento consolida las decisiones vigentes; las anotaciones históricas en `NVRA_MASTER_PLAN_CONTINUITY.md` pueden contener datos anteriores ya sustituidos.
 
@@ -104,3 +104,33 @@ No reutilizar la distribución anterior «30 % ecosistema, 25 % tesorería, 20 %
 - Última cotización comprobada: workflow 42289829058, job 128140025951, commit e69c459.
 - Referencia de continuidad histórica: `contracts/NVRA_MASTER_PLAN_CONTINUITY.md`.
 - La web pública puede seguir mostrando información anterior mientras estos cambios permanezcan en una rama no integrada.
+
+
+## 8. Hito de producción — 7 de noviembre de 2026 (actualización)
+
+**Estado: emisión confirmada en capturas de Remix y BaseScan facilitadas por el usuario.** Este registro actualiza los estados históricos de preparación anteriores; no los elimina.
+
+- Red: **Base Mainnet (8453)**; token ERC-20 **NovaRise Utility Token (NVRA)**, **18 decimales**.
+- **Contrato del token:** `0xa1128B1F4CB8394c179eb2558608a7302972EcBF` — https://basescan.org/token/0xa1128B1F4CB8394c179eb2558608a7302972EcBF
+- **Suministro visible en BaseScan:** **1.000.000 NVRA**; **5 holders** iniciales. No se observa precio de mercado establecido ni liquidez pública en la captura.
+- Remix conectado mediante MetaMask a EOA `0x89316a3553Da9315a720e25915d731AfD11d0B16`. Contrato de fábrica `NVRAAtomicImmutableVestingFactoryDraft` desplegado en Base; captura de Remix muestra dirección abreviada `0xC45...3cE65` (recuperar dirección completa y hashes de transacción de BaseScan, no deducirlos).
+- La captura de Remix muestra `initialize()` ejecutada con indicador verde, seis logs y dos transacciones en historial; `token()` devolvió la dirección NVRA indicada. BaseScan confirmó la emisión.
+- Constructor utilizado: Safe controlador `0xdbB84E6279F56EcF39E35F56a5A259DFD026E7fd`; beneficiario `0x89316a3553Da9315a720e25915d731AfD11d0B16`; fecha mínima `1793923200`; cliff `31536000` segundos; tramo lineal `94608000` segundos.
+- Distribución programada: juegos/minería/participación **300.000** (30 %), ecosistema/apps **250.000** (25 %), liquidez/expansión **200.000** (20 %), equipo/vesting **150.000** (15 %), reserva **100.000** (10 %). BaseScan muestra cinco titulares; **pendiente** cotejar cada dirección, saldo y permiso de vault/vesting de forma individual.
+- **No repetir Deploy ni initialize().** No existe evidencia de auditoría independiente ni de revisión jurídica final; no afirmar verificación de código en BaseScan, precio de mercado, liquidez, listado en DEX, venta pública, minería operativa ni utilidades NVRA activas.
+
+### Estado de trabajo y prioridades posteriores
+
+| Prioridad | Tarea | Estado |
+|---|---|---|
+| P0 | Emisión de NVRA 1.000.000 en Base | **Completado** |
+| P0 | Incorporar dirección oficial a web ES/EN, libro blanco y tokenómica | **Actualizado en rama pública main, 2026-11-07** |
+| P0 | Recuperar hash de ambas tx y dirección completa de fábrica, vesting y vaults; documentar saldos y verificación de código | Pendiente |
+| P1 | Auditoría independiente de contratos ya desplegados y controles Safe | Pendiente |
+| P1 | Revisión jurídica/regulatoria UE y España y textos públicos | Pendiente |
+| P1 | Integración de utilidades NVRA en Reinos de Leyenda y otras aplicaciones | Pendiente; requiere diseño y pruebas |
+| P2 | Estrategia de liquidez, acceso a mercados y comunicaciones responsables | Pendiente; no prometer precio ni rendimientos |
+| P2 | Consolidar documentación histórica y actualizar automatizaciones/feeds | Pendiente |
+
+### Separación de ramas
+Los archivos de web pública se actualizaron directamente en `main` sin fusionar PR #93 ni introducir enlaces públicos a GitHub. La rama experimental `feat/phase4-create2-vesting-integration` conserva el desarrollo de contratos; este plan maestro permanece en ella. No confundir publicación de contenidos con validación técnica de contratos.
