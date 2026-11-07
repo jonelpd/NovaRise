@@ -10,7 +10,10 @@
     "preflight": "node scripts/preflight.cjs",
     "simulate:local": "hardhat run scripts/simulate-deployment.cjs --network hardhat",
     "test:safe": "hardhat test test/safe-multisig.test.cjs",
-    "base:readiness": "node scripts/base-mainnet-readiness.cjs"
+    "base:readiness": "node scripts/base-mainnet-readiness.cjs",
+    "test:safe-preflight": "node --test test/check-safe-2of3.node.test.cjs",
+    "test:safe-preflight:legacy": "node --test test/check-safe-3of5.node.test.cjs",
+    "safe:preflight:base": "node scripts/check-safe-2of3.cjs"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^5.0.0",

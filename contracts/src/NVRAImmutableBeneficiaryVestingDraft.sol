@@ -7,7 +7,9 @@ import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol
 /**
  * @notice UNDEPLOYED local research vesting for exactly one immutable beneficiary.
  * @dev No Ownable, transferOwnership, delegate, admin, upgrade, rescue or
- *      arbitrary destination. Funding timing and beneficiary key security remain risks.
+ *      arbitrary destination. The entitlement is fixed at 150,000 NVRA;
+ *      unsolicited tokens remain stranded here after the full allocation is released.
+ *      Funding timing and beneficiary key security remain risks.
  */
 contract NVRAImmutableBeneficiaryVestingDraft {
     using SafeERC20 for IERC20;
@@ -18,6 +20,7 @@ contract NVRAImmutableBeneficiaryVestingDraft {
     uint64 public immutable cliffDuration;
     uint64 public immutable linearDuration;
     uint256 public released;
+    uint256 public constant TEAM_ALLOCATION = 150_000 ether;
 
     constructor(
         address token_,
@@ -38,7 +41,8 @@ contract NVRAImmutableBeneficiaryVestingDraft {
     }
 
     function vestedAmount(uint64 timestamp) public view returns (uint256) {
-        uint256 totalAllocation = token.balanceOf(address(this)) + released;
+        // Fixed entitlement: unsolicited token transfers cannot increase vesting rights.
+        uint256 totalAllocation = TEAM_ALLOCATION;
         uint256 cliffEnd = uint256(start) + uint256(cliffDuration);
         if (timestamp <= cliffEnd) return 0;
         uint256 end = cliffEnd + uint256(linearDuration);
@@ -47,12 +51,14 @@ contract NVRAImmutableBeneficiaryVestingDraft {
     }
 
     function releasable() public view returns (uint256) {
-        return vestedAmount(uint64(block.timestamp)) - released;
+        uint256 vested = vestedAmount(uint64(block.timestamp));
+        return vested > released ? vested - released : 0;
     }
 
     function release() external {
         uint256 amount = releasable();
         require(amount != 0, "NVRA: nothing releasable");
+        require(token.balanceOf(address(this)) >= amount, "NVRA: insufficient allocated funds");
         released += amount;
         token.safeTransfer(beneficiary, amount);
     }

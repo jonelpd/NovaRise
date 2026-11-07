@@ -1,0 +1,42 @@
+name: NVRA contracts validation
+on:
+  push:
+    branches:
+      - feat/phase4-create2-vesting-integration
+  pull_request:
+    paths:
+      - 'contracts/**'
+      - '.github/workflows/nvra-contracts-validation.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: contracts
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: contracts/package-lock.json
+      - run: npm ci
+      # Unpack pinned Safe Solidity sources without npm install pruning the
+      # peer dependencies of the already-installed Hardhat toolbox.
+      - name: Unpack pinned Safe Solidity fixture
+        run: |
+          mkdir -p node_modules/@safe-global/safe-contracts
+          npm pack @safe-global/safe-contracts@1.4.1 --pack-destination /tmp --silent
+          tar -xzf /tmp/safe-global-safe-contracts-1.4.1.tgz -C node_modules/@safe-global/safe-contracts --strip-components=1
+      - run: npm run compile
+      - run: npm test
+      - run: npm run test:safe-preflight
+
+      - name: Quote Base Mainnet fees (read-only, non-blocking)
+        continue-on-error: true
+        env:
+          BASE_MAINNET_RPC_URL: https://mainnet.base.org
+        run: node scripts/quote-base-launch-readonly.cjs
