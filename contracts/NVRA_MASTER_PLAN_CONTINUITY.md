@@ -192,3 +192,12 @@ Al terminar cada ejecución, mostrar: fase actual, completado en esa ejecución,
 - Distribución programada 300k juegos/minería/participación; 250k ecosistema/apps; 200k liquidez/expansión; 150k equipo vesting; 100k reserva. No asumir liquidez o minería operativa.
 - Web pública `main`: actualizados `index.html`, `en.html`, `libro-blanco.html`, `whitepaper-en.html`, `tokenomics.html`, `tokenomics-en.html` con dirección real y estado de emisión; sin fusionar PR #93.
 - Plan maestro integral actualizado en la rama experimental, con prioridades posteriores y riesgos pendientes. **No repetir despliegue ni inicialización.** Sin auditoría independiente, revisión legal definitiva ni precio de mercado establecido.
+
+
+## Registro 2026-11-07 — nueva línea de educación digital inclusiva
+- Usuario incorpora a las metas de NVRA la creación de juegos y aplicaciones didácticas para niños y personas con discapacidad.
+- Se publicaron páginas informativas bilingües `educacion-inclusiva.html` y `inclusive-education.html` y enlaces desde portada ES/EN; libro blanco ES/EN ampliado. Solo se define el plan: **no hay apps educativas terminadas**.
+- Productos propuestos: alfabetización/matemáticas, comunicación y pictogramas, habilidades cotidianas y autonomía, memoria/atención.
+- Requisitos: accesibilidad WCAG 2.2 AA donde aplique, pruebas con usuarios, privacidad infantil, ausencia de carteras, compras, publicidad financiera y recompensas NVRA para menores.
+- Integración NVRA: educación accesible sin token; usos opcionales para adultos/instituciones requieren revisión técnica/jurídica. No modificar supply ni token ya desplegado.
+- Plan integral actualizado con fases E0-E5; siguiente paso E1 investigación y especificación funcional de primer prototipo web, sin tokenización.
