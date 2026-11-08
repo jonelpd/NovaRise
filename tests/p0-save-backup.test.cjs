@@ -5,7 +5,7 @@ for(const page of ['index.html','combate-demo.html']){
  const start=html.indexOf('function persistGame(){'),end=html.indexOf('function save(){',start);
  test(page+': autosave preserves previous valid snapshot and rejects invalid game',()=>{
   assert(start>=0&&end>start);
-  const store=new Map(),s={gold:100,turn:2},ctx={s,STORE:'campaign',battle:null,rivalBusy:false,validGame:g=>Number.isInteger(g.gold)&&g.gold>=0,message:()=>{},localStorage:{getItem:k=>store.get(k)||null,setItem:(k,v)=>store.set(k,v)}};
+  const store=new Map(),s={gold:100,turn:2},ctx={window:{nvrScheduleCloudSave:()=>{}},s,STORE:'campaign',battle:null,rivalBusy:false,validGame:g=>Number.isInteger(g.gold)&&g.gold>=0,message:()=>{},localStorage:{getItem:k=>store.get(k)||null,setItem:(k,v)=>store.set(k,v)}};
   vm.createContext(ctx);vm.runInContext(html.slice(start,end),ctx);
   assert.equal(ctx.persistGame(),true);
   s.gold=150;assert.equal(ctx.persistGame(),true);
