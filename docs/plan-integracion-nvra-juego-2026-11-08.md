@@ -49,3 +49,12 @@ Pendiente: pruebas de navegador, accesibilidad, móvil, y validación de contrat
 - Commits: e7db248 (principal) y 7ddd734 (demo).
 
 **Próximo paso técnico:** definir eventos de juego generados y validados en servidor, asociarlos a un identificador de cuenta autenticada, aplicar límites y antirrepetición, y auditar la integridad de las fuentes antes de plantear recompensas on-chain.
+
+## Ajustes de estabilidad — 2026-11-08
+- Bloqueo del movimiento del héroe mientras el Centro NVRA esté abierto.
+- Apertura del Centro NVRA bloqueada durante combates, diálogos de decisión, descubrimientos y gestión del castillo.
+- Cierre del Centro NVRA al salir de la sesión en la versión principal.
+- Añadida prueba de regresión estática tests/p0-nvra-ui.test.cjs para los controles del modal y la ausencia de los dos paneles eliminados (historial de asedios e informe estratégico).
+- Commits: 5885c66, 119c0b4, b153c06.
+
+Pendiente: confirmar ejecución de pruebas y realizar una inspección manual en móvil y escritorio. La validación de eventos de juego en Supabase aún no está implementada.
