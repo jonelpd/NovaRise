@@ -163,3 +163,9 @@ Se compilaron todos los scripts clásicos embebidos en ambas páginas mediante `
 - Incorporadas dos pruebas en `tests/p0-cloud-upload-race.test.cjs`.
 - **GitHub Actions — Game regression tests:** ejecución [42507769787](https://github.com/jonelpd/NovaRise/actions/runs/42507769787), commit `dcbfa98`: **46/46 pruebas superadas, 0 fallos**.
 - Pendiente: prueba manual de guardado/recuperación con sesión real y validación visual en navegador móvil. No implica emisión de NVRA real.
+
+### Continuación — 2026-11-08: sesión de cuenta estable en operaciones cloud
+- `juego/index.html`: guardar y recuperar partidas en la nube capturan el identificador de la cuenta al iniciar la operación y verifican que no haya cambiado después de las confirmaciones asíncronas, antes de escribir datos.
+- Nuevas pruebas `tests/p0-cloud-session-race.test.cjs` para las dos rutas.
+- **GitHub Actions — Game regression tests:** ejecución [42508068509](https://github.com/jonelpd/NovaRise/actions/runs/42508068509), commit `fb45a19`: **48/48 pruebas superadas, 0 fallos**.
+- Pendiente comprobar con cuentas y navegadores reales el cambio de sesión, la restauración y la experiencia móvil. Sin activación de recompensas reales NVRA.
