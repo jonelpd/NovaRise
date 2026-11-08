@@ -5,7 +5,7 @@ const fs=require('node:fs');
 const path=require('node:path');
 const html=fs.readFileSync(path.join(__dirname,'../juego/index.html'),'utf8');
 test('autosave is armed only after a successful manual cloud save',()=>{
- const arm=html.indexOf('autoCloudRevision=newRevision;autoCloudUserId=savingUserId;autoCloudPaused=false');
+ const arm=html.indexOf('autoCloudRevision=newRevision;autoCloudUserId=savingUserId;autoCloudLastSaved=JSON.stringify(latestGame);autoCloudPending=false;autoCloudPaused=false');
  const rpc=html.indexOf("db.rpc('nvr_save_campaign_if_revision'",html.indexOf("el('online-save').onclick="));
  assert(rpc>=0&&arm>rpc);
  assert.match(html,/let autoCloudRevision=null,autoCloudUserId=null,autoCloudPaused=true/);
