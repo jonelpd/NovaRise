@@ -248,3 +248,11 @@ Se compilaron todos los scripts clásicos embebidos en ambas páginas mediante `
 - Añadidas dos pruebas estáticas de orden de operaciones en `tests/p0-cloud-revision-guard.test.cjs`.
 - **GitHub Actions — Game regression tests:** [42521886564](https://github.com/jonelpd/NovaRise/actions/runs/42521886564): **82/82 pruebas superadas, 0 fallos**.
 - **Limitación importante:** la comprobación previa no es una escritura atómica; dos dispositivos aún podrían escribir entre la última lectura y la actualización. Una garantía fuerte requiere control de concurrencia en el servidor (por ejemplo, una operación condicional por versión mediante RPC de Supabase). La subida sigue siendo manual; no se ha implementado autosincronización.
+
+### Continuación — 2026-11-08: control optimista de versiones en Supabase
+- Aplicada en el proyecto Supabase NovaRise la migración `nvr_game_save_optimistic_revision`: columna `revision bigint not null default 1` en `public.nvr_game_saves` y RPC `public.nvr_save_campaign_if_revision(jsonb,bigint)`.
+- La RPC usa `SECURITY INVOKER`, `auth.uid()`, RLS existente y actualización condicional por revisión. Si no existe partida acepta revisión nula y crea la revisión 1; si la revisión esperada ya cambió, devuelve `null` sin sobrescribir.
+- El cliente `juego/index.html` llama ahora a la RPC y muestra un error de conflicto; continúa verificando identidad, estado del combate y versión consultada.
+- **GitHub Actions — Game regression tests:** [42522265121](https://github.com/jonelpd/NovaRise/actions/runs/42522265121): **83/83 pruebas superadas, 0 fallos**.
+- Se verificó en Supabase la existencia de la columna y que la función no es `SECURITY DEFINER`. Auditor de seguridad: aviso sobre protección de contraseñas filtradas deshabilitada (preexistente) y tabla de límites sin políticas (preexistente).
+- **Limitaciones:** las escrituras antiguas directas sobre la tabla todavía podrían eludir la RPC si conservan permisos; la revisión atómica se garantiza para el flujo nuevo que usa RPC. Pendiente bloquear rutas antiguas de escritura con una migración de permisos/función de seguridad bien probada. No se ha probado una escritura concurrente real con dos sesiones autenticadas ni se ha habilitado sincronización automática.
