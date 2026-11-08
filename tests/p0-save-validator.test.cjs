@@ -9,8 +9,10 @@ for(const page of ['index.html','combate-demo.html']){
   const html=fs.readFileSync(path.join(__dirname,'../juego',page),'utf8');
   const a=html.indexOf('function validGame(g){'),b=html.indexOf('function validImport(v){',a);
   assert(a>=0&&b>a,'save validator and import validator must exist');
-  const end=html.indexOf("$('export-save').onclick",b);
-  const ctx={};vm.createContext(ctx);vm.runInContext(html.slice(a,end),ctx);
+  const gameEnd=html.indexOf('\n}',a)+2;
+  const importEnd=html.indexOf("$('export-save').onclick",b);
+  const ctx={};vm.createContext(ctx);
+  vm.runInContext(html.slice(a,gameEnd)+'\n'+html.slice(b,importEnd),ctx);
   const game={x:1,y:1,turn:8,moves:7,gold:200,crystals:10,seasonPoints:0,soldiers:4,archers:2,griffins:0,dragons:0,experience:60,seen:[],taken:[],claimed:[],ownedMines:[],buildings:[],rewardClaims:[],mineLevels:{},miners:{},faction:'Alianza del Alba'};
   assert.equal(ctx.validGame(game),true);
   assert.equal(ctx.validImport({format:'novarise-local-save',version:10,game}),true);
