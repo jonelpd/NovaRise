@@ -204,3 +204,10 @@ Se compilaron todos los scripts clásicos embebidos en ambas páginas mediante `
 - Corrección sincronizada en `juego/index.html` y `juego/combate-demo.html`; dos pruebas añadidas en `tests/p0-siege-confirm-race.test.cjs`.
 - **GitHub Actions — Game regression tests:** [42515615970](https://github.com/jonelpd/NovaRise/actions/runs/42515615970): **62/62 pruebas superadas, 0 fallos**.
 - Pendiente: comprobación interactiva de cambio de partida durante la confirmación y del ciclo completo de asedio en navegador.
+
+### Continuación — 2026-11-08: impedir que un asedio sustituya otra batalla
+- `launchDefensiveSiege` comprueba ahora que no exista ya un combate activo y que el castillo siga siendo propiedad del jugador antes de acceder a la guarnición o sustituir temporalmente el ejército del héroe.
+- Corrección aplicada a `juego/index.html` y `juego/combate-demo.html`; cuatro pruebas de ejecución en `tests/p0-siege-launch-guard.test.cjs` cubren ambos escenarios en las dos páginas.
+- Primera ejecución: dos fallos por un simulador antiguo que no proporcionaba `verifiedSiteState`; corregido el fixture en `tests/p0-siege-turn-lock.test.cjs`.
+- **GitHub Actions — Game regression tests:** [42517017194](https://github.com/jonelpd/NovaRise/actions/runs/42517017194): **66/66 pruebas superadas, 0 fallos**.
+- Pendiente: comprobación manual del flujo completo en navegador real.
