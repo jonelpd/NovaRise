@@ -314,3 +314,10 @@ Se compilaron todos los scripts clásicos embebidos en ambas páginas mediante `
 - Se añadieron cinco pruebas en `tests/p0-cloud-entry-comparison.test.cjs` y se actualizó la prueba de cambio de cuenta.
 - **GitHub Actions:** [42524818753](https://github.com/jonelpd/NovaRise/actions/runs/42524818753): **94/94 pruebas superadas, 0 fallos**.
 - Pendiente: prueba E2E en navegador con sesión real, recuperación entre dispositivos y experiencia visual de selección de campaña.
+
+### Continuación — 2026-11-08: diálogo medieval para elegir campaña
+- Se expuso `window.nvrChooseCampaign` usando `realmDialog`, la ventana profesional superpuesta del juego. Al detectar divergencia local/nube al entrar, muestra día y oro de cada campaña y ofrece conservar local, recuperar nube o posponer.
+- Si solo hay nube, propone recuperarla o continuar sin cargarla. La opción «Recuperar nube» delega en el flujo manual existente con confirmación y revisión de concurrencia; «Conservar local» no sobrescribe nube.
+- Antes de actuar tras el diálogo se comprueban identidad y copia local; se evita abrir sobre combate, turno rival, operación ocupada u otro diálogo.
+- **GitHub Actions:** [42525102405](https://github.com/jonelpd/NovaRise/actions/runs/42525102405): **95/95 pruebas superadas, 0 fallos**.
+- Pendiente: validación visual/E2E en navegador real y prueba con dos sesiones autenticadas simultáneas.
