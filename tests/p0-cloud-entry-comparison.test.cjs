@@ -8,7 +8,7 @@ async function scenario({local={gold:12},remote={gold:22},switchUser=false,chang
  const userId='player-a',key='novarise-reinos-reset-20261103-user-'+userId,store=new Map();
  if(local!==null)store.set(key,JSON.stringify(local));
  let writes=0,infoText='';
- const ctx={currentUser:{id:userId},localStorage:{getItem:k=>store.get(k)||null,setItem:()=>{writes++}},validGame:v=>v&&Number.isInteger(v.gold),info:v=>{infoText=v},db:{from:()=>({select:()=>({eq:()=>({maybeSingle:async()=>{if(switchUser)ctx.currentUser={id:'player-b'};if(changeLocal)store.set(key,JSON.stringify({gold:99}));return {data:remote?{save_data:remote,updated_at:'2026-11-08T20:00:00Z',revision:2}:null,error:fail?{message:'offline'}:null}})})})})}};
+ const ctx={currentUser:{id:userId},localStorage:{getItem:k=>store.get(k)||null,setItem:()=>{writes++}},validGame:v=>v&&Number.isInteger(v.gold),info:v=>{infoText=v},db:{from:()=>({select:()=>({eq:()=>({maybeSingle:async()=>{if(switchUser)ctx.currentUser={id:'player-b'};if(changeLocal)store.set(key,JSON.stringify({gold:99}));return {data:remote?{save_data:remote,updated_at:'2026-11-08T20:00:00Z',revision:2}:null,error:fail?{message:'offline'}:null};}})})})})}};
  vm.createContext(ctx);vm.runInContext(code,ctx);await ctx.inspectCloudOnEntry(userId);
  return {writes,infoText,store};
 }
