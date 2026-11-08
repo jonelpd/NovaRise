@@ -299,3 +299,10 @@ Se compilaron todos los scripts clásicos embebidos en ambas páginas mediante `
 - Se amplió `tests/p0-cloud-autosave-guard.test.cjs` para verificar estas condiciones.
 - **GitHub Actions — Game regression tests:** [42524159183](https://github.com/jonelpd/NovaRise/actions/runs/42524159183): **87/87 pruebas correctas, 0 fallos**.
 - Pendiente: prueba real E2E con navegador y sesiones autenticadas, recuperación de nube sin perder una campaña local divergente, y comportamiento tras interrupción de red.
+
+### Continuación — 2026-11-08: serialización de recuperación y reactivación de sincronización pendiente
+- `persistGame()` permite reprogramar una sincronización pendiente incluso cuando el estado local coincide con la última escritura local; el programador compara con `autoCloudLastSaved` para evitar envíos duplicados.
+- La recuperación manual desde nube se bloquea si `autoCloudRunning` está activo; tras la escritura local exitosa se desactiva el programador antes de recargar.
+- Añadidas dos pruebas de regresión; adaptado el entorno simulado de recuperación para contemplar el bloqueo y la desactivación del autosave.
+- **GitHub Actions:** [42524464294](https://github.com/jonelpd/NovaRise/actions/runs/42524464294): **89/89 pruebas superadas, 0 fallos**.
+- Continúan pendientes pruebas E2E en navegadores reales, sincronización segura tras reconexión y selección explícita entre progreso local y remoto al entrar.
