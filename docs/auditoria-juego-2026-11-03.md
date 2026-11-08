@@ -130,3 +130,9 @@ Se compilaron todos los scripts clásicos embebidos en ambas páginas mediante `
 - Se aplicó a juego principal y demo (commits 93f1a2e, 251df74, 464c676, ed4ba4b).
 - Se amplió la prueba `tests/p0-game-bootstrap-syntax.test.cjs` para comprobar la existencia del manejo de rechazos (commit 0c717db).
 - **Pendiente:** pruebas reales de turnos, conquistas y asedios con navegador; la prueba estática no valida la ejecución completa de la IA.
+
+## Continuación — 2026-11-08: seguridad de turnos y asedios
+- **P1 corregido en ambas versiones:** el bloqueo `rivalBusy` se mantenía solo hasta empezar la decisión asíncrona de defensa de castillo. Durante la ventana de confirmación podía iniciarse otro turno rival, aplicando economía y otros efectos dos veces. Ahora el bloqueo se libera después de resolver la elección y cualquier encuentro pendiente; el control se vuelve a dibujar al finalizar. Commits: `c26b563` y `6d5aa99`.
+- **P1 corregido en ambas versiones:** `launchDefensiveSiege` no protegía el caso de guarnición sin criaturas. En ese caso podía sustituir el ejército del héroe por uno vacío antes de iniciar combate. Ahora deriva a la resolución automática y conserva intactas las tropas del héroe.
+- Nueva prueba `tests/p0-siege-turn-lock.test.cjs`: comprueba el orden del desbloqueo respecto al `await realmConfirm` y ejecuta el caso de guarnición vacía con el código real aislado (commit `bed0eb5`).
+- **Verificación pendiente:** falta confirmar la ejecución exitosa de las pruebas Node/CI y probar el diálogo, asedio dirigido y automático, reconquista, derrota y recarga en navegador real. Se mantiene suspendida cualquier recompensa NVRA real.
