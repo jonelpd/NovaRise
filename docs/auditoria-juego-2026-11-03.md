@@ -197,3 +197,10 @@ Se compilaron todos los scripts clásicos embebidos en ambas páginas mediante `
 - Incorporadas dos pruebas en `tests/p0-auto-siege-history-removed.test.cjs`.
 - **GitHub Actions — Game regression tests:** ejecución [42513368302](https://github.com/jonelpd/NovaRise/actions/runs/42513368302), commit `a6ecc3b`: **60/60 pruebas superadas, 0 fallos**.
 - Pendiente: validación manual de asedios, transición de exploración a combate y vuelta al mapa en navegadores reales.
+
+### Continuación — 2026-11-08: decisión de defensa y cambios de partida
+- Corregida una condición de carrera en la confirmación de defensa de castillo: tras esperar `realmConfirm`, el juego verifica identidad de campaña (`s===siegeCampaign`), época del turno rival, campaña no finalizada y propiedad actual del castillo.
+- Evita iniciar una defensa táctica o automática a partir de una decisión obsoleta cuando el estado del juego ha cambiado.
+- Corrección sincronizada en `juego/index.html` y `juego/combate-demo.html`; dos pruebas añadidas en `tests/p0-siege-confirm-race.test.cjs`.
+- **GitHub Actions — Game regression tests:** [42515615970](https://github.com/jonelpd/NovaRise/actions/runs/42515615970): **62/62 pruebas superadas, 0 fallos**.
+- Pendiente: comprobación interactiva de cambio de partida durante la confirmación y del ciclo completo de asedio en navegador.
