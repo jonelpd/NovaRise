@@ -256,3 +256,11 @@ Se compilaron todos los scripts clásicos embebidos en ambas páginas mediante `
 - **GitHub Actions — Game regression tests:** [42522265121](https://github.com/jonelpd/NovaRise/actions/runs/42522265121): **83/83 pruebas superadas, 0 fallos**.
 - Se verificó en Supabase la existencia de la columna y que la función no es `SECURITY DEFINER`. Auditor de seguridad: aviso sobre protección de contraseñas filtradas deshabilitada (preexistente) y tabla de límites sin políticas (preexistente).
 - **Limitaciones:** las escrituras antiguas directas sobre la tabla todavía podrían eludir la RPC si conservan permisos; la revisión atómica se garantiza para el flujo nuevo que usa RPC. Pendiente bloquear rutas antiguas de escritura con una migración de permisos/función de seguridad bien probada. No se ha probado una escritura concurrente real con dos sesiones autenticadas ni se ha habilitado sincronización automática.
+
+### Continuación — 2026-11-08: impedir recuperación de una versión remota desactualizada
+- `online-load` solicita también `revision` en la primera consulta de partida remota.
+- Después de la confirmación del usuario vuelve a consultar `revision,updated_at`; si difieren o desapareció el registro, cancela la recuperación antes de escribir en almacenamiento local.
+- Tras la consulta repite las comprobaciones de cuenta, combate, turno rival y snapshot local.
+- `tests/p0-cloud-restore-main.test.cjs` simula una revisión remota que cambia durante la confirmación y verifica que no se sustituye la partida local.
+- **GitHub Actions — Game regression tests:** [42522476363](https://github.com/jonelpd/NovaRise/actions/runs/42522476363): **83/83 pruebas superadas, 0 fallos**.
+- Pendiente: verificar concurrencia con dos cuentas/sesiones autenticadas reales y restringir escrituras antiguas directas sobre la tabla sin romper el RPC `SECURITY INVOKER`. No se ha habilitado guardado automático en nube.
