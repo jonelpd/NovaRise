@@ -306,3 +306,11 @@ Se compilaron todos los scripts clásicos embebidos en ambas páginas mediante `
 - Añadidas dos pruebas de regresión; adaptado el entorno simulado de recuperación para contemplar el bloqueo y la desactivación del autosave.
 - **GitHub Actions:** [42524464294](https://github.com/jonelpd/NovaRise/actions/runs/42524464294): **89/89 pruebas superadas, 0 fallos**.
 - Continúan pendientes pruebas E2E en navegadores reales, sincronización segura tras reconexión y selección explícita entre progreso local y remoto al entrar.
+
+### Continuación — 2026-11-08: comparación segura de campañas al iniciar sesión
+- `inspectCloudOnEntry(userId)` consulta la campaña de Supabase al cambiar de identidad autenticada, compara con la copia local y muestra un aviso informativo en el panel de nube.
+- Distingue nube ausente, campaña solo remota, campañas iguales, campañas divergentes y error de conexión. **Nunca escribe en localStorage ni restaura/sobrescribe automáticamente**; el jugador usa las acciones manuales existentes con confirmación.
+- Antes de mostrar resultados verifica que la identidad y la copia local sigan siendo las mismas; si cambian durante la consulta descarta el resultado obsoleto.
+- Se añadieron cinco pruebas en `tests/p0-cloud-entry-comparison.test.cjs` y se actualizó la prueba de cambio de cuenta.
+- **GitHub Actions:** [42524818753](https://github.com/jonelpd/NovaRise/actions/runs/42524818753): **94/94 pruebas superadas, 0 fallos**.
+- Pendiente: prueba E2E en navegador con sesión real, recuperación entre dispositivos y experiencia visual de selección de campaña.
