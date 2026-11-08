@@ -142,3 +142,10 @@ Se compilaron todos los scripts clásicos embebidos en ambas páginas mediante `
 - Se actualizó esa aserción sin eliminar ni modificar el control de la ventana modal (commit `c04b128`).
 - **GitHub Actions: Game regression tests, run 42485502893 — SUCCESS**, ejecutado para commit `c04b128`. Incluye las comprobaciones nuevas de bloqueo del turno y guarnición vacía, además de la batería existente.
 - Límite: CI Node es satisfactorio, pero todavía falta la validación real en navegador de defensa dirigida, defensa automática, recarga y uso móvil. No se declara cerrada toda la auditoría.
+
+### Continuación — 2026-11-08: persistencia durante el turno rival
+- Detectado un riesgo de persistir estados intermedios mientras `rivalBusy` está activo (incluida la decisión de defender un castillo). Corregido el autoguardado de ambas páginas: solo escribe al terminar el turno rival y sin combate activo.
+- El guardado manual, la exportación y la importación local se bloquean durante un turno rival. La importación vuelve a comprobar el estado tras la confirmación asíncrona. En la página principal también se impide guardar o recuperar en la nube durante el turno rival y se revalida el estado justo antes de reemplazar el almacenamiento local.
+- Añadida la prueba `tests/p0-rival-save-lock.test.cjs` y actualizado el simulador de la recuperación en la nube para representar el estado inactivo del turno rival.
+- **GitHub Actions — Game regression tests:** ejecución [42505858131](https://github.com/jonelpd/NovaRise/actions/runs/42505858131) completada con **36/36 pruebas satisfactorias, 0 fallos**, commit `ba478aa`. Los fallos de las ejecuciones intermedias se debían a que el simulador de la nube no definía `rivalBusy`; corregido.
+- Pendiente: prueba manual en navegador real de asedios, restauración local y en nube, recuperación tras recarga, y móvil. No se activan recompensas NVRA reales.
