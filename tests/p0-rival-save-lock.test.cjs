@@ -7,16 +7,16 @@ const vm=require('node:vm');
 for(const page of ['index.html','combate-demo.html']){
  const html=fs.readFileSync(path.join(__dirname,'../juego',page),'utf8');
  test(page+': autosave skips active enemy turn',()=>{
-  assert.match(html,/if\(!battle&&!rivalBusy&&STORE\)\{try\{localStorage\.setItem\(STORE,JSON\.stringify\(s\)\)/);
+  assert.match(html,/if\(!battle&&!rivalBusy&&STORE\)persistGame\(\)/);
  });
  test(page+': manual save refuses active enemy turn without overwriting data',()=>{
   const start=html.indexOf('function save(){');
-  const end=html.indexOf('function load(){',start);
+  const end=html.indexOf(page==='index.html'?'function validGame(g){':'function load(){',start);
   assert.ok(start>=0&&end>start);
   const source=html.slice(start,end);
   let writes=0,notices=[];
   const ctx={rivalBusy:true,battle:null,STORE:'campaign',s:{gold:99},
-   localStorage:{setItem:()=>writes++},message:x=>notices.push(x)};
+   persistGame:()=>{writes++;return true},message:x=>notices.push(x)};
   vm.createContext(ctx);vm.runInContext(source,ctx);
   ctx.save();
   assert.equal(writes,0);
