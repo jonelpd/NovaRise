@@ -1815,7 +1815,7 @@ function rivalEncounter(){
  showBattle();
  return true
 }
-async async function rivalTurn(){
+async function rivalTurn(){
  if(rivalBusy||s.done||battle||walking)return;
  rivalBusy=true;const epoch=++rivalEpoch;
  const v=rivalState();v.turns++;
