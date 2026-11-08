@@ -1360,6 +1360,7 @@ function realmDialog(title,detail,choices,inputValue=null,allowDismiss=true){
   panel.append(actions);overlay.append(panel);document.body.append(overlay);(field||actions.querySelector('button')).focus();
  })
 }
+window.nvrChooseCampaign=(local,remote,updatedAt)=>realmDialog('⚜️ Consejo de campaña',local?'Hay dos campañas distintas. Local: día '+local.turn+', oro '+local.gold+'. Nube: día '+remote.turn+', oro '+remote.gold+' (guardada '+new Date(updatedAt).toLocaleString()+'). Elige cómo continuar; ninguna versión será reemplazada sin confirmación.':'Hay una campaña en la nube: día '+remote.turn+', oro '+remote.gold+' (guardada '+new Date(updatedAt).toLocaleString()+'). ¿Quieres recuperarla?',local?[{label:'🏰 Conservar local',value:'local'},{label:'☁️ Recuperar nube',value:'cloud'},{label:'✕ Más tarde',value:null}]:[{label:'☁️ Recuperar nube',value:'cloud'},{label:'🏰 Seguir aquí',value:null}]);
 function realmConfirm(title,detail,yes='✓ Confirmar',no='✕ Cancelar'){return realmDialog(title,detail,[{label:yes,value:true},{label:no,value:false}])}
 function realmPrompt(detail,initial=''){return realmDialog('🏰 Consejo del reino',detail,[{label:'✓ Confirmar',value:'__input__'},{label:'✕ Cancelar',value:null}],initial)}
 function showAdventureDiscovery(kind,title,detail){
@@ -2063,8 +2064,19 @@ async function inspectCloudOnEntry(userId){
    info('Partida local y nube coinciden ('+new Date(data.updated_at).toLocaleString()+').');
   }else if(local){
    info('⚠️ Hay dos partidas diferentes: una en este navegador y otra en la nube ('+new Date(data.updated_at).toLocaleString()+'). Usa «Recuperar» para elegir la nube o «Guardar en nube» para elegir la local; se pedirá confirmación. No se ha sobrescrito ninguna.');
+   if(!busy&&!rivalBusy&&el('modal').hidden&&!document.querySelector('.realm-dialog')&&window.nvrChooseCampaign){
+    const choice=await window.nvrChooseCampaign(local,remote,data.updated_at);
+    if(currentUser?.id!==userId||localStorage.getItem(localKey)!==localSnapshot)return;
+    if(choice==='cloud')el('online-load').click();
+    else if(choice==='local')info('Has conservado la campaña local. La versión de la nube no se ha modificado. Si quieres reemplazarla, utiliza «Guardar en nube» y confirma.');
+   }
   }else{
    info('☁️ Existe una partida en la nube ('+new Date(data.updated_at).toLocaleString()+'). Usa «Recuperar» para continuarla; no se cargará sin tu confirmación.');
+   if(!busy&&!rivalBusy&&el('modal').hidden&&!document.querySelector('.realm-dialog')&&window.nvrChooseCampaign){
+    const choice=await window.nvrChooseCampaign(null,remote,data.updated_at);
+    if(currentUser?.id!==userId||localStorage.getItem(localKey)!==localSnapshot)return;
+    if(choice==='cloud')el('online-load').click();
+   }
   }
  }catch(e){if(currentUser?.id===userId)info('No se pudo comparar la nube: '+(e.message||'sin conexión')+'. Tu partida local sigue disponible.')}
 }
