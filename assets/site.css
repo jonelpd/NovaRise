@@ -1024,3 +1024,38 @@ body.interest-modal-open{overflow:hidden}
   .nvra-simple .simple-facts article:hover,
   .nvra-simple .simple-cards article:hover {transform:none}
 }
+
+
+/* Official circular NVRA emblem in the homepage hero */
+.nvra-simple .nr-hero-refresh .nr-hero-visual {
+  aspect-ratio: 1 / 1;
+  width: min(100%, 485px);
+  max-width: 485px;
+  min-height: 0;
+  margin-inline: auto;
+  padding: clamp(8px, 2vw, 22px);
+  justify-self: center;
+  border-radius: 50%;
+  border: 1px solid rgba(116, 238, 165, .22);
+  background: radial-gradient(circle at 50% 50%, rgba(42, 126, 73, .18), rgba(5, 28, 21, .18) 65%, transparent 80%);
+  box-shadow: 0 0 95px rgba(46, 209, 111, .09), inset 0 0 45px rgba(63, 206, 120, .045);
+}
+.nvra-simple .nr-hero-refresh .nr-hero-visual img {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  border-radius: 50%;
+  filter: drop-shadow(0 0 35px rgba(40, 236, 104, .2));
+}
+@media (max-width: 900px) {
+  .nvra-simple .nr-hero-refresh .nr-hero-visual {
+    width: min(100%, 410px);
+  }
+}
+@media (max-width: 480px) {
+  .nvra-simple .nr-hero-refresh .nr-hero-visual {
+    width: min(100%, 320px);
+  }
+}
