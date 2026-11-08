@@ -27,6 +27,7 @@ for(const page of ['index.html','combate-demo.html']){
   assert.equal(state.verifiedSites['fort-near'],'player');
  });
  test(page+': empty-garrison fallback passes exact castle id',()=>{
+  const html=fs.readFileSync(path.join(__dirname,'../juego',page),'utf8');
   assert.match(html,/s\.message=rivalCastleConquest\(site\.id\)/);
  });
 }
