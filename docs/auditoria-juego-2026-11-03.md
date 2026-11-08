@@ -115,3 +115,10 @@ Se detectó también un fallo de ámbito: `load()` del script clásico usaba `va
 Se compilaron todos los scripts clásicos embebidos en ambas páginas mediante `new Function`, sin errores de sintaxis después de las correcciones. Se añadió una prueba de regresión de compilación y ámbito `tests/p0-game-bootstrap-syntax.test.cjs` (commits f883201, d9ec414).
 
 **Alcance y límites:** la comprobación de sintaxis NO equivale a una prueba de funcionamiento en navegador. No se ha validado el inicio de sesión, carga real desde Supabase, renderizado, movimiento, combates, compatibilidad móvil ni módulos ES. Se requiere prueba de extremo a extremo y revisar consola del navegador antes de considerar resuelta la incidencia de funcionamiento.
+
+## Auditoría de continuación — 2026-11-08
+- El usuario confirmó que el juego vuelve a funcionar tras las correcciones de arranque.
+- Se encontró un fallo de ejecución en `updateNvraCenter()`: la constante local `mines` (elemento DOM) ocultaba el array `mines` del mapa, y su referencia anterior a la inicialización provocaba un `ReferenceError` al abrir el Centro NVRA.
+- Se renombró el elemento DOM a `mineDisplay` en ambas versiones, sin alterar los datos de partida ni los identificadores del mapa (commits b4cdecd y 4034852).
+- Se amplió `tests/p0-nvra-ui.test.cjs` para impedir la reintroducción de esa colisión (commit 82c5281).
+- Pendiente de verificar en navegador el Centro NVRA, el flujo de combate, guardado/restauración y compatibilidad móvil. No se ha activado ninguna recompensa real de tokens.
