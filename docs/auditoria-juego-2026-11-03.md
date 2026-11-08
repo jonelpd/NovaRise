@@ -136,3 +136,9 @@ Se compilaron todos los scripts clásicos embebidos en ambas páginas mediante `
 - **P1 corregido en ambas versiones:** `launchDefensiveSiege` no protegía el caso de guarnición sin criaturas. En ese caso podía sustituir el ejército del héroe por uno vacío antes de iniciar combate. Ahora deriva a la resolución automática y conserva intactas las tropas del héroe.
 - Nueva prueba `tests/p0-siege-turn-lock.test.cjs`: comprueba el orden del desbloqueo respecto al `await realmConfirm` y ejecuta el caso de guarnición vacía con el código real aislado (commit `bed0eb5`).
 - **Verificación pendiente:** falta confirmar la ejecución exitosa de las pruebas Node/CI y probar el diálogo, asedio dirigido y automático, reconquista, derrota y recarga en navegador real. Se mantiene suspendida cualquier recompensa NVRA real.
+
+### Resultado CI — 2026-11-08
+- El primer flujo de regresión (run 42485425880) terminó con 27/29 pruebas satisfactorias. Los dos fallos procedían de la expresión regular obsoleta de `tests/p0-save-validator.test.cjs`, que exigía que la comprobación de `.realm-dialog` apareciese inmediatamente después de `battle` y no permitía la nueva protección del Centro NVRA intermedia.
+- Se actualizó esa aserción sin eliminar ni modificar el control de la ventana modal (commit `c04b128`).
+- **GitHub Actions: Game regression tests, run 42485502893 — SUCCESS**, ejecutado para commit `c04b128`. Incluye las comprobaciones nuevas de bloqueo del turno y guarnición vacía, además de la batería existente.
+- Límite: CI Node es satisfactorio, pero todavía falta la validación real en navegador de defensa dirigida, defensa automática, recarga y uso móvil. No se declara cerrada toda la auditoría.
