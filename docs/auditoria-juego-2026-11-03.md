@@ -272,3 +272,9 @@ Se compilaron todos los scripts clásicos embebidos en ambas páginas mediante `
 - SQL conservado en `docs/sql/nvr-save-rpc-only-write.sql`.
 - **Advertencia de seguridad:** el asesor de Supabase señala intencionadamente la RPC `SECURITY DEFINER` ejecutable por usuarios autenticados. Debe auditarse estrictamente y no ampliarse a operaciones ajenas al guardado propio. Siguen presentes avisos preexistentes sobre protección de contraseñas filtradas y tabla de límites.
 - **Limitación:** aún no se ha probado una escritura RPC exitosa y un conflicto de revisión con sesiones autenticadas reales; tampoco está implementada la sincronización automática.
+
+### Continuación — 2026-11-08: prueba transaccional de guardado con rol autenticado
+- Ejecutada en Supabase NovaRise una transacción con `SET LOCAL ROLE authenticated` y claims de sesión de un perfil existente; se llamó realmente a `nvr_save_campaign_if_revision` sin guardar datos de forma permanente.
+- Dentro de la transacción: guardado inicial con revisión esperada nula devolvió 1; segunda escritura con revisión 1 devolvió 2; escritura obsoleta con revisión 1 devolvió `NULL`; la revisión persistente dentro de la transacción continuó siendo 2.
+- Finalizada con `ROLLBACK`; consulta posterior confirmó **0 partidas de prueba** residuales.
+- **Limitación:** se simularon los claims y el rol autenticado dentro de SQL; esto no equivale a probar dos sesiones JWT reales a través del cliente Supabase ni una carrera concurrente real. Se mantienen esas pruebas pendientes antes de activar autosincronización.
