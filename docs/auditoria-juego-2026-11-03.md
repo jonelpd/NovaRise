@@ -278,3 +278,9 @@ Se compilaron todos los scripts clásicos embebidos en ambas páginas mediante `
 - Dentro de la transacción: guardado inicial con revisión esperada nula devolvió 1; segunda escritura con revisión 1 devolvió 2; escritura obsoleta con revisión 1 devolvió `NULL`; la revisión persistente dentro de la transacción continuó siendo 2.
 - Finalizada con `ROLLBACK`; consulta posterior confirmó **0 partidas de prueba** residuales.
 - **Limitación:** se simularon los claims y el rol autenticado dentro de SQL; esto no equivale a probar dos sesiones JWT reales a través del cliente Supabase ni una carrera concurrente real. Se mantienen esas pruebas pendientes antes de activar autosincronización.
+
+### Continuación — 2026-11-08: prueba de aislamiento entre dos jugadores
+- Se simuló en una única transacción SQL el rol `authenticated` con claims alternados de dos perfiles existentes de NovaRise.
+- Para cada identidad se creó una partida de prueba en revisión 1, se verificó que no podía consultar la partida de la otra identidad mediante las políticas RLS, y se confirmó que la revisión de la primera progresaba a 2 sin aceptar una escritura obsoleta basada en revisión 1.
+- La transacción terminó con `ROLLBACK`; la consulta posterior confirmó **0 registros de prueba**.
+- **Límites de la validación:** no se utilizaron tokens JWT reales de dos sesiones cliente, ni se ejecutaron dos transacciones concurrentes en paralelo. Estas comprobaciones siguen pendientes antes de habilitar sincronización automática en nube.
