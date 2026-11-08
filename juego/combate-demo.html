@@ -1584,6 +1584,12 @@ function finishDefensiveSiege(won){
 }
 function launchDefensiveSiege(site){
  const g=siteGarrison(site.id),d=g.defenders||{};
+ // Do not replace the hero army with an empty garrison: resolve the undefended castle automatically.
+ if(!Object.keys(CASTLE_RECRUIT_COST).some(type=>(d[type]||0)>0)){
+  s.autoResolveDefensiveSiege=true;
+  try{s.message=rivalCastleConquest()}finally{s.autoResolveDefensiveSiege=false}
+  render();return
+ }
  const army={};for(const type of Object.keys(CASTLE_RECRUIT_COST))army[type]=s[type]||0;
  const before={};for(const type of Object.keys(CASTLE_RECRUIT_COST)){before[type]=d[type]||0;s[type]=before[type]}
  const v=rivalState();
@@ -1888,7 +1894,7 @@ async function rivalTurn(){
   v.explored.push([v.x,v.y]);
   if(Math.hypot(v.x-heroVisualPosition()[0],v.y-heroVisualPosition()[1])<=2.2)s.rivalEncounterPending=true;
  }finally{
-  rivalBusy=false;
+  // Keep the rival turn locked while the siege decision is awaiting the player.
   if(epoch===rivalEpoch&&!s.done){
    s.turn++;s.moves=s.faction==='Alianza del Alba'?5:4;
    s.gold+=40+25*s.claimed.length+(s.buildings.includes('market')?30:0)+(s.faction==='Guardianes del Bosque'?15:0);
@@ -1903,8 +1909,10 @@ async function rivalTurn(){
      else{s.autoResolveDefensiveSiege=true;try{s.message=rivalCastleConquest()}finally{s.autoResolveDefensiveSiege=false}render()}
     }
    }
+   rivalBusy=false;
    if(!battle&&s.rivalEncounterPending){s.rivalEncounterPending=false;rivalEncounter()}
-  }
+   render();
+  }else rivalBusy=false;
  }
 }
 function updateSiegeReport(){
