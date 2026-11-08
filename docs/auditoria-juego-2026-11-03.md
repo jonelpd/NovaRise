@@ -264,3 +264,11 @@ Se compilaron todos los scripts clásicos embebidos en ambas páginas mediante `
 - `tests/p0-cloud-restore-main.test.cjs` simula una revisión remota que cambia durante la confirmación y verifica que no se sustituye la partida local.
 - **GitHub Actions — Game regression tests:** [42522476363](https://github.com/jonelpd/NovaRise/actions/runs/42522476363): **83/83 pruebas superadas, 0 fallos**.
 - Pendiente: verificar concurrencia con dos cuentas/sesiones autenticadas reales y restringir escrituras antiguas directas sobre la tabla sin romper el RPC `SECURITY INVOKER`. No se ha habilitado guardado automático en nube.
+
+### Continuación — 2026-11-08: restringir escritura de partidas a RPC con revisión
+- Aplicada migración en Supabase NovaRise `nvr_save_rpc_only_write_access`: revocados `INSERT`, `UPDATE` y `DELETE` directos de `public.nvr_game_saves` para roles públicos y autenticados; `SELECT` permanece bajo RLS.
+- La RPC `nvr_save_campaign_if_revision` usa ahora `SECURITY DEFINER` con `search_path=''`, verificación explícita de `auth.uid()`, rechazo de usuarios anónimos, límite de tamaño y escritura únicamente en la fila del usuario autenticado; sigue comprobando `revision` de forma atómica.
+- Permisos verificados con `has_table_privilege` y `has_function_privilege`: autenticados sin `INSERT/UPDATE`, con `SELECT` y `EXECUTE` RPC; anónimos sin `EXECUTE`.
+- SQL conservado en `docs/sql/nvr-save-rpc-only-write.sql`.
+- **Advertencia de seguridad:** el asesor de Supabase señala intencionadamente la RPC `SECURITY DEFINER` ejecutable por usuarios autenticados. Debe auditarse estrictamente y no ampliarse a operaciones ajenas al guardado propio. Siguen presentes avisos preexistentes sobre protección de contraseñas filtradas y tabla de límites.
+- **Limitación:** aún no se ha probado una escritura RPC exitosa y un conflicto de revisión con sesiones autenticadas reales; tampoco está implementada la sincronización automática.
