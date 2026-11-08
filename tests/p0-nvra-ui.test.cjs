@@ -6,7 +6,7 @@ const path=require('node:path');
 for(const page of ['index.html','combate-demo.html']){
  test(page+': NVRA modal does not interfere with adventure controls',()=>{
   const html=fs.readFileSync(path.join(__dirname,'../juego',page),'utf8');
-  assert.match(html,/async function move\(x,y\)\{if\(s\.done\|\|battle\|\|!document\.getElementById\('nvra-center'\)\?\.hidden/);
+  assert.match(html,/async function move\(x,y\)\{if\(rivalBusy\|\|s\.done\|\|battle\|\|!document\.getElementById\('nvra-center'\)\?\.hidden/);
   assert.match(html,/if\(!nvraCenter\.hidden\|\|battle\|\|document\.querySelector\('\.realm-dialog'\)/);
   assert.match(html,/id="nvra-center"[^>]*hidden role="dialog"/);
   assert.match(html,/id="nvra-center-close"/);
