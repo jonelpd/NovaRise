@@ -30,3 +30,13 @@ Introducir utilidad verificable para NVRA sin confundir los recursos del juego c
 - No ofrecer conversión fija entre cristales y NVRA.
 - No anunciar minería real ni ganancias automáticas hasta que el sistema exista y esté auditado.
 - Mantener la experiencia estratégica accesible sin wallet ni compra de tokens.
+
+## Actualización — Centro NVRA (2026-11-08)
+- Se incorporó el botón «◈ Centro NVRA» al encabezado del juego principal y de la demo.
+- Se creó una ventana modal con información de minas, cristales, utilidades previstas y estado de monedero/recompensas.
+- Minas y cristales reflejan el estado de la partida; no representan balances on-chain.
+- Se añadieron controles de teclado (Escape y Tab), cierre y estilos móviles.
+- No se han habilitado pagos, firma de transacciones ni minería de NVRA real.
+- Commits: 12fd219 (juego principal), af04f32 (demo).
+
+Pendiente: pruebas de navegador, accesibilidad, móvil, y validación de contrato y arquitectura de recompensas antes de integrar blockchain.
