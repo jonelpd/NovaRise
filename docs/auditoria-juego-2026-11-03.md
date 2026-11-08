@@ -284,3 +284,11 @@ Se compilaron todos los scripts clásicos embebidos en ambas páginas mediante `
 - Para cada identidad se creó una partida de prueba en revisión 1, se verificó que no podía consultar la partida de la otra identidad mediante las políticas RLS, y se confirmó que la revisión de la primera progresaba a 2 sin aceptar una escritura obsoleta basada en revisión 1.
 - La transacción terminó con `ROLLBACK`; la consulta posterior confirmó **0 registros de prueba**.
 - **Límites de la validación:** no se utilizaron tokens JWT reales de dos sesiones cliente, ni se ejecutaron dos transacciones concurrentes en paralelo. Estas comprobaciones siguen pendientes antes de habilitar sincronización automática en nube.
+
+### Continuación — 2026-11-08: sincronización automática de nube tras guardado manual
+- En `juego/index.html`, `persistGame()` programa una sincronización en nube tras un cambio local válido, **solo si la sesión ha sido habilitada por un guardado manual exitoso**.
+- Retardo de 2,5 segundos; comprobaciones de usuario, propietario, combate, turno rival, operación manual ocupada, validez y tamaño. Antes de escribir compara revisión remota y utiliza RPC de actualización condicional. En conflicto o error pausa autosincronización, preservando la copia local.
+- Los cambios posteriores mientras la petición está en curso se reprograman al finalizar; un cambio de cuenta desactiva el estado automático. La recuperación remota sigue siendo manual y con confirmación.
+- Añadidos 3 tests en `tests/p0-cloud-autosave-guard.test.cjs` y actualizado el fixture VM de `tests/p0-save-backup.test.cjs`.
+- **GitHub Actions — Game regression tests:** [42523668254](https://github.com/jonelpd/NovaRise/actions/runs/42523668254): **86/86 pruebas superadas, 0 fallos**.
+- **Limitaciones:** no se ha realizado una prueba E2E en navegador con tokens JWT reales ni dos sesiones concurrentes; la sincronización automática requiere un guardado manual inicial en cada sesión y no resuelve diferencias entre la copia local y remota al iniciar. No genera NVRA.
