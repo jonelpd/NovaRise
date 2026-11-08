@@ -218,3 +218,10 @@ Se compilaron todos los scripts clásicos embebidos en ambas páginas mediante `
 - Corrección sincronizada en `juego/index.html` y `juego/combate-demo.html`; cuatro pruebas de ejecución añadidas en `tests/p0-siege-abort-army.test.cjs`.
 - **GitHub Actions — Game regression tests:** [42518252087](https://github.com/jonelpd/NovaRise/actions/runs/42518252087), commit `091b703`: **70/70 pruebas superadas, 0 fallos**.
 - Pendiente: comprobación interactiva en navegador real de las transiciones de batalla y persistencia de tropas.
+
+### Continuación — 2026-11-08: prueba integrada del ciclo de asedio
+- Incorporadas cuatro pruebas de ejecución en `tests/p0-siege-full-cycle.test.cjs`: lanzamiento de defensa, sustitución temporal del ejército por la guarnición, bajas, victoria o derrota, restitución del ejército original, cambio de propiedad, cierre de combate y estado serializado durante `render`.
+- Las pruebas verifican que la resolución no puede repetirse y no vuelve a guardar una segunda vez.
+- No se ha detectado en estas rutas un fallo adicional que exija modificar la lógica de producción.
+- **GitHub Actions — Game regression tests:** [42519887784](https://github.com/jonelpd/NovaRise/actions/runs/42519887784), commit `b4fd566`: **74/74 pruebas superadas, 0 fallos**.
+- Limitación: pruebas de funciones aisladas con dobles de `render` y `showBattle`; falta validar el flujo visual real, la escritura efectiva de `localStorage` y la recarga del navegador.
