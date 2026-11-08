@@ -13,7 +13,7 @@ async function scenario(failKey){
  const elements={'modal':{hidden:true},'online-load':{}};
  const ctx={
   el:id=>elements[id]||{}, s:{gold:77},currentUser:{id:'player-a'},
-  db:{from:()=>({select:()=>({eq:()=>({maybeSingle:async()=>({data:{save_data:{gold:99},updated_at:'2026-11-03T09:00:00Z'},error:null})})})})},
+  db:{from:()=>({select:()=>({eq:()=>({maybeSingle:async()=>({data:{save_data:{gold:99},updated_at:'2026-11-03T09:00:00Z',revision:1},error:null})})})})},
   validGame:()=>true,
   localStorage:{
    getItem:key=>values.has(key)?values.get(key):null,
