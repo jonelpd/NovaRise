@@ -40,3 +40,12 @@ Introducir utilidad verificable para NVRA sin confundir los recursos del juego c
 - Commits: 12fd219 (juego principal), af04f32 (demo).
 
 Pendiente: pruebas de navegador, accesibilidad, móvil, y validación de contrato y arquitectura de recompensas antes de integrar blockchain.
+
+## Actualización — Registro provisional de actividad (2026-11-08)
+- Centro NVRA muestra tres indicadores derivados de objetos reales del mapa: minas controladas (ownedMines), tesoros recogidos (taken) y fortalezas controladas por el jugador (verifiedSites y CASTLE_PROFILES).
+- Se filtran las entradas contra los identificadores existentes, evitando contar identificadores inventados o duplicados.
+- Son cálculos de interfaz sobre el estado local, no un registro seguro ni una prueba de actividad verificable.
+- No se asignan puntos canjeables, no hay minería de tokens ni se crean saldos o derechos sobre NVRA.
+- Commits: e7db248 (principal) y 7ddd734 (demo).
+
+**Próximo paso técnico:** definir eventos de juego generados y validados en servidor, asociarlos a un identificador de cuenta autenticada, aplicar límites y antirrepetición, y auditar la integridad de las fuentes antes de plantear recompensas on-chain.
