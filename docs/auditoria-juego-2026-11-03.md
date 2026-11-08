@@ -211,3 +211,10 @@ Se compilaron todos los scripts clásicos embebidos en ambas páginas mediante `
 - Primera ejecución: dos fallos por un simulador antiguo que no proporcionaba `verifiedSiteState`; corregido el fixture en `tests/p0-siege-turn-lock.test.cjs`.
 - **GitHub Actions — Game regression tests:** [42517017194](https://github.com/jonelpd/NovaRise/actions/runs/42517017194): **66/66 pruebas superadas, 0 fallos**.
 - Pendiente: comprobación manual del flujo completo en navegador real.
+
+### Continuación — 2026-11-08: restauración de tropas si falla el inicio del combate
+- Detectado un caso límite en `showBattle`: si una defensa de castillo se cancelaba por falta de unidades disponibles, se descartaba el combate después de haber sustituido temporalmente el ejército del héroe por la guarnición.
+- Ahora se restaura `heroArmyBefore` antes de descartar la batalla defensiva. El comportamiento de los combates normales sin tropas no cambia.
+- Corrección sincronizada en `juego/index.html` y `juego/combate-demo.html`; cuatro pruebas de ejecución añadidas en `tests/p0-siege-abort-army.test.cjs`.
+- **GitHub Actions — Game regression tests:** [42518252087](https://github.com/jonelpd/NovaRise/actions/runs/42518252087), commit `091b703`: **70/70 pruebas superadas, 0 fallos**.
+- Pendiente: comprobación interactiva en navegador real de las transiciones de batalla y persistencia de tropas.
