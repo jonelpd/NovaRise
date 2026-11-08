@@ -34,6 +34,7 @@ for(const page of ['index.html','combate-demo.html']){
    s:state,
    CASTLE_RECRUIT_COST:{soldiers:30,archers:50,griffins:110,dragons:300},
    siteGarrison:()=>garrison,
+   verifiedSiteState:()=>({'fort-west':'player'}),
    rivalCastleConquest:()=>{automatic++;assert.equal(state.autoResolveDefensiveSiege,true);return 'Automatic defense';},
    render:()=>{rendered++;},
    showBattle:()=>{showed++;},
