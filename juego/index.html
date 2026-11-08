@@ -1903,8 +1903,12 @@ async function rivalTurn(){
     const site=VERIFIED_MAP_SITES.find(t=>t.id===s.pendingDefensiveSiege);
     s.pendingDefensiveSiege=null;
     if(site&&verifiedSiteState()[site.id]==='player'){
-     if(await realmConfirm('🏰 ¡Castillo bajo ataque!','El enemigo asedia '+CASTLE_PROFILES[site.id].name+'. ¿Deseas dirigir personalmente la guarnición?','⚔️ Dirigir defensa','🛡️ Defensa automática'))launchDefensiveSiege(site);
-     else{s.autoResolveDefensiveSiege=true;try{s.message=rivalCastleConquest(site.id)}finally{s.autoResolveDefensiveSiege=false}render()}
+     const siegeCampaign=s;
+     const directDefense=await realmConfirm('🏰 ¡Castillo bajo ataque!','El enemigo asedia '+CASTLE_PROFILES[site.id].name+'. ¿Deseas dirigir personalmente la guarnición?','⚔️ Dirigir defensa','🛡️ Defensa automática');
+     if(epoch===rivalEpoch&&s===siegeCampaign&&!s.done&&verifiedSiteState()[site.id]==='player'){
+      if(directDefense)launchDefensiveSiege(site);
+      else{s.autoResolveDefensiveSiege=true;try{s.message=rivalCastleConquest(site.id)}finally{s.autoResolveDefensiveSiege=false}render()}
+     }
     }
    }
    rivalBusy=false;
