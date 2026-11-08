@@ -169,3 +169,10 @@ Se compilaron todos los scripts clásicos embebidos en ambas páginas mediante `
 - Nuevas pruebas `tests/p0-cloud-session-race.test.cjs` para las dos rutas.
 - **GitHub Actions — Game regression tests:** ejecución [42508068509](https://github.com/jonelpd/NovaRise/actions/runs/42508068509), commit `fb45a19`: **48/48 pruebas superadas, 0 fallos**.
 - Pendiente comprobar con cuentas y navegadores reales el cambio de sesión, la restauración y la experiencia móvil. Sin activación de recompensas reales NVRA.
+
+### Continuación — 2026-11-08: diálogos de reclutamiento y guarnición
+- En las dos versiones del juego, antes de modificar oro, ejército o guarnición tras una ventana asíncrona se comprueba que el castillo siga bajo control del jugador y que el objeto de guarnición sea el mismo.
+- Si el castillo ha cambiado de propietario o su estado fue reemplazado durante el diálogo, la operación se cancela y se solicita abrir nuevamente la administración.
+- Añadidas cuatro pruebas en `tests/p0-castle-dialog-race.test.cjs`.
+- **GitHub Actions — Game regression tests:** ejecución [42508325304](https://github.com/jonelpd/NovaRise/actions/runs/42508325304), commit `1bcc74c`: **52/52 pruebas superadas, 0 fallos**.
+- Continúan pendientes las comprobaciones manuales en navegador y móvil del ciclo completo de juego y las operaciones cloud con cuenta real.
