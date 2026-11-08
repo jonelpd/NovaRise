@@ -670,3 +670,130 @@ body.interest-modal-open{overflow:hidden}
 .updates-history a:focus-visible{outline:3px solid #a8e9cf;outline-offset:3px;border-radius:2px}
 .updates-history .simple-footnote{margin:1rem 0 0}
 @media(max-width:600px){.updates-history{padding:1rem}.updates-history time{white-space:normal}}
+
+
+/* NovaRise header refinement — compact, aligned, responsive navigation */
+@media (min-width: 1100px) {
+  .nvra-simple .simple-header .simple-nav {
+    display:flex;
+    flex-wrap:nowrap;
+    align-items:center;
+    justify-content:space-between;
+    gap:clamp(12px,1.8vw,24px);
+    min-height:76px;
+    padding-block:9px;
+  }
+  .nvra-simple .simple-header .simple-brand {
+    width:108px;
+    max-width:108px;
+    flex:0 0 108px;
+  }
+  .nvra-simple .simple-header .simple-nav nav {
+    order:initial;
+    display:flex;
+    flex:1 1 auto;
+    width:auto;
+    min-width:0;
+    max-width:none;
+    overflow:visible;
+    padding:0;
+    gap:clamp(5px,.7vw,12px);
+    justify-content:flex-end;
+    align-items:center;
+  }
+  .nvra-simple .simple-header .simple-lang {
+    flex:0 0 auto;
+    padding:9px 12px;
+    font-size:13px;
+  }
+}
+.nvra-simple .simple-header .simple-nav nav>a:not(.simple-facebook):not(.simple-telegram) {
+  font-size:clamp(11.5px,.86vw,13px);
+  padding:9px 11px;
+  min-height:40px;
+  transition:background .18s ease,border-color .18s ease,color .18s ease;
+}
+.nvra-simple .simple-header .simple-nav nav>a:not(.simple-facebook):not(.simple-telegram):hover,
+.nvra-simple .simple-header .simple-nav nav>a:not(.simple-facebook):not(.simple-telegram):focus-visible {
+  background:rgba(44,116,84,.35);
+  border-color:rgba(142,245,191,.6);
+}
+.nvra-simple .simple-header .simple-nav nav .simple-app-menu summary {
+  min-height:40px;
+  padding:9px 12px;
+  font-size:clamp(11.5px,.86vw,13px);
+}
+.nvra-simple .simple-header .simple-nav nav>a.simple-facebook,
+.nvra-simple .simple-header .simple-nav nav>a.simple-telegram {
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  flex:0 0 40px!important;
+  width:40px!important;
+  min-width:40px!important;
+  height:40px!important;
+  min-height:40px!important;
+  padding:5px!important;
+  margin-left:0!important;
+  border-radius:11px!important;
+  box-sizing:border-box;
+}
+.nvra-simple .simple-header .simple-nav nav>a.simple-telegram {
+  background:#229ed9;
+  border:1px solid #53b5e1;
+}
+.nvra-simple .simple-header .simple-nav nav>a.simple-telegram:hover,
+.nvra-simple .simple-header .simple-nav nav>a.simple-telegram:focus-visible {
+  background:#1689bd;
+  box-shadow:0 0 0 2px rgba(34,158,217,.22);
+}
+.nvra-simple .simple-header .simple-nav nav>a.simple-facebook svg,
+.nvra-simple .simple-header .simple-nav nav>a.simple-telegram svg {
+  width:23px!important;
+  height:23px!important;
+  flex:0 0 23px!important;
+}
+.nvra-simple .simple-header .simple-nav nav a:focus-visible,
+.nvra-simple .simple-header .simple-lang:focus-visible {
+  outline:2px solid #a5f2cb;
+  outline-offset:3px;
+}
+@media (max-width:1099px) {
+  .nvra-simple .simple-header .simple-nav {
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto;
+    align-items:center;
+    gap:8px 12px;
+    padding-block:8px;
+  }
+  .nvra-simple .simple-header .simple-brand {
+    grid-column:1;
+    grid-row:1;
+    width:96px;
+    max-width:96px;
+  }
+  .nvra-simple .simple-header .simple-lang {
+    grid-column:2;
+    grid-row:1;
+    justify-self:end;
+  }
+  .nvra-simple .simple-header .simple-nav nav {
+    grid-column:1/-1;
+    grid-row:2;
+    width:100%;
+    max-width:100%;
+    overflow-x:auto;
+    overflow-y:hidden;
+    justify-content:flex-start;
+    gap:8px;
+    padding:4px 0 8px;
+  }
+  .nvra-simple .simple-header .simple-nav nav .simple-app-menu {
+    width:auto;
+    flex:0 0 auto;
+  }
+}
+@media (max-width:480px) {
+  .nvra-simple .simple-header .simple-brand {width:86px;max-width:86px}
+  .nvra-simple .simple-header .simple-nav nav>a:not(.simple-facebook):not(.simple-telegram) {padding:8px 10px}
+}
