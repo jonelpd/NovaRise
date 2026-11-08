@@ -34,3 +34,10 @@ test('account changes or local progress changes cancel stale comparison',async()
 test('network errors preserve local campaign',async()=>{
  const r=await scenario({fail:true});assert.match(r.infoText,/No se pudo comparar/);assert.equal(r.writes,0);
 });
+
+test('campaign selection is presented without direct writes',async()=>{
+ const r=await scenario();assert.match(r.infoText,/dos partidas diferentes/);assert.equal(r.writes,0);
+ assert.match(html,/window\.nvrChooseCampaign=\(local,remote,updatedAt\)=>realmDialog/);
+ assert.match(html,/choice==='cloud'\)el\('online-load'\)\.click\(\)/);
+ assert.match(html,/choice==='local'\)info\('Has conservado la campaña local/);
+});
