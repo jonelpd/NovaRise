@@ -8,7 +8,7 @@ async function scenario({local={gold:12},remote={gold:22},switchUser=false,chang
  const userId='player-a',key='novarise-reinos-reset-20261103-user-'+userId,store=new Map();
  if(local!==null)store.set(key,JSON.stringify(local));
  let writes=0,infoText='';
- const ctx={currentUser:{id:userId},localStorage:{getItem:k=>store.get(k)||null,setItem:()=>{writes++}},validGame:v=>v&&Number.isInteger(v.gold),info:v=>{infoText=v}};
+ const ctx={currentUser:{id:userId},localStorage:{getItem:k=>store.get(k)||null,setItem:()=>{writes++}},validGame:v=>v&&Number.isInteger(v.gold),info:v=>{infoText=v},busy:false,rivalBusy:false,el:()=>({hidden:true}),document:{querySelector:()=>null},window:{nvrChooseCampaign:async()=>null}};
  ctx.db={from:()=>({select:()=>({eq:()=>({maybeSingle:async function(){
   if(switchUser)ctx.currentUser={id:'player-b'};
   if(changeLocal)store.set(key,JSON.stringify({gold:99}));
