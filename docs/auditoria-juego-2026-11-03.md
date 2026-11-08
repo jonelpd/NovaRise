@@ -183,3 +183,10 @@ Se compilaron todos los scripts clásicos embebidos en ambas páginas mediante `
 - Añadidas cuatro pruebas en `tests/p0-castle-campaign-race.test.cjs`.
 - **GitHub Actions — Game regression tests:** ejecución [42508460916](https://github.com/jonelpd/NovaRise/actions/runs/42508460916), commit `9bd2c05`: **56/56 pruebas superadas, 0 fallos**.
 - Pendiente: comprobación interactiva de castillos, combates y partidas en navegador real y móvil.
+
+### Continuación — 2026-11-08: limpieza del historial de asedios retirado
+- En `juego/index.html` y `juego/combate-demo.html` se elimina la escritura de `s.siegeHistory` en `finishDefensiveSiege`, respetando la petición de retirar esta función del juego.
+- Se mantiene la resolución táctica, el resultado de la conquista y la restitución del ejército del héroe tras la defensa.
+- Incorporadas dos pruebas `tests/p0-siege-history-removed.test.cjs` y actualizadas las cuatro pruebas de `tests/p0-siege.test.cjs` para verificar que el historial retirado no se vuelva a crear.
+- La primera ejecución falló porque las pruebas antiguas todavía exigían la existencia del historial eliminado. Corregidas esas expectativas, la ejecución [42512554239](https://github.com/jonelpd/NovaRise/actions/runs/42512554239), commit `27818d7`, terminó con **58/58 pruebas superadas, 0 fallos**.
+- Pendiente: revisión de referencias históricas residuales, comprobaciones de combate real en navegador y móvil.
