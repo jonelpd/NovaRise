@@ -2046,7 +2046,29 @@ function updateGameScreen(){
 }
 const gameExit=document.getElementById('game-exit');
 if(gameExit)gameExit.onclick=()=>{closeNvraCenter();document.getElementById('online-logout').click()};
-async function refresh(){const {data,error}=await db.auth.getUser();const nextUser=error?null:data.user;if(currentUser?.id!==nextUser?.id)stopAutoCloud();currentUser=nextUser;SAVE=currentUser?'novarise-reinos-reset-20261103-user-'+currentUser.id:null;OWNER=currentUser?'novarise-last-cloud-owner-v12-user-'+currentUser.id:null;window.nvrSwitchPlayer?.(currentUser?.id||null);let nickname=currentUser?.user_metadata?.nickname||'';if(currentUser&&!nickname){const {data:profile}=await db.from('nvr_game_profiles').select('nickname').eq('user_id',currentUser.id).maybeSingle();if(currentUser&&profile?.nickname)nickname=profile.nickname}const nick=el('player-nickname');if(nick)nick.textContent=nickname?'Héroe: '+nickname:'';const realm=el('realm-player-name');if(realm)realm.textContent=nickname?'· '+nickname:'';const chooseNick=el('realm-set-nickname');if(chooseNick)chooseNick.hidden=!currentUser||!!nickname;controls();updateGameScreen();status(currentUser?'Sesión iniciada: '+currentUser.email:'Sin sesión. Inicia sesión para entrar al juego.');if(!currentUser){remoteTimestamp=null;info('Estado de la nube: inicia sesión para consultar.')}}
+async function inspectCloudOnEntry(userId){
+ const localKey='novarise-reinos-reset-20261103-user-'+userId;
+ const localSnapshot=localStorage.getItem(localKey);
+ try{
+  const {data,error}=await db.from('nvr_game_saves').select('save_data,updated_at,revision').eq('user_id',userId).maybeSingle();
+  if(error)throw error;
+  if(currentUser?.id!==userId||localStorage.getItem(localKey)!==localSnapshot)return;
+  if(!data){info('No hay una partida en la nube. Tu progreso local se conserva.');return}
+  const remote=data.save_data;
+  if(!validGame(remote)){info('La partida en la nube no supera la validación. No se ha modificado el progreso local.');return}
+  let local=null;
+  try{if(localSnapshot)local=JSON.parse(localSnapshot)}catch(e){}
+  if(local&&!validGame(local))local=null;
+  if(local&&JSON.stringify(local)===JSON.stringify(remote)){
+   info('Partida local y nube coinciden ('+new Date(data.updated_at).toLocaleString()+').');
+  }else if(local){
+   info('⚠️ Hay dos partidas diferentes: una en este navegador y otra en la nube ('+new Date(data.updated_at).toLocaleString()+'). Usa «Recuperar» para elegir la nube o «Guardar en nube» para elegir la local; se pedirá confirmación. No se ha sobrescrito ninguna.');
+  }else{
+   info('☁️ Existe una partida en la nube ('+new Date(data.updated_at).toLocaleString()+'). Usa «Recuperar» para continuarla; no se cargará sin tu confirmación.');
+  }
+ }catch(e){if(currentUser?.id===userId)info('No se pudo comparar la nube: '+(e.message||'sin conexión')+'. Tu partida local sigue disponible.')}
+}
+async function refresh(){const {data,error}=await db.auth.getUser();const nextUser=error?null:data.user;const changedPlayer=currentUser?.id!==nextUser?.id;if(changedPlayer)stopAutoCloud();currentUser=nextUser;SAVE=currentUser?'novarise-reinos-reset-20261103-user-'+currentUser.id:null;OWNER=currentUser?'novarise-last-cloud-owner-v12-user-'+currentUser.id:null;window.nvrSwitchPlayer?.(currentUser?.id||null);let nickname=currentUser?.user_metadata?.nickname||'';if(currentUser&&!nickname){const {data:profile}=await db.from('nvr_game_profiles').select('nickname').eq('user_id',currentUser.id).maybeSingle();if(currentUser&&profile?.nickname)nickname=profile.nickname}const nick=el('player-nickname');if(nick)nick.textContent=nickname?'Héroe: '+nickname:'';const realm=el('realm-player-name');if(realm)realm.textContent=nickname?'· '+nickname:'';const chooseNick=el('realm-set-nickname');if(chooseNick)chooseNick.hidden=!currentUser||!!nickname;controls();updateGameScreen();status(currentUser?'Sesión iniciada: '+currentUser.email:'Sin sesión. Inicia sesión para entrar al juego.');if(!currentUser){remoteTimestamp=null;info('Estado de la nube: inicia sesión para consultar.')}else if(changedPlayer){void inspectCloudOnEntry(currentUser.id)}}
 async function run(fn){if(busy)return;busy=true;controls();try{await fn()}catch(e){status('Error: '+(e.message||'operación fallida'))}finally{busy=false;controls()}}
 async function cloudInfo(){if(!currentUser)throw Error('Inicia sesión');const {data,error}=await db.from('nvr_game_saves').select('updated_at,revision').eq('user_id',currentUser.id).maybeSingle();if(error)throw error;remoteTimestamp=data?.updated_at||null;info(remoteTimestamp?'Última partida en la nube: '+new Date(remoteTimestamp).toLocaleString():'Todavía no hay partida en la nube.');return remoteTimestamp}
 el('online-signup').onclick=()=>run(async()=>{const email=el('online-email').value.trim(),password=el('online-password').value;if(password.length<8)throw Error('La contraseña debe tener al menos 8 caracteres');const nickname=el('online-nickname').value.trim();if(nickname.length<3||nickname.length>32)throw Error('El apodo debe tener entre 3 y 32 caracteres');const {data,error}=await db.auth.signUp({email,password,options:{data:{nickname}}});el('online-password').value='';if(error)throw error;await refresh();status(data.session?'Cuenta creada e iniciada.':'Registro solicitado. Revisa tu correo para confirmar la cuenta si es necesario.')});
