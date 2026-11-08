@@ -7,12 +7,17 @@ test('cloud upload rechecks remote revision after user confirmation',()=>{
  const confirm=source.indexOf("await realmConfirm('☁️ Guardar en la nube'");
  const recheck=source.indexOf("const {data:remoteNow,error:remoteCheckError}");
  const compare=source.indexOf("(remoteNow?.updated_at||null)!==previous");
- const upload=source.indexOf("upsert({user_id:currentUser.id,save_data:latestGame");
+ const upload=source.indexOf("rpc('nvr_save_campaign_if_revision'");
  assert(confirm>=0&&recheck>confirm&&compare>recheck&&upload>compare);
 });
 test('cloud upload rechecks session and turn state after revision fetch',()=>{
  const recheck=source.indexOf("const {data:remoteNow,error:remoteCheckError}");
  const guard=source.indexOf("currentUser.id!==savingUserId||rivalBusy||!el('modal').hidden",recheck);
- const upload=source.indexOf("upsert({user_id:currentUser.id,save_data:latestGame");
+ const upload=source.indexOf("rpc('nvr_save_campaign_if_revision'");
  assert(guard>recheck&&upload>guard);
+});
+
+test('cloud upload rejects atomic version conflicts',()=>{
+ assert.match(source,/if\(newRevision===null\)throw Error\('Conflicto de versiones/);
+ assert.match(source,/p_expected_revision:expectedRevision/);
 });
