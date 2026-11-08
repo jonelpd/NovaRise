@@ -335,3 +335,11 @@ Se compilaron todos los scripts clásicos embebidos en ambas páginas mediante `
 - CSS dedicado `realm-map-console-professional` con acabado medieval coherente con el panel derecho y distribución adaptable a móvil.
 - **GitHub Actions:** [42525738403](https://github.com/jonelpd/NovaRise/actions/runs/42525738403): **100/100 pruebas superadas, 0 fallos**.
 - Pendiente: validación visual manual en navegador real y dispositivos móviles.
+
+### Fase 1 — 2026-11-08: auditoría funcional de turnos y reinicio (primera intervención)
+- Inspección de `juego/index.html` y `juego/combate-demo.html`: `walkTo`, `move`, `rivalTurn`, `persistGame`, `validGame`, `load`, `start` y manejador de nueva campaña.
+- **Corregido:** `walkTo` y `move` ahora rechazan entradas durante `rivalBusy`; evita modificar el estado mientras el rival calcula/ejecuta sus acciones.
+- **Corregido:** nueva campaña rechaza combate, movimiento o turno rival; exige sesión/almacenamiento activo; captura identidad de `STORE`, referencia del estado y JSON de la partida antes de abrir confirmación y los vuelve a comprobar después. Si cambia la partida, cancela sin borrar datos.
+- Se añadieron seis pruebas de regresión en `tests/p0-turn-reset-race.test.cjs` (tres por archivo), y se actualizaron dos aserciones anteriores que dependían del orden textual de la condición.
+- **CI:** [42526963572](https://github.com/jonelpd/NovaRise/actions/runs/42526963572) **108/108 pruebas correctas, 0 fallos**. El primer intento [42526902254](https://github.com/jonelpd/NovaRise/actions/runs/42526902254) falló por cuatro aserciones estáticas desactualizadas; corregidas y revalidadas.
+- **Alcance y pendientes:** auditoría profunda todavía en curso. Falta prueba integral real de una campaña completa (exploración, asedio, reclutamiento, guardado, cierre/reentrada), dos sesiones en navegadores, simulación de interrupciones de red durante sincronización y validación visual/funcional en dispositivos. Las pruebas de CI no sustituyen estas comprobaciones.
