@@ -149,3 +149,10 @@ Se compilaron todos los scripts clásicos embebidos en ambas páginas mediante `
 - Añadida la prueba `tests/p0-rival-save-lock.test.cjs` y actualizado el simulador de la recuperación en la nube para representar el estado inactivo del turno rival.
 - **GitHub Actions — Game regression tests:** ejecución [42505858131](https://github.com/jonelpd/NovaRise/actions/runs/42505858131) completada con **36/36 pruebas satisfactorias, 0 fallos**, commit `ba478aa`. Los fallos de las ejecuciones intermedias se debían a que el simulador de la nube no definía `rivalBusy`; corregido.
 - Pendiente: prueba manual en navegador real de asedios, restauración local y en nube, recuperación tras recarga, y móvil. No se activan recompensas NVRA reales.
+
+### Continuación — 2026-11-08: castillo exacto y persistencia tras combate
+- La resolución automática de un castillo sin guarnición ahora recibe explícitamente el identificador del castillo atacado. Se evita que la selección por proximidad afecte a otra fortaleza del jugador.
+- Tras una derrota en combate y tras la conquista de un castillo independiente, ambas versiones del juego invocan el renderizado final para persistir inmediatamente el estado resultante (sin esperar a otra interacción).
+- Nuevas pruebas de regresión `tests/p0-siege-target.test.cjs` y `tests/p0-battle-persistence.test.cjs`. Ajustada la extracción de la función de asedio en `tests/p0-siege-turn-lock.test.cjs` al nuevo parámetro.
+- **GitHub Actions — Game regression tests:** ejecución [42506478996](https://github.com/jonelpd/NovaRise/actions/runs/42506478996), commit `98808fa`: **44/44 pruebas superadas, 0 fallos**.
+- Sigue pendiente validar visualmente en navegador real el ciclo de combate, asedio, recarga, nube y versión móvil. No se han activado recompensas NVRA reales.
