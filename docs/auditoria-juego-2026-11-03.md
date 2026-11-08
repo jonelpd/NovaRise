@@ -321,3 +321,10 @@ Se compilaron todos los scripts clásicos embebidos en ambas páginas mediante `
 - Antes de actuar tras el diálogo se comprueban identidad y copia local; se evita abrir sobre combate, turno rival, operación ocupada u otro diálogo.
 - **GitHub Actions:** [42525102405](https://github.com/jonelpd/NovaRise/actions/runs/42525102405): **95/95 pruebas superadas, 0 fallos**.
 - Pendiente: validación visual/E2E en navegador real y prueba con dos sesiones autenticadas simultáneas.
+
+### Continuación — 2026-11-08: auditoría y simplificación del panel derecho
+- Se reorganizó el `aside` de `juego/index.html` como `realm-sidebar`: resumen superior del reino, seis grupos desplegables para acciones, y diario de campaña independiente.
+- Se eliminaron del panel el catálogo de precios NVRA conceptual y explicaciones redundantes; se conservaron los controles interactivos y sus IDs para no romper reclutamiento, construcción, minas, facción, misiones, importación/exportación o mensajes.
+- Se añadió CSS específico `realm-sidebar-professional` con acabado medieval, jerarquía tipográfica, botones de ancho completo y adaptación móvil.
+- **GitHub Actions:** [42525466670](https://github.com/jonelpd/NovaRise/actions/runs/42525466670): **97/97 pruebas superadas, 0 fallos**.
+- Pendiente: revisión visual manual en navegador real, especialmente móviles y el desplazamiento del panel.
