@@ -1587,7 +1587,7 @@ function launchDefensiveSiege(site){
  // Do not replace the hero army with an empty garrison: resolve the undefended castle automatically.
  if(!Object.keys(CASTLE_RECRUIT_COST).some(type=>(d[type]||0)>0)){
   s.autoResolveDefensiveSiege=true;
-  try{s.message=rivalCastleConquest()}finally{s.autoResolveDefensiveSiege=false}
+  try{s.message=rivalCastleConquest(site.id)}finally{s.autoResolveDefensiveSiege=false}
   render();return
  }
  const army={};for(const type of Object.keys(CASTLE_RECRUIT_COST))army[type]=s[type]||0;
@@ -1596,10 +1596,10 @@ function launchDefensiveSiege(site){
  battle={x:s.x,y:s.y,k:'defense:'+site.id,defenseSiteId:site.id,heroArmyBefore:army,defenseBefore:before,defenseEnemyBefore:{soldiers:v.soldiers,archers:v.archers},hp:Math.max(8,v.soldiers*2+v.archers*3),rival:true,fort:true,defending:true,ax:0,ay:2,ex:5,ey:2,range:1,selected:'soldiers',sx:0,sy:2,rx:0,ry:3,round:0};
  showBattle();
 }
-function rivalCastleConquest(){
+function rivalCastleConquest(siteId){
  const v=rivalState();if(v.defeated)return '';
  const owners=verifiedSiteState();
- const target=VERIFIED_MAP_SITES.filter(site=>site.kind==='fort'&&owners[site.id]==='player')
+ const target=VERIFIED_MAP_SITES.filter(site=>site.kind==='fort'&&owners[site.id]==='player'&&(!siteId||site.id===siteId))
   .map(site=>({site,d:Math.hypot(v.x-site.x,v.y-site.y)})).sort((a,b)=>a.d-b.d)[0];
  if(!target||target.d>5.5)return '';
  const guard=siteGarrison(target.site.id);
@@ -1906,7 +1906,7 @@ async function rivalTurn(){
     s.pendingDefensiveSiege=null;
     if(site&&verifiedSiteState()[site.id]==='player'){
      if(await realmConfirm('🏰 ¡Castillo bajo ataque!','El enemigo asedia '+CASTLE_PROFILES[site.id].name+'. ¿Deseas dirigir personalmente la guarnición?','⚔️ Dirigir defensa','🛡️ Defensa automática'))launchDefensiveSiege(site);
-     else{s.autoResolveDefensiveSiege=true;try{s.message=rivalCastleConquest()}finally{s.autoResolveDefensiveSiege=false}render()}
+     else{s.autoResolveDefensiveSiege=true;try{s.message=rivalCastleConquest(site.id)}finally{s.autoResolveDefensiveSiege=false}render()}
     }
    }
    rivalBusy=false;
