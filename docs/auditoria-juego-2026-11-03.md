@@ -225,3 +225,11 @@ Se compilaron todos los scripts clásicos embebidos en ambas páginas mediante `
 - No se ha detectado en estas rutas un fallo adicional que exija modificar la lógica de producción.
 - **GitHub Actions — Game regression tests:** [42519887784](https://github.com/jonelpd/NovaRise/actions/runs/42519887784), commit `b4fd566`: **74/74 pruebas superadas, 0 fallos**.
 - Limitación: pruebas de funciones aisladas con dobles de `render` y `showBattle`; falta validar el flujo visual real, la escritura efectiva de `localStorage` y la recarga del navegador.
+
+### Continuación — 2026-11-08: persistencia local validada y recuperación
+- Nuevo `persistGame` centraliza guardado manual y automático: bloquea estados de combate o turno rival, valida la estructura antes de escribir, evita escrituras idénticas y guarda en `STORE+'-backup'` el estado anterior válido antes de actualizar el principal.
+- `load` intenta recuperar esa copia anterior si el guardado principal no supera validación; avisa al jugador cuando se restaura. Si tampoco hay copia válida, conserva el guardado original para recuperación manual y no lo sobrescribe.
+- Aplicado a `juego/index.html` y `juego/combate-demo.html`.
+- Nuevas pruebas en `tests/p0-save-backup.test.cjs` y `tests/p0-save-backup-recovery.test.cjs`; adaptados los fixtures de `tests/p0-rival-save-lock.test.cjs`.
+- **GitHub Actions — Game regression tests:** [42520216631](https://github.com/jonelpd/NovaRise/actions/runs/42520216631): **78/78 pruebas superadas, 0 fallos**.
+- Alcance: almacenamiento local del mismo navegador/perfil. No garantiza sincronización entre dispositivos ni recuperación ante borrado total del almacenamiento; pendiente prueba de cierre/reapertura en navegador real.
