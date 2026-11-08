@@ -1642,9 +1642,6 @@ function rivalCastleConquest(siteId){
  if(!alive()){v.defeated=true;v.recovery=0}
  const outcome=won?'⚔️ El Reino Umbrío conquista '+castle+'.':'🛡️ '+castle+' resiste el asedio enemigo.';
  const details=report.length?report.join(' | '):'Sin defensores desplegados';
- const history=Array.isArray(s.siegeHistory)?s.siegeHistory:[];
- history.unshift({turn:s.turn,castle,outcome,details,won,attackerBefore:initialAttackers,attackerAfter:{...attackers},defenderBefore:initialDefenders,defenderAfter:{...d},frames});
- s.siegeHistory=history.slice(0,12);
  return outcome+' '+details;
 }
 function applyVerifiedSiteTurn(){
