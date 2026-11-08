@@ -34,11 +34,11 @@ for (const page of ['index.html', 'combate-demo.html']) {
       assert.equal(state.griffins,1);
       assert.equal(garrison.defenders.soldiers,won?3:0);
       assert.equal(state.verifiedSites['fort-west'],won?'player':'rival');
-      assert.equal(state.siegeHistory.length,1);
+      assert.equal(state.siegeHistory,undefined,'Removed siege history must not be created');
       assert.equal(messages,1);
       assert.equal(context.battle,null);
       assert.equal(context.finishDefensiveSiege(won),false,'Resolution must not run twice');
-      assert.equal(state.siegeHistory.length,1,'History must not duplicate');
+      assert.equal(state.siegeHistory,undefined,'Removed siege history must remain absent');
     });
   }
 }
