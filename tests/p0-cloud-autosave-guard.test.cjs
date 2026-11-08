@@ -24,3 +24,11 @@ test('autosave preserves local writes and excludes combat and rival turns',()=>{
  assert.match(html,/rivalBusy\|\|!el\('modal'\)\.hidden/);
  assert.match(html,/if\(currentUser\?\.id!==nextUser\?\.id\)stopAutoCloud\(\)/);
 });
+
+test('autosave does not re-upload an unchanged snapshot and queues edits during upload',()=>{
+ assert.match(html,/if\(snapshotText===autoCloudLastSaved\)return/);
+ assert.match(html,/if\(autoCloudRunning\)\{autoCloudPending=true;return\}/);
+ assert.match(html,/autoCloudLastSaved=snapshotText/);
+ assert.match(html,/autoCloudPending\|\|JSON\.stringify\(s\)!==snapshotText/);
+ assert.match(html,/autoCloudLastSaved=JSON\.stringify\(latestGame\)/);
+});
