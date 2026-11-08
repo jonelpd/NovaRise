@@ -292,3 +292,10 @@ Se compilaron todos los scripts clásicos embebidos en ambas páginas mediante `
 - Añadidos 3 tests en `tests/p0-cloud-autosave-guard.test.cjs` y actualizado el fixture VM de `tests/p0-save-backup.test.cjs`.
 - **GitHub Actions — Game regression tests:** [42523668254](https://github.com/jonelpd/NovaRise/actions/runs/42523668254): **86/86 pruebas superadas, 0 fallos**.
 - **Limitaciones:** no se ha realizado una prueba E2E en navegador con tokens JWT reales ni dos sesiones concurrentes; la sincronización automática requiere un guardado manual inicial en cada sesión y no resuelve diferencias entre la copia local y remota al iniciar. No genera NVRA.
+
+### Continuación — 2026-11-08: cambios durante la subida y deduplicación
+- La sincronización automática conserva `autoCloudLastSaved` para evitar volver a subir exactamente la misma campaña; se inicializa tras el guardado manual que habilita el modo automático.
+- Si el juego modifica el estado mientras la RPC está activa, `autoCloudPending` registra la necesidad de otra sincronización; al terminar, se vuelve a programar si hubo cambios.
+- Se amplió `tests/p0-cloud-autosave-guard.test.cjs` para verificar estas condiciones.
+- **GitHub Actions — Game regression tests:** [42524159183](https://github.com/jonelpd/NovaRise/actions/runs/42524159183): **87/87 pruebas correctas, 0 fallos**.
+- Pendiente: prueba real E2E con navegador y sesiones autenticadas, recuperación de nube sin perder una campaña local divergente, y comportamiento tras interrupción de red.
