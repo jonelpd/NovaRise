@@ -176,3 +176,10 @@ Se compilaron todos los scripts clásicos embebidos en ambas páginas mediante `
 - Añadidas cuatro pruebas en `tests/p0-castle-dialog-race.test.cjs`.
 - **GitHub Actions — Game regression tests:** ejecución [42508325304](https://github.com/jonelpd/NovaRise/actions/runs/42508325304), commit `1bcc74c`: **52/52 pruebas superadas, 0 fallos**.
 - Continúan pendientes las comprobaciones manuales en navegador y móvil del ciclo completo de juego y las operaciones cloud con cuenta real.
+
+### Continuación — 2026-11-08: protección frente a sustitución de campaña
+- En las dos versiones, reclutamiento y administración de guarnición capturan la referencia de la campaña antes de abrir los diálogos y verifican que siga siendo la partida activa antes de modificar recursos o unidades.
+- Esta comprobación complementa la validación de propiedad y referencia de guarnición existente; evita aplicar una decisión pendiente a otra partida después de una sustitución.
+- Añadidas cuatro pruebas en `tests/p0-castle-campaign-race.test.cjs`.
+- **GitHub Actions — Game regression tests:** ejecución [42508460916](https://github.com/jonelpd/NovaRise/actions/runs/42508460916), commit `9bd2c05`: **56/56 pruebas superadas, 0 fallos**.
+- Pendiente: comprobación interactiva de castillos, combates y partidas en navegador real y móvil.
