@@ -1581,9 +1581,6 @@ function finishDefensiveSiege(won){
  if(won){v.defeated=true;v.recovery=0;v.soldiers=0;v.archers=0}
  else{verifiedSiteState()[id]='rival';v.soldiers=Math.max(1,Math.ceil(v.soldiers/2));v.archers=Math.max(0,Math.ceil(v.archers/2));g.defenders={soldiers:0,archers:0,griffins:0,dragons:0}}
  const outcome=won?'🛡️ '+castle+' resiste: has dirigido la defensa.':'⚔️ El Reino Umbrío conquista '+castle+' tras la batalla.';
- const history=Array.isArray(s.siegeHistory)?s.siegeHistory:[];
- history.unshift({turn:s.turn,castle,outcome,details:'Batalla táctica dirigida por el jugador',won,attackerBefore:enemyBefore,attackerAfter:{soldiers:v.soldiers,archers:v.archers},defenderBefore:before,defenderAfter:after});
- s.siegeHistory=history.slice(0,12);
  battle=null;$('modal').hidden=true;message(outcome);render();return true
 }
 function launchDefensiveSiege(site){
