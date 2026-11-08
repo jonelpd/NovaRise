@@ -97,3 +97,11 @@ En la página principal se unificó validGame para carga local, importación v10
 - Se añadió tests/p0-local-save-integrity.test.cjs para comprobar conservación del JSON inválido y restauración de partida válida en ambas páginas (commit 916597d).
 
 **Limitación:** el flujo está configurado, pero no se han obtenido ni revisado registros de ejecución; no se puede afirmar que las pruebas hayan pasado. Próximo paso: inspeccionar los resultados de GitHub Actions, corregir cualquier fallo, y realizar pruebas manuales de nube, combate y visualización.
+
+## Sexta revisión — 2026-11-08: auditoría de las pruebas
+
+- Se añadió tests/p0-save-validator.test.cjs con casos válidos e inválidos de guardado y comprobaciones estáticas de movimiento/ventanas.
+- Se corrigió el aislamiento de funciones en tests/p0-save-validator.test.cjs (commit da1d140) y tests/p0-import.test.cjs (commit 8f0bc96) para evitar ejecutar inicializadores de la interfaz durante las pruebas de validación.
+- La consulta de estados y ejecuciones de GitHub para el commit de pruebas anterior no devolvió registros. Se intentó obtener una copia del repositorio para ejecutar Node localmente, pero la conexión falló por resolución DNS.
+
+**Resultado honesto:** cobertura ampliada y código de pruebas corregido, sin confirmación de ejecución satisfactoria. Abrir GitHub Actions y revisar el flujo Game regression tests; si falla, descargar los logs y reparar los casos concretos antes de declarar completada la fase.
