@@ -7,7 +7,7 @@ const vm=require('node:vm');
 for(const page of ['index.html','combate-demo.html']){
  test(page+': all classic inline scripts compile',()=>{
   const html=fs.readFileSync(path.join(__dirname,'../juego',page),'utf8');
-  const scripts=[...html.matchAll(/<script\\b([^>]*)>([\\s\\S]*?)<\\/script>/gi)];
+  const scripts=[...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)];
   assert(scripts.length>=5,'expected game scripts');
   for(const [index,script] of scripts.entries()){
    if(/type=["']module["']/.test(script[1]))continue;
