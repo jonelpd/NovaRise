@@ -23,7 +23,7 @@ for(const page of ['index.html','combate-demo.html']){
  test(page+': movement waits for decisions and blocks modal reentry',()=>{
   const html=fs.readFileSync(path.join(__dirname,'../juego',page),'utf8');
   assert.match(html,/await move\(x,y\)/);
-  assert.match(html,/async function move\(x,y\)\{if\(s.done\|\|battle\|\|[^\n]*document.querySelector\('\.realm-dialog'\)/);
+  assert.match(html,/async function move\(x,y\)\{if\(rivalBusy\|\|s.done\|\|battle\|\|[^\n]*document.querySelector\('\.realm-dialog'\)/);
   assert.match(html,/s\.taken\.push\(k\);recordMapTreasure\(k\);if\(chooseExperience\)/);
  });
 }
