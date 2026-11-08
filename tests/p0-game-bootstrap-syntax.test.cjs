@@ -15,5 +15,6 @@ for(const page of ['index.html','combate-demo.html']){
   }
   assert.match(scripts[0][2],/function validGame\(g\)\{/);
   assert.doesNotMatch(scripts[0][2],/async\s+async\s+function/);
+  assert.match(scripts[0][2],/rivalTurn\(\)\.catch\(error=>\{/,'rival AI errors must be handled');
  });
 }
