@@ -32,3 +32,13 @@ test('autosave does not re-upload an unchanged snapshot and queues edits during 
  assert.match(html,/autoCloudPending\|\|JSON\.stringify\(s\)!==snapshotText/);
  assert.match(html,/autoCloudLastSaved=JSON\.stringify\(latestGame\)/);
 });
+
+test('unchanged local snapshot can rearm a pending cloud upload safely',()=>{
+ assert.match(html,/if\(previous===next\)\{window\.nvrScheduleCloudSave\?\.\(\);return true;\}/);
+ assert.match(html,/if\(autoCloudLastSaved!==null&&JSON\.stringify\(s\)===autoCloudLastSaved\)return/);
+});
+test('cloud restore does not race an in-flight autosave',()=>{
+ const restore=html.slice(html.indexOf("el('online-load').onclick"),html.indexOf('db.auth.onAuthStateChange'));
+ assert.match(restore,/if\(autoCloudRunning\)throw Error/);
+ assert.match(restore,/stopAutoCloud\(\);location\.reload\(\)/);
+});
