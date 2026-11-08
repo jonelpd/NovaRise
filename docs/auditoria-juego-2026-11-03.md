@@ -122,3 +122,11 @@ Se compilaron todos los scripts clásicos embebidos en ambas páginas mediante `
 - Se renombró el elemento DOM a `mineDisplay` en ambas versiones, sin alterar los datos de partida ni los identificadores del mapa (commits b4cdecd y 4034852).
 - Se amplió `tests/p0-nvra-ui.test.cjs` para impedir la reintroducción de esa colisión (commit 82c5281).
 - Pendiente de verificar en navegador el Centro NVRA, el flujo de combate, guardado/restauración y compatibilidad móvil. No se ha activado ninguna recompensa real de tokens.
+
+## Auditoría del turno rival — 2026-11-08
+- Se inspeccionó el flujo del botón «Terminar turno» y la función asíncrona `rivalTurn()`.
+- El botón invocaba la función sin gestionar rechazos de la promesa; un error inesperado podía quedar sin comunicar y dificultar la recuperación de la interfaz.
+- Se incorporó un manejador `.catch()` que registra el fallo en consola, libera `rivalBusy`, vuelve a dibujar la interfaz y muestra un aviso al jugador. No se repite automáticamente el turno para evitar aplicar ingresos por duplicado.
+- Se aplicó a juego principal y demo (commits 93f1a2e, 251df74, 464c676, ed4ba4b).
+- Se amplió la prueba `tests/p0-game-bootstrap-syntax.test.cjs` para comprobar la existencia del manejo de rechazos (commit 0c717db).
+- **Pendiente:** pruebas reales de turnos, conquistas y asedios con navegador; la prueba estática no valida la ejecución completa de la IA.
