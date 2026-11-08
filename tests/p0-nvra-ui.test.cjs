@@ -13,6 +13,8 @@ for(const page of ['index.html','combate-demo.html']){
   assert.match(html,/id="nvra-merit-mines"/);
   assert.match(html,/id="nvra-merit-treasures"/);
   assert.match(html,/id="nvra-merit-castles"/);
+  assert.match(html,/const mineDisplay=document\.getElementById\('nvra-center-mines'\)/);
+  assert.doesNotMatch(html,/const mines=document\.getElementById\('nvra-center-mines'\)/);
   assert.doesNotMatch(html,/<details id="siege-report"/);
   assert.doesNotMatch(html,/<details id="realm-intelligence"/);
  });
