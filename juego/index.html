@@ -1584,6 +1584,8 @@ function finishDefensiveSiege(won){
  battle=null;$('modal').hidden=true;message(outcome);render();return true
 }
 function launchDefensiveSiege(site){
+ // A stale siege event must never replace an active battle or defend a lost castle.
+ if(battle||!site||verifiedSiteState()[site.id]!=='player')return false;
  const g=siteGarrison(site.id),d=g.defenders||{};
  // Do not replace the hero army with an empty garrison: resolve the undefended castle automatically.
  if(!Object.keys(CASTLE_RECRUIT_COST).some(type=>(d[type]||0)>0)){
