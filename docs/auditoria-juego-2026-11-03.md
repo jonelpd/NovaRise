@@ -105,3 +105,13 @@ En la página principal se unificó validGame para carga local, importación v10
 - La consulta de estados y ejecuciones de GitHub para el commit de pruebas anterior no devolvió registros. Se intentó obtener una copia del repositorio para ejecutar Node localmente, pero la conexión falló por resolución DNS.
 
 **Resultado honesto:** cobertura ampliada y código de pruebas corregido, sin confirmación de ejecución satisfactoria. Abrir GitHub Actions y revisar el flujo Game regression tests; si falla, descargar los logs y reparar los casos concretos antes de declarar completada la fase.
+
+## Incidencia crítica de arranque — 2026-11-08
+
+El usuario informó que el juego no funcionaba. La inspección directa de los scripts embebidos detectó un fallo de sintaxis bloqueante: `async async function rivalTurn()` en ambos HTML. Se corrigió a `async function rivalTurn()` (commits 504be84 y 2b57fdc).
+
+Se detectó también un fallo de ámbito: `load()` del script clásico usaba `validGame()` declarada en un módulo ES separado en la versión principal, por lo que no podía resolver esa función desde el motor clásico. Se trasladó la declaración al script clásico antes de `load()` (commit 1c5748c).
+
+Se compilaron todos los scripts clásicos embebidos en ambas páginas mediante `new Function`, sin errores de sintaxis después de las correcciones. Se añadió una prueba de regresión de compilación y ámbito `tests/p0-game-bootstrap-syntax.test.cjs` (commits f883201, d9ec414).
+
+**Alcance y límites:** la comprobación de sintaxis NO equivale a una prueba de funcionamiento en navegador. No se ha validado el inicio de sesión, carga real desde Supabase, renderizado, movimiento, combates, compatibilidad móvil ni módulos ES. Se requiere prueba de extremo a extremo y revisar consola del navegador antes de considerar resuelta la incidencia de funcionamiento.
