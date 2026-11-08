@@ -12,7 +12,7 @@ async function scenario(failKey){
  let reloaded=false, error=null;
  const elements={'modal':{hidden:true},'online-load':{}};
  const ctx={
-  el:id=>elements[id]||{}, currentUser:{id:'player-a'},
+  el:id=>elements[id]||{}, s:{gold:77},currentUser:{id:'player-a'},
   db:{from:()=>({select:()=>({eq:()=>({maybeSingle:async()=>({data:{save_data:{gold:99},updated_at:'2026-11-03T09:00:00Z'},error:null})})})})},
   validGame:()=>true,
   localStorage:{
