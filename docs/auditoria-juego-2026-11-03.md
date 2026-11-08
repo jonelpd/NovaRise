@@ -328,3 +328,10 @@ Se compilaron todos los scripts clásicos embebidos en ambas páginas mediante `
 - Se añadió CSS específico `realm-sidebar-professional` con acabado medieval, jerarquía tipográfica, botones de ancho completo y adaptación móvil.
 - **GitHub Actions:** [42525466670](https://github.com/jonelpd/NovaRise/actions/runs/42525466670): **97/97 pruebas superadas, 0 fallos**.
 - Pendiente: revisión visual manual en navegador real, especialmente móviles y el desplazamiento del panel.
+
+### Continuación — 2026-11-08: consola inferior del mapa
+- Se sustituyó el bloque de leyenda, ayuda, acciones y objetivo bajo el mapa por `realm-map-console`, con cabecera «Órdenes del héroe», botones destacados de terminar turno, guardar y nueva campaña, objetivo compacto y leyenda/ayuda desplegable.
+- Se conservaron los IDs `end`, `save` y `reset`, junto con sus manejadores originales y confirmación para reiniciar.
+- CSS dedicado `realm-map-console-professional` con acabado medieval coherente con el panel derecho y distribución adaptable a móvil.
+- **GitHub Actions:** [42525738403](https://github.com/jonelpd/NovaRise/actions/runs/42525738403): **100/100 pruebas superadas, 0 fallos**.
+- Pendiente: validación visual manual en navegador real y dispositivos móviles.
