@@ -233,3 +233,11 @@ Se compilaron todos los scripts clásicos embebidos en ambas páginas mediante `
 - Nuevas pruebas en `tests/p0-save-backup.test.cjs` y `tests/p0-save-backup-recovery.test.cjs`; adaptados los fixtures de `tests/p0-rival-save-lock.test.cjs`.
 - **GitHub Actions — Game regression tests:** [42520216631](https://github.com/jonelpd/NovaRise/actions/runs/42520216631): **78/78 pruebas superadas, 0 fallos**.
 - Alcance: almacenamiento local del mismo navegador/perfil. No garantiza sincronización entre dispositivos ni recuperación ante borrado total del almacenamiento; pendiente prueba de cierre/reapertura en navegador real.
+
+### Continuación — 2026-11-08: proteger el progreso local durante la recuperación en nube
+- El flujo `online-load` captura `JSON.stringify(s)` al iniciarse y verifica que siga siendo idéntico después de las consultas y confirmaciones asíncronas, justo antes de sustituir el guardado local.
+- Si la campaña ha cambiado durante la espera, cancela la recuperación para no sobrescribir avances recientes.
+- Se mantiene la copia `SAVE+'-before-cloud-restore'` y el rollback del guardado y su propietario ante errores de escritura.
+- Dos nuevas pruebas en `tests/p0-cloud-restore-progress-race.test.cjs`; adaptado `tests/p0-cloud-restore-main.test.cjs` para suministrar estado local al simulador.
+- **GitHub Actions — Game regression tests:** [42521570799](https://github.com/jonelpd/NovaRise/actions/runs/42521570799): **80/80 pruebas superadas, 0 fallos**.
+- La sincronización en nube sigue siendo manual; pendiente verificar con dos navegadores/dispositivos reales y estudiar detección de conflictos entre versiones remotas y locales.
