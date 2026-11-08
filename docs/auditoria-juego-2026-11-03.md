@@ -241,3 +241,10 @@ Se compilaron todos los scripts clásicos embebidos en ambas páginas mediante `
 - Dos nuevas pruebas en `tests/p0-cloud-restore-progress-race.test.cjs`; adaptado `tests/p0-cloud-restore-main.test.cjs` para suministrar estado local al simulador.
 - **GitHub Actions — Game regression tests:** [42521570799](https://github.com/jonelpd/NovaRise/actions/runs/42521570799): **80/80 pruebas superadas, 0 fallos**.
 - La sincronización en nube sigue siendo manual; pendiente verificar con dos navegadores/dispositivos reales y estudiar detección de conflictos entre versiones remotas y locales.
+
+### Continuación — 2026-11-08: detectar cambios remotos antes de subir partidas
+- `online-save` vuelve a consultar `nvr_game_saves.updated_at` tras la confirmación y antes de sobrescribir el guardado remoto. Si la versión cambió, cancela la subida y solicita revisar la partida reciente.
+- Tras la nueva consulta asíncrona también comprueba que no haya cambiado la sesión, que no esté activo un turno rival y que el modal de combate permanezca cerrado.
+- Añadidas dos pruebas estáticas de orden de operaciones en `tests/p0-cloud-revision-guard.test.cjs`.
+- **GitHub Actions — Game regression tests:** [42521886564](https://github.com/jonelpd/NovaRise/actions/runs/42521886564): **82/82 pruebas superadas, 0 fallos**.
+- **Limitación importante:** la comprobación previa no es una escritura atómica; dos dispositivos aún podrían escribir entre la última lectura y la actualización. Una garantía fuerte requiere control de concurrencia en el servidor (por ejemplo, una operación condicional por versión mediante RPC de Supabase). La subida sigue siendo manual; no se ha implementado autosincronización.
