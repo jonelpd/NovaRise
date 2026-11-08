@@ -156,3 +156,10 @@ Se compilaron todos los scripts clásicos embebidos en ambas páginas mediante `
 - Nuevas pruebas de regresión `tests/p0-siege-target.test.cjs` y `tests/p0-battle-persistence.test.cjs`. Ajustada la extracción de la función de asedio en `tests/p0-siege-turn-lock.test.cjs` al nuevo parámetro.
 - **GitHub Actions — Game regression tests:** ejecución [42506478996](https://github.com/jonelpd/NovaRise/actions/runs/42506478996), commit `98808fa`: **44/44 pruebas superadas, 0 fallos**.
 - Sigue pendiente validar visualmente en navegador real el ciclo de combate, asedio, recarga, nube y versión móvil. No se han activado recompensas NVRA reales.
+
+### Continuación — 2026-11-08: protección contra cambios durante guardado en nube
+- En `juego/index.html`, la subida de la partida online comprueba nuevamente `rivalBusy` y el estado del modal tras las operaciones asíncronas de consulta/confirmación y antes de escribir en la nube.
+- La carga útil se genera desde una copia actualizada de `s` justo antes de la subida, evitando enviar la instantánea previa a la confirmación. Se vuelve a validar estructura y tamaño.
+- Incorporadas dos pruebas en `tests/p0-cloud-upload-race.test.cjs`.
+- **GitHub Actions — Game regression tests:** ejecución [42507769787](https://github.com/jonelpd/NovaRise/actions/runs/42507769787), commit `dcbfa98`: **46/46 pruebas superadas, 0 fallos**.
+- Pendiente: prueba manual de guardado/recuperación con sesión real y validación visual en navegador móvil. No implica emisión de NVRA real.
