@@ -24,7 +24,7 @@ for(const page of ['index.html','combate-demo.html']){
  });
  test(page+': empty garrison does not overwrite player army',()=>{
   const start=html.indexOf('function launchDefensiveSiege(site){');
-  const end=html.indexOf('function rivalCastleConquest(){',start);
+  const end=html.indexOf('function rivalCastleConquest(siteId){',start);
   assert.ok(start>=0&&end>start);
   const snippet=html.slice(start,end);
   const state={autoResolveDefensiveSiege:false,message:'',soldiers:25,archers:9,griffins:2,dragons:1};
