@@ -251,3 +251,8 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - Revisión de `tests/p0-save-backup-recovery.test.cjs`: ya cubría recuperación desde backup y preservación de bytes dañados en ambas páginas.
 - Nueva suite `tests/p0-save-recovery-integrity.test.cjs` para comprobar datos completos: tropas, oro, experiencia y castillo conquistado tras recarga, recuperación de backup y preservación del guardado irrecuperable.
 - Las nuevas pruebas son automatizadas pero todavía no hay ejecución verificada. Pendiente comprobar resultados de GitHub Actions y navegador real antes de cerrar fase 1.
+
+## Fase 1 — Control de sintaxis de páginas del juego (2026-11-09)
+- Incorporada `tests/p0-browser-script-syntax.test.cjs`: inspecciona los scripts inline de `juego/index.html` y `juego/combate-demo.html`, verifica scripts clásicos con `vm.Script` y módulos con `node --check --input-type=module`.
+- Se integra automáticamente en `.github/workflows/game-regression.yml` mediante `node --test tests/p0-*.test.cjs`.
+- No equivale a una prueba funcional real en navegador. Los endpoints disponibles de GitHub no permiten confirmar una ejecución de push a main: la consulta de workflow runs está limitada a ejecuciones asociadas a PR; la consulta de estados no devolvió resultados. Pendiente verificación de la ejecución desde la interfaz de GitHub Actions.
