@@ -16,7 +16,7 @@ for(const page of ['index.html','combate-demo.html']){
   const state={gold:20};
   const ctx={$:id=>buttons[id]??(buttons[id]={}),rivalBusy:false,walking:false,battle:null,STORE:'campaign',s:state,
    realmConfirm:async()=>true,message:()=>{},start:()=>{started++},
-   localStorage:{removeItem:key=>store.delete(key)}};
+   localStorage:{getItem:key=>store.get(key)??null,setItem:(key,value)=>store.set(key,value),removeItem:key=>store.delete(key)}};
   vm.createContext(ctx);vm.runInContext(html.slice(start,end),ctx);
   await buttons.reset.onclick();
   assert.equal(started,1);
@@ -27,11 +27,25 @@ for(const page of ['index.html','combate-demo.html']){
   const store=new Map([['campaign','old save'],['campaign-backup','older campaign']]);
   const buttons={reset:{}};let started=0;
   const ctx={$:id=>buttons[id]??(buttons[id]={}),rivalBusy:false,walking:false,battle:null,STORE:'campaign',s:{gold:20},
-   realmConfirm:async()=>false,message:()=>{},start:()=>{started++},localStorage:{removeItem:key=>store.delete(key)}};
+   realmConfirm:async()=>false,message:()=>{},start:()=>{started++},localStorage:{getItem:key=>store.get(key)??null,setItem:(key,value)=>store.set(key,value),removeItem:key=>store.delete(key)}};
   vm.createContext(ctx);vm.runInContext(html.slice(start,end),ctx);
   await buttons.reset.onclick();
   assert.equal(started,0);
   assert.equal(store.get('campaign'),'old save');
   assert.equal(store.get('campaign-backup'),'older campaign');
+ });
+ test(page+': failed primary removal restores the previous backup and aborts reset',async()=>{
+  const store=new Map([['campaign','old save'],['campaign-backup','older campaign']]);
+  const buttons={reset:{}};let started=0,notice='';
+  const ctx={$:id=>buttons[id]??(buttons[id]={}),rivalBusy:false,walking:false,battle:null,STORE:'campaign',s:{gold:20},
+   realmConfirm:async()=>true,message:t=>{notice=t},start:()=>{started++},
+   localStorage:{getItem:key=>store.get(key)??null,setItem:(key,value)=>store.set(key,value),
+    removeItem:key=>{if(key==='campaign')throw Error('blocked');store.delete(key)}}};
+  vm.createContext(ctx);vm.runInContext(html.slice(start,end),ctx);
+  await buttons.reset.onclick();
+  assert.equal(started,0);
+  assert.equal(store.get('campaign'),'old save');
+  assert.equal(store.get('campaign-backup'),'older campaign');
+  assert.match(notice,/No se pudo limpiar/);
  });
 }
