@@ -8,7 +8,9 @@ for(const page of ['index.html','combate-demo.html']){
   const src=html.slice(begin,end);
   assert.match(src,/const validShot=t=>distanceTo\(t\)>=2&&distanceTo\(t\)<=3&&clearShot/);
   assert.match(src,/const available=u\.id==='archers'\?candidates\.filter\(validShot\):\[\]/);
-  assert.match(src,/const nearest=\(available\.length\?available:candidates\)\.sort/);
+  assert.match(src,/const inReach=u\.id==='archers'\?available:candidates\.filter/);
+  assert.match(src,/const choices=inReach\.length\?inReach:candidates/);
+  assert.match(src,/const nearest=choices\.sort/);
   assert.match(src,/u\.id!=='archers'\|\|distance>=2/);
  });
 }
