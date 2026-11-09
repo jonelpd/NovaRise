@@ -1994,7 +1994,7 @@ function render(){const nvraProgress=document.getElementById('nvra-game-progress
   const next=JSON.stringify(s),previous=localStorage.getItem(STORE);
   if(previous===next){window.nvrScheduleCloudSave?.();return true;}
   // Keep one valid previous snapshot for recovery after interrupted or corrupted writes.
-  if(previous){try{if(validGame(JSON.parse(previous)))localStorage.setItem(STORE+'-backup',previous)}catch(e){}}
+  if(previous){let previousValid=false;try{previousValid=validGame(JSON.parse(previous))}catch(e){}if(previousValid){try{localStorage.setItem(STORE+'-backup',previous)}catch(e){return false}}}
   localStorage.setItem(STORE,next);
   window.nvrScheduleCloudSave?.();
   return true;
