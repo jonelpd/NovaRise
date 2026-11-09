@@ -246,3 +246,8 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - Corregido en ambas páginas `siteGarrison`: si `g.defenders` es un array, se sustituye por un objeto de contadores por criatura. Antes los arrays pasaban la comprobación de tipo objeto y podían conservar estructura inválida.
 - Ampliada la prueba `tests/p0-corrupt-garrison-recovery.test.cjs` para exigir explícitamente que los defensores reconstruidos no sean un array.
 - Se intentó ejecutar la suite mediante `git clone` y `node --test`, pero el contenedor no resuelve `github.com` (DNS). No hay ejecución local confirmada; no se cierra la fase 1.
+
+## Fase 1 — Integridad de recuperación de campañas (2026-11-09)
+- Revisión de `tests/p0-save-backup-recovery.test.cjs`: ya cubría recuperación desde backup y preservación de bytes dañados en ambas páginas.
+- Nueva suite `tests/p0-save-recovery-integrity.test.cjs` para comprobar datos completos: tropas, oro, experiencia y castillo conquistado tras recarga, recuperación de backup y preservación del guardado irrecuperable.
+- Las nuevas pruebas son automatizadas pero todavía no hay ejecución verificada. Pendiente comprobar resultados de GitHub Actions y navegador real antes de cerrar fase 1.
