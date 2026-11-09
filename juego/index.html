@@ -793,7 +793,7 @@ function duelEnemyTurn(done){
   const nearest=living.map(t=>({type:t,x:pos(t)[0],y:pos(t)[1]})).sort((a,b)=>(Math.abs(a.x-u.x)+Math.abs(a.y-u.y))-(Math.abs(b.x-u.x)+Math.abs(b.y-u.y)))[0];
   const distance=Math.abs(nearest.x-u.x)+Math.abs(nearest.y-u.y);
   const clearShot=(fromX,fromY,toX,toY)=>!current.obstacles?.some(p=>(fromX===toX&&p[0]===fromX&&p[1]>Math.min(fromY,toY)&&p[1]<Math.max(fromY,toY))||(fromY===toY&&p[1]===fromY&&p[0]>Math.min(fromX,toX)&&p[0]<Math.max(fromX,toX)));
-  if(distance<=(u.id==='archers'?3:1)&&(u.id!=='archers'||distance===1||clearShot(u.x,u.y,nearest.x,nearest.y))){
+  if(distance<=(u.id==='archers'?3:1)&&(u.id!=='archers'||distance>=2)&&(u.id!=='archers'||clearShot(u.x,u.y,nearest.x,nearest.y))){
    const losses=current.guarding?.includes(nearest.type)?0:Math.min(battleCount(nearest.type),Math.max(0,Math.ceil(u.count/(u.id==='archers'?5:7))-mapTreasureEquipment().defense));
    s[nearest.type]=Math.max(0,s[nearest.type]-losses);animateBattleFx(nearest.type,s[nearest.type]===0);
    drawTactics();setTimeout(next,420);return
