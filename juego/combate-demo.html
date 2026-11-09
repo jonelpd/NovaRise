@@ -753,14 +753,14 @@ function renderBattleInitiative(){
  panel.replaceChildren();
  const heading=document.createElement('span');heading.className='turn-label';heading.textContent='⚔ Iniciativa · Ronda '+battle.round;panel.append(heading);
  const names={griffins:'🦅 Grifos',dragons:'🐉 Dragones',archers:'🏹 Arqueros',soldiers:'🛡 Soldados'};
+ // El jugador puede elegir cualquier unidad pendiente: no hay un «siguiente» obligatorio.
  const pending=battleInitiativeOrder().filter(type=>battleCount(type)>0&&!battle.acted.includes(type));
- const next=pending.find(type=>type!==battle.selected);
  for(const type of battleInitiativeOrder()){
   const item=document.createElement('span');
   const alive=battleCount(type)>0,done=battle.acted.includes(type),current=alive&&!done&&battle.selected===type;
   item.className='turn-unit'+(!alive?' lost':done?' done':current?' current':'');
-  item.textContent=names[type]+(done?' ✓':current?' · Ahora':type===next?' · Después':'');
-  item.title=!alive?'Sin unidades':done?'Ya ha actuado':current?'Turno actual · velocidad '+battleSpeed(type):type===next?'Siguiente turno · velocidad '+battleSpeed(type):'Pendiente · velocidad '+battleSpeed(type);
+  item.textContent=names[type]+(done?' ✓':current?' · Seleccionada':pending.includes(type)?' · Disponible':'');
+  item.title=!alive?'Sin unidades':done?'Ya ha actuado':current?'Unidad seleccionada · velocidad '+battleSpeed(type):'Disponible para seleccionar · velocidad '+battleSpeed(type);
   panel.append(item);
  }
  const foe=document.createElement('span');foe.className='turn-unit';foe.textContent='☠ Guardianes · final de ronda';panel.append(foe);
