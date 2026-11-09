@@ -195,3 +195,9 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - Corregido: `enemyAdvance` invoca `onComplete` una vez antes de retornar en este caso. Cambio sincronizado en juego y demo, sin cambios de persistencia.
 - Añadidas dos pruebas de comportamiento con `node:vm` en `tests/p0-empty-army-turn-resolution.test.cjs`.
 - Continúan pendientes la ejecución confirmada de CI y las pruebas de campaña completas en navegador, incluidos guardados posteriores a combates.
+
+## Auditoría de combates — Guarniciones y resultados (2026-11-09)
+- Inspeccionados `finishDefensiveSiege`, `loseBattle`, `hitResolveVictory` y `persistGame`: la defensa sustituye temporalmente las tropas visibles por la guarnición, conserva las bajas de esta y restaura el ejército del héroe antes de cerrar el combate.
+- Corregido doble `render()` al finalizar el asedio defensivo: `message(outcome)` ya renderiza y persiste cuando corresponde.
+- Añadidas dos pruebas de comportamiento en `tests/p0-defensive-siege-army-preservation.test.cjs` para victoria defensiva, bajas de guarnición, restauración del ejército y una sola actualización de interfaz.
+- Falta ejecutar pruebas y validar derrota defensiva, recompensas de conquista y continuidad real de guardado en navegador.
