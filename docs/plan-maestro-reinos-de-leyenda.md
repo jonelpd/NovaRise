@@ -201,3 +201,8 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - Corregido doble `render()` al finalizar el asedio defensivo: `message(outcome)` ya renderiza y persiste cuando corresponde.
 - Añadidas dos pruebas de comportamiento en `tests/p0-defensive-siege-army-preservation.test.cjs` para victoria defensiva, bajas de guarnición, restauración del ejército y una sola actualización de interfaz.
 - Falta ejecutar pruebas y validar derrota defensiva, recompensas de conquista y continuidad real de guardado en navegador.
+
+## Auditoría de combates — Bajas y resultados de asedios defensivos (2026-11-09)
+- Revisado `finishDefensiveSiege(won)`: restaura el ejército del héroe tras usar temporalmente las tropas de guarnición; registra supervivientes de guarnición en victoria y vacía la guarnición al perder el castillo.
+- Incorporadas dos pruebas ejecutables con `node:vm` en `tests/p0-defensive-siege-outcome.test.cjs`, cubriendo victoria y derrota en ambas páginas.
+- No se modificó la lógica del juego en este paso: el comportamiento revisado ya estaba implementado. Pendiente confirmar ejecución de tests, duelos ofensivos, recompensas y persistencia real tras recarga del navegador.
