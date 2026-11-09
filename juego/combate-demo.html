@@ -859,7 +859,8 @@ function enemyAdvance(onComplete){
  battle.counterUsed=false;
  const types=['soldiers','archers','griffins','dragons'];
  const targets=types.filter(t=>battleCount(t)>0).map(type=>({type,x:pos(type)[0],y:pos(type)[1]}));
- if(!targets.length)return;
+ // Completar siempre el turno: la resolución central comprobará la derrota.
+ if(!targets.length){if(onComplete)onComplete();return;}
  const occupied=new Set(targets.map(t=>t.x+','+t.y));
  const blocked=new Set((battle.obstacles||[]).map(p=>p[0]+','+p[1]));
  const dirs=[[1,0],[-1,0],[0,1],[0,-1]];
