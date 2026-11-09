@@ -799,9 +799,8 @@ function duelEnemyTurn(done){
   const nearest=(available.length?available:candidates).sort((a,b)=>distanceTo(a)-distanceTo(b))[0];
   const distance=distanceTo(nearest);
   if(distance<=(u.id==='archers'?3:1)&&(u.id!=='archers'||distance>=2)&&(u.id!=='archers'||clearShot(u.x,u.y,nearest.x,nearest.y))){
-   const guarded=current.guarding?.includes(nearest.type);
+   const guarded=consumeBattleGuard(nearest.type);
    const losses=guarded?0:Math.min(battleCount(nearest.type),Math.max(0,Math.ceil(u.count/(u.id==='archers'?5:7))-mapTreasureEquipment().defense));
-   if(guarded)current.guarding.splice(current.guarding.indexOf(nearest.type),1);
    s[nearest.type]=Math.max(0,s[nearest.type]-losses);animateBattleFx(nearest.type,s[nearest.type]===0);
    drawTactics();setTimeout(next,420);return
   }
@@ -824,6 +823,13 @@ function duelEnemyTurn(done){
    [u.x,u.y]=steps[n++];if(u.id===current.targetEnemyId){current.ex=u.x;current.ey=u.y}drawTactics();setTimeout(advance,460)
   };advance()
  };next()
+}
+function consumeBattleGuard(type){
+ if(!battle||!Array.isArray(battle.guarding))return false;
+ const index=battle.guarding.indexOf(type);
+ if(index<0)return false;
+ battle.guarding.splice(index,1);
+ return true;
 }
 function battleCount(type){return Math.max(0,s[type]||0)}
 function battleRange(type){return type==='archers'?3:type==='dragons'?2:1}
@@ -878,7 +884,7 @@ function enemyAdvance(onComplete){
  options.sort((a,b)=>b.priority-a.priority||a.d-b.d||a.target.type.localeCompare(b.target.type));
  const best=options[0];
  if(best&&best.d===0){
-  const chosen=best.target,guarded=battle.guarding?.includes(chosen.type);
+  const chosen=best.target,guarded=consumeBattleGuard(best.target.type);
   const losses=guarded?0:1;
   s[chosen.type]=Math.max(0,s[chosen.type]-losses);
   animateBattleFx(chosen.type,s[chosen.type]===0);
@@ -1261,7 +1267,7 @@ function hit(defend){if(!battle||battle.moving)return;if(!battleUnitReady(battle
  let counterNote='';
  if(!defend&&dist===1&&!battle.counterUsed&&(!struckEnemy||struckEnemy.count>0)){
   battle.counterUsed=true;
-  const protectedStack=battle.guarding?.includes(attacker);
+  const protectedStack=consumeBattleGuard(attacker);
   const losses=protectedStack?0:1;
   s[attacker]=Math.max(0,s[attacker]-losses);
   animateBattleFx(attacker,s[attacker]===0);
