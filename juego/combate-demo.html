@@ -1984,7 +1984,7 @@ function render(){const nvraProgress=document.getElementById('nvra-game-progress
  try{
   const next=JSON.stringify(s),previous=localStorage.getItem(STORE);
   if(previous===next)return true;
-  if(previous){try{if(validGame(JSON.parse(previous)))localStorage.setItem(STORE+'-backup',previous)}catch(e){}}
+  if(previous){let previousValid=false;try{previousValid=validGame(JSON.parse(previous))}catch(e){}if(previousValid){try{localStorage.setItem(STORE+'-backup',previous)}catch(e){return false}}}
   localStorage.setItem(STORE,next);
   return true;
  }catch(e){return false}
