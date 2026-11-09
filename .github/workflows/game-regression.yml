@@ -34,7 +34,10 @@ jobs:
           if [ -f game-regression-results.tap ]; then
             echo '## Reinos de Leyenda — pruebas automáticas' >> "$GITHUB_STEP_SUMMARY"
             echo '```text' >> "$GITHUB_STEP_SUMMARY"
-            tail -n 35 game-regression-results.tap >> "$GITHUB_STEP_SUMMARY"
+            echo '### Pruebas fallidas' >> "$GITHUB_STEP_SUMMARY"
+            grep -E '^not ok [0-9]+ - ' game-regression-results.tap >> "$GITHUB_STEP_SUMMARY" || true
+            echo '### Resumen final' >> "$GITHUB_STEP_SUMMARY"
+            tail -n 18 game-regression-results.tap >> "$GITHUB_STEP_SUMMARY"
             echo '```' >> "$GITHUB_STEP_SUMMARY"
           fi
       - name: Attach test results
