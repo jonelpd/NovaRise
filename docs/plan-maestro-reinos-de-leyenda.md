@@ -143,3 +143,9 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - Si no existe blanco atacable, mantiene la búsqueda de aproximación; el criterio de protección es secundario al hecho de poder atacar.
 - Aplicado en ambas vistas y añadidas dos pruebas estáticas `tests/p0-enemy-unguarded-targets.test.cjs`.
 - Referencia de diseño: decisiones tácticas comprensibles de Heroes of Might and Magic III, sin copiar sus recursos ni afirmar equivalencia exacta de reglas. Pendiente ejecución de pruebas y validación E2E.
+
+## Fase 2 — Movimiento de criaturas voladoras (2026-11-09)
+- Corregida la generación de destinos alcanzables: grifos y dragones pueden atravesar obstáculos, pero no finalizar movimiento en casillas ocupadas por ellos. Soldados y arqueros siguen bloqueados por obstáculos.
+- Cambio sincronizado en juego y demo, sin alterar el guardado.
+- Dos pruebas de comportamiento con `node:vm` en `tests/p0-flying-unit-landing.test.cjs`: atravesar obstáculo y prohibir aterrizaje sobre él.
+- Referencia conceptual: vuelo táctico de Heroes of Might and Magic III. Pendiente ejecución confirmada en CI y validación en navegador.
