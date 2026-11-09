@@ -160,3 +160,9 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - En combates con un único enemigo se conserva `counterUsed`; el registro se inicializa al abrir combate y se reinicia al empezar una ronda nueva.
 - Aplicado en juego y demo, sin modificar el formato persistente de campaña. Añadidas dos pruebas estáticas `tests/p0-per-enemy-retaliation.test.cjs`.
 - Pendiente confirmar CI y probar manualmente duelos con varias pilas enemigas.
+
+## Fase 2 — Iniciativa por velocidad (2026-11-09)
+- `battleNextUnit()` consulta ahora `battleInitiativeOrder()`, calculado ordenando las criaturas por `battleSpeed()` descendente; empates resueltos por orden base estable.
+- Velocidades actuales: grifos 3, dragones 2, arqueros 1, soldados 1. El orden efectivo actual no cambia, pero la iniciativa queda ligada a la velocidad y preparada para futuras variaciones.
+- Aplicado a ambas vistas, sin modificar persistencia. Añadidas dos pruebas de comportamiento con `node:vm` en `tests/p0-speed-based-initiative.test.cjs`.
+- Pendiente confirmar CI y validación real en navegador.
