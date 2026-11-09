@@ -12,7 +12,7 @@ for(const page of ['index.html','combate-demo.html']){
  const loadStart=html.indexOf('function load(){');
  const loadEnd=html.indexOf('function exportSave()',loadStart);
  const validatorStart=html.indexOf('function validGame(');
- const validatorEnd=html.indexOf('function validImport(',validatorStart);
+ const validatorEnd=Math.min(...[html.indexOf('function load(){',validatorStart),html.indexOf('function validImport(',validatorStart)].filter(i=>i>validatorStart));
  const validatorSource=validatorStart>=0&&validatorEnd>validatorStart?html.slice(validatorStart,validatorEnd):'';
  const validGame=vm.runInNewContext(validatorSource+';validGame');
 
