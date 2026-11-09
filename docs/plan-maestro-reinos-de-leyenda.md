@@ -256,3 +256,12 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - Incorporada `tests/p0-browser-script-syntax.test.cjs`: inspecciona los scripts inline de `juego/index.html` y `juego/combate-demo.html`, verifica scripts clásicos con `vm.Script` y módulos con `node --check --input-type=module`.
 - Se integra automáticamente en `.github/workflows/game-regression.yml` mediante `node --test tests/p0-*.test.cjs`.
 - No equivale a una prueba funcional real en navegador. Los endpoints disponibles de GitHub no permiten confirmar una ejecución de push a main: la consulta de workflow runs está limitada a ejecuciones asociadas a PR; la consulta de estados no devolvió resultados. Pendiente verificación de la ejecución desde la interfaz de GitHub Actions.
+
+## Fase 1 — Diagnóstico real de GitHub Actions #210 (2026-11-09)
+- Registro completo recuperado del job `129179865070` de la ejecución `42623079418`: 185 pruebas, 173 superadas y 12 fallidas.
+- Fallos #57 y #60: `p0-combat.test.cjs` esperaba la regla obsoleta de ataque adyacente para arqueros enemigos; actualizado para verificar alcance mínimo y reposicionamiento.
+- Fallos #77 y #78: `p0-enemy-archer-target-priority.test.cjs` esperaba el antiguo selector `nearest`; actualizado para verificar `available`, `inReach`, `choices` y selección de objetivo.
+- Fallos #156-159: `p0-siege-full-cycle.test.cjs` simulaba `message()` sin el `render()` que ejecuta en producción; corregido el doble de prueba para reflejar persistencia tras el asedio.
+- Fallos #160-161: `p0-siege-history-removed.test.cjs` esperaba `render()` explícito redundante después de `message()`; actualizado para comprobar el cierre y retorno sin historial.
+- Fallos #182 y #185: `p0-turn-reset-race.test.cjs` exigía reinicio inmediato tras eliminar el guardado; ahora comprueba eliminación de guardado y backup, manejo de errores y posterior inicio.
+- Cambios aplicados en los cinco archivos de tests; **pendiente confirmar resultado de una nueva ejecución** antes de cerrar fase 1. Ninguna prueba fue omitida intencionalmente.
