@@ -228,3 +228,10 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - Corrección en `juego/index.html`: tras consultar la revisión y antes de la RPC se comprueba `JSON.stringify(s)===snapshotText`; en caso contrario se marca `autoCloudPending` y se programa una nueva sincronización al salir de `finally`.
 - Añadida prueba de regresión estructural `tests/p0-cloud-stale-snapshot.test.cjs`.
 - No se ha confirmado ejecución de la suite: intento de clonar GitHub desde el entorno local falló por falta de resolución DNS. Pendiente validación de CI y sincronización real entre dispositivos.
+
+## Auditoría GitHub Actions y conflictos de nube (2026-11-09)
+- Confirmada configuración de `.github/workflows/game-regression.yml`: ejecuta `node --test tests/p0-*.test.cjs` con Node 22 en cambios a `juego/**` o `tests/**`.
+- Consulta de ejecuciones asociadas al commit `9ebc9e69` devolvió lista vacía; la consulta de estados combinados también. No se ha podido confirmar CI verde. Acceso directo desde contenedor a github.com falla por DNS.
+- Hallazgo corregido: el guardado manual podía subir una instantánea desactualizada si el estado local cambiaba durante la comprobación asíncrona de revisión remota. Se vuelve a comparar `s` con `latestGame` antes de llamar a la RPC.
+- Añadidas pruebas estructurales en `tests/p0-cloud-manual-save-conflicts.test.cjs` para guardado manual y comprobaciones de conflicto en recuperación de nube.
+- Pendiente ejecutar tests, validar navegador y ensayar conflictos reales entre dos dispositivos.
