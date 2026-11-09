@@ -50,5 +50,10 @@ Prioridad: movimientos, turnos, combates, economía, IA, castillos y persistenci
 6. No confundir pruebas Node aisladas con validación integral en navegador.
 7. No activar recompensas NVRA reales antes de completar las salvaguardas de las fases anteriores.
 
+## Avance de la fase 1 — 2026-11-09
+- Añadida prueba de continuidad de campaña en ambas vistas: guardado, recarga, progresión posterior y recuperación de copia previa ante corrupción de datos (`tests/p0-campaign-continuity.test.cjs`).
+- Esta prueba usa el almacenamiento simulado y funciones reales aisladas; no constituye validación E2E en navegador.
+- Pendiente confirmar el resultado del nuevo flujo de GitHub Actions antes de marcar la prueba como superada.
+
 ## Próxima tarea
 Fase 1: prueba de continuidad de campaña y persistencia tras cierre/reapertura, seguida de conflictos de guardado local/nube y pruebas de dos sesiones reales. No manipular partidas de usuarios reales para las pruebas.
