@@ -137,3 +137,9 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - Aplicada a ataques de unidades enemigas ordinarias, ataques en duelos de héroes y contraataques recibidos por tropas aliadas.
 - Actualizadas cuatro pruebas de `tests/p0-duel-guard-consumption.test.cjs`, incluyendo una ejecución aislada de la función con `node:vm`.
 - Pendiente confirmar ejecución de Node/CI y validar casos completos en navegador.
+
+## Fase 2 — IA de selección de objetivos, referencia Heroes III (2026-11-09)
+- En duelos entre ejércitos, la IA enemiga prefiere blancos sin defensa activa cuando dispone de varios objetivos inmediatamente atacables; conserva los requisitos de distancia y línea de tiro de arqueros.
+- Si no existe blanco atacable, mantiene la búsqueda de aproximación; el criterio de protección es secundario al hecho de poder atacar.
+- Aplicado en ambas vistas y añadidas dos pruebas estáticas `tests/p0-enemy-unguarded-targets.test.cjs`.
+- Referencia de diseño: decisiones tácticas comprensibles de Heroes of Might and Magic III, sin copiar sus recursos ni afirmar equivalencia exacta de reglas. Pendiente ejecución de pruebas y validación E2E.
