@@ -6,7 +6,7 @@ Repositorio: jonelpd/NovaRise · Juego: juego/index.html · Demo: juego/combate-
 ## Objetivo
 Desarrollar un juego de estrategia por turnos estable, profundo y atractivo, inspirado en la experiencia de exploración, gestión de castillos y combate táctico de Heroes of Might and Magic III, con identidad y recursos propios. La futura integración de NVRA no debe comprometer el equilibrio, la seguridad ni el acceso gratuito.
 
-## Fase 1 — Auditoría de jugabilidad y estabilidad (EN CURSO)
+## Fase 1 — Auditoría de jugabilidad y estabilidad (CORRECCIONES FINALIZADAS; ACEPTACIÓN PENDIENTE)
 Prioridad: movimientos, turnos, combates, economía, IA, castillos y persistencia.
 - [x] Protección frente a desplazamientos durante turno rival.
 - [x] Protección del reinicio de campaña durante acciones asíncronas.
@@ -18,7 +18,7 @@ Prioridad: movimientos, turnos, combates, economía, IA, castillos y persistenci
 - [ ] Verificar navegadores reales en escritorio y móvil; documentar incidencias.
 **Criterio de salida:** regresiones verdes más matriz E2E funcional sin defectos críticos o graves de pérdida de progreso.
 
-## Fase 2 — Profundizar en la jugabilidad (PENDIENTE)
+## Fase 2 — Profundizar en la jugabilidad (INICIADA: PLANIFICACIÓN)
 - Habilidades de héroes y progresión.
 - Rasgos diferenciados de criaturas y equilibrio de ejércitos.
 - Construcciones y mejoras de castillos.
@@ -78,5 +78,18 @@ Prioridad: movimientos, turnos, combates, economía, IA, castillos y persistenci
 - Endurecido el reinicio: si falla la eliminación del guardado principal, se intenta restaurar el respaldo previo y se cancela la nueva campaña; advertencia explícita si también falla la restauración.
 - Ampliado `tests/p0-reset-backup-isolation.test.cjs` con dos escenarios de fallo de eliminación (uno por vista), sin CI verificado.
 
+## Transición de fase 1 a fase 2 — 2026-11-09
+- Finalizada por ahora la implementación de correcciones identificadas de fase 1. No equivale a certificación de calidad ni a cumplir los criterios de salida: siguen pendientes CI actualizado y pruebas E2E de campaña, navegador móvil y dos sesiones reales.
+- Riesgo abierto: la red del entorno de ejecución no resuelve github.com para clonar y ejecutar toda la batería; el último CI confirmado corresponde a una revisión anterior de 108 pruebas.
+- Se autoriza iniciar trabajo preparatorio y desarrollo incremental de fase 2 sin declarar aprobada la aceptación de fase 1. Cualquier regresión crítica vuelve a prioridad inmediata.
+
+## Plan operativo de fase 2
+1. **Habilidades y progresión:** inventariar experiencia, nivel y héroes actuales; diseñar habilidades pasivas y activas con costes y límites claros, sin modificar partidas existentes sin migración.
+2. **Criaturas:** catalogar estadísticas reales y reglas de combate; diferenciar roles (defensa, distancia, movilidad y unidades avanzadas), evitando ventajas irreversibles.
+3. **Castillos:** auditar edificios ya presentes y añadir mejoras graduales vinculadas a recursos reales del juego.
+4. **Exploración:** aprovechar exclusivamente cofres, minas, estructuras y objetos que existen en el mapa; decisiones mediante ventanas superpuestas.
+5. **IA:** ampliar objetivos y prioridades, conservando determinismo de turnos y límites de tiempo.
+6. **Calidad:** para cada cambio, pruebas de reglas, compatibilidad de guardados y regresión de combates; no activar recompensas NVRA reales.
+
 ## Próxima tarea
-Fase 1: prueba de continuidad de campaña y persistencia tras cierre/reapertura, seguida de conflictos de guardado local/nube y pruebas de dos sesiones reales. No manipular partidas de usuarios reales para las pruebas.
+Fase 2: inventario técnico de habilidades, criaturas, construcciones y economía actual; escoger primera mecánica pequeña e implementarla con pruebas. En paralelo, verificar CI y matriz E2E pendientes de fase 1 sin usar partidas reales de usuarios.
