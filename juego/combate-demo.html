@@ -788,7 +788,10 @@ function duelEnemyTurn(done){
   const distanceTo=t=>Math.abs(t.x-u.x)+Math.abs(t.y-u.y);
   const validShot=t=>distanceTo(t)>=2&&distanceTo(t)<=3&&clearShot(u.x,u.y,t.x,t.y);
   const available=u.id==='archers'?candidates.filter(validShot):[];
-  const nearest=(available.length?available:candidates).sort((a,b)=>distanceTo(a)-distanceTo(b))[0];
+  const inReach=u.id==='archers'?available:candidates.filter(t=>distanceTo(t)===1);
+  // Como en Héroes III, la IA valora los blancos expuestos sin ignorar el alcance real.
+  const choices=inReach.length?inReach:candidates;
+  const nearest=choices.sort((a,b)=>Number(!!current.guarding?.includes(a.type))-Number(!!current.guarding?.includes(b.type))||distanceTo(a)-distanceTo(b)||a.type.localeCompare(b.type))[0];
   const distance=distanceTo(nearest);
   if(distance<=(u.id==='archers'?3:1)&&(u.id!=='archers'||distance>=2)&&(u.id!=='archers'||clearShot(u.x,u.y,nearest.x,nearest.y))){
    const guarded=consumeBattleGuard(nearest.type);
