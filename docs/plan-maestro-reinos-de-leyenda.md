@@ -55,5 +55,8 @@ Prioridad: movimientos, turnos, combates, economía, IA, castillos y persistenci
 - Esta prueba usa el almacenamiento simulado y funciones reales aisladas; no constituye validación E2E en navegador.
 - Pendiente confirmar el resultado del nuevo flujo de GitHub Actions antes de marcar la prueba como superada.
 
+- Añadidas pruebas estáticas de seguridad ante errores de red, conflicto de revisión y restauración remota (`tests/p0-cloud-interruption-safety.test.cjs`).
+- Pendiente ejecutar CI y pruebas reales de dos navegadores y desconexión durante RPC.
+
 ## Próxima tarea
 Fase 1: prueba de continuidad de campaña y persistencia tras cierre/reapertura, seguida de conflictos de guardado local/nube y pruebas de dos sesiones reales. No manipular partidas de usuarios reales para las pruebas.
