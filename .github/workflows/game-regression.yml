@@ -24,4 +24,23 @@ jobs:
         with:
           node-version: '22'
       - name: Run gameplay and save regression tests
-        run: node --test tests/p0-*.test.cjs
+        shell: bash
+        run: |
+          set -o pipefail
+          node --test --test-reporter=tap tests/p0-*.test.cjs | tee game-regression-results.tap
+      - name: Publish test report
+        if: always()
+        run: |
+          if [ -f game-regression-results.tap ]; then
+            echo '## Reinos de Leyenda — pruebas automáticas' >> "$GITHUB_STEP_SUMMARY"
+            echo '```text' >> "$GITHUB_STEP_SUMMARY"
+            tail -n 35 game-regression-results.tap >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Attach test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reinos-de-leyenda-regression-results
+          path: game-regression-results.tap
+          if-no-files-found: warn
