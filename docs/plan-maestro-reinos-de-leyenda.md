@@ -241,3 +241,8 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - Corregido en `juego/index.html` y `juego/combate-demo.html`: se reconstruyen estructuras de guarnición o inventario no válidas a partir del perfil del castillo; no se alteran guarniciones correctamente formadas.
 - Prueba añadida: `tests/p0-corrupt-garrison-recovery.test.cjs`, cubre ambas páginas y los dos formatos dañados.
 - Sigue pendiente confirmar ejecución de GitHub Actions y validar manualmente la recarga en navegador real.
+
+## Fase 1 — Validación adicional de defensores (2026-11-09)
+- Corregido en ambas páginas `siteGarrison`: si `g.defenders` es un array, se sustituye por un objeto de contadores por criatura. Antes los arrays pasaban la comprobación de tipo objeto y podían conservar estructura inválida.
+- Ampliada la prueba `tests/p0-corrupt-garrison-recovery.test.cjs` para exigir explícitamente que los defensores reconstruidos no sean un array.
+- Se intentó ejecutar la suite mediante `git clone` y `node --test`, pero el contenedor no resuelve `github.com` (DNS). No hay ejecución local confirmada; no se cierra la fase 1.
