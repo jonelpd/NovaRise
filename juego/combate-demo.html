@@ -994,7 +994,7 @@ function tacticalReachable(type){
  const [sx,sy]=pos(type),queue=[[sx,sy,0]],visited=new Set([sx+','+sy]);
  while(queue.length){
   const [x,y,steps]=queue.shift();
-  if(steps>0)reachable.add(x+','+y);
+  if(steps>0&&!battle.obstacles?.some(p=>p[0]===x&&p[1]===y))reachable.add(x+','+y);
   if(steps>=battleSpeed(type))continue;
   for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){
    const nx=x+dx,ny=y+dy,k=nx+','+ny;
