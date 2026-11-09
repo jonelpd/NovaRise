@@ -217,3 +217,8 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - Revisado el flujo `hitResolveVictory` → `render` → `persistGame`: el guardado se solicita al cerrar el combate y se impide mientras `battle` está activo.
 - Añadidas pruebas de integración simulada en `tests/p0-combat-save-continuity.test.cjs` para serializar una victoria en duelo con bajas, oro, experiencia y estado del rival; y para impedir sobrescrituras durante un combate activo.
 - Sin cambios en la estructura de partidas. Pendientes ejecución de la suite, recarga real del navegador, sincronización en nube y comprobación de conquista de castillos.
+
+## Auditoría de recarga de castillos conquistados (2026-11-09)
+- Añadida prueba `tests/p0-castle-save-reload.test.cjs`: simula la victoria en un castillo, guardado local y posterior `load`, verificando propiedad, supervivientes, oro y experiencia.
+- La prueba utiliza las funciones reales de resolución, validación, persistencia y carga aisladas con `node:vm`; no sustituye una comprobación en navegador real.
+- Sin cambios en reglas ni esquema de partidas. Pendiente ejecutar las pruebas de Node y verificar publicación, recarga del navegador y sincronización en nube.
