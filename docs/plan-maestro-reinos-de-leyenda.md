@@ -235,3 +235,9 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - Hallazgo corregido: el guardado manual podía subir una instantánea desactualizada si el estado local cambiaba durante la comprobación asíncrona de revisión remota. Se vuelve a comparar `s` con `latestGame` antes de llamar a la RPC.
 - Añadidas pruebas estructurales en `tests/p0-cloud-manual-save-conflicts.test.cjs` para guardado manual y comprobaciones de conflicto en recuperación de nube.
 - Pendiente ejecutar tests, validar navegador y ensayar conflictos reales entre dos dispositivos.
+
+## Auditoría de integridad de guarniciones (2026-11-09)
+- Hallazgo: `siteGarrison` aceptaba `garrisons` como array y `stock` como dato no estructurado; la normalización podía fallar o dejar guarniciones inutilizables al recuperar una partida dañada.
+- Corregido en `juego/index.html` y `juego/combate-demo.html`: se reconstruyen estructuras de guarnición o inventario no válidas a partir del perfil del castillo; no se alteran guarniciones correctamente formadas.
+- Prueba añadida: `tests/p0-corrupt-garrison-recovery.test.cjs`, cubre ambas páginas y los dos formatos dañados.
+- Sigue pendiente confirmar ejecución de GitHub Actions y validar manualmente la recarga en navegador real.
