@@ -1128,9 +1128,9 @@ function renderHeroPanel(){
 function heroSkillMilestones(){
  const spec=heroSpecialization(),level=heroLevel();
  const trees={
-  warrior:[['Disciplina marcial',2,'+2 de daño físico'],['Maestría de guerra',4,'+3 de daño físico adicional']],
-  mage:[['Concentración arcana',2,'Rayo arcano cuesta 1 maná menos'],['Poder ancestral',4,'+6 de daño al Rayo arcano']],
-  guardian:[['Muralla viva',2,'+1 de fuerza del ejército'],['Bastión',4,'La protección inicial cubre dos unidades']]
+  warrior:[['Disciplina marcial',2,'+2 de daño físico'],['Maestría de guerra',4,'+3 de daño físico adicional'],['Veterano de campaña',6,'+1 de daño físico adicional']],
+  mage:[['Concentración arcana',2,'Rayo arcano cuesta 1 maná menos'],['Poder ancestral',4,'+6 de daño al Rayo arcano'],['Canalización superior',6,'+2 de daño al Rayo arcano']],
+  guardian:[['Muralla viva',2,'+1 de fuerza del ejército'],['Bastión',4,'La protección inicial cubre dos unidades'],['Defensa experta',6,'+1 de daño físico adicional']]
  };
  return trees[spec].map(([name,required,description])=>({name,required,description,unlocked:level>=required}));
 }
@@ -1160,7 +1160,7 @@ function battleMagicCast(spell){
  battle.magicRound=battle.round;
  let note='';
  if(spell==='bolt'){
-  const damage=12+heroStats().arcana*3+(heroSpecialization()==='mage'&&heroSkillUnlocked(4)?6:0);
+  const damage=12+heroStats().arcana*3+(heroSpecialization()==='mage'&&heroSkillUnlocked(4)?6:0)+(heroSpecialization()==='mage'&&heroSkillUnlocked(6)?2:0);
   if(battle.enemyStacks)duelApplyDamage(damage);
   else battle.hp=Math.max(0,battle.hp-damage);
   animateBattleFx('enemy',battle.hp===0);
@@ -1232,7 +1232,7 @@ function battleAttackDamage(type){
  if(!count)return 0;
  const base=type==='archers'?count*2:type==='griffins'?count*3:type==='dragons'?count*7:count+(s.buildings.includes('forge')?2:0)+(s.faction==='Reino Umbrío'?2:0);
  // Distinct roles: archers excel at range, griffins at close combat, dragons deal heavy damage.
- return Math.max(1,Math.floor(base)+heroStats().might+mapTreasureEquipment().attack+(heroSpecialization()==='warrior'&&heroSkillUnlocked(2)?2:0)+(heroSpecialization()==='warrior'&&heroSkillUnlocked(4)?3:0)+(heroSpecialization()==='guardian'&&heroSkillUnlocked(2)?1:0));
+ return Math.max(1,Math.floor(base)+heroStats().might+mapTreasureEquipment().attack+(heroSpecialization()==='warrior'&&heroSkillUnlocked(2)?2:0)+(heroSpecialization()==='warrior'&&heroSkillUnlocked(4)?3:0)+(heroSpecialization()==='guardian'&&heroSkillUnlocked(2)?1:0)+(heroSpecialization()==='warrior'&&heroSkillUnlocked(6)?1:0)+(heroSpecialization()==='guardian'&&heroSkillUnlocked(6)?1:0));
 }
 function hit(defend){if(!battle||battle.moving)return;if(!battleUnitReady(battle.selected))return updateBattle('Esta unidad ya ha actuado. Selecciona otra disponible.');if(!defend&&!battleCount(battle.selected))return updateBattle('Selecciona una unidad disponible antes de atacar.');if(defend){if(!battle.guarding)battle.guarding=[];battle.guarding.push(battle.selected);}let [ux,uy]=pos(battle.selected),dist=Math.abs(ux-battle.ex)+Math.abs(uy-battle.ey),range=battleRange(battle.selected);if(!defend&&dist>range)return updateBattle('El enemigo está fuera del alcance de la unidad seleccionada.');
  if(!defend&&battle.selected==='archers'&&dist<=1)return updateBattle('Los arqueros necesitan separarse del enemigo para disparar.');
