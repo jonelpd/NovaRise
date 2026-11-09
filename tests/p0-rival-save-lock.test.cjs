@@ -27,7 +27,14 @@ for(const page of ['index.html','combate-demo.html']){
  test(page+': export and import refuse unresolved enemy turn',()=>{
   assert.match(html,/function exportSave\(\)\{if\(rivalBusy\)return message/);
   assert.match(html,/\$\('import-file'\)\.onchange=async\(\)=>\{if\(rivalBusy\)/);
-  assert.match(html,/if\(rivalBusy\|\|battle\)return message\('Espera a que termine el turno rival antes de importar\.'\);s=v\.game/);
+  const start=html.indexOf("$('import-file').onchange=async()=>");
+  const end=html.indexOf(";$('profile-save').onclick",start);
+  assert.ok(start>=0&&end>start,'import handler missing');
+  const handler=html.slice(start,end);
+  const lock=handler.indexOf("if(rivalBusy||battle)return message('Espera a que termine el turno rival antes de importar.')");
+  const snapshot=handler.indexOf('s!==importState||JSON.stringify(s)!==importSnapshot||STORE!==importStore');
+  const assign=handler.indexOf('s=v.game;');
+  assert.ok(lock>=0&&snapshot>lock&&assign>snapshot,'enemy-turn lock and snapshot validation must precede import');
  });
 }
 test('main page: cloud save and restore reject unresolved turns',()=>{
