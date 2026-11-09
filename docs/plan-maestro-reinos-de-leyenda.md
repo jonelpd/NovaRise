@@ -126,3 +126,8 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - En combates contra héroes, los arqueros enemigos priorizan un blanco con distancia válida (2–3) y línea despejada frente a un objetivo más cercano pero no atacable.
 - Sin blanco válido, conservan la búsqueda de posición anterior. Aplicado a `juego/index.html` y `juego/combate-demo.html` sin migración de guardado.
 - Incorporadas dos pruebas de regresión estáticas: `tests/p0-enemy-archer-target-priority.test.cjs`. Pendiente ejecución real de CI y E2E.
+
+## Fase 2 — Consumo de defensa en duelos (2026-11-09)
+- En `duelEnemyTurn`, una unidad protegida absorbe un ataque enemigo y consume esa protección inmediatamente. Antes podía bloquear varios ataques sucesivos durante la misma ronda.
+- Aplicado en juego principal y demo; sin cambios de formato de guardado.
+- Dos pruebas estáticas añadidas: `tests/p0-duel-guard-consumption.test.cjs`. Falta ejecutar CI y validar en navegador con varios atacantes.
