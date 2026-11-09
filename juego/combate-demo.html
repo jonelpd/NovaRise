@@ -1447,10 +1447,10 @@ const CASTLE_RECRUIT_COST={soldiers:30,archers:50,griffins:110,dragons:300};
 const CASTLE_UNIT_NAMES={soldiers:'soldados',archers:'arqueros',griffins:'grifos',dragons:'dragones'};
 function siteGarrison(id){
  const state=verifiedSiteState();
- if(!state.garrisons||typeof state.garrisons!=='object')state.garrisons={};
+ if(!state.garrisons||typeof state.garrisons!=='object'||Array.isArray(state.garrisons))state.garrisons={};
  const profile=CASTLE_PROFILES[id]||CASTLE_PROFILES['fort-west'];
  let g=state.garrisons[id];
- if(!g||!g.stock){
+ if(!g||typeof g!=='object'||Array.isArray(g)||!g.stock||typeof g.stock!=='object'||Array.isArray(g.stock)){
   g={stock:{...profile.stock},guard:{...profile.guard}};
   state.garrisons[id]=g;
  }
