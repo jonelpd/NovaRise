@@ -1023,7 +1023,7 @@ function drawTactics(){
    const stack=document.createElement('span');stack.className='combat-stack';
    stack.textContent=enemy?(enemyStack?enemyStack.count:Math.max(0,battle.hp)):battleCount(type);
    c.append(stack);
-   c.title=enemy?(enemyStack?'Reino Umbrío · '+(enemyStack.id==='archers'?'arqueros':'soldados')+' · '+enemyStack.count+' criaturas':(battle.rival?'Ejército del Reino Umbrío':'Guardianes')+' · resistencia '+battle.hp):type+' · '+battleCount(type);
+   c.title=enemy?(enemyStack?'Reino Umbrío · '+(enemyStack.id==='archers'?'arqueros':'soldados')+' · '+enemyStack.count+' criaturas':(battle.rival?'Ejército del Reino Umbrío':'Guardianes')+' · resistencia '+battle.hp):({soldiers:'Soldados · primera línea · alcance 1 · movimiento 1',archers:'Arqueros · distancia 2–3 · movimiento 1 · sin disparo adyacente',griffins:'Grifos · movilidad 3 · contraataque · alcance 1',dragons:'Dragones · daño elevado · alcance 2 · movimiento 2'}[type]+' · unidades '+battleCount(type));
   }else{
    c.classList.add('terrain-only');
    c.textContent=obstacle?'🪨':(x*7+y*11)%9===0?'✦':(x+y)%5===0?'♣':'';
