@@ -17,6 +17,9 @@ for(const filename of ['index.html','combate-demo.html']){
   assert.match(reset,/if\(!STORE\)return/);
   assert.match(reset,/const resetStore=STORE,resetState=s,resetSnapshot=JSON\.stringify\(s\)/);
   assert.match(reset,/STORE!==resetStore\|\|s!==resetState\|\|JSON\.stringify\(s\)!==resetSnapshot/);
-  assert.match(reset,/localStorage\.removeItem\(resetStore\);start\(\)/);
+  assert.match(reset,/localStorage\.removeItem\(resetStore\+'-backup'\)/);
+  assert.match(reset,/localStorage\.removeItem\(resetStore\)/);
+  assert.match(reset,/catch\(e\)\{/);
+  assert.match(reset,/start\(\)\}/);
  });
 }
