@@ -65,5 +65,8 @@ Prioridad: movimientos, turnos, combates, economía, IA, castillos y persistenci
 - Añadidas cuatro comprobaciones de fallos de escritura local (cuota de almacenamiento y copia de respaldo), dos por cada vista: `tests/p0-save-write-failure.test.cjs`.
 - Pendiente verificar las nuevas pruebas en CI; no se han simulado navegadores reales ni dos cuentas autenticadas.
 
+- Corregido el aislamiento del validador en `tests/p0-campaign-continuity.test.cjs`: se detiene antes de inicializar la interfaz y evita un fallo falso en Node.
+- Intento de ejecutar `node --test tests/p0-*.test.cjs` bloqueado porque el entorno no resuelve `github.com` al clonar. Sin resultados nuevos de CI confirmados.
+
 ## Próxima tarea
 Fase 1: prueba de continuidad de campaña y persistencia tras cierre/reapertura, seguida de conflictos de guardado local/nube y pruebas de dos sesiones reales. No manipular partidas de usuarios reales para las pruebas.
