@@ -265,3 +265,9 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - Fallos #160-161: `p0-siege-history-removed.test.cjs` esperaba `render()` explícito redundante después de `message()`; actualizado para comprobar el cierre y retorno sin historial.
 - Fallos #182 y #185: `p0-turn-reset-race.test.cjs` exigía reinicio inmediato tras eliminar el guardado; ahora comprueba eliminación de guardado y backup, manejo de errores y posterior inicio.
 - Cambios aplicados en los cinco archivos de tests; **pendiente confirmar resultado de una nueva ejecución** antes de cerrar fase 1. Ninguna prueba fue omitida intencionalmente.
+
+## Fase 1 — Auditoría de código: importación concurrente (2026-11-09)
+- Hallazgo confirmado en ambas páginas: el manejador de importación comprobaba `rivalBusy` y `battle` tras el diálogo asíncrono, pero no si la campaña, su contenido o la clave de almacenamiento habían cambiado durante la confirmación. Esto podía sobrescribir progreso reciente.
+- Corregido con captura y verificación de identidad, instantánea JSON y `STORE` antes de asignar `s=v.game`.
+- Añadida prueba `tests/p0-import-confirmation-race.test.cjs` para asegurar que la comprobación antecede a la sustitución de campaña en ambas páginas.
+- Auditoría profunda aún en curso: pendientes validación en navegador, sincronización nube y ejecución de suite actualizada.
