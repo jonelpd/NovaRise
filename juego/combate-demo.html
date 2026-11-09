@@ -1454,7 +1454,7 @@ function siteGarrison(id){
   g={stock:{...profile.stock},guard:{...profile.guard}};
   state.garrisons[id]=g;
  }
- if(!g.defenders||typeof g.defenders!=='object')g.defenders={soldiers:0,archers:0,griffins:0,dragons:0};
+ if(!g.defenders||typeof g.defenders!=='object'||Array.isArray(g.defenders))g.defenders={soldiers:0,archers:0,griffins:0,dragons:0};
  for(const type of Object.keys(CASTLE_RECRUIT_COST)){g.defenders[type]=Math.max(0,Math.floor(Number(g.defenders[type])||0));g.stock[type]=Math.max(0,Math.floor(Number(g.stock[type])||0))}
  return g
 }
