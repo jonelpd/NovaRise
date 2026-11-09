@@ -1469,7 +1469,7 @@ async function recruitFromCastle(site){
  const index=Number(choice)-1;if(!Number.isInteger(index)||index<0||index>=options.length)return message('Selecciona un número válido.');
  const type=options[index],quantityText=await realmPrompt('¿Cuántos '+CASTLE_UNIT_NAMES[type]+' deseas reclutar? (máximo '+g.stock[type]+')','1');
  if(quantityText===null)return;
- if(s!==campaign||verifiedSiteState()[site.id]!=='player'||siteGarrison(site.id)!==g)return message('El estado del castillo ha cambiado. Vuelve a abrir el reclutamiento.');
+ if(rivalBusy||battle||s!==campaign||verifiedSiteState()[site.id]!=='player'||siteGarrison(site.id)!==g)return message('El estado del castillo ha cambiado. Vuelve a abrir el reclutamiento.');
  const quantity=Number(quantityText);
  if(!Number.isInteger(quantity)||quantity<1||quantity>g.stock[type])return message('Cantidad de reclutamiento inválida.');
  const price=quantity*CASTLE_RECRUIT_COST[type];
@@ -1488,7 +1488,7 @@ async function manageCastleGarrison(site){
  const index=Number(choice)-1;if(!Number.isInteger(index)||index<0||index>=types.length)return message('Criatura no válida.');
  const type=types[index],amountText=await realmPrompt('Cantidad a depositar (+) o retirar (-):','1');
  if(amountText===null)return;
- if(s!==campaign||verifiedSiteState()[site.id]!=='player'||siteGarrison(site.id)!==g)return message('El estado del castillo ha cambiado. Vuelve a abrir la guarnición.');
+ if(rivalBusy||battle||s!==campaign||verifiedSiteState()[site.id]!=='player'||siteGarrison(site.id)!==g)return message('El estado del castillo ha cambiado. Vuelve a abrir la guarnición.');
  const amount=Number(amountText);
  if(!Number.isInteger(amount)||amount===0)return message('Introduce una cantidad entera distinta de cero.');
  if(amount>0){
