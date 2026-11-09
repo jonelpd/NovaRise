@@ -47,7 +47,7 @@ for (const page of ['index.html', 'combate-demo.html']) {
     const html = fs.readFileSync(path.join(__dirname, '..', 'juego', page), 'utf8');
     assert.match(html, /if\(battle\?\.enemyStacks&&battle\.rival\)/);
   });
-  test(page + ': archers can attack adjacent enemies', () => {
+  test(page + ': enemy archers respect minimum range and reposition when adjacent', () => {
     const html = fs.readFileSync(path.join(__dirname, '..', 'juego', page), 'utf8');
     // Enemy archers intentionally require range >= 2; adjacent units are handled by repositioning.
     assert.match(html,/const validShot=t=>distanceTo\(t\)>=2&&distanceTo\(t\)<=3&&clearShot/);
