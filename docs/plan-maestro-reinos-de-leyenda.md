@@ -71,5 +71,9 @@ Prioridad: movimientos, turnos, combates, economía, IA, castillos y persistenci
 - Corregido el guardado local en ambas vistas: si falla escribir el respaldo de una partida previa válida, se cancela el guardado nuevo sin reemplazar el progreso anterior.
 - Ampliadas las pruebas de cuota y guardado anterior inválido en `tests/p0-save-write-failure.test.cjs` (seis escenarios, aún sin ejecución CI confirmada).
 
+- Corregido el reinicio de campaña en ambas vistas: limpia el guardado principal y su copia de respaldo obsoleta solo tras confirmación; si falla la limpieza, no inicia una nueva campaña.
+- Añadidas cuatro pruebas de aislamiento del respaldo en reinicio y cancelación: `tests/p0-reset-backup-isolation.test.cjs`.
+- Pendiente ejecución CI y pruebas en navegador.
+
 ## Próxima tarea
 Fase 1: prueba de continuidad de campaña y persistencia tras cierre/reapertura, seguida de conflictos de guardado local/nube y pruebas de dos sesiones reales. No manipular partidas de usuarios reales para las pruebas.
