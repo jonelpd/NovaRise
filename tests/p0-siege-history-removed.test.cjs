@@ -13,6 +13,6 @@ for(const page of ['index.html','combate-demo.html']){
   assert.match(fn,/g\.defenders\[type\]=after\[type\];s\[type\]=battle\.heroArmyBefore\[type\]/);
   assert.match(fn,/verifiedSiteState\(\)\[id\]='rival'/);
   assert.doesNotMatch(fn,/siegeHistory|history\.unshift/);
-  assert.match(fn,/battle=null;\$\('modal'\)\.hidden=true;message\(outcome\);render\(\)/);
+  assert.match(fn,/battle=null;\$\('modal'\)\.hidden=true;message\(outcome\);return true/);
  });
 }
