@@ -838,7 +838,11 @@ function battleCount(type){return Math.max(0,s[type]||0)}
 function battleRange(type){return type==='archers'?3:type==='dragons'?2:1}
 function battleSpeed(type){return type==='griffins'?3:type==='dragons'?2:1}
 const BATTLE_INITIATIVE=['griffins','dragons','archers','soldiers'];
-function battleNextUnit(){return BATTLE_INITIATIVE.find(t=>battleCount(t)&&!battle.acted.includes(t))||null}
+function battleInitiativeOrder(){
+ // La velocidad determina el turno; el orden base desempata velocidades iguales.
+ return [...BATTLE_INITIATIVE].sort((a,b)=>battleSpeed(b)-battleSpeed(a));
+}
+function battleNextUnit(){return battleInitiativeOrder().find(t=>battleCount(t)&&!battle.acted.includes(t))||null}
 function battleUnitReady(type){return battle&&battleCount(type)&&!battle.acted.includes(type)}
 function battleFinishAction(note){
  if(!battle||battle.moving)return;
