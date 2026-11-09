@@ -58,5 +58,9 @@ Prioridad: movimientos, turnos, combates, economía, IA, castillos y persistenci
 - Añadidas pruebas estáticas de seguridad ante errores de red, conflicto de revisión y restauración remota (`tests/p0-cloud-interruption-safety.test.cjs`).
 - Pendiente ejecutar CI y pruebas reales de dos navegadores y desconexión durante RPC.
 
+- Corregida la recuperación local para preservar los bytes del guardado corrupto antes de restaurar la copia anterior, en `juego/index.html` y `juego/combate-demo.html`.
+- Ampliada la regresión de recuperación para verificar que el guardado defectuoso se conserva (`tests/p0-save-backup-recovery.test.cjs`).
+- Sin confirmación todavía de CI de los cambios recientes; no cerrar fase 1.
+
 ## Próxima tarea
 Fase 1: prueba de continuidad de campaña y persistencia tras cierre/reapertura, seguida de conflictos de guardado local/nube y pruebas de dos sesiones reales. No manipular partidas de usuarios reales para las pruebas.
