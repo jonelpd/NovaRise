@@ -176,3 +176,10 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - Corregidas las etiquetas de iniciativa: el sistema permite elegir libremente cualquier pila no actuada, por lo que «Ahora/Después» era engañoso. La barra muestra «Seleccionada» y «Disponible», manteniendo marcas de unidades ya actuadas y orden visual por velocidad.
 - Actualizada la regresión `tests/p0-initiative-turn-indicators.test.cjs` en ambas vistas.
 - Pendiente ejecución confirmada de CI y comprobación en navegador.
+
+## Fase 2 — Coherencia de controles de combate (2026-11-09)
+- Mensaje posterior a una acción indica que la unidad propuesta está disponible, sin afirmar turno obligatorio.
+- La barra de iniciativa distingue guardianes de ejércitos enemigos en duelos.
+- Los botones de selección de criaturas quedan deshabilitados durante `battle.moving` para impedir entradas contradictorias.
+- Sin cambios en guardado; dos comprobaciones estáticas añadidas en `tests/p0-battle-ui-turn-consistency.test.cjs`.
+- Pendiente ejecutar pruebas automáticas y validar interacciones reales en navegador.
