@@ -1141,7 +1141,10 @@ function heroStats(){
  return {level,might:Math.floor((level-1)/2)+bonus.might,arcana:Math.floor((level-1)/2)+bonus.arcana,maxMana:20+Math.floor((level-1)/2)*3+bonus.mana+mapTreasureEquipment().mana};
 }
 function awardHeroExperience(amount){
- const before=heroLevel();s.experience=(s.experience||0)+amount;
+ if(!Number.isSafeInteger(amount)||amount<=0)return '';
+ const before=heroLevel();
+ const current=Number.isSafeInteger(s.experience)&&s.experience>=0?s.experience:0;
+ s.experience=Math.min(100000000,current+amount);
  const after=heroLevel();
  return after>before?' 🌟 ¡Héroe de nivel '+after+'! Fuerza y magia mejoradas.':'';
 }
