@@ -23,5 +23,14 @@ for(const page of ['index.html','combate-demo.html']){
   vm.createContext(ctx);vm.runInContext(html.slice(start,end),ctx);
   assert.equal(ctx.persistGame(),false);
   assert.equal(data.get('campaign'),old);
+  assert.equal(data.has('campaign-backup'),false);
+ });
+ test(page+': invalid previous snapshot does not block a new valid save',()=>{
+  const data=new Map([['campaign','{invalid json']]);
+  const ctx={STORE:'campaign',battle:null,rivalBusy:false,s:{gold:200},window:{nvrScheduleCloudSave:()=>{}},validGame:g=>g.gold>=0,localStorage:{getItem:k=>data.get(k)??null,setItem:(k,v)=>data.set(k,v)}};
+  vm.createContext(ctx);vm.runInContext(html.slice(start,end),ctx);
+  assert.equal(ctx.persistGame(),true);
+  assert.equal(JSON.parse(data.get('campaign')).gold,200);
+  assert.equal(data.has('campaign-backup'),false);
  });
 }
