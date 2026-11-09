@@ -189,3 +189,9 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - Hallazgo corregido: el guardián podía preferir caminar hacia un objetivo lejano de mayor prioridad aun teniendo un blanco adyacente. La ordenación de opciones favorece ahora siempre un ataque inmediato; entre blancos atacables conserva su valoración táctica.
 - Sin cambios de guardado, corregido en juego y demo. Añadidas dos pruebas funcionales del comparador de decisiones en `tests/p0-guardian-immediate-attack.test.cjs`.
 - Auditoría de extremo a extremo NO cerrada: faltan ejecución de suite automatizada, pruebas de navegador de victorias/derrotas, asedios, duelos y continuidad de guardado.
+
+## Auditoría de combates — Resolución de ejército vacío (2026-11-09)
+- Detectado un retorno anticipado de `enemyAdvance` cuando no quedan tropas aliadas; podía impedir que `battleFinishAction` ejecutara su comprobación de derrota.
+- Corregido: `enemyAdvance` invoca `onComplete` una vez antes de retornar en este caso. Cambio sincronizado en juego y demo, sin cambios de persistencia.
+- Añadidas dos pruebas de comportamiento con `node:vm` en `tests/p0-empty-army-turn-resolution.test.cjs`.
+- Continúan pendientes la ejecución confirmada de CI y las pruebas de campaña completas en navegador, incluidos guardados posteriores a combates.
