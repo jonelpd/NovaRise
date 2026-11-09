@@ -1999,7 +1999,7 @@ function load(){
   if(validGame(v)){s=v;selectedMine=s.ownedMines[0]||'';reveal();render();return}
  }catch(e){}
  // Recover the last valid snapshot when the primary save is damaged.
- try{const backup=localStorage.getItem(STORE+'-backup');if(backup){const restored=JSON.parse(backup);if(validGame(restored)){s=restored;selectedMine=s.ownedMines[0]||'';reveal();render();message('⚠️ La última partida estaba dañada. Se ha recuperado la copia anterior válida.');return}}}catch(e){}
+ try{const backup=localStorage.getItem(STORE+'-backup');if(backup){const restored=JSON.parse(backup);if(validGame(restored)){try{localStorage.setItem(STORE+'-recovery-'+Date.now(),raw)}catch(e){}s=restored;selectedMine=s.ownedMines[0]||'';reveal();render();message('⚠️ La última partida estaba dañada. Se ha recuperado la copia anterior válida.');return}}}catch(e){}
  // Never overwrite an unreadable campaign with a new one.
  // Preserve the original bytes for manual recovery.
  try{localStorage.setItem(STORE+'-recovery-'+Date.now(),raw)}catch(e){}
