@@ -271,3 +271,9 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - Corregido con captura y verificación de identidad, instantánea JSON y `STORE` antes de asignar `s=v.game`.
 - Añadida prueba `tests/p0-import-confirmation-race.test.cjs` para asegurar que la comprobación antecede a la sustitución de campaña en ambas páginas.
 - Auditoría profunda aún en curso: pendientes validación en navegador, sincronización nube y ejecución de suite actualizada.
+
+## Fase 1 — GitHub Actions #220 (2026-11-09)
+- Registro real consultado: ejecución `42713142213`, job `129487656161`; dos fallos en `tests/p0-rival-save-lock.test.cjs`, correspondientes a `index.html` y `combate-demo.html`.
+- Causa: aserción antigua exigía que la comprobación `if(rivalBusy||battle)` fuese seguida inmediatamente por `s=v.game`; la protección nueva contra importación concurrente añade un guard de instantánea entre ambos.
+- Corregida la prueba para exigir en orden bloqueo de turno rival, comprobación de instantánea y asignación de partida. Se mantienen ambas protecciones del juego.
+- Pendiente verificar ejecución posterior a la corrección; no declarar verde sin resultados.
