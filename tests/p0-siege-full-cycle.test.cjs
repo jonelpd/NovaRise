@@ -18,7 +18,7 @@ for(const page of ['index.html','combate-demo.html']){
    const rival={soldiers:12,archers:4,defeated:false,recovery:0};
    const storage=[];
    let hidden=false,shown=0;
-   const ctx={s,battle:null,CASTLE_PROFILES:{'fort-west':{name:'Bastión'}},CASTLE_RECRUIT_COST:{soldiers:30,archers:50,griffins:110,dragons:300},siteGarrison:()=>garrison,verifiedSiteState:()=>s.verifiedSites,rivalState:()=>rival,showBattle:()=>{shown++;},render:()=>{storage.push(JSON.stringify(s));},message:()=>{},rivalCastleConquest:()=>{throw Error('Unexpected automatic siege');},$:()=>({set hidden(v){hidden=v;}})};
+   const ctx={s,battle:null,CASTLE_PROFILES:{'fort-west':{name:'Bastión'}},CASTLE_RECRUIT_COST:{soldiers:30,archers:50,griffins:110,dragons:300},siteGarrison:()=>garrison,verifiedSiteState:()=>s.verifiedSites,rivalState:()=>rival,showBattle:()=>{shown++;},render:()=>{storage.push(JSON.stringify(s));},message:()=>{storage.push(JSON.stringify(s));},rivalCastleConquest:()=>{throw Error('Unexpected automatic siege');},$:()=>({set hidden(v){hidden=v;}})};
    vm.createContext(ctx);vm.runInContext(html.slice(start,end),ctx);
    assert.equal(ctx.launchDefensiveSiege({id:'fort-west'}),undefined);
    assert.equal(shown,1);
