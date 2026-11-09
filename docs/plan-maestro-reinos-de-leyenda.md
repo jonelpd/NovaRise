@@ -154,3 +154,9 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - Evitado que la orden Defender añada una segunda entrada de protección si la unidad ya estaba protegida por la especialización del héroe o por otra orden.
 - La protección continúa consumiéndose una sola vez mediante `consumeBattleGuard`; cambio en ambas vistas sin modificar partidas guardadas.
 - Añadidas dos comprobaciones estáticas `tests/p0-guard-no-duplicates.test.cjs`. Ejecución de CI y pruebas de navegador pendientes.
+
+## Fase 2 — Contraataques por pila enemiga (2026-11-09)
+- En duelos entre ejércitos, sustituido el límite global de contraataque por un registro `counterUsedByEnemy` de las pilas enemigas que ya respondieron en la ronda. Cada pila superviviente puede contraatacar una vez si recibe un ataque cuerpo a cuerpo.
+- En combates con un único enemigo se conserva `counterUsed`; el registro se inicializa al abrir combate y se reinicia al empezar una ronda nueva.
+- Aplicado en juego y demo, sin modificar el formato persistente de campaña. Añadidas dos pruebas estáticas `tests/p0-per-enemy-retaliation.test.cjs`.
+- Pendiente confirmar CI y probar manualmente duelos con varias pilas enemigas.
