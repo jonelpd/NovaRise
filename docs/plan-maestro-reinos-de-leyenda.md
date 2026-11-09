@@ -212,3 +212,8 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - Añadidos cuatro casos de prueba de comportamiento en `tests/p0-hero-duel-outcomes.test.cjs` (victoria y derrota en juego y demo). Comprueban bajas de tropas propias, supervivientes rivales, recompensa de oro y experiencia, y ausencia de doble recompensa al repetir resolución.
 - Sin cambios de reglas ni del formato de guardado en esta etapa.
 - Pendiente ejecución de pruebas, validación en navegador de ambos resultados y comprobación de persistencia real tras recarga.
+
+## Auditoría de continuidad de guardado tras combate (2026-11-09)
+- Revisado el flujo `hitResolveVictory` → `render` → `persistGame`: el guardado se solicita al cerrar el combate y se impide mientras `battle` está activo.
+- Añadidas pruebas de integración simulada en `tests/p0-combat-save-continuity.test.cjs` para serializar una victoria en duelo con bajas, oro, experiencia y estado del rival; y para impedir sobrescrituras durante un combate activo.
+- Sin cambios en la estructura de partidas. Pendientes ejecución de la suite, recarga real del navegador, sincronización en nube y comprobación de conquista de castillos.
