@@ -171,3 +171,8 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - Barra de iniciativa actualizada en ambas vistas: orden calculado por velocidad, etiquetas «Ahora» y «Después», marca de acción completada y velocidades en la información contextual.
 - Se reutiliza la barra existente sin añadir paneles redundantes ni modificar el formato de guardado.
 - Dos pruebas estáticas añadidas en `tests/p0-initiative-turn-indicators.test.cjs`; pendiente confirmar CI y validación visual en navegador.
+
+## Fase 2 — Coherencia de barra y selección (2026-11-09)
+- Corregidas las etiquetas de iniciativa: el sistema permite elegir libremente cualquier pila no actuada, por lo que «Ahora/Después» era engañoso. La barra muestra «Seleccionada» y «Disponible», manteniendo marcas de unidades ya actuadas y orden visual por velocidad.
+- Actualizada la regresión `tests/p0-initiative-turn-indicators.test.cjs` en ambas vistas.
+- Pendiente ejecución confirmada de CI y comprobación en navegador.
