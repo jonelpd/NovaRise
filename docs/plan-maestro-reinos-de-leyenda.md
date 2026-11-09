@@ -166,3 +166,8 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - Velocidades actuales: grifos 3, dragones 2, arqueros 1, soldados 1. El orden efectivo actual no cambia, pero la iniciativa queda ligada a la velocidad y preparada para futuras variaciones.
 - Aplicado a ambas vistas, sin modificar persistencia. Añadidas dos pruebas de comportamiento con `node:vm` en `tests/p0-speed-based-initiative.test.cjs`.
 - Pendiente confirmar CI y validación real en navegador.
+
+## Fase 2 — Visualización de turnos de iniciativa (2026-11-09)
+- Barra de iniciativa actualizada en ambas vistas: orden calculado por velocidad, etiquetas «Ahora» y «Después», marca de acción completada y velocidades en la información contextual.
+- Se reutiliza la barra existente sin añadir paneles redundantes ni modificar el formato de guardado.
+- Dos pruebas estáticas añadidas en `tests/p0-initiative-turn-indicators.test.cjs`; pendiente confirmar CI y validación visual en navegador.
