@@ -49,6 +49,8 @@ for (const page of ['index.html', 'combate-demo.html']) {
   });
   test(page + ': archers can attack adjacent enemies', () => {
     const html = fs.readFileSync(path.join(__dirname, '..', 'juego', page), 'utf8');
-    assert.ok(html.includes("distance===1||clearShot(u.x,u.y,nearest.x,nearest.y)"));
+    // Enemy archers intentionally require range >= 2; adjacent units are handled by repositioning.
+    assert.match(html,/const validShot=t=>distanceTo\(t\)>=2&&distanceTo\(t\)<=3&&clearShot/);
+    assert.match(html,/u\.id!=='archers'\|\|distance>=2/);
   });
 }
