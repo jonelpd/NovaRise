@@ -75,5 +75,8 @@ Prioridad: movimientos, turnos, combates, economía, IA, castillos y persistenci
 - Añadidas cuatro pruebas de aislamiento del respaldo en reinicio y cancelación: `tests/p0-reset-backup-isolation.test.cjs`.
 - Pendiente ejecución CI y pruebas en navegador.
 
+- Endurecido el reinicio: si falla la eliminación del guardado principal, se intenta restaurar el respaldo previo y se cancela la nueva campaña; advertencia explícita si también falla la restauración.
+- Ampliado `tests/p0-reset-backup-isolation.test.cjs` con dos escenarios de fallo de eliminación (uno por vista), sin CI verificado.
+
 ## Próxima tarea
 Fase 1: prueba de continuidad de campaña y persistencia tras cierre/reapertura, seguida de conflictos de guardado local/nube y pruebas de dos sesiones reales. No manipular partidas de usuarios reales para las pruebas.
