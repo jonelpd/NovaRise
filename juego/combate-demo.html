@@ -791,7 +791,9 @@ function duelEnemyTurn(done){
   const nearest=(available.length?available:candidates).sort((a,b)=>distanceTo(a)-distanceTo(b))[0];
   const distance=distanceTo(nearest);
   if(distance<=(u.id==='archers'?3:1)&&(u.id!=='archers'||distance>=2)&&(u.id!=='archers'||clearShot(u.x,u.y,nearest.x,nearest.y))){
-   const losses=current.guarding?.includes(nearest.type)?0:Math.min(battleCount(nearest.type),Math.max(0,Math.ceil(u.count/(u.id==='archers'?5:7))-mapTreasureEquipment().defense));
+   const guarded=current.guarding?.includes(nearest.type);
+   const losses=guarded?0:Math.min(battleCount(nearest.type),Math.max(0,Math.ceil(u.count/(u.id==='archers'?5:7))-mapTreasureEquipment().defense));
+   if(guarded)current.guarding.splice(current.guarding.indexOf(nearest.type),1);
    s[nearest.type]=Math.max(0,s[nearest.type]-losses);animateBattleFx(nearest.type,s[nearest.type]===0);
    drawTactics();setTimeout(next,420);return
   }
