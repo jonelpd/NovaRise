@@ -3,8 +3,8 @@ const test=require('node:test'),assert=require('node:assert/strict'),fs=require(
 for(const page of ['index.html','combate-demo.html']){
  const html=fs.readFileSync(path.join(__dirname,'../juego',page),'utf8');
  for(const [name,next,notice] of [
-  ['recruitFromCastle','// Tropas de guarnición independientes','reclutamiento'],
-  ['manageCastleGarrison','async function castleGarrisonMenu','guarnición']
+  ['recruitFromCastle','// Tropas de guarnición independientes','el reclutamiento'],
+  ['manageCastleGarrison','async function castleGarrisonMenu','la guarnición']
  ]){
   test(page+': '+name+' rejects changes during battle or rival turn after async prompt',()=>{
    const start=html.indexOf('async function '+name+'('),end=html.indexOf(next,start);
