@@ -11,6 +11,7 @@ for(const page of ['index.html','combate-demo.html']){
   const g=ctx.siteGarrison('fort-west');
   assert.equal(g.stock.soldiers,4);
   assert.equal(g.defenders.soldiers,0);
+  assert.equal(Array.isArray(g.defenders),false,'defenders must be a plain object');
   assert.equal(state.garrisons['fort-west'],g);
   state.garrisons=[];
   const recovered=ctx.siteGarrison('fort-west');
