@@ -277,3 +277,9 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - Causa: aserción antigua exigía que la comprobación `if(rivalBusy||battle)` fuese seguida inmediatamente por `s=v.game`; la protección nueva contra importación concurrente añade un guard de instantánea entre ambos.
 - Corregida la prueba para exigir en orden bloqueo de turno rival, comprobación de instantánea y asignación de partida. Se mantienen ambas protecciones del juego.
 - Pendiente verificar ejecución posterior a la corrección; no declarar verde sin resultados.
+
+## Fase 1 — Bloqueo de operaciones de castillo (2026-11-09)
+- Hallazgo: `recruitFromCastle` y `manageCastleGarrison` comprobaban campaña y propiedad del castillo tras los diálogos asíncronos, pero no `rivalBusy` ni `battle`. Podían permitir operaciones de tropas durante un turno rival o un combate activo.
+- Corregido en `juego/index.html` y `juego/combate-demo.html` mediante bloqueo adicional antes de aplicar cambios.
+- Añadida prueba `tests/p0-castle-menu-turn-lock.test.cjs` para ambas operaciones y páginas.
+- Pendiente ejecución confirmada de GitHub Actions y validación manual en navegador; Fase 1 abierta.
