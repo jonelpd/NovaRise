@@ -131,3 +131,9 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - En `duelEnemyTurn`, una unidad protegida absorbe un ataque enemigo y consume esa protección inmediatamente. Antes podía bloquear varios ataques sucesivos durante la misma ronda.
 - Aplicado en juego principal y demo; sin cambios de formato de guardado.
 - Dos pruebas estáticas añadidas: `tests/p0-duel-guard-consumption.test.cjs`. Falta ejecutar CI y validar en navegador con varios atacantes.
+
+## Fase 2 — Defensa y contraataques coherentes (2026-11-09)
+- Incorporada función compartida `consumeBattleGuard(type)` en ambas vistas: cada protección se consume una única vez.
+- Aplicada a ataques de unidades enemigas ordinarias, ataques en duelos de héroes y contraataques recibidos por tropas aliadas.
+- Actualizadas cuatro pruebas de `tests/p0-duel-guard-consumption.test.cjs`, incluyendo una ejecución aislada de la función con `node:vm`.
+- Pendiente confirmar ejecución de Node/CI y validar casos completos en navegador.
