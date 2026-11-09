@@ -183,3 +183,9 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - Los botones de selección de criaturas quedan deshabilitados durante `battle.moving` para impedir entradas contradictorias.
 - Sin cambios en guardado; dos comprobaciones estáticas añadidas en `tests/p0-battle-ui-turn-consistency.test.cjs`.
 - Pendiente ejecutar pruebas automáticas y validar interacciones reales en navegador.
+
+## Auditoría de combates — Primera corrección (2026-11-09)
+- Inspeccionadas las rutas de `battleFinishAction`, `enemyAdvance`, `duelEnemyTurn`, `hit`, `hitResolveVictory` y `loseBattle` en el código principal.
+- Hallazgo corregido: el guardián podía preferir caminar hacia un objetivo lejano de mayor prioridad aun teniendo un blanco adyacente. La ordenación de opciones favorece ahora siempre un ataque inmediato; entre blancos atacables conserva su valoración táctica.
+- Sin cambios de guardado, corregido en juego y demo. Añadidas dos pruebas funcionales del comparador de decisiones en `tests/p0-guardian-immediate-attack.test.cjs`.
+- Auditoría de extremo a extremo NO cerrada: faltan ejecución de suite automatizada, pruebas de navegador de victorias/derrotas, asedios, duelos y continuidad de guardado.
