@@ -890,7 +890,8 @@ function enemyAdvance(onComplete){
    seen.add(key);queue.push([nx,ny,d+1,first||[nx,ny]]);
   }
  }
- options.sort((a,b)=>b.priority-a.priority||a.d-b.d||a.target.type.localeCompare(b.target.type));
+ // Si hay una unidad adyacente, atacar ahora evita desperdiciar el turno persiguiendo otro objetivo.
+ options.sort((a,b)=>Number(b.d===0)-Number(a.d===0)||b.priority-a.priority||a.d-b.d||a.target.type.localeCompare(b.target.type));
  const best=options[0];
  if(best&&best.d===0){
   const chosen=best.target,guarded=consumeBattleGuard(best.target.type);
