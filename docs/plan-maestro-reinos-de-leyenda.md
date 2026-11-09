@@ -222,3 +222,9 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - Añadida prueba `tests/p0-castle-save-reload.test.cjs`: simula la victoria en un castillo, guardado local y posterior `load`, verificando propiedad, supervivientes, oro y experiencia.
 - La prueba utiliza las funciones reales de resolución, validación, persistencia y carga aisladas con `node:vm`; no sustituye una comprobación en navegador real.
 - Sin cambios en reglas ni esquema de partidas. Pendiente ejecutar las pruebas de Node y verificar publicación, recarga del navegador y sincronización en nube.
+
+## Auditoría de sincronización nube — Instantáneas obsoletas (2026-11-09)
+- Hallazgo: `autoCloudSave` tomaba una instantánea antes de consultar asincrónicamente la revisión remota y podía enviar una instantánea antigua si la partida cambiaba durante la espera.
+- Corrección en `juego/index.html`: tras consultar la revisión y antes de la RPC se comprueba `JSON.stringify(s)===snapshotText`; en caso contrario se marca `autoCloudPending` y se programa una nueva sincronización al salir de `finally`.
+- Añadida prueba de regresión estructural `tests/p0-cloud-stale-snapshot.test.cjs`.
+- No se ha confirmado ejecución de la suite: intento de clonar GitHub desde el entorno local falló por falta de resolución DNS. Pendiente validación de CI y sincronización real entre dispositivos.
