@@ -15,7 +15,7 @@ for(const page of ['index.html','combate-demo.html']){
    const code=html.slice(a,b);
    const snapshot=code.indexOf('const campaign=s;');
    const prompt=code.lastIndexOf('await realmPrompt(');
-   const check=code.indexOf('if(s!==campaign||verifiedSiteState()[site.id]');
+   const check=code.indexOf("if(rivalBusy||battle||s!==campaign||verifiedSiteState()[site.id]!=='player'||siteGarrison(site.id)!==g)");
    const mutation=name==='recruitment'?code.indexOf('s.gold-=price'):code.indexOf('g.defenders[type]+=amount');
    assert(snapshot>=0&&snapshot<prompt&&check>prompt&&mutation>check);
   });
