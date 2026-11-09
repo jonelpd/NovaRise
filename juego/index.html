@@ -790,9 +790,14 @@ function duelEnemyTurn(done){
   if(index>=units.length){current.moving=false;current.round++;const target=duelTarget();if(target)duelSelectEnemy(target);if(done)done();return}
   const u=units[index++];if(!u.count)return next();
   const living=targets.filter(t=>battleCount(t)>0);if(!living.length){current.moving=false;if(done)done();return}
-  const nearest=living.map(t=>({type:t,x:pos(t)[0],y:pos(t)[1]})).sort((a,b)=>(Math.abs(a.x-u.x)+Math.abs(a.y-u.y))-(Math.abs(b.x-u.x)+Math.abs(b.y-u.y)))[0];
-  const distance=Math.abs(nearest.x-u.x)+Math.abs(nearest.y-u.y);
+  const candidates=living.map(t=>({type:t,x:pos(t)[0],y:pos(t)[1]}));
   const clearShot=(fromX,fromY,toX,toY)=>!current.obstacles?.some(p=>(fromX===toX&&p[0]===fromX&&p[1]>Math.min(fromY,toY)&&p[1]<Math.max(fromY,toY))||(fromY===toY&&p[1]===fromY&&p[0]>Math.min(fromX,toX)&&p[0]<Math.max(fromX,toX)));
+  // Ranged enemies prefer an immediately valid target instead of chasing an adjacent stack.
+  const distanceTo=t=>Math.abs(t.x-u.x)+Math.abs(t.y-u.y);
+  const validShot=t=>distanceTo(t)>=2&&distanceTo(t)<=3&&clearShot(u.x,u.y,t.x,t.y);
+  const available=u.id==='archers'?candidates.filter(validShot):[];
+  const nearest=(available.length?available:candidates).sort((a,b)=>distanceTo(a)-distanceTo(b))[0];
+  const distance=distanceTo(nearest);
   if(distance<=(u.id==='archers'?3:1)&&(u.id!=='archers'||distance>=2)&&(u.id!=='archers'||clearShot(u.x,u.y,nearest.x,nearest.y))){
    const losses=current.guarding?.includes(nearest.type)?0:Math.min(battleCount(nearest.type),Math.max(0,Math.ceil(u.count/(u.id==='archers'?5:7))-mapTreasureEquipment().defense));
    s[nearest.type]=Math.max(0,s[nearest.type]-losses);animateBattleFx(nearest.type,s[nearest.type]===0);
