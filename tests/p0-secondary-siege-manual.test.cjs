@@ -75,3 +75,15 @@ test('stale attacker snapshot cannot open manual siege',()=>{
  assert.equal(f.ctx.launchSecondaryDefensiveSiege(f.draft),false);
  assert.equal(f.s.soldiers,15);assert.equal(f.ctx.battle,null);
 });
+
+test('rejected siege outcome restores army and preserves original decision',()=>{
+ const f=setup();f.ctx.launchSecondaryDefensiveSiege(f.draft);
+ f.ctx.applySecondarySiegeOutcome=()=>false;
+ f.ctx.battle.enemyStacks.forEach(u=>u.count=0);
+ assert.equal(f.ctx.finishSecondaryDefensiveSiege(true),false);
+ assert.equal(f.s.soldiers,15);assert.equal(f.s.archers,6);
+ assert.equal(f.ctx.battle,null);
+ assert.equal(f.s.pendingSecondarySiege.commanderId,'fort-west');
+ assert.equal(f.s.pendingSecondarySiege.enemyArmyBefore.soldiers,8);
+ assert.equal(f.h.lastSecondarySiege,'');
+});
