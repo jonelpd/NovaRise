@@ -363,3 +363,10 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 **Validación:** la regresión del juego y la publicación de Pages fueron satisfactorias para `c489e3fc`. La validación de `65a8390` está pendiente de finalizar. La prueba estática general sigue fallando por referencias a un logotipo inexistente en las páginas principales; el flujo de Telegram también presenta un fallo independiente. No declarar CI global verde.
 
 **Pendiente prioritario:** integrar batallas de cada comandante con el ejército concreto, bajas persistentes, asedios, derrota y recuperación; comprobar que las rutas y la toma de recursos funcionan en navegador; añadir pruebas específicas de guardado, recuperación, 2+ héroes y conquistas simultáneas. Los héroes secundarios todavía no participan en combates independientes. NVRA real continúa desactivado.
+
+### Avance incremental — defensas de fortalezas (2026-11-10)
+
+- **Código:** commit `930ca4d5`. Cuando una fortaleza rival tiene su comandante secundario cerca, el duelo defensivo usa las tropas de ese comandante, no las del rival global. El combate registra `enemyCommanderId` para atribuir correctamente las bajas si el jugador pierde y la derrota si gana.
+- **Compatibilidad:** se conserva el comportamiento anterior cuando no hay comandante secundario defendiendo; no se modifica la versión del guardado ni se generan NVRA.
+- **Estado de verificación:** pendiente de resultado de CI de este commit y prueba E2E manual de defensa, derrota y recarga.
+- **Aún pendiente:** encuentro en campo abierto contra comandantes secundarios, asedios iniciados por ellos, gestión completa de bajas y defensa en todos los tipos de combate, pruebas automatizadas específicas para múltiples comandantes y evaluación de equilibrio.
