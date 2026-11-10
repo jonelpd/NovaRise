@@ -319,3 +319,32 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - El jugador confirma haber salido del juego y vuelto a entrar, observando que los datos guardados se mantienen. **Validación manual positiva de persistencia básica en su entorno.**
 - Alcance limitado: no se ha aportado comparación campo a campo de héroe, tropas, recursos, castillos y turno; tampoco prueba de corrupción/restauración de respaldo, otro dispositivo o dos sesiones en nube. No declarar E2E-03 ni E2E-05 completamente certificados.
 - Próximo paso: verificar continuidad tras combate/conquista y guardado, y después recuperación de respaldo y sincronización en dos sesiones de prueba.
+
+## Ampliación aprobada: héroes enemigos independientes por castillo (2026-11-10)
+
+**Solicitud de diseño:** cada castillo controlado por el enemigo debe contar con un héroe propio, que tenga su turno de movimiento independiente. El objetivo es aumentar la dificultad estratégica de la campaña y preparar, sin activar aún, retos más exigentes para futuras recompensas NVRA.
+
+**Estado:** diseño incorporado al plan; **implementación y pruebas pendientes**. No se debe confundir el héroe rival global actual con una plantilla que pueda duplicarse sin aislar estado y batallas.
+
+### Reglas propuestas
+1. Un héroe enemigo activo como máximo por castillo enemigo, incluido el castillo principal; identificarlo mediante un ID estable del castillo. Nunca generar un segundo héroe por recargar la partida.
+2. Cada héroe mantiene posición, ejército, movimientos disponibles, objetivo, estado de derrota y contador de recuperación propios, guardados con la campaña.
+3. Al finalizar el turno humano, los héroes enemigos activos actúan **secuencialmente**, con presupuesto finito de movimiento, rutas transitables y animación visible. Bloquear interacciones humanas durante la secuencia y garantizar desbloqueo en errores/cancelaciones.
+4. IA: defender su castillo, proteger rutas, disputar minas, perseguir al jugador cuando exista ventaja militar y reconquistar fortalezas; evitar ataques suicidas. No utilizar información de niebla de guerra no descubierta por ese héroe.
+5. Combates y asedios deben usar el ejército del héroe concreto; aplicar bajas y derrotas solo a su estado. No duplicar recompensas ni activar dos combates simultáneos.
+6. La conquista de un castillo desactiva su héroe vinculado según el resultado del combate; el castillo recuperado por el rival puede reclutar un nuevo héroe tras un período y coste definidos, sin generar ejércitos gratis.
+7. La dificultad se ajustará a una economía limitada: costes de reclutamiento, producción real y límite de movimientos. Sin ventajas ocultas de recursos para la IA.
+8. Migración de partidas existentes: crear el registro de héroes enemigos solo si falta, a partir del control actual de castillos, conservando al héroe rival previo, sus tropas, conquistas y posición. Validar importación, exportación, nube y recuperación local.
+9. NVRA: **sin emisión ni pago de tokens reales** por esta mecánica. Antes de cualquier recompensa real: diseño de emisión, límites por jugador/temporada, antifraude, pruebas de balance, seguridad y revisión legal.
+
+### Orden de implementación y criterios de aceptación
+- [ ] Auditar funciones actuales `rivalState`, `rivalTurn`, `rivalEncounter`, `rivalHeroDefendingCastle`, `rivalCastleHeroBattle`, conquista/asedio, `validGame`, guardado y recuperación.
+- [ ] Introducir modelo de múltiples héroes con migración compatible y pruebas de guardado antiguo.
+- [ ] Crear turnos secuenciales de héroes enemigos, con rutas, límite de movimientos y bloqueo robusto.
+- [ ] Mostrar marcadores individuales y animaciones sin interferir con la cámara o los diálogos.
+- [ ] Vincular combate, bajas, asedio, derrota, conquista y reclutamiento al héroe correcto.
+- [ ] Añadir pruebas de regresión: 2+ héroes activos, uno derrotado, castillo conquistado, recarga durante transición, partida antigua, errores de ruta y ausencia de duplicación.
+- [ ] Ejecutar CI completo y pruebas E2E en navegador, incluyendo guardado y reentrada.
+- [ ] Ajustar dificultad mediante partidas de prueba antes de activar cualquier incentivo NVRA.
+
+**Protección de estabilidad:** realizar la implementación en incrementos pequeños y no reemplazar de golpe el sistema rival vigente. No marcar la función como terminada hasta verificar código, regresiones y comportamiento real.
