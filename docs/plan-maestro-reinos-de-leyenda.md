@@ -587,3 +587,9 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Código `66a8bbf0`:** al cargar la partida principal o recuperar una copia de respaldo, se valida el expediente de asedio secundario antes de revelar, renderizar y guardar el mapa. Los expedientes obsoletos o ya resueltos se descartan antes de cualquier persistencia automática.
 - **Pruebas `5a4dc767`:** verifican el orden de validación anterior al renderizado tanto para guardado principal como respaldo.
 - **Pendiente:** validar en navegador con guardados reales; comprobar CI de esta versión.
+
+### Validación estricta de tropas al recuperar asedios — 2026-11-10
+
+- **Código `22d51d78`:** antes de reactivar un asedio secundario pendiente se exige que todas las cantidades de atacantes y defensores sean enteros no negativos y coincidan con el estado actual. Los datos corruptos se descartan sin ejecutar un combate.
+- **Pruebas `91a914c2`:** cantidades negativas, decimales, texto, nulos y valores ausentes no pueden reabrir un expediente de asedio.
+- **Pendiente:** verificación de la ejecución de regresión y pruebas manuales de recuperación en navegador.
