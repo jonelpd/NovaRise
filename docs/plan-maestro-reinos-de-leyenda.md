@@ -407,3 +407,5 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Próximo paso:** diseñar una integración aislada y compatible con el motor de asedios existente, acompañada de pruebas específicas de atacante, guarnición, bajas, confirmación asíncrona y guardado antes de activarla.
 
 - **Ajuste adicional:** tras la reversión, CI mostró un fallo residual en el bloqueo de turno durante la confirmación de asedios (`p0-siege-turn-lock`). Commit `21ac38af`: restaurado el orden de comprobación del encuentro del rival principal antes de evaluar comandantes secundarios, siempre después de liberar el bloqueo. Resultado de CI pendiente.
+
+- **Corrección de regresión P0:** la prueba `p0-siege-turn-lock.test.cjs` exige que el desbloqueo `rivalBusy=false` vaya seguido inmediatamente de la comprobación `rivalEncounterPending`. El comentario intermedio impedía cumplir el contrato de prueba. Commit `c6a46df4` elimina el comentario sin modificar la lógica; pendiente de confirmación CI.
