@@ -503,3 +503,11 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Corrección `1a292f8c`:** si el jugador elige mantener la defensa, se registra `lastSecondarySiege` antes de cerrar la solicitud, evitando que el mismo comandante repita la propuesta durante ese turno sin gastar tropas.
 - **Prueba `a47ed0e8`:** refuerza la comprobación del sello de turno al mantener la defensa.
 - **Pendiente:** CI de la corrección, pruebas de interacción en navegador, resolución de la concurrencia Pages y defensa manual secundaria.
+
+### Persistencia del sello de asedio y diagnóstico Pages — 2026-11-10
+
+- **Regresión anterior:** verde `42823353891` (bloqueo de turno y rechazo de asedios duplicados).
+- **Corrección `a88ae7fa`:** normalizar y preservar `lastSecondarySiege` al recuperar comandantes de partidas guardadas; complementa `lastSiegeRetreat` y evita perder el sello que se registra tanto al resolver automáticamente como al mantener la defensa.
+- **Pruebas `903b9fed`:** dos casos adicionales de serialización y compatibilidad con valores inválidos, sin alterar el ejército del comandante.
+- **Pages:** el despliegue `42823380887` volvió a fallar porque GitHub indica un despliegue de la revisión `5fff7a74` todavía en curso, aunque las ejecuciones Actions de esa revisión constan como completadas. Es un conflicto de estado del despliegue Pages; requiere revisar el estado de GitHub Pages, no basta con modificar el juego.
+- **Pendiente:** verificar CI y publicación, prueba real de recarga en navegador, defensa manual secundaria con motor táctico independiente.
