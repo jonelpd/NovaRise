@@ -377,3 +377,10 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Ejército independiente:** la batalla utiliza las tropas del comandante encontrado; si pierde el jugador, se conservan las bajas de ese ejército concreto; si vence el jugador, el comandante secundario queda derrotado sin destruir automáticamente su fortaleza ni al rival principal.
 - **Límites:** no se han incorporado todavía ataques ofensivos iniciados por estos comandantes durante su propio turno ni asedios independientes. La detección de encuentros se hace al mover al jugador.
 - **Verificación:** pruebas de regresión y E2E de este cambio pendientes de completar. No declarar terminada la fase hasta comprobar colisiones, animaciones, guardado y resultados de batalla.
+
+### Avance incremental — persecución estratégica (2026-11-10)
+
+- **Código:** `f51336d3`. Los comandantes secundarios detectan al héroe del jugador dentro de nueve unidades de distancia y solo consideran perseguirlo si su ejército tiene una ventaja ponderada mínima del 40 %, permaneciendo además dentro de su radio de defensa de 15 unidades respecto al castillo.
+- **Comportamiento:** cuando existe una ruta transitable, la persecución tiene prioridad sobre la búsqueda de recursos; se mantiene el límite de cuatro pasos por turno y la animación. No se inicia todavía un combate automático durante el turno enemigo.
+- **Validación:** pendiente de CI y comprobación E2E. Deben verificarse rutas, colisiones, guardado y equilibrio antes de considerar terminada la IA ofensiva.
+- **Pendiente:** ataque táctico iniciado por el enemigo, asedios secundarios y pruebas automatizadas específicas para persecución y enfrentamientos.
