@@ -34,3 +34,16 @@ test('reload does not interrupt ongoing battle or rival turn',()=>{
   f.ctx[field]=field==='battle'?{}:true;f.run();assert.equal(f.calls(),0);
  }
 });
+
+test('load validates pending secondary siege before rendering primary save',()=>{
+ const body=html.slice(html.indexOf('function load(){'),html.indexOf('function exportSave()',html.indexOf('function load(){')));
+ const primary=body.slice(body.indexOf('if(validGame(v))'),body.indexOf('}catch(e){}'));
+ assert.ok(primary.indexOf('recoverSecondarySiegeDecision()')>=0);
+ assert.ok(primary.indexOf('recoverSecondarySiegeDecision()')<primary.indexOf('render()'));
+});
+test('backup recovery validates pending secondary siege before rendering',()=>{
+ const body=html.slice(html.indexOf('function load(){'),html.indexOf('function exportSave()',html.indexOf('function load(){')));
+ const backup=body.slice(body.indexOf('s=restored;'));
+ assert.ok(backup.indexOf('recoverSecondarySiegeDecision()')>=0);
+ assert.ok(backup.indexOf('recoverSecondarySiegeDecision()')<backup.indexOf('render()'));
+});
