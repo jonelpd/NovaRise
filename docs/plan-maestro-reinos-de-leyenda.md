@@ -405,3 +405,5 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Acción:** commit `e3c5a751`: revertida exclusivamente la modificación de asedios secundarios en `juego/index.html`, restaurando el código de combate previo (`f9914730`). Se mantienen los encuentros en campo abierto y la persecución implementados anteriormente.
 - **Estado real:** los asedios secundarios vuelven a estar **pendientes**, no completados. La regresión del commit de corrección requiere verificación CI.
 - **Próximo paso:** diseñar una integración aislada y compatible con el motor de asedios existente, acompañada de pruebas específicas de atacante, guarnición, bajas, confirmación asíncrona y guardado antes de activarla.
+
+- **Ajuste adicional:** tras la reversión, CI mostró un fallo residual en el bloqueo de turno durante la confirmación de asedios (`p0-siege-turn-lock`). Commit `21ac38af`: restaurado el orden de comprobación del encuentro del rival principal antes de evaluar comandantes secundarios, siempre después de liberar el bloqueo. Resultado de CI pendiente.
