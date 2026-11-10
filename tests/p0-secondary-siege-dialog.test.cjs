@@ -21,7 +21,7 @@ test('secondary siege prompt applies automatic resolution only on confirmation',
  assert.equal(f.s.pendingSecondarySiege,null);assert.equal(f.hero.lastSecondarySiege,'fort-west:fort-center:2');
 });
 test('secondary siege prompt keeps troops untouched on defensive hold',async()=>{
- const f=fixture(false);assert.equal(await f.run(),true);assert.equal(f.calls.apply,0);assert.equal(f.s.pendingSecondarySiege,null);
+ const f=fixture(false);assert.equal(await f.run(),true);assert.equal(f.calls.apply,0);assert.equal(f.s.pendingSecondarySiege,null);assert.equal(f.hero.lastSecondarySiege,'fort-west:fort-center:2');
 });
 test('secondary siege prompt refuses an active battle',async()=>{
  const f=fixture();f.ctx.battle={};assert.equal(await f.run(),false);assert.equal(f.calls.apply,0);
