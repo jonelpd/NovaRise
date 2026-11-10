@@ -1776,7 +1776,10 @@ function recoverSecondarySiegeDecision(){
  const draft=secondarySiegeBattleDraft(pending.commanderId,pending.castleId);
  const h=enemyCastleHeroes()[pending.commanderId];
  const same=(a,b,types)=>a&&b&&types.every(type=>a[type]===b[type]);
+ const stamp=pending.commanderId+':'+pending.castleId+':'+pending.turn;
+ // Una decisión ya resuelta no debe reaparecer al restaurar un guardado antiguo.
  if(!draft||!h||h.turns!==pending.turn||
+  h.lastSecondarySiege===stamp||h.lastSiegeRetreat===stamp||
   !same(draft.enemyArmyBefore,pending.enemyArmyBefore,['soldiers','archers'])||
   !same(draft.defenseBefore,pending.defenseBefore,['soldiers','archers','griffins','dragons'])){
   s.pendingSecondarySiege=null;return null;
