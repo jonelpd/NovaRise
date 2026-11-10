@@ -1815,12 +1815,19 @@ function enemyCastleHeroes(){
    continue;
   }
   if(hero){
-   // Un comandante derrotado solo regresa tras tres turnos si su castillo sigue siendo enemigo.
-   if(hero.defeated){
-    hero.active=false;
-    continue;
+   // Normalizar partidas antiguas sin reemplazar ni duplicar sus ejércitos.
+   hero.soldiers=Math.max(0,Math.floor(Number(hero.soldiers)||0));
+   hero.archers=Math.max(0,Math.floor(Number(hero.archers)||0));
+   hero.gold=Math.max(0,Math.floor(Number(hero.gold)||0));
+   hero.turns=Math.max(0,Math.floor(Number(hero.turns)||0));
+   hero.recovery=Math.max(0,Math.floor(Number(hero.recovery)||0));
+   if(!Number.isFinite(hero.x)||!Number.isFinite(hero.y)){
+    const point=safeHeroPoint(site.x,site.y);
+    hero.x=point?point[0]:site.x;hero.y=point?point[1]:site.y;
    }
-   hero.active=true;
+   // Sin tropas no puede seguir patrullando; requiere recuperación en su castillo.
+   if(!hero.defeated&&hero.soldiers+hero.archers===0){hero.defeated=true;hero.recovery=0}
+   hero.active=!hero.defeated;
    continue;
   }
   if(!hero){
