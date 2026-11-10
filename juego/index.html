@@ -1634,7 +1634,8 @@ function checkpointSecondarySiegeBeforeBattle(){
    }
    localStorage.setItem(STORE,next);
   }
-  return true;
+  // Verificar la escritura: no exponer las tropas del héroe a un guardado incompleto.
+  return localStorage.getItem(STORE)===next;
  }catch(e){return false}
 }
 function launchSecondaryDefensiveSiege(draft){
