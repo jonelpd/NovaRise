@@ -27,7 +27,7 @@ test('manual secondary defense swaps only garrison and restores hero on victory'
 });
 test('manual secondary defense applies attacker survivors on defeat',()=>{
  const f=setup();f.ctx.launchSecondaryDefensiveSiege(f.draft);
- f.s.soldiers=0;f.s.archers=0;f.s.griffins=0;
+ f.s.soldiers=0;f.s.archers=0;f.s.griffins=0;f.s.dragons=0;
  assert.equal(f.ctx.finishSecondaryDefensiveSiege(false),true);
  assert.equal(f.applied().winner,'attacker');assert.equal(f.applied().attackers.soldiers,8);
  assert.equal(f.s.soldiers,15);
@@ -48,4 +48,17 @@ test('scene that aborts battle restores hero army and pending siege',()=>{
  const f=setup();f.ctx.showBattle=()=>{f.ctx.battle=null};
  assert.equal(f.ctx.launchSecondaryDefensiveSiege(f.draft),false);
  assert.equal(f.s.soldiers,15);assert.equal(f.s.pendingSecondarySiege.commanderId,'fort-west');
+});
+
+test('premature victory cannot erase surviving enemy stacks',()=>{
+ const f=setup();f.ctx.launchSecondaryDefensiveSiege(f.draft);
+ assert.equal(f.ctx.finishSecondaryDefensiveSiege(true),false);
+ assert.ok(f.ctx.battle);assert.equal(f.s.soldiers,4);
+ assert.equal(f.applied(),null);assert.equal(f.h.lastSecondarySiege,'');
+});
+test('premature defeat cannot discard surviving defenders',()=>{
+ const f=setup();f.ctx.launchSecondaryDefensiveSiege(f.draft);
+ assert.equal(f.ctx.finishSecondaryDefensiveSiege(false),false);
+ assert.ok(f.ctx.battle);assert.equal(f.s.archers,2);
+ assert.equal(f.applied(),null);
 });
