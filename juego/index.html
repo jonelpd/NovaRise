@@ -1671,8 +1671,15 @@ function finishSecondaryDefensiveSiege(won){
  const result={winner:won?'defender':'attacker',attackers,defenders:survivors};
  const applied=applySecondarySiegeOutcome(draft,result);
  if(applied){const h=enemyCastleHeroes()[draft.commanderId];h.lastSecondarySiege=draft.commanderId+':'+draft.castleId+':'+h.turns}
+ else{
+  // El resultado no se aplicó: no perder silenciosamente la decisión original.
+  // La próxima apertura volverá a validar el expediente y los ejércitos.
+  s.pendingSecondarySiege={commanderId:draft.commanderId,castleId:draft.castleId,
+   turn:enemyCastleHeroes()[draft.commanderId]?.turns||0,
+   enemyArmyBefore:{...draft.enemyArmyBefore},defenseBefore:{...draft.defenseBefore}};
+ }
  battle=null;$('modal').hidden=true;
- message(applied?(won?'🛡️ La guarnición ha defendido el castillo.':'⚔️ El comandante secundario ha conquistado el castillo.'):'El resultado del asedio no pudo aplicarse; se ha restaurado el ejército principal.');
+ message(applied?(won?'🛡️ La guarnición ha defendido el castillo.':'⚔️ El comandante secundario ha conquistado el castillo.'):'No se pudo confirmar el resultado del asedio. Se ha restaurado el ejército principal y conservado el expediente para su revisión.');
  render();return applied;
 }
 function finishDefensiveSiege(won){
