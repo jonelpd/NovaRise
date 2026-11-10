@@ -593,3 +593,9 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Código `22d51d78`:** antes de reactivar un asedio secundario pendiente se exige que todas las cantidades de atacantes y defensores sean enteros no negativos y coincidan con el estado actual. Los datos corruptos se descartan sin ejecutar un combate.
 - **Pruebas `91a914c2`:** cantidades negativas, decimales, texto, nulos y valores ausentes no pueden reabrir un expediente de asedio.
 - **Pendiente:** verificación de la ejecución de regresión y pruebas manuales de recuperación en navegador.
+
+### Cancelación segura de movimientos de comandantes secundarios — 2026-11-10
+
+- **Código `baa0bb3e`:** después de la última espera asíncrona de movimiento se vuelve a verificar el identificador de turno, el estado de la campaña y la propiedad del castillo de origen antes de solicitar un asedio o capturar un recurso. Evita acciones tardías de un turno cancelado o de un comandante cuyo castillo cambió de propietario.
+- **Prueba `89e86bc0`:** garantiza que la comprobación se encuentre después de la pausa final y antes de ambas acciones estratégicas.
+- **Pendiente:** validación manual de interrupciones durante el movimiento y confirmación del CI.
