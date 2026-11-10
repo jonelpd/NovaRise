@@ -62,3 +62,16 @@ test('premature defeat cannot discard surviving defenders',()=>{
  assert.ok(f.ctx.battle);assert.equal(f.s.archers,2);
  assert.equal(f.applied(),null);
 });
+
+test('stale defender snapshot cannot open manual siege',()=>{
+ const f=setup();f.draft.defenseBefore.archers=99;
+ assert.equal(f.ctx.launchSecondaryDefensiveSiege(f.draft),false);
+ assert.equal(f.s.soldiers,15);assert.equal(f.s.archers,6);
+ assert.equal(f.s.pendingSecondarySiege.commanderId,'fort-west');
+ assert.equal(f.ctx.battle,null);
+});
+test('stale attacker snapshot cannot open manual siege',()=>{
+ const f=setup();f.draft.enemyArmyBefore.soldiers=99;
+ assert.equal(f.ctx.launchSecondaryDefensiveSiege(f.draft),false);
+ assert.equal(f.s.soldiers,15);assert.equal(f.ctx.battle,null);
+});
