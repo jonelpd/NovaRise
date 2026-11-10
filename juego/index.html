@@ -738,7 +738,7 @@ function walkTo(tx,ty){
   await move(x,y);
   if(epoch!==walkEpoch){walking=false;return}
   if(!battle&&!rivalBusy&&!s.done){
-   if(enemyCommanderEncounter()){walking=false;clearAdventureRoute();return}
+   if(enemyCommanderEncounter(true)){walking=false;clearAdventureRoute();return}
    const v=rivalState(),[hx,hy]=heroVisualPosition();
    if(!v.defeated&&Math.hypot(v.x-hx,v.y-hy)<=2.2){
     walking=false;clearAdventureRoute();rivalEncounter();
@@ -1965,8 +1965,8 @@ function rivalChooseObjective(v,options){
  candidates.sort((a,b)=>a.score-b.score);
  return candidates[0]||null
 }
-function enemyCommanderEncounter(){
- if(battle||s.done||rivalBusy||walking)return false;
+function enemyCommanderEncounter(allowWalking=false){
+ if(battle||s.done||rivalBusy||(walking&&!allowWalking))return false;
  const [hx,hy]=heroVisualPosition();
  const heroes=enemyCastleHeroes();
  const site=VERIFIED_MAP_SITES.find(site=>site.kind==='fort'&&verifiedSiteState()[site.id]==='rival'&&heroes[site.id]?.active&&!heroes[site.id].defeated&&Math.hypot(heroes[site.id].x-hx,heroes[site.id].y-hy)<=2.2);
