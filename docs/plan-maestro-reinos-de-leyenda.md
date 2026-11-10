@@ -495,3 +495,11 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - La primera integración `e64f7e2e` reveló un fallo en la regresión `42822823863`: se liberaba `rivalBusy` antes de concluir la nueva decisión, incumpliendo la protección contra encuentros simultáneos.
 - **Corrección `25203ccd`:** el diálogo secundario se procesa dentro del turno rival manteniendo el bloqueo activo; solo después se libera el turno y pueden comenzar los encuentros pendientes. La llamada interna usa `promptSecondarySiegeDefense(true)` y las llamadas externas continúan bloqueadas mientras `rivalBusy`.
 - **Prueba `57b9599e`:** ajustada para exigir el orden correcto de diálogo y desbloqueo; nueva regresión pendiente.
+
+### Revisión de integración y despliegue — 2026-11-10
+
+- **Regresión del juego:** verde `42823064849` tras corregir el bloqueo de turnos.
+- **Publicación Pages:** la ejecución `42823064848` falló por conflicto de despliegues simultáneos (GitHub informa que la revisión `5fff7a74` seguía publicándose); no se ha atribuido a un error de sintaxis del juego. Queda pendiente verificar un despliegue limpio.
+- **Corrección `1a292f8c`:** si el jugador elige mantener la defensa, se registra `lastSecondarySiege` antes de cerrar la solicitud, evitando que el mismo comandante repita la propuesta durante ese turno sin gastar tropas.
+- **Prueba `a47ed0e8`:** refuerza la comprobación del sello de turno al mantener la defensa.
+- **Pendiente:** CI de la corrección, pruebas de interacción en navegador, resolución de la concurrencia Pages y defensa manual secundaria.
