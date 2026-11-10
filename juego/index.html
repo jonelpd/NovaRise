@@ -1621,7 +1621,40 @@ function rivalResourceCapture(){
 // El héroe rival sólo conquista un castillo si llega físicamente a él.
 // Un castillo reconquistado deja de producir recursos para el jugador.
 // Asedio automático por rondas: las tropas de la guarnición combaten y sufren bajas reales.
+// Defensa manual de comandante secundario: aislar la guarnición del ejército del héroe.
+function launchSecondaryDefensiveSiege(draft){
+ if(battle||!draft||!secondarySiegeEligibility(draft.commanderId,draft.castleId))return false;
+ const types=['soldiers','archers','griffins','dragons'];
+ if(!types.some(type=>(draft.defenders[type]||0)>0))return false;
+ const current=recoverSecondarySiegeDecision();
+ if(!current||current.commanderId!==draft.commanderId||current.castleId!==draft.castleId)return false;
+ const heroArmyBefore={};
+ for(const type of types){heroArmyBefore[type]=s[type]||0;s[type]=draft.defenders[type]||0}
+ battle={x:s.x,y:s.y,k:'secondary-defense:'+draft.castleId,defenseSiteId:draft.castleId,
+  secondarySiegeDraft:draft,heroArmyBefore,defenseBefore:{...draft.defenseBefore},
+  enemyStacks:draft.enemyStacks.map(u=>({...u})),hp:draft.hp,rival:true,fort:true,
+  defending:true,ax:0,ay:2,ex:5,ey:2,range:1,selected:'soldiers',sx:0,sy:2,rx:0,ry:3,round:0};
+ s.pendingSecondarySiege=null;
+ showBattle();return !!battle;
+}
+function finishSecondaryDefensiveSiege(won){
+ if(!battle?.secondarySiegeDraft)return false;
+ const combat=battle,draft=combat.secondarySiegeDraft;
+ const types=['soldiers','archers','griffins','dragons'];
+ const survivors={};for(const type of types)survivors[type]=Math.max(0,Math.floor(s[type]||0));
+ const attackers={soldiers:0,archers:0};
+ if(!won)for(const unit of combat.enemyStacks||[]){if(unit.id==='soldiers'||unit.id==='archers')attackers[unit.id]=Math.max(0,unit.count||0)}
+ // Restaurar siempre el ejército principal antes de aplicar el resultado del asedio.
+ for(const type of types)s[type]=combat.heroArmyBefore[type]||0;
+ const result={winner:won?'defender':'attacker',attackers,defenders:survivors};
+ const applied=applySecondarySiegeOutcome(draft,result);
+ if(applied){const h=enemyCastleHeroes()[draft.commanderId];h.lastSecondarySiege=draft.commanderId+':'+draft.castleId+':'+h.turns}
+ battle=null;$('modal').hidden=true;
+ message(applied?(won?'🛡️ La guarnición ha defendido el castillo.':'⚔️ El comandante secundario ha conquistado el castillo.'):'El resultado del asedio no pudo aplicarse; se ha restaurado el ejército principal.');
+ render();return applied;
+}
 function finishDefensiveSiege(won){
+ if(battle?.secondarySiegeDraft)return finishSecondaryDefensiveSiege(won);
  if(!battle||!battle.defenseSiteId)return false;
  const id=battle.defenseSiteId,castle=CASTLE_PROFILES[id].name;
  const g=siteGarrison(id),v=rivalState(),before=battle.defenseBefore,enemyBefore=battle.defenseEnemyBefore;
@@ -1711,13 +1744,14 @@ async function promptSecondarySiegeDefense(insideRivalTurn=false){
  const draft=recoverSecondarySiegeDecision();
  if(!draft)return false;
  const castle=CASTLE_PROFILES[draft.castleId];
- const automatic=await realmConfirm('🏰 Defensa de '+(castle?.name||'la fortaleza'),
-  'Un comandante enemigo asedia tu castillo. Puedes resolver el enfrentamiento automáticamente. La defensa dirigida estará disponible cuando se complete su integración.',
-  '⚔️ Resolver automáticamente','🛡️ Mantener defensa');
+ const choice=await realmDialog('🏰 Defensa de '+(castle?.name||'la fortaleza'),
+  'Un comandante enemigo asedia tu castillo. ¿Cómo deseas defender la guarnición?',
+  [{label:'⚔️ Dirigir defensa',value:'manual'},{label:'⚙️ Defensa automática',value:'automatic'},{label:'🛡️ Mantener defensa',value:'hold'}]);
  if(s!==campaign||s.pendingSecondarySiege!==pending||battle||(rivalBusy&&!insideRivalTurn))return false;
  const current=recoverSecondarySiegeDecision();
  if(!current)return false;
- if(!automatic){const h=enemyCastleHeroes()[current.commanderId];h.lastSecondarySiege=current.commanderId+':'+current.castleId+':'+h.turns;s.pendingSecondarySiege=null;message('🛡️ La guarnición mantiene su posición. No se han modificado tropas.');return true}
+ if(choice==='manual')return launchSecondaryDefensiveSiege(current);
+ if(choice!=='automatic'){const h=enemyCastleHeroes()[current.commanderId];h.lastSecondarySiege=current.commanderId+':'+current.castleId+':'+h.turns;s.pendingSecondarySiege=null;message('🛡️ La guarnición mantiene su posición. No se han modificado tropas.');return true}
  const result=simulateSecondarySiege(current);
  if(!result)return false;
  const applied=result.winner==='retreat'?applySecondarySiegeRetreat(current,result):applySecondarySiegeOutcome(current,result);
