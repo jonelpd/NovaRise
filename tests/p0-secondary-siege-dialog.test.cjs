@@ -12,7 +12,7 @@ function fixture(confirm=true){
  const hero={turns:2,lastSecondarySiege:''};
  const calls={apply:0,render:0};
  const draft={commanderId:'fort-west',castleId:'fort-center'};
- const ctx={s,battle:null,rivalBusy:false,CASTLE_PROFILES:{'fort-center':{name:'Fortaleza Central'}},recoverSecondarySiegeDecision:()=>draft,realmConfirm:async()=>confirm,simulateSecondarySiege:()=>({winner:'attacker',attackers:{},defenders:{}}),applySecondarySiegeOutcome:()=>{calls.apply++;return true},applySecondarySiegeRetreat:()=>false,enemyCastleHeroes:()=>({'fort-west':hero}),message:()=>{},render:()=>{calls.render++}};
+ const ctx={s,battle:null,rivalBusy:false,CASTLE_PROFILES:{'fort-center':{name:'Fortaleza Central'}},recoverSecondarySiegeDecision:()=>draft,realmDialog:async()=>confirm?'automatic':'hold',launchSecondaryDefensiveSiege:()=>false,simulateSecondarySiege:()=>({winner:'attacker',attackers:{},defenders:{}}),applySecondarySiegeOutcome:()=>{calls.apply++;return true},applySecondarySiegeRetreat:()=>false,enemyCastleHeroes:()=>({'fort-west':hero}),message:()=>{},render:()=>{calls.render++}};
  vm.createContext(ctx);vm.runInContext(html.slice(a,b),ctx);
  return {ctx,s,hero,calls,run:()=>ctx.promptSecondarySiegeDefense()};
 }
@@ -27,6 +27,6 @@ test('secondary siege prompt refuses an active battle',async()=>{
  const f=fixture();f.ctx.battle={};assert.equal(await f.run(),false);assert.equal(f.calls.apply,0);
 });
 test('secondary siege prompt refuses stale decision after asynchronous confirmation',async()=>{
- const f=fixture();f.ctx.realmConfirm=async()=>{f.s.pendingSecondarySiege={commanderId:'other'};return true};
+ const f=fixture();f.ctx.realmDialog=async()=>{f.s.pendingSecondarySiege={commanderId:'other'};return true};
  assert.equal(await f.run(),false);assert.equal(f.calls.apply,0);
 });
