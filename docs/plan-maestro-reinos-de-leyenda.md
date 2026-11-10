@@ -431,3 +431,10 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Código `90dd9fea`:** función aislada `secondarySiegeEligibility(commanderId,castleId)`. Valida titularidad de castillo de origen y destino, ejército activo, derrota, proximidad física (5,5) y devuelve copias de atacantes y defensores. No inicia batallas ni modifica tropas, guardado o guarniciones.
 - **Pruebas `08753a97`:** cinco casos de ejecución funcional de la nueva función: aceptación válida, propiedad, comandante derrotado/inactivo/sin tropas, distancia y ausencia de mutaciones.
 - **Estado:** ejecución CI de estos cambios pendiente. El inicio efectivo de asedios secundarios sigue **desactivado** hasta garantizar compatibilidad con el sistema defensivo y las pruebas P0 existentes.
+
+### Expediente táctico de asedio secundario — 2026-11-10
+
+- **Validación previa:** regresión verde `42816430766` para elegibilidad de comandantes secundarios.
+- **Código `413000b3`:** nueva función `secondarySiegeBattleDraft(commanderId,castleId)` que genera una copia independiente de los ejércitos y las pilas tácticas de soldados/arqueros, con puntos de vida y referencias de comandante/castillo. No inicia batalla, no modifica guarniciones y no altera el motor de asedios existente.
+- **Pruebas `32ea2202`:** cuatro comprobaciones funcionales de rechazo de ataques inválidos, pilas tácticas, ausencia de mutaciones y ejércitos compuestos solo por arqueros.
+- **Pendiente:** comprobar CI de esta entrega; posteriormente implementar el resultado y persistencia del asedio secundario con pruebas de victoria, derrota y recarga antes de habilitarlo en turnos enemigos.
