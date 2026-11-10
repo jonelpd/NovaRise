@@ -1673,6 +1673,32 @@ function secondarySiegeBattleDraft(commanderId,castleId){
   enemyArmyBefore:{...attackers},defenseBefore:{...defenders},
   hp:stacks.reduce((total,unit)=>total+unit.hp,0)};
 }
+// Aplica un resultado ya calculado; no invoca el motor de combate principal.
+function applySecondarySiegeOutcome(draft,result){
+ if(!draft||!result||!['attacker','defender'].includes(result.winner))return false;
+ const eligible=secondarySiegeEligibility(draft.commanderId,draft.castleId);
+ if(!eligible||draft.commanderId!==eligible.commanderId||draft.castleId!==eligible.castleId)return false;
+ const h=enemyCastleHeroes()[draft.commanderId];
+ // No aplicar un informe obsoleto si alguna tropa cambió mientras se resolvía el asedio.
+ if(h.soldiers!==draft.enemyArmyBefore.soldiers||h.archers!==draft.enemyArmyBefore.archers)return false;
+ const g=siteGarrison(draft.castleId),d=g.defenders;
+ for(const type of ['soldiers','archers','griffins','dragons']){
+  if((d[type]||0)!==(draft.defenseBefore[type]||0))return false;
+ }
+ const attackers=result.attackers||{},defenders=result.defenders||{};
+ const count=(value,max)=>Number.isInteger(value)&&value>=0&&value<=max;
+ if(!count(attackers.soldiers,h.soldiers)||!count(attackers.archers,h.archers))return false;
+ for(const type of ['soldiers','archers','griffins','dragons']){
+  if(!count(defenders[type],draft.defenseBefore[type]||0))return false;
+ }
+ if(result.winner==='attacker'&&Object.values(defenders).some(value=>value>0))return false;
+ if(result.winner==='defender'&&attackers.soldiers+attackers.archers>0)return false;
+ h.soldiers=attackers.soldiers;h.archers=attackers.archers;
+ for(const type of ['soldiers','archers','griffins','dragons'])d[type]=defenders[type];
+ if(result.winner==='attacker')verifiedSiteState()[draft.castleId]='rival';
+ if(h.soldiers+h.archers===0){h.defeated=true;h.active=false;h.recovery=0}
+ return true;
+}
 function rivalCastleConquest(siteId){
  const v=rivalState();if(v.defeated)return '';
  const owners=verifiedSiteState();
