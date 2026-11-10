@@ -1845,12 +1845,20 @@ async function enemyCastleHeroTurns(epoch){
   if(epoch!==rivalEpoch||s.done)return;
   const h=heroes[site.id];if(site.kind!=='fort'||!h||!h.active||h.defeated||verifiedSiteState()[site.id]!=='rival')continue;
   h.turns++;h.moves=4;
-  // Primera etapa: patrulla defensiva alrededor de su fortaleza, sin ataques automáticos.
+  // La IA secundaria prioriza recursos cercanos sin abandonar indefinidamente su castillo.
   const goal=safeHeroPoint(site.x,site.y);
   if(!goal)continue;
   const distance=Math.hypot(h.x-goal[0],h.y-goal[1]);
-  const destination=distance>9?goal:safeHeroPoint(site.x+(h.turns%2?4:-4),site.y+(h.turns%3===0?4:-4));
-  const path=destination?fineRoute([h.x,h.y],destination):null;
+  const owners=verifiedSiteState();
+  const targets=distance>15?[]:VERIFIED_MAP_SITES.filter(target=>(target.kind==='mine'||target.kind==='mill')&&owners[target.id]!=='rival'&&Math.hypot(target.x-site.x,target.y-site.y)<20);
+  const routes=targets.map(target=>{
+   const point=safeHeroPoint(target.x,target.y);
+   const path=point?fineRoute([h.x,h.y],point):null;
+   return path?{target,path,score:path.length-(owners[target.id]==='player'?6:2)}:null;
+  }).filter(Boolean).sort((a,b)=>a.score-b.score);
+  const objective=distance>15?null:routes[0]||null;
+  const destination=distance>15?goal:objective?null:safeHeroPoint(site.x+(h.turns%2?4:-4),site.y+(h.turns%3===0?4:-4));
+  const path=objective?objective.path:destination?fineRoute([h.x,h.y],destination):null;
   if(!path||!path.length)continue;
   const marker=Array.from($('map').querySelectorAll('[data-enemy-castle]')).find(el=>el.dataset.enemyCastle===site.id);
   for(const [x,y] of path.slice(0,4)){
@@ -1859,6 +1867,12 @@ async function enemyCastleHeroTurns(epoch){
    h.x=x;h.y=y;h.moves--;
    if(marker){marker.style.transition='left 150ms linear, top 150ms linear';marker.style.left=x+'%';marker.style.top=y+'%'}
    await new Promise(resolve=>setTimeout(resolve,160));
+  }
+  // Solo reclamar al alcanzar físicamente el recurso; nunca capturarlo a distancia.
+  if(objective&&path.length<=4&&Math.hypot(h.x-objective.target.x,h.y-objective.target.y)<=4.2&&verifiedSiteState()[objective.target.id]!=='rival'){
+   const previous=verifiedSiteState()[objective.target.id];
+   verifiedSiteState()[objective.target.id]='rival';
+   s.message='⚔️ El comandante de '+CASTLE_PROFILES[site.id].name+' ocupa '+objective.target.label+(previous==='player'?'. Pierdes su producción.':'.');
   }
  }
 }
