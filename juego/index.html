@@ -1785,15 +1785,21 @@ function recoverSecondarySiegeDecision(){
 }
 // Presenta la decisión secundaria con la misma ventana profesional del reino.
 // La defensa manual aún no se habilita hasta integrar el motor de combate específico.
+let secondarySiegeDialogOpen=false;
 async function promptSecondarySiegeDefense(insideRivalTurn=false){
  const campaign=s,pending=s.pendingSecondarySiege;
- if(!pending||battle||(rivalBusy&&!insideRivalTurn))return false;
+ if(secondarySiegeDialogOpen||!pending||battle||(rivalBusy&&!insideRivalTurn))return false;
  const draft=recoverSecondarySiegeDecision();
  if(!draft)return false;
  const castle=CASTLE_PROFILES[draft.castleId];
- const choice=await realmDialog('🏰 Defensa de '+(castle?.name||'la fortaleza'),
-  'Un comandante enemigo asedia tu castillo. ¿Cómo deseas defender la guarnición?',
-  [{label:'⚔️ Dirigir defensa',value:'manual'},{label:'⚙️ Defensa automática',value:'automatic'},{label:'🛡️ Mantener defensa',value:'hold'}]);
+ secondarySiegeDialogOpen=true;
+ let choice;
+ try{
+  choice=await realmDialog('🏰 Defensa de '+(castle?.name||'la fortaleza'),
+   'Un comandante enemigo asedia tu castillo. ¿Cómo deseas defender la guarnición?',
+   [{label:'⚔️ Dirigir defensa',value:'manual'},{label:'⚙️ Defensa automática',value:'automatic'},{label:'🛡️ Mantener defensa',value:'hold'}]);
+ }catch(error){return false}
+ finally{secondarySiegeDialogOpen=false}
  if(s!==campaign||s.pendingSecondarySiege!==pending||battle||(rivalBusy&&!insideRivalTurn))return false;
  const current=recoverSecondarySiegeDecision();
  if(!current)return false;
