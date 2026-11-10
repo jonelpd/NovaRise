@@ -550,3 +550,10 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Corrección `3079b515`:** si el motor rechaza aplicar un resultado manual (por ejemplo, por datos obsoletos), se restaura el ejército principal, se cierra el escenario y se conserva el expediente original del asedio para validarlo nuevamente. No se marca falsamente el asedio como completado.
 - **Prueba `261b5044`:** rechazo del resultado con conservación de tropas, expediente y sello del comandante. La regresión anterior `42881667096` fue verde; pendiente de confirmar la ejecución de esta prueba nueva.
 - **Limitación:** el progreso táctico dentro de una batalla activa no se guarda. La política actual evita persistir el estado temporal de la guarnición como si fuese el ejército principal; aún debe validarse en navegador la recuperación tras cierre abrupto.
+
+### Punto de recuperación previo a batalla secundaria — 2026-11-10
+
+- **Código `6c39ffaf`:** antes de sustituir temporalmente las tropas del héroe por las de la guarnición, se guarda una instantánea válida de la campaña con el ejército principal y el asedio pendiente. Funciona incluso dentro del turno rival, cuando `persistGame()` bloquea los guardados habituales. Se mantiene copia anterior válida y no se abre el combate si el guardado falla.
+- **Pruebas `aa66d05b`:** verifican rechazo seguro por fallo de escritura y que el archivo almacenado contiene el ejército original y el asedio pendiente, mientras la batalla utiliza la guarnición.
+- **Regresión `42883212825`:** verde. Una ejecución intermedia previa falló por necesitar adaptar los dobles de prueba a la nueva función de guardado.
+- **Limitación:** al cerrar el navegador durante la batalla se recupera la situación inmediatamente anterior al enfrentamiento y se vuelve a presentar la defensa; no se reanuda la ronda táctica exacta. Pendiente validación manual en navegador.
