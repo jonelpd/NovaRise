@@ -1814,6 +1814,7 @@ function enemyCastleHeroes(){
    if(hero&&hero.active)hero.active=false;
    continue;
   }
+  if(hero){if(!hero.defeated)hero.active=true;continue;}
   if(!hero){
    const point=safeHeroPoint(site.x,site.y);
    s.enemyCastleHeroes[site.id]={castleId:site.id,x:point?point[0]:site.x,y:point?point[1]:site.y,
@@ -1885,7 +1886,7 @@ function rivalEncounter(){
 async function rivalTurn(){
  if(rivalBusy||s.done||battle||walking)return;
  rivalBusy=true;const epoch=++rivalEpoch;
- const v=rivalState();v.turns++;
+ const v=rivalState();enemyCastleHeroes();v.turns++;
  if(v.defeated){
   v.recovery=(v.recovery||0)+1;
   if(v.recovery>=3){v.defeated=false;v.recovery=0;v.soldiers=4;v.archers=1;v.x=7.5;v.y=93;s.message='⚔️ El Reino Umbrío ha reclutado un nuevo comandante.'}
