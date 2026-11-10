@@ -313,3 +313,9 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 5. Al terminar, actualizar este plan y `docs/auditoria-juego-2026-11-03.md` con resultados reales; solo entonces decidir cierre formal de Fase 1 y paso completo a Fase 2.
 
 **Próxima acción prioritaria:** ejecutar E2E-01 y E2E-03 en navegador real, seguidos de E2E-05 con dos sesiones de prueba. La Fase 2 puede continuar únicamente con cambios incrementales que no bloqueen la aceptación de la Fase 1.
+
+### Validación manual comunicada por jugador — 2026-11-10
+- El jugador confirma haber probado el movimiento de las unidades en el juego y lo considera satisfactorio; no se requieren ajustes adicionales de velocidad por ahora.
+- El jugador confirma haber salido del juego y vuelto a entrar, observando que los datos guardados se mantienen. **Validación manual positiva de persistencia básica en su entorno.**
+- Alcance limitado: no se ha aportado comparación campo a campo de héroe, tropas, recursos, castillos y turno; tampoco prueba de corrupción/restauración de respaldo, otro dispositivo o dos sesiones en nube. No declarar E2E-03 ni E2E-05 completamente certificados.
+- Próximo paso: verificar continuidad tras combate/conquista y guardado, y después recuperación de respaldo y sincronización en dos sesiones de prueba.
