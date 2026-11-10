@@ -398,3 +398,10 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Defensa:** las guarniciones con tropas conservan la opción de defensa manual o automática. Se transmite el comandante atacante al diálogo y a la batalla defensiva. Sin guarnición, se utiliza la resolución automática ya existente.
 - **Limitaciones:** los comandantes todavía no planifican rutas de ataque específicas hacia fortalezas; solo asedian si llegan a ellas. El motor y los casos de concurrencia necesitan pruebas E2E de dos comandantes, recarga, victoria/derrota y persistencia de guarniciones.
 - **Validación:** CI de este commit pendiente. No declarar la fase completada ni prometer comportamiento verificado en navegador.
+
+### Corrección prioritaria de estabilidad — 10 de noviembre de 2026
+
+- **Hallazgo:** la implementación inicial de asedios secundarios `33a32c0` provocó 13 fallos en las 185 pruebas de regresión, afectando especialmente a la defensa de castillos, conservación de tropas y decisiones asíncronas.
+- **Acción:** commit `e3c5a751`: revertida exclusivamente la modificación de asedios secundarios en `juego/index.html`, restaurando el código de combate previo (`f9914730`). Se mantienen los encuentros en campo abierto y la persecución implementados anteriormente.
+- **Estado real:** los asedios secundarios vuelven a estar **pendientes**, no completados. La regresión del commit de corrección requiere verificación CI.
+- **Próximo paso:** diseñar una integración aislada y compatible con el motor de asedios existente, acompañada de pruebas específicas de atacante, guarnición, bajas, confirmación asíncrona y guardado antes de activarla.
