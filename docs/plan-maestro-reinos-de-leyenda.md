@@ -417,3 +417,10 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Alcance deliberado:** únicamente planificación y movimiento; **no** se ejecuta el asedio al llegar ni se modifica el motor defensivo. Se preservan las pruebas P0 del sistema de asedios.
 - **Validación:** regresión de este cambio pendiente; comprobar además selección de rutas, obstáculos y guardado en navegador.
 - **Pendiente:** añadir un iniciador de asedio secundario compatible con la defensa manual/automática y pruebas específicas antes de activarlo.
+
+### Pruebas específicas de planificación ofensiva — 2026-11-10
+
+- **Base estable:** la regresión del cambio de rutas `bdc256cb` finalizó correctamente en GitHub Actions, ejecución `42815078078`.
+- **Pruebas añadidas:** commit `258160d2`, archivo `tests/p0-secondary-commander-siege-planning.test.cjs`. Cinco comprobaciones protegen la selección de castillos del jugador, distancia máxima, evaluación de guarniciones, prioridad de persecución, límite de movimiento y ausencia de llamadas directas al motor de asedios.
+- **Estado:** pendiente de confirmar CI del nuevo archivo de pruebas. Son pruebas de regresión estáticas sobre código; no sustituyen simulaciones de combate en navegador.
+- **Próximo paso:** integración gradual de asedios secundarios con pruebas funcionales y preservación del motor defensivo original.
