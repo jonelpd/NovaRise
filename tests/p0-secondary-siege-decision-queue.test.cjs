@@ -41,3 +41,17 @@ test('secondary siege decision respects previous retreat on same turn',()=>{
  const f=fixture();f.hero.lastSiegeRetreat='fort-west:fort-center:7';
  assert.equal(f.queue(),false);assert.equal(f.state.pendingSecondarySiege,null);
 });
+
+test('already resolved secondary siege is not resurrected after reload',()=>{
+ const f=fixture();assert.equal(f.queue(),true);
+ f.hero.lastSecondarySiege='fort-west:fort-center:7';
+ assert.equal(f.recover(),null);
+ assert.equal(f.state.pendingSecondarySiege,null);
+ assert.equal(f.queue(),false);
+});
+test('retreat resolved after queued decision invalidates recovered siege',()=>{
+ const f=fixture();assert.equal(f.queue(),true);
+ f.hero.lastSiegeRetreat='fort-west:fort-center:7';
+ assert.equal(f.recover(),null);
+ assert.equal(f.state.pendingSecondarySiege,null);
+});
