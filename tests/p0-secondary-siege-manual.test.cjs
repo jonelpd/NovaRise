@@ -106,3 +106,27 @@ test('checkpoint stores original army and pending siege before combat',()=>{
  assert.equal(saved.pendingSecondarySiege.commanderId,'fort-west');
  assert.equal(f.s.soldiers,4);
 });
+
+test('checkpoint refuses battle if browser silently fails to persist',()=>{
+ const f=setup();const store=new Map();
+ f.ctx.STORE='game-test';f.ctx.validGame=()=>true;
+ f.ctx.localStorage={getItem:key=>store.get(key)||null,setItem:()=>{}};
+ vm.runInContext(html.slice(a,html.indexOf('function launchSecondaryDefensiveSiege(',a)),f.ctx);
+ assert.equal(f.ctx.launchSecondaryDefensiveSiege(f.draft),false);
+ assert.equal(f.s.soldiers,15);assert.equal(f.s.archers,6);
+ assert.equal(f.s.pendingSecondarySiege.commanderId,'fort-west');
+ assert.equal(f.ctx.battle,null);
+});
+test('checkpoint preserves recoverable army when browser reloads during battle',()=>{
+ const f=setup();const store=new Map();
+ f.ctx.STORE='game-test';f.ctx.validGame=()=>true;
+ f.ctx.localStorage={getItem:key=>store.get(key)||null,setItem:(key,val)=>store.set(key,val)};
+ vm.runInContext(html.slice(a,html.indexOf('function launchSecondaryDefensiveSiege(',a)),f.ctx);
+ assert.equal(f.ctx.launchSecondaryDefensiveSiege(f.draft),true);
+ f.s.soldiers=0;f.s.archers=0; // simulated losses before closing the tab
+ const recovered=JSON.parse(store.get('game-test'));
+ assert.equal(recovered.soldiers,15);assert.equal(recovered.archers,6);
+ assert.equal(recovered.griffins,3);assert.equal(recovered.dragons,1);
+ assert.equal(recovered.pendingSecondarySiege.commanderId,'fort-west');
+ assert.equal(recovered.pendingSecondarySiege.castleId,undefined);
+});
