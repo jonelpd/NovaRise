@@ -1802,6 +1802,28 @@ function rivalState(){
  if(!Number.isInteger(s.rival.gold))s.rival.gold=160;
  return s.rival
 }
+// Registro persistente de comandantes por fortaleza. Esta primera migración no altera todavía la IA de combate.
+function enemyCastleHeroes(){
+ const owners=verifiedSiteState();
+ if(!s.enemyCastleHeroes||typeof s.enemyCastleHeroes!=='object'||Array.isArray(s.enemyCastleHeroes))s.enemyCastleHeroes={};
+ for(const site of VERIFIED_MAP_SITES){
+  if(site.kind!=='fort')continue;
+  const hero=s.enemyCastleHeroes[site.id];
+  if(owners[site.id]!=='rival'){
+   // Conservar el historial, pero impedir que un castillo perdido mantenga un comandante activo.
+   if(hero&&hero.active)hero.active=false;
+   continue;
+  }
+  if(!hero){
+   const point=safeHeroPoint(site.x,site.y);
+   s.enemyCastleHeroes[site.id]={castleId:site.id,x:point?point[0]:site.x,y:point?point[1]:site.y,
+    soldiers:Math.max(1,Math.floor((CASTLE_PROFILES[site.id]?.guard.soldiers||4)/2)),
+    archers:Math.max(0,Math.floor((CASTLE_PROFILES[site.id]?.guard.archers||0)/2)),
+    moves:0,turns:0,defeated:false,recovery:0,active:true};
+  }
+ }
+ return s.enemyCastleHeroes;
+}
 function rivalPosition(){const v=rivalState();return [v.x,v.y]}
 function drawRivalHero(map){
  const v=rivalState();
