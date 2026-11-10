@@ -1628,6 +1628,10 @@ function launchSecondaryDefensiveSiege(draft){
  if(!types.some(type=>(draft.defenders[type]||0)>0))return false;
  const current=recoverSecondarySiegeDecision();
  if(!current||current.commanderId!==draft.commanderId||current.castleId!==draft.castleId)return false;
+ // Revalidar ambos ejércitos antes de sustituir temporalmente las tropas del héroe.
+ const equalArmy=(a,b,units)=>units.every(type=>Number.isInteger(a?.[type])&&a[type]===b?.[type]);
+ if(!equalArmy(current.enemyArmyBefore,draft.enemyArmyBefore,['soldiers','archers'])||
+    !equalArmy(current.defenseBefore,draft.defenseBefore,types))return false;
  const heroArmyBefore={};
  for(const type of types){heroArmyBefore[type]=s[type]||0;s[type]=draft.defenders[type]||0}
  battle={x:s.x,y:s.y,k:'secondary-defense:'+draft.castleId,defenseSiteId:draft.castleId,
