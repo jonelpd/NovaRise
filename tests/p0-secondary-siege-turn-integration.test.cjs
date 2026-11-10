@@ -14,7 +14,7 @@ test('secondary commander only queues siege after approaching objective',()=>{
  assert.match(turn,/queueSecondarySiegeDecision\(site\.id,siegeObjective\.target\.id\)/);
 });
 test('secondary siege dialogue completes before releasing rival turn lock',()=>{
- assert.match(rival,/rivalBusy=false;\s*if\(!battle&&s\.pendingSecondarySiege\)await promptSecondarySiegeDefense\(\)/);
+ assert.match(rival,/if\(!battle&&s\.pendingSecondarySiege\)await promptSecondarySiegeDefense\(true\);\s*rivalBusy=false;/);
 });
 test('main siege decision remains independently available',()=>{
  assert.match(rival,/if\(s\.pendingDefensiveSiege\)/);
