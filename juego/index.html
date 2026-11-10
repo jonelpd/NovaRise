@@ -1624,32 +1624,31 @@ function rivalResourceCapture(){
 function finishDefensiveSiege(won){
  if(!battle||!battle.defenseSiteId)return false;
  const id=battle.defenseSiteId,castle=CASTLE_PROFILES[id].name;
- const g=siteGarrison(id),v=battle.enemyCommanderId?s.enemyCastleHeroes?.[battle.enemyCommanderId]:rivalState(),before=battle.defenseBefore,enemyBefore=battle.defenseEnemyBefore;
+ const g=siteGarrison(id),v=rivalState(),before=battle.defenseBefore,enemyBefore=battle.defenseEnemyBefore;
  const after={};for(const type of Object.keys(CASTLE_RECRUIT_COST)){after[type]=Math.max(0,s[type]||0);g.defenders[type]=after[type];s[type]=battle.heroArmyBefore[type]||0}
- if(won){v.defeated=true;v.active=false;v.recovery=0;v.soldiers=0;v.archers=0}
+ if(won){v.defeated=true;v.recovery=0;v.soldiers=0;v.archers=0}
  else{verifiedSiteState()[id]='rival';v.soldiers=Math.max(1,Math.ceil(v.soldiers/2));v.archers=Math.max(0,Math.ceil(v.archers/2));g.defenders={soldiers:0,archers:0,griffins:0,dragons:0}}
  const outcome=won?'🛡️ '+castle+' resiste: has dirigido la defensa.':'⚔️ El Reino Umbrío conquista '+castle+' tras la batalla.';
  battle=null;$('modal').hidden=true;message(outcome);return true
 }
-function launchDefensiveSiege(site,commanderId=null){
+function launchDefensiveSiege(site){
  // A stale siege event must never replace an active battle or defend a lost castle.
  if(battle||!site||verifiedSiteState()[site.id]!=='player')return false;
  const g=siteGarrison(site.id),d=g.defenders||{};
  // Do not replace the hero army with an empty garrison: resolve the undefended castle automatically.
  if(!Object.keys(CASTLE_RECRUIT_COST).some(type=>(d[type]||0)>0)){
   s.autoResolveDefensiveSiege=true;
-  try{s.message=rivalCastleConquest(site.id,commanderId)}finally{s.autoResolveDefensiveSiege=false}
+  try{s.message=rivalCastleConquest(site.id)}finally{s.autoResolveDefensiveSiege=false}
   render();return
  }
  const army={};for(const type of Object.keys(CASTLE_RECRUIT_COST))army[type]=s[type]||0;
  const before={};for(const type of Object.keys(CASTLE_RECRUIT_COST)){before[type]=d[type]||0;s[type]=before[type]}
- const v=commanderId?enemyCastleHeroes()[commanderId]:rivalState();
- if(!v||v.defeated)return false;
- battle={x:s.x,y:s.y,k:'defense:'+site.id,enemyCommanderId:commanderId,defenseSiteId:site.id,heroArmyBefore:army,defenseBefore:before,defenseEnemyBefore:{soldiers:v.soldiers,archers:v.archers},hp:Math.max(8,v.soldiers*2+v.archers*3),rival:true,fort:true,defending:true,ax:0,ay:2,ex:5,ey:2,range:1,selected:'soldiers',sx:0,sy:2,rx:0,ry:3,round:0};
+ const v=rivalState();
+ battle={x:s.x,y:s.y,k:'defense:'+site.id,defenseSiteId:site.id,heroArmyBefore:army,defenseBefore:before,defenseEnemyBefore:{soldiers:v.soldiers,archers:v.archers},hp:Math.max(8,v.soldiers*2+v.archers*3),rival:true,fort:true,defending:true,ax:0,ay:2,ex:5,ey:2,range:1,selected:'soldiers',sx:0,sy:2,rx:0,ry:3,round:0};
  showBattle();
 }
-function rivalCastleConquest(siteId,commanderId=null){
- const v=commanderId?enemyCastleHeroes()[commanderId]:rivalState();if(!v||v.defeated||commanderId&&!v.active)return '';
+function rivalCastleConquest(siteId){
+ const v=rivalState();if(v.defeated)return '';
  const owners=verifiedSiteState();
  const target=VERIFIED_MAP_SITES.filter(site=>site.kind==='fort'&&owners[site.id]==='player'&&(!siteId||site.id===siteId))
   .map(site=>({site,d:Math.hypot(v.x-site.x,v.y-site.y)})).sort((a,b)=>a.d-b.d)[0];
@@ -1658,7 +1657,6 @@ function rivalCastleConquest(siteId,commanderId=null){
  if(!guard.defenders)guard.defenders={soldiers:0,archers:0,griffins:0,dragons:0};
  const d=guard.defenders,castle=CASTLE_PROFILES[target.site.id].name;
  if(Object.values(d).some(n=>n>0)&&typeof window!=='undefined'&&!s.autoResolveDefensiveSiege){
-  s.pendingSiegeCommanderId=commanderId;
   s.pendingDefensiveSiege=target.site.id;
   return '🛡️ '+castle+' está bajo ataque. Prepara la defensa.';
  }
@@ -1691,7 +1689,7 @@ function rivalCastleConquest(siteId,commanderId=null){
  v.soldiers=attackers.soldiers;v.archers=attackers.archers;
  const won=power()===0&&alive();
  if(won){owners[target.site.id]='rival';guard.defenders={soldiers:0,archers:0,griffins:0,dragons:0}}
- if(!alive()){v.defeated=true;v.active=false;v.recovery=0}
+ if(!alive()){v.defeated=true;v.recovery=0}
  const outcome=won?'⚔️ El Reino Umbrío conquista '+castle+'.':'🛡️ '+castle+' resiste el asedio enemigo.';
  const details=report.length?report.join(' | '):'Sin defensores desplegados';
  return outcome+' '+details;
@@ -1920,12 +1918,6 @@ async function enemyCastleHeroTurns(epoch){
    if(marker){marker.style.transition='left 150ms linear, top 150ms linear';marker.style.left=x+'%';marker.style.top=y+'%'}
    await new Promise(resolve=>setTimeout(resolve,160));
   }
-  // Un comandante puede asediar una fortaleza del jugador solo si llega físicamente a ella.
-  const attackedCastle=VERIFIED_MAP_SITES.find(target=>target.kind==='fort'&&owners[target.id]==='player'&&Math.hypot(h.x-target.x,h.y-target.y)<=5.5);
-  if(attackedCastle&&!s.pendingDefensiveSiege){
-   const siege=rivalCastleConquest(attackedCastle.id,site.id);
-   if(siege)s.message=siege;
-  }
   // Solo reclamar al alcanzar físicamente el recurso; nunca capturarlo a distancia.
   if(objective&&completed===path.length&&Math.hypot(h.x-objective.target.x,h.y-objective.target.y)<=4.2&&verifiedSiteState()[objective.target.id]!=='rival'){
    const previous=verifiedSiteState()[objective.target.id];
@@ -2091,13 +2083,12 @@ async function rivalTurn(){
    if(s.pendingDefensiveSiege){
     const site=VERIFIED_MAP_SITES.find(t=>t.id===s.pendingDefensiveSiege);
     s.pendingDefensiveSiege=null;
-    const siegeCommanderId=s.pendingSiegeCommanderId||null;s.pendingSiegeCommanderId=null;
     if(site&&verifiedSiteState()[site.id]==='player'){
      const siegeCampaign=s;
      const directDefense=await realmConfirm('🏰 ¡Castillo bajo ataque!','El enemigo asedia '+CASTLE_PROFILES[site.id].name+'. ¿Deseas dirigir personalmente la guarnición?','⚔️ Dirigir defensa','🛡️ Defensa automática');
      if(epoch===rivalEpoch&&s===siegeCampaign&&!s.done&&verifiedSiteState()[site.id]==='player'){
-      if(directDefense)launchDefensiveSiege(site,siegeCommanderId);
-      else{s.autoResolveDefensiveSiege=true;try{s.message=rivalCastleConquest(site.id,siegeCommanderId)}finally{s.autoResolveDefensiveSiege=false}render()}
+      if(directDefense)launchDefensiveSiege(site);
+      else{s.autoResolveDefensiveSiege=true;try{s.message=rivalCastleConquest(site.id)}finally{s.autoResolveDefensiveSiege=false}render()}
      }
     }
    }
