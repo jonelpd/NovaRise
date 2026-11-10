@@ -350,6 +350,8 @@ body:has(#auth-screen:not([hidden])){min-height:100vh;background:linear-gradient
 #modal .battle-arena.has-illustrated-map .hero-corner{z-index:12!important}
 @media(max-width:700px){#modal .battle-arena.has-illustrated-map .combat-sprite{width:clamp(42px,12vw,85px)!important;height:clamp(60px,16vw,115px)!important}}
 </style><style id="novarise-v89-art">
+#modal .battle-arena.has-illustrated-map .combat-cell.unit-ally .combat-sprite:not(.has-novarise-art)>svg,#modal .battle-arena.has-illustrated-map .combat-cell.unit-enemy .combat-sprite:not(.has-novarise-art)>svg{display:block!important;visibility:visible!important;opacity:1!important;width:100%!important;height:100%!important;max-height:none!important}
+
 #modal .battle-arena.has-illustrated-map .combat-sprite.has-novarise-art>svg{display:none!important}
 #modal .battle-arena.has-illustrated-map .combat-sprite .novarise-art{display:none;width:100%;height:100%;object-fit:contain;object-position:center bottom;pointer-events:none;image-rendering:auto;filter:drop-shadow(1px 5px 3px #0009)}
 #modal .battle-arena.has-illustrated-map .combat-sprite .novarise-art.loaded{display:block}
@@ -1038,6 +1040,7 @@ function drawTactics(){
   if(enemy||soldier||archer||griffin||dragon){
    const type=enemy?'enemy':soldier?'soldiers':archer?'archers':griffin?'griffins':'dragons';
    c.classList.add(enemy?'unit-enemy':'unit-ally');
+   c.dataset.unit=type;
    if(battleFx&&battleFx.target===(enemy?'enemy':type))c.classList.add(battleFx.casualty?'combat-casualty':'combat-impact');
    if(!enemy&&battle.selected===type)c.classList.add('unit-selected');
    if(!enemy&&battle.acted.includes(type))c.classList.add('combat-acted');
@@ -2305,7 +2308,7 @@ if(arena){
   const arena=document.querySelector('#modal .battle-arena');
   if(!arena)return;
   arena.querySelectorAll('.combat-cell.unit-ally,.combat-cell.unit-enemy').forEach(cell=>{
-   const type=cell.classList.contains('unit-enemy')?'enemy':Object.keys(types).find(k=>k!=='enemy'&&cell.title.startsWith(k));
+   const type=cell.classList.contains('unit-enemy')?'enemy':Object.keys(types).find(k=>k!=='enemy'&&cell.dataset.unit===k);
    if(!type)return;
    const wrap=cell.querySelector('.combat-sprite');if(!wrap||wrap.querySelector('.novarise-art'))return;
    const key=types[type],phase=phases.get(type)||'idle';
@@ -2324,11 +2327,11 @@ if(arena){
   if(!types[key])return;
   phases.set(key,phase);
   document.querySelectorAll('#modal .combat-cell').forEach(cell=>{
-   const match=key==='enemy'?cell.classList.contains('unit-enemy'):cell.title.startsWith(key);
+   const match=key==='enemy'?cell.classList.contains('unit-enemy'):cell.dataset.unit===key;
    if(!match)return;
    const art=cell.querySelector('.novarise-art');if(art)art.src='./sprites/'+types[key]+'-'+phase+'.png';
   });
-  setTimeout(()=>{if(phases.get(key)!==phase)return;phases.delete(key);document.querySelectorAll('#modal .combat-cell').forEach(cell=>{const match=key==='enemy'?cell.classList.contains('unit-enemy'):cell.title.startsWith(key);const art=match?cell.querySelector('.novarise-art'):null;if(art)art.src='./sprites/'+types[key]+'-idle.png'})},duration);
+  setTimeout(()=>{if(phases.get(key)!==phase)return;phases.delete(key);document.querySelectorAll('#modal .combat-cell').forEach(cell=>{const match=key==='enemy'?cell.classList.contains('unit-enemy'):cell.dataset.unit===key;const art=match?cell.querySelector('.novarise-art'):null;if(art)art.src='./sprites/'+types[key]+'-idle.png'})},duration);
  };
 })();
 </script><script id="novarise-v815-toolbar">(function(){function setup(){const battle=document.querySelector('#modal .battle');if(!battle||battle.querySelector('.novarise-command-bar'))return;const log=battle.querySelector('#battle-log');const unit=battle.querySelector('#unit-soldier');const atk=battle.querySelector('#attack');if(!log||!unit||!atk)return;const groups=[unit.closest('.actions'),atk.closest('.actions')];if(!groups[0]||!groups[1])return;const bar=document.createElement('div');bar.className='novarise-command-bar';bar.setAttribute('aria-label','Controles del combate');const left=document.createElement('div');left.className='novarise-utility';const right=document.createElement('div');right.className='novarise-utility';for(const [label,target,where] of [['📖','unit-soldier',left],['⚔️','attack',left],['⚙️','defend',left],['🚩','retreat',right],['⌛','defend',right]]){const btn=document.createElement('button');btn.type='button';btn.className='action secondary';btn.textContent=label;btn.title=label==='📖'?'Seleccionar soldados':label==='⚔️'?'Atacar':label==='⚙️'?'Defender':label==='🚩'?'Retirarse':'Defender';btn.setAttribute('aria-label',btn.title);btn.addEventListener('click',()=>document.getElementById(target)?.click());where.appendChild(btn)}bar.append(left,groups[0],groups[1],right);log.parentNode.insertBefore(bar,log);const selected=battle.querySelector('#selected-unit');if(selected)bar.after(selected);bar.after(log)}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup);else setup()})();</script><script id="novarise-v816-toolbar-cleanup">(function(){function run(){const bar=document.querySelector('#modal .battle .novarise-command-bar');if(!bar||bar.dataset.ornateDone)return;bar.dataset.ornateDone='1';bar.querySelectorAll('.novarise-utility').forEach(el=>el.remove());const groups=[...bar.querySelectorAll('.actions')];if(!groups.length)return;const start=document.createElement('span');start.className='novarise-crest';start.textContent='⚜';start.setAttribute('aria-hidden','true');const end=document.createElement('span');end.className='novarise-crest';end.textContent='⚑';end.setAttribute('aria-hidden','true');bar.prepend(start);bar.append(end);const labels={'unit-soldier':'🛡️ Soldados','unit-archer':'🏹 Arqueros','unit-griffin':'🦅 Grifos','unit-dragon':'🐉 Dragones'};for(const [id,label] of Object.entries(labels)){const btn=document.getElementById(id);if(btn){btn.textContent=label;btn.title='Seleccionar '+label.split(' ').slice(1).join(' ')}}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run);else run()})();</script></body></html>
