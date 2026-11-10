@@ -459,3 +459,11 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Código `14a06d7c`:** función aislada `applySecondarySiegeRetreat(draft,result)` que valida la retirada, compara instantáneas originales de tropas, aplica únicamente bajas válidas, conserva el castillo en manos del jugador y registra `lastSiegeRetreat` en el comandante para impedir doble aplicación en el mismo turno. No activa todavía el asedio en la partida.
 - **Pruebas `09ff2e6d`:** cinco casos de conservación de ejércitos y propiedad, aplicación única, rechazo de instantáneas obsoletas, bajas inválidas y supervivencia de ambos bandos.
 - **Pendiente:** confirmar CI y conectar cálculo/resultado con interfaz de defensa, guardado/recarga y turnos enemigos tras pruebas integrales.
+
+### Persistencia de retiradas secundarias — 2026-11-10
+
+- **Regresión previa:** verde `42818627184` (retiradas).
+- **Código `845823f9`:** al normalizar comandantes de una partida cargada se conserva `lastSiegeRetreat` si es una cadena válida (máximo 120 caracteres), o se inicializa a cadena vacía para partidas antiguas. Los ejércitos permanecen intactos; el guardado existente serializa el estado `s` mediante JSON.
+- **Pruebas `5d4dc305`:** tres pruebas funcionales que serializan/restauran el estado y verifican bajas persistentes, rechazo de una segunda aplicación del mismo asedio y compatibilidad con partidas antiguas o sellos inválidos.
+- **Alcance:** pruebas de serialización y normalización en entorno aislado, no prueba completa de navegación o recarga real del navegador. CI pendiente de confirmar.
+- **Pendiente:** integrar interfaz de defensa y flujo de turnos, además de pruebas end-to-end de guardado y recarga en navegador.
