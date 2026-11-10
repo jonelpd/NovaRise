@@ -5,7 +5,7 @@ const fs=require('node:fs');
 const path=require('node:path');
 const vm=require('node:vm');
 const html=fs.readFileSync(path.join(__dirname,'..','juego','index.html'),'utf8');
-const a=html.indexOf('function launchSecondaryDefensiveSiege('),b=html.indexOf('function finishDefensiveSiege(',a);
+const a=html.indexOf('function checkpointSecondarySiegeBeforeBattle('),b=html.indexOf('function finishDefensiveSiege(',a);
 assert.ok(a>=0&&b>a);
 function setup(){
  const draft={commanderId:'fort-west',castleId:'fort-center',defenders:{soldiers:4,archers:2,griffins:1,dragons:0},defenseBefore:{soldiers:4,archers:2,griffins:1,dragons:0},enemyArmyBefore:{soldiers:8,archers:2},enemyStacks:[{id:'soldiers',count:8,hp:16,hpPerUnit:2,x:5,y:2},{id:'archers',count:2,hp:6,hpPerUnit:3,x:5,y:4}],hp:22};
@@ -13,7 +13,7 @@ function setup(){
  const h={turns:4,lastSecondarySiege:''};
  let applied=null,rendered=0;
  const ctx={s,battle:null,secondarySiegeEligibility:()=>draft,recoverSecondarySiegeDecision:()=>draft,showBattle:()=>{},applySecondarySiegeOutcome:(_draft,result)=>{applied=result;return true},enemyCastleHeroes:()=>({'fort-west':h}),$:()=>({hidden:false}),message:()=>{},render:()=>{rendered++}};
- vm.createContext(ctx);vm.runInContext(html.slice(a,b),ctx);
+ vm.createContext(ctx);vm.runInContext(html.slice(a,b),ctx);ctx.checkpointSecondarySiegeBeforeBattle=()=>true;
  return {ctx,s,h,draft,applied:()=>applied,rendered:()=>rendered};
 }
 test('manual secondary defense swaps only garrison and restores hero on victory',()=>{
@@ -86,4 +86,23 @@ test('rejected siege outcome restores army and preserves original decision',()=>
  assert.equal(f.s.pendingSecondarySiege.commanderId,'fort-west');
  assert.equal(f.s.pendingSecondarySiege.enemyArmyBefore.soldiers,8);
  assert.equal(f.h.lastSecondarySiege,'');
+});
+
+test('manual defense refuses to start when checkpoint cannot be saved',()=>{
+ const f=setup();f.ctx.checkpointSecondarySiegeBeforeBattle=()=>false;
+ assert.equal(f.ctx.launchSecondaryDefensiveSiege(f.draft),false);
+ assert.equal(f.s.soldiers,15);assert.equal(f.s.archers,6);
+ assert.equal(f.s.pendingSecondarySiege.commanderId,'fort-west');
+ assert.equal(f.ctx.battle,null);
+});
+test('checkpoint stores original army and pending siege before combat',()=>{
+ const f=setup();const store=new Map();
+ f.ctx.STORE='game-test';f.ctx.validGame=()=>true;
+ f.ctx.localStorage={getItem:key=>store.get(key)||null,setItem:(key,val)=>store.set(key,val)};
+ vm.runInContext(html.slice(a,html.indexOf('function launchSecondaryDefensiveSiege(',a)),f.ctx);
+ assert.equal(f.ctx.launchSecondaryDefensiveSiege(f.draft),true);
+ const saved=JSON.parse(store.get('game-test'));
+ assert.equal(saved.soldiers,15);assert.equal(saved.archers,6);
+ assert.equal(saved.pendingSecondarySiege.commanderId,'fort-west');
+ assert.equal(f.s.soldiers,4);
 });
