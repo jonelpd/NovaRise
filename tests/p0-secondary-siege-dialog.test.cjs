@@ -46,3 +46,17 @@ test('failed dialog releases lock for a later retry',async()=>{
  f.ctx.realmDialog=async()=>{calls++;return 'hold'};
  assert.equal(await f.run(),true);assert.equal(calls,2);
 });
+
+test('dismissed secondary siege dialog keeps pending decision and troops',async()=>{
+ const f=fixture();f.ctx.realmDialog=async()=>undefined;
+ assert.equal(await f.run(),false);
+ assert.equal(f.calls.apply,0);
+ assert.equal(f.s.pendingSecondarySiege.commanderId,'fort-west');
+ assert.equal(f.hero.lastSecondarySiege,'');
+});
+test('unexpected secondary siege dialog response cannot confirm hold',async()=>{
+ const f=fixture();f.ctx.realmDialog=async()=>true;
+ assert.equal(await f.run(),false);
+ assert.equal(f.calls.apply,0);
+ assert.equal(f.s.pendingSecondarySiege.castleId,'fort-center');
+});
