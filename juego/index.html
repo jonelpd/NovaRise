@@ -1634,8 +1634,19 @@ function launchSecondaryDefensiveSiege(draft){
   secondarySiegeDraft:draft,heroArmyBefore,defenseBefore:{...draft.defenseBefore},
   enemyStacks:draft.enemyStacks.map(u=>({...u})),hp:draft.hp,rival:true,fort:true,
   defending:true,ax:0,ay:2,ex:5,ey:2,range:1,selected:'soldiers',sx:0,sy:2,rx:0,ry:3,round:0};
+ const pending=s.pendingSecondarySiege;
  s.pendingSecondarySiege=null;
- showBattle();return !!battle;
+ try{showBattle()}catch(error){
+  for(const type of types)s[type]=heroArmyBefore[type];
+  battle=null;s.pendingSecondarySiege=pending;
+  return false;
+ }
+ if(!battle){
+  for(const type of types)s[type]=heroArmyBefore[type];
+  s.pendingSecondarySiege=pending;
+  return false;
+ }
+ return true;
 }
 function finishSecondaryDefensiveSiege(won){
  if(!battle?.secondarySiegeDraft)return false;
