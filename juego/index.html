@@ -1622,6 +1622,21 @@ function rivalResourceCapture(){
 // Un castillo reconquistado deja de producir recursos para el jugador.
 // Asedio automático por rondas: las tropas de la guarnición combaten y sufren bajas reales.
 // Defensa manual de comandante secundario: aislar la guarnición del ejército del héroe.
+// Punto de recuperación previo a sustituir temporalmente el ejército principal.
+// Durante el turno rival no se usa persistGame(), pues bloquea los guardados.
+function checkpointSecondarySiegeBeforeBattle(){
+ if(!STORE||battle||!validGame(s))return false;
+ try{
+  const next=JSON.stringify(s),previous=localStorage.getItem(STORE);
+  if(previous!==next){
+   if(previous){let valid=false;try{valid=validGame(JSON.parse(previous))}catch(e){}
+    if(valid)localStorage.setItem(STORE+'-backup',previous);
+   }
+   localStorage.setItem(STORE,next);
+  }
+  return true;
+ }catch(e){return false}
+}
 function launchSecondaryDefensiveSiege(draft){
  if(battle||!draft||!secondarySiegeEligibility(draft.commanderId,draft.castleId))return false;
  const types=['soldiers','archers','griffins','dragons'];
@@ -1632,6 +1647,8 @@ function launchSecondaryDefensiveSiege(draft){
  const equalArmy=(a,b,units)=>units.every(type=>Number.isInteger(a?.[type])&&a[type]===b?.[type]);
  if(!equalArmy(current.enemyArmyBefore,draft.enemyArmyBefore,['soldiers','archers'])||
     !equalArmy(current.defenseBefore,draft.defenseBefore,types))return false;
+ // No iniciar la defensa sin una copia recuperable del estado anterior.
+ if(!checkpointSecondarySiegeBeforeBattle())return false;
  const heroArmyBefore={};
  for(const type of types){heroArmyBefore[type]=s[type]||0;s[type]=draft.defenders[type]||0}
  battle={x:s.x,y:s.y,k:'secondary-defense:'+draft.castleId,defenseSiteId:draft.castleId,
