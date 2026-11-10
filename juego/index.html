@@ -1814,7 +1814,15 @@ function enemyCastleHeroes(){
    if(hero&&hero.active)hero.active=false;
    continue;
   }
-  if(hero){if(!hero.defeated)hero.active=true;continue;}
+  if(hero){
+   // Un comandante derrotado solo regresa tras tres turnos si su castillo sigue siendo enemigo.
+   if(hero.defeated){
+    hero.active=false;
+    continue;
+   }
+   hero.active=true;
+   continue;
+  }
   if(!hero){
    const point=safeHeroPoint(site.x,site.y);
    s.enemyCastleHeroes[site.id]={castleId:site.id,x:point?point[0]:site.x,y:point?point[1]:site.y,
@@ -1843,7 +1851,19 @@ async function enemyCastleHeroTurns(epoch){
  const heroes=enemyCastleHeroes();
  for(const site of VERIFIED_MAP_SITES){
   if(epoch!==rivalEpoch||s.done)return;
-  const h=heroes[site.id];if(site.kind!=='fort'||!h||!h.active||h.defeated||verifiedSiteState()[site.id]!=='rival')continue;
+  const h=heroes[site.id];if(site.kind!=='fort'||!h||verifiedSiteState()[site.id]!=='rival')continue;
+  if(h.defeated){
+   h.recovery=Math.max(0,Math.floor(Number(h.recovery)||0))+1;
+   if(h.recovery>=3){
+    const point=safeHeroPoint(site.x,site.y);
+    h.x=point?point[0]:site.x;h.y=point?point[1]:site.y;
+    h.soldiers=3;h.archers=1;h.gold=0;h.moves=0;
+    h.defeated=false;h.active=true;h.recovery=0;
+    s.message='⚔️ '+CASTLE_PROFILES[site.id].name+' ha reclutado un nuevo comandante.';
+   }
+   continue;
+  }
+  if(!h.active)continue;
   h.turns++;h.moves=4;
   // Reclutamiento con tesorería propia: los refuerzos no aparecen gratis.
   h.gold=Math.max(0,Math.min(100000,Math.floor(Number(h.gold)||0)+20));
@@ -1947,7 +1967,8 @@ async function rivalTurn(){
   v.recovery=(v.recovery||0)+1;
   if(v.recovery>=3){v.defeated=false;v.recovery=0;v.soldiers=4;v.archers=1;v.x=7.5;v.y=93;s.message='⚔️ El Reino Umbrío ha reclutado un nuevo comandante.'}
   else s.message='El Reino Umbrío reconstruye su ejército ('+v.recovery+'/3 turnos).';
-  rivalBusy=false;
+  try{if(navBlocked)await enemyCastleHeroTurns(epoch)}finally{rivalBusy=false}
+  if(epoch!==rivalEpoch||s.done)return;
   s.turn++;s.moves=s.faction==='Alianza del Alba'?5:4;
   s.gold+=40+25*s.claimed.length+(s.buildings.includes('market')?30:0)+(s.faction==='Guardianes del Bosque'?15:0);
   if(s.buildings.includes('barracks'))s.soldiers++;
