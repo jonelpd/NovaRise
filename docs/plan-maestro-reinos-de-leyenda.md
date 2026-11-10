@@ -537,3 +537,10 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Pruebas `aa3f3b67`:** rechazo de cambios tanto en la guarnición como en el comandante atacante; se verificó que la partida conserva el ejército y la decisión pendiente.
 - **Regresión `42879992410`:** completada correctamente. La ejecución intermedia `42879953976` falló por un error en el montaje de la prueba (ambas instantáneas compartían el mismo objeto), corregido antes de esta validación.
 - **Pendiente:** prueba visual completa en navegador y evaluación del guardado al cerrar inesperadamente una batalla.
+
+### Reanudación de defensa pendiente al recuperar partida — 2026-11-10
+
+- **Integración `88034dc4`:** al cargar un guardado válido (o recuperar su copia anterior), el juego programa la presentación de una decisión de asedio secundario pendiente después del renderizado. No abre un diálogo si la campaña cambió, existe una batalla activa o está ocupado el turno rival.
+- **Pruebas `1ffae634`:** cuatro casos de reanudación, ausencia de asedio, cambio de campaña y bloqueo por combate o turno enemigo.
+- **Compatibilidad `eeac1379`:** se corrigió una incompatibilidad con las pruebas aisladas de carga, que ejecutan `load()` sin los auxiliares globales; la reanudación solo se invoca cuando existe un asedio pendiente y está disponible la función.
+- **Regresión `42881256150`:** verde. Queda pendiente comprobar en navegador el recorrido completo de cierre y reapertura de una partida con decisión pendiente.
