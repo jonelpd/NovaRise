@@ -474,3 +474,10 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Código `a83ef5a2`:** funciones `queueSecondarySiegeDecision` y `recoverSecondarySiegeDecision` para preparar una única decisión pendiente de asedio secundario en el estado serializable de campaña. Rechazan solapamiento con batallas o asedios principales, duplicados del mismo turno y expedientes obsoletos tras recarga. No muestran aún ventana ni disparan combates, para preservar el bloqueo de turnos ya validado.
 - **Pruebas `09cca9ac`:** cinco casos de cola única, JSON guardado/recarga, invalidación por cambios de ejército, exclusión de combates simultáneos y bloqueo de retiradas duplicadas.
 - **Pendiente:** confirmar CI, conectar la cola a una ventana de decisión defensiva y a la resolución del combate, verificar manualmente la experiencia y el guardado en navegador antes de habilitar asedios automáticos.
+
+### Ventana de defensa secundaria: integración aislada — 2026-11-10
+
+- **Código `0b736044`:** `promptSecondarySiegeDefense()` prepara la ventana profesional mediante `realmConfirm`, con resolución automática y opción de mantener la defensa sin modificar tropas. Revalida la campaña y la decisión tras la confirmación asíncrona, calcula el resultado, lo aplica al comandante secundario y a la guarnición, y registra un sello de asedio para evitar repetición en el turno.
+- **Pruebas `b617ba4b`:** cuatro pruebas de confirmación, cancelación, combate simultáneo y decisión obsoleta.
+- **Limitación importante:** el diálogo existe como función aislada pero aún **no está conectado a los turnos enemigos**; la defensa manual tampoco está habilitada. No presentar esta fase como asedios secundarios jugables. Se requiere integración específica del motor manual y un control de concurrencia antes de conectar el disparador.
+- **Pendiente:** CI de regresión, conectar el disparador en turno enemigo, verificar guardado/recarga real y habilitar defensa manual.
