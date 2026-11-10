@@ -569,3 +569,9 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Código `5089d747`:** exclusión mutua para que la defensa secundaria no muestre dos ventanas simultáneas cuando coinciden la recuperación de partida y otro intento de apertura. El bloqueo se libera al finalizar el diálogo, incluso si la ventana produce un error.
 - **Pruebas `380be75a`:** dos llamadas concurrentes producen una sola ventana; tras un fallo de diálogo, un nuevo intento puede presentarse.
 - **Pendiente:** validación visual en navegador y comprobación final de CI de esta modificación.
+
+### Cancelación segura del diálogo de asedio secundario — 2026-11-10
+
+- **Corrección `975f3dd3`:** pulsar Escape, cerrar la ventana o recibir una respuesta inesperada ya no equivale a seleccionar «Mantener defensa». El expediente pendiente se conserva y no se marca al comandante como atendido; solo una elección explícita ejecuta la decisión.
+- **Pruebas `459c2b73`:** cancelación y respuesta inesperada preservan el expediente sin alterar resultados ni sellos del comandante.
+- **Pendiente:** validar interacción visual y comportamiento del diálogo en navegador; la recuperación por recarga permanece disponible.
