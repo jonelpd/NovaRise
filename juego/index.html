@@ -1999,6 +1999,7 @@ function enemyCastleHeroes(){
    hero.recovery=Math.max(0,Math.floor(Number(hero.recovery)||0));
    // La protección frente a retiradas duplicadas se conserva al recargar la partida.
    hero.lastSiegeRetreat=typeof hero.lastSiegeRetreat==='string'&&hero.lastSiegeRetreat.length<=120?hero.lastSiegeRetreat:'';
+   hero.lastSecondarySiege=typeof hero.lastSecondarySiege==='string'&&hero.lastSecondarySiege.length<=120?hero.lastSecondarySiege:'';
    if(!Number.isFinite(hero.x)||!Number.isFinite(hero.y)){
     const point=safeHeroPoint(site.x,site.y);
     hero.x=point?point[0]:site.x;hero.y=point?point[1]:site.y;
