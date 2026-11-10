@@ -575,3 +575,9 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Corrección `975f3dd3`:** pulsar Escape, cerrar la ventana o recibir una respuesta inesperada ya no equivale a seleccionar «Mantener defensa». El expediente pendiente se conserva y no se marca al comandante como atendido; solo una elección explícita ejecuta la decisión.
 - **Pruebas `459c2b73`:** cancelación y respuesta inesperada preservan el expediente sin alterar resultados ni sellos del comandante.
 - **Pendiente:** validar interacción visual y comportamiento del diálogo en navegador; la recuperación por recarga permanece disponible.
+
+### Prevención de repetición de asedios tras restaurar partidas — 2026-11-10
+
+- **Código `f3987729`:** al recuperar una decisión secundaria, se contrasta su identificador de comandante, castillo y turno con los sellos `lastSecondarySiege` y `lastSiegeRetreat`. Si el asedio ya fue resuelto o el atacante se retiró en ese turno, se descarta la decisión pendiente para impedir un enfrentamiento duplicado.
+- **Pruebas `2f4cb196`:** recuperación de un asedio previamente resuelto y de una retirada ya registrada; ambos deben invalidar el expediente sin alterar tropas.
+- **Pendiente:** prueba de navegación real con partidas antiguas y validación visual de las ventanas.
