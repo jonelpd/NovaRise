@@ -581,3 +581,9 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Código `f3987729`:** al recuperar una decisión secundaria, se contrasta su identificador de comandante, castillo y turno con los sellos `lastSecondarySiege` y `lastSiegeRetreat`. Si el asedio ya fue resuelto o el atacante se retiró en ese turno, se descarta la decisión pendiente para impedir un enfrentamiento duplicado.
 - **Pruebas `2f4cb196`:** recuperación de un asedio previamente resuelto y de una retirada ya registrada; ambos deben invalidar el expediente sin alterar tropas.
 - **Pendiente:** prueba de navegación real con partidas antiguas y validación visual de las ventanas.
+
+### Validación anticipada de asedios al cargar partidas — 2026-11-10
+
+- **Código `66a8bbf0`:** al cargar la partida principal o recuperar una copia de respaldo, se valida el expediente de asedio secundario antes de revelar, renderizar y guardar el mapa. Los expedientes obsoletos o ya resueltos se descartan antes de cualquier persistencia automática.
+- **Pruebas `5a4dc767`:** verifican el orden de validación anterior al renderizado tanto para guardado principal como respaldo.
+- **Pendiente:** validar en navegador con guardados reales; comprobar CI de esta versión.
