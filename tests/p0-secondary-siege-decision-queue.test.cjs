@@ -55,3 +55,15 @@ test('retreat resolved after queued decision invalidates recovered siege',()=>{
  assert.equal(f.recover(),null);
  assert.equal(f.state.pendingSecondarySiege,null);
 });
+
+test('corrupt pending troop counts are rejected before replay',()=>{
+ for(const invalid of [-1,1.5,'8',null]){
+  const f=fixture();f.queue();f.state.pendingSecondarySiege.enemyArmyBefore.soldiers=invalid;
+  assert.equal(f.recover(),null);
+  assert.equal(f.state.pendingSecondarySiege,null);
+ }
+});
+test('corrupt pending garrison counts are rejected before replay',()=>{
+ const f=fixture();f.queue();f.state.pendingSecondarySiege.defenseBefore.griffins=undefined;
+ assert.equal(f.recover(),null);assert.equal(f.state.pendingSecondarySiege,null);
+});
