@@ -1905,9 +1905,19 @@ async function enemyCastleHeroTurns(epoch){
   const pursue=distance<=15&&playerDistance<=9&&enemyArmy>=Math.max(5,Math.ceil(playerArmy*1.4));
   const playerPoint=pursue?safeHeroPoint(playerX,playerY):null;
   const chaseRoute=playerPoint?fineRoute([h.x,h.y],playerPoint):null;
-  const objective=distance>15||chaseRoute?null:routes[0]||null;
-  const destination=distance>15?goal:objective?null:safeHeroPoint(site.x+(h.turns%2?4:-4),site.y+(h.turns%3===0?4:-4));
-  const path=chaseRoute&&chaseRoute.length?chaseRoute:objective?objective.path:destination?fineRoute([h.x,h.y],destination):null;
+  // Planificación ofensiva gradual: elegir una fortaleza cercana solo cuando el
+  // ejército tiene fuerza suficiente. Todavía no ejecuta el asedio automáticamente.
+  const castleRoutes=distance>15?[]:VERIFIED_MAP_SITES.filter(target=>target.kind==='fort'&&owners[target.id]==='player'&&Math.hypot(target.x-site.x,target.y-site.y)<=20).map(target=>{
+   const point=safeHeroPoint(target.x,target.y);
+   const path=point?fineRoute([h.x,h.y],point):null;
+   const defenders=siteGarrison(target.id).defenders;
+   const defensePower=defenders.soldiers+2*defenders.archers+5*defenders.griffins+14*defenders.dragons;
+   return path&&path.length&&enemyArmy>=Math.max(8,Math.ceil(defensePower*1.5))?{target,path}:null;
+  }).filter(Boolean).sort((a,b)=>a.path.length-b.path.length);
+  const siegeObjective=!chaseRoute&&castleRoutes.length&&h.turns%3===0?castleRoutes[0]:null;
+  const objective=distance>15||chaseRoute||siegeObjective?null:routes[0]||null;
+  const destination=distance>15?goal:objective||siegeObjective?null:safeHeroPoint(site.x+(h.turns%2?4:-4),site.y+(h.turns%3===0?4:-4));
+  const path=chaseRoute&&chaseRoute.length?chaseRoute:siegeObjective?siegeObjective.path:objective?objective.path:destination?fineRoute([h.x,h.y],destination):null;
   if(!path||!path.length)continue;
   const marker=Array.from($('map').querySelectorAll('[data-enemy-castle]')).find(el=>el.dataset.enemyCastle===site.id);
   let completed=0;
