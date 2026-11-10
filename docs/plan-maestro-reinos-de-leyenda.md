@@ -438,3 +438,10 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Código `413000b3`:** nueva función `secondarySiegeBattleDraft(commanderId,castleId)` que genera una copia independiente de los ejércitos y las pilas tácticas de soldados/arqueros, con puntos de vida y referencias de comandante/castillo. No inicia batalla, no modifica guarniciones y no altera el motor de asedios existente.
 - **Pruebas `32ea2202`:** cuatro comprobaciones funcionales de rechazo de ataques inválidos, pilas tácticas, ausencia de mutaciones y ejércitos compuestos solo por arqueros.
 - **Pendiente:** comprobar CI de esta entrega; posteriormente implementar el resultado y persistencia del asedio secundario con pruebas de victoria, derrota y recarga antes de habilitarlo en turnos enemigos.
+
+### Resultados de asedios secundarios (sin activación automática) — 2026-11-10
+
+- **Regresión anterior:** verde en ejecución `42817243854` (expediente táctico).
+- **Código `ff8d8e26`:** `applySecondarySiegeOutcome(draft,result)` aplica resultados ya calculados exclusivamente al comandante atacante y a la guarnición objetivo. Revalida elegibilidad y estado de tropas para rechazar informes obsoletos, comprueba bajas enteras y no negativas y verifica que el ganador corresponde a la eliminación del ejército contrario. Solo después de validar todo aplica las bajas y la titularidad del castillo. No toca al rival principal ni ejecuta asedios automáticamente.
+- **Pruebas `af05c0e3`:** cinco pruebas funcionales de victoria atacante, victoria defensora, rechazo de estado obsoleto, rechazo atómico de bajas inválidas y resultado desconocido.
+- **Pendiente:** confirmar regresión CI, resolver el combate con motor compatible y conectar decisiones del jugador, guardado/recarga y turnos enemigos tras pruebas integrales.
