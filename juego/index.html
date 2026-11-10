@@ -1896,9 +1896,18 @@ async function enemyCastleHeroTurns(epoch){
    const path=point?fineRoute([h.x,h.y],point):null;
    return path?{target,path,score:path.length-(owners[target.id]==='player'?6:2)}:null;
   }).filter(Boolean).sort((a,b)=>a.score-b.score);
-  const objective=distance>15?null:routes[0]||null;
+  // Perseguir solo cuando el jugador está a la vista y existe ventaja numérica clara.
+  // La persecución no inicia batallas automáticas: la resolución táctica sigue pendiente.
+  const [playerX,playerY]=heroVisualPosition();
+  const playerArmy=s.soldiers+2*s.archers+3*s.griffins+7*s.dragons;
+  const enemyArmy=h.soldiers+2*h.archers;
+  const playerDistance=Math.hypot(h.x-playerX,h.y-playerY);
+  const pursue=distance<=15&&playerDistance<=9&&enemyArmy>=Math.max(5,Math.ceil(playerArmy*1.4));
+  const playerPoint=pursue?safeHeroPoint(playerX,playerY):null;
+  const chaseRoute=playerPoint?fineRoute([h.x,h.y],playerPoint):null;
+  const objective=distance>15||chaseRoute?null:routes[0]||null;
   const destination=distance>15?goal:objective?null:safeHeroPoint(site.x+(h.turns%2?4:-4),site.y+(h.turns%3===0?4:-4));
-  const path=objective?objective.path:destination?fineRoute([h.x,h.y],destination):null;
+  const path=chaseRoute&&chaseRoute.length?chaseRoute:objective?objective.path:destination?fineRoute([h.x,h.y],destination):null;
   if(!path||!path.length)continue;
   const marker=Array.from($('map').querySelectorAll('[data-enemy-castle]')).find(el=>el.dataset.enemyCastle===site.id);
   let completed=0;
