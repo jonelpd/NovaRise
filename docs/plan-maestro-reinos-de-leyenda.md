@@ -384,3 +384,10 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Comportamiento:** cuando existe una ruta transitable, la persecución tiene prioridad sobre la búsqueda de recursos; se mantiene el límite de cuatro pasos por turno y la animación. No se inicia todavía un combate automático durante el turno enemigo.
 - **Validación:** pendiente de CI y comprobación E2E. Deben verificarse rutas, colisiones, guardado y equilibrio antes de considerar terminada la IA ofensiva.
 - **Pendiente:** ataque táctico iniciado por el enemigo, asedios secundarios y pruebas automatizadas específicas para persecución y enfrentamientos.
+
+### Avance incremental — combate iniciado tras el turno enemigo (2026-11-10)
+
+- **Código:** `ee8bbcbf`. Tras completar los movimientos de los comandantes enemigos, el juego comprueba si alguno ha alcanzado al héroe jugador e inicia su duelo táctico individual. La comprobación se realiza después de liberar el bloqueo del turno y no interrumpe las animaciones. También funciona cuando el rival principal está en recuperación.
+- **Seguridad:** el encuentro no se inicia si ya existe una batalla; se mantiene el ejército concreto y la atribución individual de bajas incorporados anteriormente.
+- **Validación:** CI de este cambio pendiente; se requieren pruebas manuales de combate, movimiento, fin de turno, recarga y coexistencia con asedios.
+- **Pendiente:** asedios ofensivos de comandantes secundarios, pruebas específicas y mejoras del equilibrio de IA. No activar recompensas NVRA.
