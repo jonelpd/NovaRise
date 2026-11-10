@@ -1943,6 +1943,8 @@ function enemyCastleHeroes(){
    hero.gold=Math.max(0,Math.floor(Number(hero.gold)||0));
    hero.turns=Math.max(0,Math.floor(Number(hero.turns)||0));
    hero.recovery=Math.max(0,Math.floor(Number(hero.recovery)||0));
+   // La protección frente a retiradas duplicadas se conserva al recargar la partida.
+   hero.lastSiegeRetreat=typeof hero.lastSiegeRetreat==='string'&&hero.lastSiegeRetreat.length<=120?hero.lastSiegeRetreat:'';
    if(!Number.isFinite(hero.x)||!Number.isFinite(hero.y)){
     const point=safeHeroPoint(site.x,site.y);
     hero.x=point?point[0]:site.x;hero.y=point?point[1]:site.y;
