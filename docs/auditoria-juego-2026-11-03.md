@@ -350,3 +350,9 @@ Se compilaron todos los scripts clásicos embebidos en ambas páginas mediante `
 - El flujo general de pruebas estáticas del sitio [42794290132](https://github.com/jonelpd/NovaRise/actions/runs/42794290132) falla por la ruta local del logotipo circular usada en `index.html` y `en.html`. Incidencia de la web general pendiente de corrección independiente.
 - **No se ha ejecutado ni certificado** una campaña completa en navegador, persistencia tras cierre real, recuperación de copia corrupta en navegador, conflicto de nube con dos sesiones ni compatibilidad móvil. La matriz detallada E2E-01 a E2E-07 queda registrada en `docs/plan-maestro-reinos-de-leyenda.md`.
 - **Decisión de auditoría:** Fase 1 con correcciones implementadas y CI de juego verde, **aceptación pendiente**. Prioridad siguiente: E2E-01, E2E-03 y E2E-05 con datos y cuentas de prueba; no utilizar campañas de usuarios.
+
+### Validación manual comunicada por jugador — 2026-11-10
+- El jugador confirma haber probado el movimiento de las unidades en el juego y lo considera satisfactorio; no se requieren ajustes adicionales de velocidad por ahora.
+- El jugador confirma haber salido del juego y vuelto a entrar, observando que los datos guardados se mantienen. **Validación manual positiva de persistencia básica en su entorno.**
+- Alcance limitado: no se ha aportado comparación campo a campo de héroe, tropas, recursos, castillos y turno; tampoco prueba de corrupción/restauración de respaldo, otro dispositivo o dos sesiones en nube. No declarar E2E-03 ni E2E-05 completamente certificados.
+- Próximo paso: verificar continuidad tras combate/conquista y guardado, y después recuperación de respaldo y sincronización en dos sesiones de prueba.
