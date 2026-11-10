@@ -524,3 +524,9 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Código `22cf6cd2`:** apertura de escenario táctico protegida. Si `showBattle()` lanza un error o cancela el combate, se restauran las cuatro tropas del héroe principal y la decisión de asedio pendiente; no se confirma una batalla inexistente.
 - **Pruebas `85b93838`:** dos escenarios de rollback por error y por cancelación de escena.
 - **Estado:** regresión pendiente; revisión visual del usuario diferida hasta que pueda acceder a su ordenador. Continúa pendiente probar en navegador la defensa secundaria completa.
+
+### Validación de resultados tácticos secundarios — 2026-11-10
+
+- **Corrección `18c4c4af`:** el cierre de defensa secundaria usa las unidades atacantes supervivientes reales del escenario y rechaza una victoria cuando quedan enemigos vivos o una derrota cuando queda guarnición viva. No se cierra el combate ni se reemplazan tropas ante resultados prematuros.
+- **Pruebas `445b7a47`:** casos adicionales para impedir victoria/derrota prematura y adaptar la derrota válida a la eliminación de las cuatro clases defensoras.
+- **Pendiente:** resultado de CI, validación de batalla real en navegador y guardado posterior.
