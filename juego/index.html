@@ -2428,16 +2428,25 @@ function validGame(g){
  if(!g.miners||typeof g.miners!=='object'||Array.isArray(g.miners)||!Object.values(g.miners).every(n=>bounded(n,3)))return false;
  return ['Alianza del Alba','Reino Umbrío','Guardianes del Bosque'].includes(g.faction);
 }
+// Recuperar una decisión defensiva pendiente tras volver a entrar en la partida.
+// La comprobación se difiere para que el mapa y los diálogos terminen de inicializarse.
+function resumeSecondarySiegeAfterLoad(campaign){
+ if(!campaign?.pendingSecondarySiege)return;
+ setTimeout(()=>{
+  if(s!==campaign||battle||rivalBusy||!s.pendingSecondarySiege)return;
+  if(recoverSecondarySiegeDecision())void promptSecondarySiegeDefense();
+ },0);
+}
 function load(){
  if(!STORE)return start();
  const raw=localStorage.getItem(STORE);
  if(!raw)return start();
  try{
   const v=JSON.parse(raw);
-  if(validGame(v)){s=v;selectedMine=s.ownedMines[0]||'';reveal();render();return}
+  if(validGame(v)){s=v;selectedMine=s.ownedMines[0]||'';reveal();render();resumeSecondarySiegeAfterLoad(s);return}
  }catch(e){}
  // Recover the last valid snapshot when the primary save is damaged.
- try{const backup=localStorage.getItem(STORE+'-backup');if(backup){const restored=JSON.parse(backup);if(validGame(restored)){try{localStorage.setItem(STORE+'-recovery-'+Date.now(),raw)}catch(e){}s=restored;selectedMine=s.ownedMines[0]||'';reveal();render();message('⚠️ La última partida estaba dañada. Se ha recuperado la copia anterior válida.');return}}}catch(e){}
+ try{const backup=localStorage.getItem(STORE+'-backup');if(backup){const restored=JSON.parse(backup);if(validGame(restored)){try{localStorage.setItem(STORE+'-recovery-'+Date.now(),raw)}catch(e){}s=restored;selectedMine=s.ownedMines[0]||'';reveal();render();message('⚠️ La última partida estaba dañada. Se ha recuperado la copia anterior válida.');resumeSecondarySiegeAfterLoad(s);return}}}catch(e){}
  // Never overwrite an unreadable campaign with a new one.
  // Preserve the original bytes for manual recovery.
  try{localStorage.setItem(STORE+'-recovery-'+Date.now(),raw)}catch(e){}
