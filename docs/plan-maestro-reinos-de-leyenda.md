@@ -370,3 +370,10 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Compatibilidad:** se conserva el comportamiento anterior cuando no hay comandante secundario defendiendo; no se modifica la versión del guardado ni se generan NVRA.
 - **Estado de verificación:** pendiente de resultado de CI de este commit y prueba E2E manual de defensa, derrota y recarga.
 - **Aún pendiente:** encuentro en campo abierto contra comandantes secundarios, asedios iniciados por ellos, gestión completa de bajas y defensa en todos los tipos de combate, pruebas automatizadas específicas para múltiples comandantes y evaluación de equilibrio.
+
+### Avance incremental — encuentros en campo abierto (2026-11-10)
+
+- **Código:** `9063cc5c` y corrección `c4d1bd1c`. Los comandantes secundarios de fortalezas enemigas pueden iniciar encuentros con el héroe del jugador a distancia corta, tanto al mover una casilla como durante desplazamientos automáticos.
+- **Ejército independiente:** la batalla utiliza las tropas del comandante encontrado; si pierde el jugador, se conservan las bajas de ese ejército concreto; si vence el jugador, el comandante secundario queda derrotado sin destruir automáticamente su fortaleza ni al rival principal.
+- **Límites:** no se han incorporado todavía ataques ofensivos iniciados por estos comandantes durante su propio turno ni asedios independientes. La detección de encuentros se hace al mover al jugador.
+- **Verificación:** pruebas de regresión y E2E de este cambio pendientes de completar. No declarar terminada la fase hasta comprobar colisiones, animaciones, guardado y resultados de batalla.
