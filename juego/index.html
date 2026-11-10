@@ -1710,6 +1710,31 @@ function simulateSecondarySiege(draft){
  }
  return {winner,attackers:a,defenders:d,rounds};
 }
+// Una retirada conserva la fortaleza y las tropas supervivientes del atacante.
+// El sello por turno impide aplicar dos veces un mismo resultado, incluso sin bajas.
+function applySecondarySiegeRetreat(draft,result){
+ if(!draft||!result||result.winner!=='retreat')return false;
+ const eligible=secondarySiegeEligibility(draft.commanderId,draft.castleId);
+ if(!eligible)return false;
+ const h=enemyCastleHeroes()[draft.commanderId],g=siteGarrison(draft.castleId);
+ const stamp=draft.commanderId+':'+draft.castleId+':'+h.turns;
+ if(h.lastSiegeRetreat===stamp)return false;
+ if(h.soldiers!==draft.enemyArmyBefore.soldiers||h.archers!==draft.enemyArmyBefore.archers)return false;
+ for(const type of ['soldiers','archers','griffins','dragons']){
+  if((g.defenders[type]||0)!==(draft.defenseBefore[type]||0))return false;
+ }
+ const a=result.attackers||{},d=result.defenders||{};
+ const valid=(value,max)=>Number.isInteger(value)&&value>=0&&value<=max;
+ if(!valid(a.soldiers,h.soldiers)||!valid(a.archers,h.archers)||a.soldiers+a.archers<=0)return false;
+ for(const type of ['soldiers','archers','griffins','dragons']){
+  if(!valid(d[type],draft.defenseBefore[type]||0))return false;
+ }
+ if(Object.values(d).every(n=>n===0))return false;
+ h.soldiers=a.soldiers;h.archers=a.archers;
+ for(const type of ['soldiers','archers','griffins','dragons'])g.defenders[type]=d[type];
+ h.lastSiegeRetreat=stamp;
+ return true;
+}
 function applySecondarySiegeOutcome(draft,result){
  if(!draft||!result||!['attacker','defender'].includes(result.winner))return false;
  const eligible=secondarySiegeEligibility(draft.commanderId,draft.castleId);
