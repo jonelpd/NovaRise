@@ -2190,6 +2190,9 @@ async function enemyCastleHeroTurns(epoch){
    if(marker){marker.style.transition='left 150ms linear, top 150ms linear';marker.style.left=x+'%';marker.style.top=y+'%'}
    await new Promise(resolve=>setTimeout(resolve,160));
   }
+  // La campaña puede cambiar durante la última pausa de movimiento.
+  // Nunca capturar recursos ni abrir asedios desde un turno cancelado.
+  if(epoch!==rivalEpoch||s.done||verifiedSiteState()[site.id]!=='rival')return;
   // El asedio solo se solicita si el comandante realmente llegó al castillo.
   if(siegeObjective&&Math.hypot(h.x-siegeObjective.target.x,h.y-siegeObjective.target.y)<=5.5){
    if(queueSecondarySiegeDecision(site.id,siegeObjective.target.id)){
