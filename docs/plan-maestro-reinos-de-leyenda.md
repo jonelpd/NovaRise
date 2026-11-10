@@ -409,3 +409,11 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Ajuste adicional:** tras la reversión, CI mostró un fallo residual en el bloqueo de turno durante la confirmación de asedios (`p0-siege-turn-lock`). Commit `21ac38af`: restaurado el orden de comprobación del encuentro del rival principal antes de evaluar comandantes secundarios, siempre después de liberar el bloqueo. Resultado de CI pendiente.
 
 - **Corrección de regresión P0:** la prueba `p0-siege-turn-lock.test.cjs` exige que el desbloqueo `rivalBusy=false` vaya seguido inmediatamente de la comprobación `rivalEncounterPending`. El comentario intermedio impedía cumplir el contrato de prueba. Commit `c6a46df4` elimina el comentario sin modificar la lógica; pendiente de confirmación CI.
+
+### Avance controlado — planificación de aproximación a fortalezas (2026-11-10)
+
+- **Base verificada:** regresión verde en ejecución `42812685492` tras la reversión de los asedios secundarios incompatibles.
+- **Código:** `bdc256cb`. Los comandantes secundarios evalúan rutas hacia fortalezas del jugador a un máximo de 20 unidades de su castillo, estiman la fuerza de la guarnición y solo priorizan aproximarse cada tercer turno si su fuerza supera un umbral de 1,5 veces la defensa (mínimo 8). La persecución del héroe y la retirada hacia la fortaleza propia conservan prioridad.
+- **Alcance deliberado:** únicamente planificación y movimiento; **no** se ejecuta el asedio al llegar ni se modifica el motor defensivo. Se preservan las pruebas P0 del sistema de asedios.
+- **Validación:** regresión de este cambio pendiente; comprobar además selección de rutas, obstáculos y guardado en navegador.
+- **Pendiente:** añadir un iniciador de asedio secundario compatible con la defensa manual/automática y pruebas específicas antes de activarlo.
