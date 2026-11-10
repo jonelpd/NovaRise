@@ -2093,7 +2093,6 @@ async function rivalTurn(){
     }
    }
    rivalBusy=false;
-   // Resolver el encuentro al terminar la secuencia enemiga, nunca durante la animación.
    if(!battle&&s.rivalEncounterPending){s.rivalEncounterPending=false;rivalEncounter()}
    if(!battle)enemyCommanderEncounter();
    render();
