@@ -557,3 +557,9 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Pruebas `aa66d05b`:** verifican rechazo seguro por fallo de escritura y que el archivo almacenado contiene el ejército original y el asedio pendiente, mientras la batalla utiliza la guarnición.
 - **Regresión `42883212825`:** verde. Una ejecución intermedia previa falló por necesitar adaptar los dobles de prueba a la nueva función de guardado.
 - **Limitación:** al cerrar el navegador durante la batalla se recupera la situación inmediatamente anterior al enfrentamiento y se vuelve a presentar la defensa; no se reanuda la ronda táctica exacta. Pendiente validación manual en navegador.
+
+### Verificación del checkpoint de recuperación — 2026-11-10
+
+- **Código `79182de6`:** la apertura de una defensa manual secundaria verifica que el contenido guardado pueda leerse exactamente antes de intercambiar las tropas del héroe y de la guarnición. Una escritura que falla silenciosamente impide iniciar el combate.
+- **Pruebas `2a918595`:** se comprueba el rechazo por escritura silenciosa fallida y la conservación en almacenamiento del ejército original tras simular bajas y cierre de la pestaña.
+- **Límite:** las pruebas simulan el almacenamiento y el cierre; falta la comprobación real de recarga en navegador. El punto de recuperación conserva el estado anterior al combate, no la ronda exacta.
