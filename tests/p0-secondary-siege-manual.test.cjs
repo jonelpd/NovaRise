@@ -36,3 +36,16 @@ test('manual secondary defense refuses overlapping combat',()=>{
  const f=setup();f.ctx.battle={};assert.equal(f.ctx.launchSecondaryDefensiveSiege(f.draft),false);
  assert.equal(f.s.soldiers,15);
 });
+
+test('failed tactical scene restores hero army and pending siege',()=>{
+ const f=setup();f.ctx.showBattle=()=>{throw new Error('scene unavailable')};
+ assert.equal(f.ctx.launchSecondaryDefensiveSiege(f.draft),false);
+ assert.equal(f.ctx.battle,null);assert.equal(f.s.soldiers,15);assert.equal(f.s.archers,6);
+ assert.equal(f.s.griffins,3);assert.equal(f.s.dragons,1);
+ assert.equal(f.s.pendingSecondarySiege.commanderId,'fort-west');
+});
+test('scene that aborts battle restores hero army and pending siege',()=>{
+ const f=setup();f.ctx.showBattle=()=>{f.ctx.battle=null};
+ assert.equal(f.ctx.launchSecondaryDefensiveSiege(f.draft),false);
+ assert.equal(f.s.soldiers,15);assert.equal(f.s.pendingSecondarySiege.commanderId,'fort-west');
+});
