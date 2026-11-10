@@ -511,3 +511,10 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Pruebas `903b9fed`:** dos casos adicionales de serialización y compatibilidad con valores inválidos, sin alterar el ejército del comandante.
 - **Pages:** el despliegue `42823380887` volvió a fallar porque GitHub indica un despliegue de la revisión `5fff7a74` todavía en curso, aunque las ejecuciones Actions de esa revisión constan como completadas. Es un conflicto de estado del despliegue Pages; requiere revisar el estado de GitHub Pages, no basta con modificar el juego.
 - **Pendiente:** verificar CI y publicación, prueba real de recarga en navegador, defensa manual secundaria con motor táctico independiente.
+
+### Defensa manual contra comandantes secundarios — 2026-11-10
+
+- **Integración `aed8645c`:** diálogo de tres opciones (dirigir defensa, automática, mantener defensa), escenario táctico de la guarnición con las pilas reales del comandante secundario, y cierre independiente `finishSecondaryDefensiveSiege` mediante `applySecondarySiegeOutcome`. El ejército principal se conserva y restaura tras el combate; las bajas se registran en la guarnición y el comandante correspondiente, sin tocar el ejército del rival principal.
+- **Pruebas `31aa708d` y `4ab2a055`:** adaptación de la ventana y tres casos adicionales de victoria, derrota y rechazo de combate simultáneo.
+- **Regresión:** verde `42826385774` para las pruebas del juego.
+- **Pendiente:** prueba visual y manual en navegador (incluyendo recarga y retirada), evaluar protección ante cierre abrupto durante batalla y verificar el despliegue Pages más reciente. El motor de combate existente sigue siendo la base táctica; no afirmar validación end-to-end hasta probarlo.
