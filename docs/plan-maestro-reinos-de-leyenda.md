@@ -467,3 +467,10 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Pruebas `5d4dc305`:** tres pruebas funcionales que serializan/restauran el estado y verifican bajas persistentes, rechazo de una segunda aplicación del mismo asedio y compatibilidad con partidas antiguas o sellos inválidos.
 - **Alcance:** pruebas de serialización y normalización en entorno aislado, no prueba completa de navegación o recarga real del navegador. CI pendiente de confirmar.
 - **Pendiente:** integrar interfaz de defensa y flujo de turnos, además de pruebas end-to-end de guardado y recarga en navegador.
+
+### Preparación de decisiones defensivas secundarias — 2026-11-10
+
+- **Base verificada:** regresión verde `42818834151` de persistencia de retiradas.
+- **Código `a83ef5a2`:** funciones `queueSecondarySiegeDecision` y `recoverSecondarySiegeDecision` para preparar una única decisión pendiente de asedio secundario en el estado serializable de campaña. Rechazan solapamiento con batallas o asedios principales, duplicados del mismo turno y expedientes obsoletos tras recarga. No muestran aún ventana ni disparan combates, para preservar el bloqueo de turnos ya validado.
+- **Pruebas `09cca9ac`:** cinco casos de cola única, JSON guardado/recarga, invalidación por cambios de ejército, exclusión de combates simultáneos y bloqueo de retiradas duplicadas.
+- **Pendiente:** confirmar CI, conectar la cola a una ventana de decisión defensiva y a la resolución del combate, verificar manualmente la experiencia y el guardado en navegador antes de habilitar asedios automáticos.
