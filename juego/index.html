@@ -1675,6 +1675,34 @@ function secondarySiegeBattleDraft(commanderId,castleId){
 }
 // Aplica un resultado ya calculado; no invoca el motor de combate principal.
 // Simulación determinista y aislada: devuelve bajas sin modificar la partida.
+// Prepara una decisión defensiva secundaria sin iniciar todavía el combate.
+// Solo existe un expediente pendiente por campaña para evitar asedios simultáneos.
+function queueSecondarySiegeDecision(commanderId,castleId){
+ if(battle||s.pendingDefensiveSiege||s.pendingSecondarySiege)return false;
+ const draft=secondarySiegeBattleDraft(commanderId,castleId);
+ if(!draft)return false;
+ const h=enemyCastleHeroes()[commanderId];
+ const stamp=commanderId+':'+castleId+':'+h.turns;
+ if(h.lastSiegeRetreat===stamp||h.lastSecondarySiege===stamp)return false;
+ s.pendingSecondarySiege={commanderId,castleId,turn:h.turns,
+  enemyArmyBefore:{...draft.enemyArmyBefore},defenseBefore:{...draft.defenseBefore}};
+ return true;
+}
+// Al recuperar una partida, rechazar decisiones obsoletas sin alterar las tropas.
+function recoverSecondarySiegeDecision(){
+ const pending=s.pendingSecondarySiege;
+ if(!pending)return null;
+ if(typeof pending!=='object'||!pending.commanderId||!pending.castleId){s.pendingSecondarySiege=null;return null}
+ const draft=secondarySiegeBattleDraft(pending.commanderId,pending.castleId);
+ const h=enemyCastleHeroes()[pending.commanderId];
+ const same=(a,b,types)=>a&&b&&types.every(type=>a[type]===b[type]);
+ if(!draft||!h||h.turns!==pending.turn||
+  !same(draft.enemyArmyBefore,pending.enemyArmyBefore,['soldiers','archers'])||
+  !same(draft.defenseBefore,pending.defenseBefore,['soldiers','archers','griffins','dragons'])){
+  s.pendingSecondarySiege=null;return null;
+ }
+ return draft;
+}
 function simulateSecondarySiege(draft){
  if(!draft||!draft.attackers||!draft.defenders)return null;
  const a={soldiers:draft.attackers.soldiers,archers:draft.attackers.archers};
