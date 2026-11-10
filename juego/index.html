@@ -1647,6 +1647,19 @@ function launchDefensiveSiege(site){
  battle={x:s.x,y:s.y,k:'defense:'+site.id,defenseSiteId:site.id,heroArmyBefore:army,defenseBefore:before,defenseEnemyBefore:{soldiers:v.soldiers,archers:v.archers},hp:Math.max(8,v.soldiers*2+v.archers*3),rival:true,fort:true,defending:true,ax:0,ay:2,ex:5,ey:2,range:1,selected:'soldiers',sx:0,sy:2,rx:0,ry:3,round:0};
  showBattle();
 }
+// Preparación aislada de asedios secundarios: no modifica tropas, castillos ni combates.
+function secondarySiegeEligibility(commanderId,castleId){
+ const owners=verifiedSiteState();
+ const site=VERIFIED_MAP_SITES.find(item=>item.id===castleId&&item.kind==='fort');
+ const home=VERIFIED_MAP_SITES.find(item=>item.id===commanderId&&item.kind==='fort');
+ if(!site||!home||owners[castleId]!=='player'||owners[commanderId]!=='rival')return null;
+ const h=enemyCastleHeroes()[commanderId];
+ if(!h||!h.active||h.defeated||h.soldiers+h.archers<=0)return null;
+ if(Math.hypot(h.x-site.x,h.y-site.y)>5.5)return null;
+ const d=siteGarrison(castleId).defenders;
+ const defenders={soldiers:d.soldiers||0,archers:d.archers||0,griffins:d.griffins||0,dragons:d.dragons||0};
+ return {commanderId,castleId,attackers:{soldiers:h.soldiers,archers:h.archers},defenders};
+}
 function rivalCastleConquest(siteId){
  const v=rivalState();if(v.defeated)return '';
  const owners=verifiedSiteState();
