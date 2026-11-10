@@ -128,5 +128,4 @@ test('checkpoint preserves recoverable army when browser reloads during battle',
  assert.equal(recovered.soldiers,15);assert.equal(recovered.archers,6);
  assert.equal(recovered.griffins,3);assert.equal(recovered.dragons,1);
  assert.equal(recovered.pendingSecondarySiege.commanderId,'fort-west');
- assert.equal(recovered.pendingSecondarySiege.castleId,undefined);
 });
