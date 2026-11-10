@@ -2097,6 +2097,12 @@ async function enemyCastleHeroTurns(epoch){
    if(marker){marker.style.transition='left 150ms linear, top 150ms linear';marker.style.left=x+'%';marker.style.top=y+'%'}
    await new Promise(resolve=>setTimeout(resolve,160));
   }
+  // El asedio solo se solicita si el comandante realmente llegó al castillo.
+  if(siegeObjective&&Math.hypot(h.x-siegeObjective.target.x,h.y-siegeObjective.target.y)<=5.5){
+   if(queueSecondarySiegeDecision(site.id,siegeObjective.target.id)){
+    s.message='🏰 '+CASTLE_PROFILES[siegeObjective.target.id].name+' está bajo amenaza de un comandante secundario.';
+   }
+  }
   // Solo reclamar al alcanzar físicamente el recurso; nunca capturarlo a distancia.
   if(objective&&completed===path.length&&Math.hypot(h.x-objective.target.x,h.y-objective.target.y)<=4.2&&verifiedSiteState()[objective.target.id]!=='rival'){
    const previous=verifiedSiteState()[objective.target.id];
@@ -2272,6 +2278,7 @@ async function rivalTurn(){
     }
    }
    rivalBusy=false;
+   if(!battle&&s.pendingSecondarySiege)await promptSecondarySiegeDefense();
    if(!battle&&s.rivalEncounterPending){s.rivalEncounterPending=false;rivalEncounter()}
    if(!battle)enemyCommanderEncounter();
    render();
