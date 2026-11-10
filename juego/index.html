@@ -1705,16 +1705,16 @@ function recoverSecondarySiegeDecision(){
 }
 // Presenta la decisión secundaria con la misma ventana profesional del reino.
 // La defensa manual aún no se habilita hasta integrar el motor de combate específico.
-async function promptSecondarySiegeDefense(){
+async function promptSecondarySiegeDefense(insideRivalTurn=false){
  const campaign=s,pending=s.pendingSecondarySiege;
- if(!pending||battle||rivalBusy)return false;
+ if(!pending||battle||(rivalBusy&&!insideRivalTurn))return false;
  const draft=recoverSecondarySiegeDecision();
  if(!draft)return false;
  const castle=CASTLE_PROFILES[draft.castleId];
  const automatic=await realmConfirm('🏰 Defensa de '+(castle?.name||'la fortaleza'),
   'Un comandante enemigo asedia tu castillo. Puedes resolver el enfrentamiento automáticamente. La defensa dirigida estará disponible cuando se complete su integración.',
   '⚔️ Resolver automáticamente','🛡️ Mantener defensa');
- if(s!==campaign||s.pendingSecondarySiege!==pending||battle||rivalBusy)return false;
+ if(s!==campaign||s.pendingSecondarySiege!==pending||battle||(rivalBusy&&!insideRivalTurn))return false;
  const current=recoverSecondarySiegeDecision();
  if(!current)return false;
  if(!automatic){s.pendingSecondarySiege=null;message('🛡️ La guarnición mantiene su posición. No se han modificado tropas.');return true}
@@ -2277,8 +2277,8 @@ async function rivalTurn(){
      }
     }
    }
+   if(!battle&&s.pendingSecondarySiege)await promptSecondarySiegeDefense(true);
    rivalBusy=false;
-   if(!battle&&s.pendingSecondarySiege)await promptSecondarySiegeDefense();
    if(!battle&&s.rivalEncounterPending){s.rivalEncounterPending=false;rivalEncounter()}
    if(!battle)enemyCommanderEncounter();
    render();
