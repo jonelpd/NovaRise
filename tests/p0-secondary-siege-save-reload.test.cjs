@@ -42,3 +42,16 @@ test('invalid retreat stamp is normalized without losing army',()=>{
  const a=setup(saved);const h=a.ctx.enemyCastleHeroes()['fort-west'];
  assert.equal(h.lastSiegeRetreat,'');assert.equal(h.archers,3);
 });
+
+test('secondary siege decision stamp survives JSON reload',()=>{
+ const saved=base();saved.enemyCastleHeroes['fort-west'].lastSecondarySiege='fort-west:fort-center:4';
+ const a=setup(JSON.parse(JSON.stringify(saved)));
+ const h=a.ctx.enemyCastleHeroes()['fort-west'];
+ assert.equal(h.lastSecondarySiege,'fort-west:fort-center:4');
+ assert.equal(h.soldiers,8);assert.equal(h.archers,3);
+});
+test('invalid secondary siege stamp is normalized without altering troops',()=>{
+ const saved=base();saved.enemyCastleHeroes['fort-west'].lastSecondarySiege={bad:true};
+ const a=setup(saved);const h=a.ctx.enemyCastleHeroes()['fort-west'];
+ assert.equal(h.lastSecondarySiege,'');assert.equal(h.soldiers,8);
+});
