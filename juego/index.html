@@ -1803,8 +1803,10 @@ async function promptSecondarySiegeDefense(insideRivalTurn=false){
  if(s!==campaign||s.pendingSecondarySiege!==pending||battle||(rivalBusy&&!insideRivalTurn))return false;
  const current=recoverSecondarySiegeDecision();
  if(!current)return false;
+ // Cerrar la ventana sin elegir no equivale a ordenar mantener la defensa.
+ if(!['manual','automatic','hold'].includes(choice))return false;
  if(choice==='manual')return launchSecondaryDefensiveSiege(current);
- if(choice!=='automatic'){const h=enemyCastleHeroes()[current.commanderId];h.lastSecondarySiege=current.commanderId+':'+current.castleId+':'+h.turns;s.pendingSecondarySiege=null;message('🛡️ La guarnición mantiene su posición. No se han modificado tropas.');return true}
+ if(choice==='hold'){const h=enemyCastleHeroes()[current.commanderId];h.lastSecondarySiege=current.commanderId+':'+current.castleId+':'+h.turns;s.pendingSecondarySiege=null;message('🛡️ La guarnición mantiene su posición. No se han modificado tropas.');render();return true}
  const result=simulateSecondarySiege(current);
  if(!result)return false;
  const applied=result.winner==='retreat'?applySecondarySiegeRetreat(current,result):applySecondarySiegeOutcome(current,result);
