@@ -348,3 +348,18 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - [ ] Ajustar dificultad mediante partidas de prueba antes de activar cualquier incentivo NVRA.
 
 **Protección de estabilidad:** realizar la implementación en incrementos pequeños y no reemplazar de golpe el sistema rival vigente. No marcar la función como terminada hasta verificar código, regresiones y comportamiento real.
+
+### Seguimiento de implementación — 10 de noviembre de 2026
+
+**Regla de mantenimiento:** actualizar este plan maestro junto con cada cambio funcional posterior, indicando commit, estado de CI, alcance comprobado y trabajo pendiente. No marcar tareas completas únicamente por haber publicado código.
+
+**Implementado hasta ahora:**
+- Registro persistente de comandantes secundarios por las cinco fortalezas, condicionado al control enemigo (commits `97730ba5`, `61276781`).
+- Marcadores visibles y patrullas secuenciales limitadas por turnos (commit `2694ba2c`).
+- Búsqueda de minas y molinos cercanos, rutas transitables y captura condicionada a llegada (commits `42ec12ec`, `9918b38b`).
+- Tesorería individual y reclutamiento limitado; recuperación de tres turnos y continuidad de los comandantes cuando cae el rival principal (commits `9918b38b`, `c489e3fc`).
+- Normalización defensiva de tropas, tesorería y coordenadas de partidas anteriores; los comandantes sin tropas pasan a estado derrotado (commit `65a8390`).
+
+**Validación:** la regresión del juego y la publicación de Pages fueron satisfactorias para `c489e3fc`. La validación de `65a8390` está pendiente de finalizar. La prueba estática general sigue fallando por referencias a un logotipo inexistente en las páginas principales; el flujo de Telegram también presenta un fallo independiente. No declarar CI global verde.
+
+**Pendiente prioritario:** integrar batallas de cada comandante con el ejército concreto, bajas persistentes, asedios, derrota y recuperación; comprobar que las rutas y la toma de recursos funcionan en navegador; añadir pruebas específicas de guardado, recuperación, 2+ héroes y conquistas simultáneas. Los héroes secundarios todavía no participan en combates independientes. NVRA real continúa desactivado.
