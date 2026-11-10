@@ -283,3 +283,33 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - Corregido en `juego/index.html` y `juego/combate-demo.html` mediante bloqueo adicional antes de aplicar cambios.
 - Añadida prueba `tests/p0-castle-menu-turn-lock.test.cjs` para ambas operaciones y páginas.
 - Pendiente ejecución confirmada de GitHub Actions y validación manual en navegador; Fase 1 abierta.
+
+## Cierre técnico de Fase 1 — revisión de evidencias (2026-11-10)
+
+**Estado: pruebas automatizadas superadas; aceptación E2E todavía pendiente.** No se declara la Fase 1 cerrada hasta satisfacer su criterio de salida.
+
+### Evidencia CI verificada
+- GitHub Actions «Game regression tests» [42794290431](https://github.com/jonelpd/NovaRise/actions/runs/42794290431), commit `c6c4e794a26916ca65936ed0bd3465ba8460ab27`: **191 pruebas superadas, 0 fallidas**; el job `game-regression` finalizó correctamente el 2026-11-10. Incluye pruebas Node, simuladas y estáticas; no sustituye una sesión real de navegador.
+- GitHub Pages y su despliegue concluyeron correctamente para el mismo commit (ejecuciones [42794290228](https://github.com/jonelpd/NovaRise/actions/runs/42794290228) y [42794288258](https://github.com/jonelpd/NovaRise/actions/runs/42794288258)).
+- Flujo general «NovaRise - pruebas estáticas» [42794290132](https://github.com/jonelpd/NovaRise/actions/runs/42794290132) **fallido**, por referencias a `assets/Logotipo%20circular%20N%20verde%20ne%C3%B3n.png` no resueltas en `index.html` y `en.html`. Incidencia del sitio web general; no demuestra fallo del motor del juego. Requiere corrección separada y nueva verificación.
+- La última modificación del commit comprobado ajusta únicamente la velocidad visual de desplazamiento en `juego/combate-demo.html`; no consta todavía aceptación manual de esa velocidad.
+
+### Matriz de aceptación E2E (ningún caso marcado como superado sin evidencia)
+| Caso | Procedimiento y resultado esperado | Estado |
+| --- | --- | --- |
+| E2E-01 Campaña completa | Nueva campaña → explorar → cofres/minas → reclutar → combatir → asediar/conquistar → victoria/derrota; interfaz y recursos coherentes | PENDIENTE: navegador real |
+| E2E-02 Economía y turnos | Cambiar turnos, comprobar ingresos/costes, impedir acciones durante turno rival, cancelar diálogos sin mutar recursos | PENDIENTE: navegador real |
+| E2E-03 Persistencia local | Guardar después de combate/conquista, recargar y cerrar/reabrir; comparar día, oro, héroes, tropas, minas, castillos y estado del rival | PENDIENTE: navegador real |
+| E2E-04 Respaldo y corrupción | Con partida de prueba, corromper copia principal, recuperar respaldo y conservar bytes corruptos; probar fallo de cuota/escritura | PENDIENTE: navegador real |
+| E2E-05 Nube y conflictos | Dos sesiones autenticadas de prueba; partidas divergentes, guardar/recuperar, desconectar durante RPC, reconectar sin sobrescribir progreso reciente | PENDIENTE: dos sesiones reales |
+| E2E-06 Escritorio y móvil | Probar mapa, panel lateral, consola inferior, diálogos, escenario de combate, selección, animación y accesibilidad en navegadores reales | PENDIENTE: dispositivos reales |
+| E2E-07 Demo y juego principal | Confirmar paridad de reglas, regreso al mapa tras victoria/derrota y velocidad reducida solo en la demostración | PENDIENTE: navegador real |
+
+### Reglas para completar la aceptación
+1. Usar **partidas y cuentas de prueba**, nunca campañas reales de usuarios; respaldar/exportar antes de probar recuperación.
+2. Registrar para cada caso fecha, navegador/dispositivo, commit, pasos, resultado, evidencia y severidad de incidencias.
+3. Ante un defecto crítico de pérdida de progreso, detener la aceptación, corregir con regresión y volver a ejecutar el caso afectado.
+4. No marcar como E2E aprobado una comprobación Node ni un workflow verde.
+5. Al terminar, actualizar este plan y `docs/auditoria-juego-2026-11-03.md` con resultados reales; solo entonces decidir cierre formal de Fase 1 y paso completo a Fase 2.
+
+**Próxima acción prioritaria:** ejecutar E2E-01 y E2E-03 en navegador real, seguidos de E2E-05 con dos sesiones de prueba. La Fase 2 puede continuar únicamente con cambios incrementales que no bloqueen la aceptación de la Fase 1.
