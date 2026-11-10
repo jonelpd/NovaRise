@@ -481,3 +481,11 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Pruebas `b617ba4b`:** cuatro pruebas de confirmación, cancelación, combate simultáneo y decisión obsoleta.
 - **Limitación importante:** el diálogo existe como función aislada pero aún **no está conectado a los turnos enemigos**; la defensa manual tampoco está habilitada. No presentar esta fase como asedios secundarios jugables. Se requiere integración específica del motor manual y un control de concurrencia antes de conectar el disparador.
 - **Pendiente:** CI de regresión, conectar el disparador en turno enemigo, verificar guardado/recarga real y habilitar defensa manual.
+
+### Activación de asedios secundarios durante el turno rival — 2026-11-10
+
+- **Regresión previa:** verde `42822024528` para diálogo de defensa.
+- **Código `276f0022`:** los comandantes secundarios solicitan un asedio solo al aproximarse realmente a un castillo del jugador (distancia máxima 5,5), conservando los requisitos previos de superioridad militar y planificación cada tres turnos. Al concluir el turno rival, tras liberar el bloqueo, se muestra la ventana de defensa secundaria si existe una solicitud pendiente. El asedio principal conserva su ruta independiente.
+- **Pruebas `e64f7e2e`:** cuatro verificaciones de integración de disparador por proximidad, presentación de diálogo tras liberar bloqueo, preservación de asedio principal y requisitos tácticos.
+- **Alcance actual:** opción de resolución automática o mantener la defensa; todavía no existe combate manual secundario. No se ha realizado aún prueba end-to-end en navegador y CI está pendiente.
+- **Pendiente prioritario:** verificar regresiones, revisar carreras asíncronas, probar visualmente el diálogo y desarrollar el combate manual secundario sin reutilizar indebidamente el ejército del rival principal.
