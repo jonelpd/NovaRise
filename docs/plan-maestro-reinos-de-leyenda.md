@@ -391,3 +391,10 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Seguridad:** el encuentro no se inicia si ya existe una batalla; se mantiene el ejército concreto y la atribución individual de bajas incorporados anteriormente.
 - **Validación:** CI de este cambio pendiente; se requieren pruebas manuales de combate, movimiento, fin de turno, recarga y coexistencia con asedios.
 - **Pendiente:** asedios ofensivos de comandantes secundarios, pruebas específicas y mejoras del equilibrio de IA. No activar recompensas NVRA.
+
+### Avance incremental — asedios de comandantes secundarios (2026-11-10)
+
+- **Código:** `33a32c0`. Los comandantes secundarios pueden iniciar un asedio si llegan físicamente a una fortaleza del jugador (radio 5,5). El motor de asedios acepta un identificador de comandante para utilizar sus tropas y aplicar las bajas a su ejército, no al rival principal.
+- **Defensa:** las guarniciones con tropas conservan la opción de defensa manual o automática. Se transmite el comandante atacante al diálogo y a la batalla defensiva. Sin guarnición, se utiliza la resolución automática ya existente.
+- **Limitaciones:** los comandantes todavía no planifican rutas de ataque específicas hacia fortalezas; solo asedian si llegan a ellas. El motor y los casos de concurrencia necesitan pruebas E2E de dos comandantes, recarga, victoria/derrota y persistencia de guarniciones.
+- **Validación:** CI de este commit pendiente. No declarar la fase completada ni prometer comportamiento verificado en navegador.
