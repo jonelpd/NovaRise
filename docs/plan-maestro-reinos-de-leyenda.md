@@ -452,3 +452,10 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Código `55095881`:** `simulateSecondarySiege(draft)` simula hasta ocho rondas, calcula bajas deterministas y devuelve copias del estado final y un registro de rondas. Nunca modifica el estado del juego. Si tras ocho rondas sobreviven ambos bandos devuelve `retreat` y no una victoria falsa; este resultado todavía no puede aplicarse mediante `applySecondarySiegeOutcome`.
 - **Pruebas `69af0666`:** cinco casos sobre inmutabilidad, determinismo, validación de ejércitos, conquista con defensores eliminados y retirada.
 - **Pendiente:** CI de esta entrega, diseñar persistencia y tratamiento de retirada sin pérdida incorrecta de tropas, e integrar decisiones defensivas del jugador antes de activar ataques automáticos.
+
+### Retiradas de asedios secundarios — 2026-11-10
+
+- **Regresión anterior confirmada:** ejecución verde `42817699947` del simulador.
+- **Código `14a06d7c`:** función aislada `applySecondarySiegeRetreat(draft,result)` que valida la retirada, compara instantáneas originales de tropas, aplica únicamente bajas válidas, conserva el castillo en manos del jugador y registra `lastSiegeRetreat` en el comandante para impedir doble aplicación en el mismo turno. No activa todavía el asedio en la partida.
+- **Pruebas `09ff2e6d`:** cinco casos de conservación de ejércitos y propiedad, aplicación única, rechazo de instantáneas obsoletas, bajas inválidas y supervivencia de ambos bandos.
+- **Pendiente:** confirmar CI y conectar cálculo/resultado con interfaz de defensa, guardado/recarga y turnos enemigos tras pruebas integrales.
