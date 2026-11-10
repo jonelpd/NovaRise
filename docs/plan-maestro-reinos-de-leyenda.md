@@ -489,3 +489,9 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Pruebas `e64f7e2e`:** cuatro verificaciones de integración de disparador por proximidad, presentación de diálogo tras liberar bloqueo, preservación de asedio principal y requisitos tácticos.
 - **Alcance actual:** opción de resolución automática o mantener la defensa; todavía no existe combate manual secundario. No se ha realizado aún prueba end-to-end en navegador y CI está pendiente.
 - **Pendiente prioritario:** verificar regresiones, revisar carreras asíncronas, probar visualmente el diálogo y desarrollar el combate manual secundario sin reutilizar indebidamente el ejército del rival principal.
+
+### Corrección del bloqueo del turno durante la defensa secundaria — 2026-11-10
+
+- La primera integración `e64f7e2e` reveló un fallo en la regresión `42822823863`: se liberaba `rivalBusy` antes de concluir la nueva decisión, incumpliendo la protección contra encuentros simultáneos.
+- **Corrección `25203ccd`:** el diálogo secundario se procesa dentro del turno rival manteniendo el bloqueo activo; solo después se libera el turno y pueden comenzar los encuentros pendientes. La llamada interna usa `promptSecondarySiegeDefense(true)` y las llamadas externas continúan bloqueadas mientras `rivalBusy`.
+- **Prueba `57b9599e`:** ajustada para exigir el orden correcto de diálogo y desbloqueo; nueva regresión pendiente.
