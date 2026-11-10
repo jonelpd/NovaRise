@@ -424,3 +424,10 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Pruebas añadidas:** commit `258160d2`, archivo `tests/p0-secondary-commander-siege-planning.test.cjs`. Cinco comprobaciones protegen la selección de castillos del jugador, distancia máxima, evaluación de guarniciones, prioridad de persecución, límite de movimiento y ausencia de llamadas directas al motor de asedios.
 - **Estado:** pendiente de confirmar CI del nuevo archivo de pruebas. Son pruebas de regresión estáticas sobre código; no sustituyen simulaciones de combate en navegador.
 - **Próximo paso:** integración gradual de asedios secundarios con pruebas funcionales y preservación del motor defensivo original.
+
+### Preparación segura de asedios secundarios — 2026-11-10
+
+- **Regresión previa confirmada verde:** ejecución `42815470059` (planificación ofensiva y sus cinco pruebas).
+- **Código `90dd9fea`:** función aislada `secondarySiegeEligibility(commanderId,castleId)`. Valida titularidad de castillo de origen y destino, ejército activo, derrota, proximidad física (5,5) y devuelve copias de atacantes y defensores. No inicia batallas ni modifica tropas, guardado o guarniciones.
+- **Pruebas `08753a97`:** cinco casos de ejecución funcional de la nueva función: aceptación válida, propiedad, comandante derrotado/inactivo/sin tropas, distancia y ausencia de mutaciones.
+- **Estado:** ejecución CI de estos cambios pendiente. El inicio efectivo de asedios secundarios sigue **desactivado** hasta garantizar compatibilidad con el sistema defensivo y las pruebas P0 existentes.
