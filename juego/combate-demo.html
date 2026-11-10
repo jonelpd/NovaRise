@@ -819,7 +819,7 @@ function duelEnemyTurn(done){
   let n=0;const advance=()=>{
    if(battle!==current)return;
    if(n>=Math.min(steps.length,u.id==='archers'?1:2)){setTimeout(next,220);return}
-   [u.x,u.y]=steps[n++];if(u.id===current.targetEnemyId){current.ex=u.x;current.ey=u.y}drawTactics();setTimeout(advance,1350)
+   [u.x,u.y]=steps[n++];if(u.id===current.targetEnemyId){current.ex=u.x;current.ey=u.y}drawTactics();setTimeout(advance,2200)
   };advance()
  };next()
 }
@@ -926,7 +926,7 @@ function enemyAdvance(onComplete){
     const animate=()=>{
      if(battle!==current)return;
      if(index>=path.length){current.moving=false;current.defending=false;current.round++;if(onComplete)onComplete();return}
-     [current.ex,current.ey]=path[index++];drawTactics();setTimeout(animate,1350);
+     [current.ex,current.ey]=path[index++];drawTactics();setTimeout(animate,2200);
     };
     animate();return;
    }
@@ -961,7 +961,7 @@ function tacticalMove(x,y){
   if(battle!==current)return;
   if(i>=steps.length){current.moving=false;battleFinishAction('Movimiento realizado.');return}
   place(...steps[i++]);drawTactics();
-  setTimeout(advance,1300);
+  setTimeout(advance,2100);
  };
  advance();
 }
