@@ -530,3 +530,10 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Corrección `18c4c4af`:** el cierre de defensa secundaria usa las unidades atacantes supervivientes reales del escenario y rechaza una victoria cuando quedan enemigos vivos o una derrota cuando queda guarnición viva. No se cierra el combate ni se reemplazan tropas ante resultados prematuros.
 - **Pruebas `445b7a47`:** casos adicionales para impedir victoria/derrota prematura y adaptar la derrota válida a la eliminación de las cuatro clases defensoras.
 - **Pendiente:** resultado de CI, validación de batalla real en navegador y guardado posterior.
+
+### Validación de instantáneas antes de la defensa manual — 2026-11-10
+
+- **Corrección `cb72e967`:** el inicio de una defensa manual secundaria compara las instantáneas de las tropas atacantes y defensoras con la decisión vigente. Si están desactualizadas, rechaza abrir el escenario sin tocar el ejército principal.
+- **Pruebas `aa3f3b67`:** rechazo de cambios tanto en la guarnición como en el comandante atacante; se verificó que la partida conserva el ejército y la decisión pendiente.
+- **Regresión `42879992410`:** completada correctamente. La ejecución intermedia `42879953976` falló por un error en el montaje de la prueba (ambas instantáneas compartían el mismo objeto), corregido antes de esta validación.
+- **Pendiente:** prueba visual completa en navegador y evaluación del guardado al cerrar inesperadamente una batalla.
