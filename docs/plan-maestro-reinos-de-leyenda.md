@@ -544,3 +544,9 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Pruebas `1ffae634`:** cuatro casos de reanudación, ausencia de asedio, cambio de campaña y bloqueo por combate o turno enemigo.
 - **Compatibilidad `eeac1379`:** se corrigió una incompatibilidad con las pruebas aisladas de carga, que ejecutan `load()` sin los auxiliares globales; la reanudación solo se invoca cuando existe un asedio pendiente y está disponible la función.
 - **Regresión `42881256150`:** verde. Queda pendiente comprobar en navegador el recorrido completo de cierre y reapertura de una partida con decisión pendiente.
+
+### Recuperación ante fallo de confirmación de batalla secundaria — 2026-11-10
+
+- **Corrección `3079b515`:** si el motor rechaza aplicar un resultado manual (por ejemplo, por datos obsoletos), se restaura el ejército principal, se cierra el escenario y se conserva el expediente original del asedio para validarlo nuevamente. No se marca falsamente el asedio como completado.
+- **Prueba `261b5044`:** rechazo del resultado con conservación de tropas, expediente y sello del comandante. La regresión anterior `42881667096` fue verde; pendiente de confirmar la ejecución de esta prueba nueva.
+- **Limitación:** el progreso táctico dentro de una batalla activa no se guarda. La política actual evita persistir el estado temporal de la guarnición como si fuese el ejército principal; aún debe validarse en navegador la recuperación tras cierre abrupto.
