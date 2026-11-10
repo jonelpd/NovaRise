@@ -1242,11 +1242,11 @@ function setupBattleMagic(){
  const arena=root.querySelector('.battle-arena');if(arena)arena.before(bar);
 }
 function updateBattle(t='Selecciona una unidad, muévela a una casilla resaltada o ataca al enemigo.'){if(!battle)return;if(battle.selected==='soldiers'&&s.soldiers===0)battle.selected='archers';if(!battleUnitReady(battle.selected))battle.selected=battleNextUnit()||battle.selected;drawTactics();renderBattleInitiative();renderBattleMagic();renderHeroPanel();$('ally').textContent=`${s.soldiers} soldados · ${s.archers} arqueros · ${s.griffins} grifos · ${s.dragons} dragones · fuerza ${strength()}`;$('enemy').textContent=battle.enemyArmyBefore?`Reino Umbrío · ${battle.enemyArmyBefore.soldiers} soldados · ${battle.enemyArmyBefore.archers} arqueros · resistencia ${Math.max(0,battle.hp)} · ronda ${battle.round}`:`Resistencia ${Math.max(0,battle.hp)} · ronda ${battle.round}`;$('selected-unit').textContent='Unidad seleccionada: '+(battle.selected==='soldiers'?'Soldados · alcance 1':battle.selected==='archers'?'Arqueros · alcance 3':battle.selected==='griffins'?'Grifos · vuelo 3, alcance 1':'Dragones · vuelo 2, alcance 2');$('unit-soldier').disabled=!!battle.moving||!battleUnitReady('soldiers');$('unit-archer').disabled=!!battle.moving||!battleUnitReady('archers');$('unit-griffin').disabled=!!battle.moving||!battleUnitReady('griffins');$('unit-dragon').disabled=!!battle.moving||!battleUnitReady('dragons');$('battle-log').textContent=t}
-function loseBattle(){if(battle&&battle.defenseSiteId){finishDefensiveSiege(false);return}if(battle?.enemyStacks&&battle.rival){const v=rivalState();for(const u of battle.enemyStacks){if(u.id==='soldiers'||u.id==='archers')v[u.id]=Math.max(0,u.count)}}const rivalFight=!!(battle&&battle.rival);battle=null;$('modal').hidden=true;message(rivalFight?'El Reino Umbrío ha vencido a tu ejército. Recluta nuevas tropas para continuar.':'Tu ejército ha sido derrotado. Recluta nuevas tropas.');render()}
+function loseBattle(){if(battle&&battle.defenseSiteId){finishDefensiveSiege(false);return}if(battle?.enemyStacks&&battle.rival){const v=battle.enemyCommanderId?s.enemyCastleHeroes?.[battle.enemyCommanderId]:rivalState();if(v)for(const u of battle.enemyStacks){if(u.id==='soldiers'||u.id==='archers')v[u.id]=Math.max(0,u.count)}}const rivalFight=!!(battle&&battle.rival);battle=null;$('modal').hidden=true;message(rivalFight?'El Reino Umbrío ha vencido a tu ejército. Recluta nuevas tropas para continuar.':'Tu ejército ha sido derrotado. Recluta nuevas tropas.');render()}
 function hitResolveVictory(){if(!battle)return;if(battle.defenseSiteId){finishDefensiveSiege(true);return}
  if(battle.rivalCastle){verifiedSiteState().rival='player';const v=rivalState();v.defeated=true;v.recovery=0;v.soldiers=0;v.archers=0;s.moves=Math.max(0,s.moves-1);s.done=true;const note=awardHeroExperience(100);battle=null;$('modal').hidden=true;s.message='🏆 ¡Victoria! Has conquistado el castillo principal del Reino Umbrío y ganado la campaña.'+note;render();return}
  if(battle.siteId){
-  if(battle.castleHeroDefender){const v=rivalState();v.defeated=true;v.recovery=0;v.soldiers=0;v.archers=0}
+  if(battle.castleHeroDefender){const v=battle.enemyCommanderId?s.enemyCastleHeroes?.[battle.enemyCommanderId]:rivalState();if(v){v.defeated=true;v.active=false;v.recovery=0;v.soldiers=0;v.archers=0}}
   const id=battle.siteId,label=battle.siteLabel||'Castillo independiente';
   verifiedSiteState()[id]='player';
   siteGarrison(id);
@@ -1518,19 +1518,26 @@ async function castleGarrisonMenu(site){
  if(choice==='2')return manageCastleGarrison(site);
 }
 let pendingSiteInteraction=null;
-function rivalHeroDefendingCastle(site){
+function castleDefendingCommander(site){
+ if(site.kind==='fort'&&verifiedSiteState()[site.id]==='rival'){
+  const h=enemyCastleHeroes()[site.id];
+  if(h&&h.active&&!h.defeated&&Math.hypot(h.x-site.x,h.y-site.y)<=7.5)return {hero:h,id:site.id};
+ }
  const v=rivalState();
- return !v.defeated&&Math.hypot(v.x-site.x,v.y-site.y)<=7.5;
+ return !v.defeated&&Math.hypot(v.x-site.x,v.y-site.y)<=7.5?{hero:v,id:null}:null;
 }
+function rivalHeroDefendingCastle(site){return !!castleDefendingCommander(site)}
 function rivalCastleHeroBattle(site){
- const v=rivalState(),soldiers=Math.max(0,v.soldiers),archers=Math.max(0,v.archers);
+ const defender=castleDefendingCommander(site);
+ if(!defender)return false;
+ const v=defender.hero,soldiers=Math.max(0,v.soldiers),archers=Math.max(0,v.archers);
  const stacks=[
   {id:'soldiers',count:soldiers,hp:soldiers*2,hpPerUnit:2,x:5,y:2},
   {id:'archers',count:archers,hp:archers*3,hpPerUnit:3,x:5,y:4}
  ].filter(u=>u.count>0);
  if(!stacks.length)return false;
  battle={x:s.x,y:s.y,k:'castle-hero:'+site.id,siteId:site.kind==='fort'?site.id:null,
-  siteLabel:site.label,rivalCastle:site.kind==='rival',castleHeroDefender:true,
+  siteLabel:site.label,rivalCastle:site.kind==='rival',castleHeroDefender:true,enemyCommanderId:defender.id,
   rival:true,fort:true,hp:stacks.reduce((n,u)=>n+u.hp,0),
   enemyArmyBefore:{soldiers,archers},enemyStacks:stacks,
   targetEnemyId:stacks[0].id,defending:false,
