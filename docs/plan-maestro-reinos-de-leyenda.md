@@ -518,3 +518,9 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Pruebas `31aa708d` y `4ab2a055`:** adaptación de la ventana y tres casos adicionales de victoria, derrota y rechazo de combate simultáneo.
 - **Regresión:** verde `42826385774` para las pruebas del juego.
 - **Pendiente:** prueba visual y manual en navegador (incluyendo recarga y retirada), evaluar protección ante cierre abrupto durante batalla y verificar el despliegue Pages más reciente. El motor de combate existente sigue siendo la base táctica; no afirmar validación end-to-end hasta probarlo.
+
+### Protección ante fallo al abrir la defensa manual secundaria — 2026-11-10
+
+- **Código `22cf6cd2`:** apertura de escenario táctico protegida. Si `showBattle()` lanza un error o cancela el combate, se restauran las cuatro tropas del héroe principal y la decisión de asedio pendiente; no se confirma una batalla inexistente.
+- **Pruebas `85b93838`:** dos escenarios de rollback por error y por cancelación de escena.
+- **Estado:** regresión pendiente; revisión visual del usuario diferida hasta que pueda acceder a su ordenador. Continúa pendiente probar en navegador la defensa secundaria completa.
