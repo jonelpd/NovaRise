@@ -1660,6 +1660,19 @@ function secondarySiegeEligibility(commanderId,castleId){
  const defenders={soldiers:d.soldiers||0,archers:d.archers||0,griffins:d.griffins||0,dragons:d.dragons||0};
  return {commanderId,castleId,attackers:{soldiers:h.soldiers,archers:h.archers},defenders};
 }
+// Construye un expediente táctico independiente sin iniciar combate ni modificar estado.
+function secondarySiegeBattleDraft(commanderId,castleId){
+ const eligible=secondarySiegeEligibility(commanderId,castleId);
+ if(!eligible)return null;
+ const attackers={...eligible.attackers},defenders={...eligible.defenders};
+ const stacks=[
+  {id:'soldiers',count:attackers.soldiers,hp:attackers.soldiers*2,hpPerUnit:2,x:5,y:2},
+  {id:'archers',count:attackers.archers,hp:attackers.archers*3,hpPerUnit:3,x:5,y:4}
+ ].filter(unit=>unit.count>0);
+ return {commanderId,castleId,attackers,defenders,enemyStacks:stacks,
+  enemyArmyBefore:{...attackers},defenseBefore:{...defenders},
+  hp:stacks.reduce((total,unit)=>total+unit.hp,0)};
+}
 function rivalCastleConquest(siteId){
  const v=rivalState();if(v.defeated)return '';
  const owners=verifiedSiteState();
