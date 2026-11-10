@@ -5,7 +5,7 @@ const fs=require('node:fs');
 const path=require('node:path');
 const vm=require('node:vm');
 const html=fs.readFileSync(path.join(__dirname,'..','juego','index.html'),'utf8');
-const a=html.indexOf('async function promptSecondarySiegeDefense('),b=html.indexOf('function simulateSecondarySiege(',a);
+const a=html.indexOf('let secondarySiegeDialogOpen=false;'),b=html.indexOf('function simulateSecondarySiege(',a);
 assert.ok(a>=0&&b>a);
 function fixture(confirm=true){
  const s={pendingSecondarySiege:{commanderId:'fort-west',castleId:'fort-center',turn:2}};
@@ -29,4 +29,20 @@ test('secondary siege prompt refuses an active battle',async()=>{
 test('secondary siege prompt refuses stale decision after asynchronous confirmation',async()=>{
  const f=fixture();f.ctx.realmDialog=async()=>{f.s.pendingSecondarySiege={commanderId:'other'};return true};
  assert.equal(await f.run(),false);assert.equal(f.calls.apply,0);
+});
+
+test('reload cannot open duplicate secondary siege dialogs',async()=>{
+ const f=fixture();let resolveDialog,calls=0;
+ f.ctx.realmDialog=()=>{calls++;return new Promise(resolve=>{resolveDialog=resolve})};
+ const first=f.run();const duplicate=f.run();
+ assert.equal(await duplicate,false);assert.equal(calls,1);
+ resolveDialog('hold');assert.equal(await first,true);
+ assert.equal(f.s.pendingSecondarySiege,null);
+});
+test('failed dialog releases lock for a later retry',async()=>{
+ const f=fixture();let calls=0;
+ f.ctx.realmDialog=async()=>{calls++;throw new Error('dialog unavailable')};
+ assert.equal(await f.run(),false);
+ f.ctx.realmDialog=async()=>{calls++;return 'hold'};
+ assert.equal(await f.run(),true);assert.equal(calls,2);
 });
