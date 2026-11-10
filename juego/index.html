@@ -1703,6 +1703,32 @@ function recoverSecondarySiegeDecision(){
  }
  return draft;
 }
+// Presenta la decisión secundaria con la misma ventana profesional del reino.
+// La defensa manual aún no se habilita hasta integrar el motor de combate específico.
+async function promptSecondarySiegeDefense(){
+ const campaign=s,pending=s.pendingSecondarySiege;
+ if(!pending||battle||rivalBusy)return false;
+ const draft=recoverSecondarySiegeDecision();
+ if(!draft)return false;
+ const castle=CASTLE_PROFILES[draft.castleId];
+ const automatic=await realmConfirm('🏰 Defensa de '+(castle?.name||'la fortaleza'),
+  'Un comandante enemigo asedia tu castillo. Puedes resolver el enfrentamiento automáticamente. La defensa dirigida estará disponible cuando se complete su integración.',
+  '⚔️ Resolver automáticamente','🛡️ Mantener defensa');
+ if(s!==campaign||s.pendingSecondarySiege!==pending||battle||rivalBusy)return false;
+ const current=recoverSecondarySiegeDecision();
+ if(!current)return false;
+ if(!automatic){s.pendingSecondarySiege=null;message('🛡️ La guarnición mantiene su posición. No se han modificado tropas.');return true}
+ const result=simulateSecondarySiege(current);
+ if(!result)return false;
+ const applied=result.winner==='retreat'?applySecondarySiegeRetreat(current,result):applySecondarySiegeOutcome(current,result);
+ if(!applied)return false;
+ const hero=enemyCastleHeroes()[current.commanderId];
+ hero.lastSecondarySiege=current.commanderId+':'+current.castleId+':'+hero.turns;
+ s.pendingSecondarySiege=null;
+ message(result.winner==='attacker'?'⚔️ El comandante enemigo ha conquistado '+(castle?.name||'la fortaleza')+'.':
+  result.winner==='retreat'?'🛡️ El atacante se retira y la fortaleza resiste.':'🛡️ La guarnición ha derrotado al atacante.');
+ render();return true;
+}
 function simulateSecondarySiege(draft){
  if(!draft||!draft.attackers||!draft.defenders)return null;
  const a={soldiers:draft.attackers.soldiers,archers:draft.attackers.archers};
