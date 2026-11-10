@@ -1674,6 +1674,42 @@ function secondarySiegeBattleDraft(commanderId,castleId){
   hp:stacks.reduce((total,unit)=>total+unit.hp,0)};
 }
 // Aplica un resultado ya calculado; no invoca el motor de combate principal.
+// Simulación determinista y aislada: devuelve bajas sin modificar la partida.
+function simulateSecondarySiege(draft){
+ if(!draft||!draft.attackers||!draft.defenders)return null;
+ const a={soldiers:draft.attackers.soldiers,archers:draft.attackers.archers};
+ const d={soldiers:draft.defenders.soldiers,archers:draft.defenders.archers,griffins:draft.defenders.griffins,dragons:draft.defenders.dragons};
+ const valid=n=>Number.isInteger(n)&&n>=0;
+ if(!Object.values(a).every(valid)||!Object.values(d).every(valid)||a.soldiers+a.archers===0)return null;
+ const attackPower=()=>a.soldiers+2*a.archers;
+ const defensePower=()=>d.soldiers+2*d.archers+5*d.griffins+14*d.dragons;
+ const reduce=(army,damage,types,costs)=>{
+  let remaining=damage;
+  for(const type of types){
+   if(remaining<=0)break;
+   const loss=Math.min(army[type],Math.floor(remaining/costs[type]));
+   army[type]-=loss;remaining-=loss*costs[type];
+  }
+  if(remaining>0){const type=types.find(type=>army[type]>0);if(type)army[type]--}
+ };
+ const rounds=[];
+ for(let round=1;round<=8&&attackPower()>0&&defensePower()>0;round++){
+  const defenderDamage=Math.max(1,Math.ceil((2*d.archers+3*d.griffins+7*d.dragons+d.soldiers+2*d.griffins+5*d.dragons+2)/5));
+  reduce(a,defenderDamage,['soldiers','archers'],{soldiers:1,archers:2});
+  if(attackPower()>0){
+   const attackerDamage=Math.max(1,Math.ceil(attackPower()/5));
+   reduce(d,attackerDamage,['soldiers','archers','griffins','dragons'],{soldiers:1,archers:2,griffins:5,dragons:14});
+  }
+  rounds.push({round,attackers:{...a},defenders:{...d}});
+ }
+ // El empate táctico favorece a la defensa; el atacante se retira sin conquista.
+ const winner=defensePower()===0&&attackPower()>0?'attacker':'defender';
+ if(winner==='defender'&&attackPower()>0){
+  // La retirada no equivale a la destrucción del ejército.
+  return {winner:'retreat',attackers:a,defenders:d,rounds};
+ }
+ return {winner,attackers:a,defenders:d,rounds};
+}
 function applySecondarySiegeOutcome(draft,result){
  if(!draft||!result||!['attacker','defender'].includes(result.winner))return false;
  const eligible=secondarySiegeEligibility(draft.commanderId,draft.castleId);
