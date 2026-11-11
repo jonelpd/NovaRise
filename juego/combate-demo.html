@@ -1205,7 +1205,12 @@ function awardHeroExperience(amount){
  if(!Number.isSafeInteger(amount)||amount<=0)return '';
  const before=heroLevel();
  const current=Number.isSafeInteger(s.experience)&&s.experience>=0?s.experience:0;
- s.experience=Math.min(100000000,current+amount);
+ // La experiencia disminuye por campaña igual que los ingresos de oro.
+ // Nunca se retira experiencia acumulada ni se anula una recompensa positiva.
+ const campaign=Number.isInteger(s.campaignLevel)?s.campaignLevel:1;
+ const factor=Math.max(0.45,1-0.08*Math.max(0,Math.min(7,campaign-1)));
+ const earned=Math.max(1,Math.floor(amount*factor));
+ s.experience=Math.min(100000000,current+earned);
  const after=heroLevel();
  return after>before?' 🌟 ¡Héroe de nivel '+after+'! Fuerza y magia mejoradas.':'';
 }
