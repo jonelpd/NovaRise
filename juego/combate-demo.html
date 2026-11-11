@@ -1751,10 +1751,12 @@ function rivalCastleConquest(siteId){
  const details=report.length?report.join(' | '):'Sin defensores desplegados';
  return outcome+' '+details;
 }
+function campaignGoldFactor(){const level=Number.isInteger(s.campaignLevel)?s.campaignLevel:1;return Math.max(0.45,1-0.08*Math.max(0,Math.min(7,level-1)))}
+function campaignGoldIncome(amount){return Math.max(0,Math.floor(amount*campaignGoldFactor()))}
 function applyVerifiedSiteTurn(){
  const owned=verifiedSiteState();
  const count=kind=>VERIFIED_MAP_SITES.filter(site=>site.kind===kind&&owned[site.id]==='player').length;
- s.gold+=count('fort')*15;
+ s.gold+=campaignGoldIncome(count('fort')*15);
  s.crystals+=count('mine')*10;
  for(const site of VERIFIED_MAP_SITES){
   if(site.kind==='fort'&&owned[site.id]==='player'){
@@ -1936,11 +1938,11 @@ async function rivalTurn(){
   else s.message='El Reino Umbrío reconstruye su ejército ('+v.recovery+'/3 turnos).';
   rivalBusy=false;
   s.turn++;s.moves=s.faction==='Alianza del Alba'?5:4;
-  s.gold+=40+25*s.claimed.length+(s.buildings.includes('market')?30:0)+(s.faction==='Guardianes del Bosque'?15:0);
+  s.gold+=campaignGoldIncome(40+25*s.claimed.length+(s.buildings.includes('market')?30:0)+(s.faction==='Guardianes del Bosque'?15:0));
   if(s.buildings.includes('barracks'))s.soldiers++;
   s.crystals+=mineYield();applyVerifiedSiteTurn();render();return
  }
- v.gold+=65+20*v.claimed.filter(k=>k==='4,7').length+VERIFIED_MAP_SITES.filter(site=>site.kind==='mine'&&verifiedSiteState()[site.id]==='rival').length*10;
+ v.gold+=65+12*Math.max(0,Math.min(20,(Number.isInteger(s.campaignLevel)?s.campaignLevel:1)-1))+20*v.claimed.filter(k=>k==='4,7').length+VERIFIED_MAP_SITES.filter(site=>site.kind==='mine'&&verifiedSiteState()[site.id]==='rival').length*10;
  const recruits=Math.min(2,Math.floor(v.gold/30));v.soldiers+=recruits;v.gold-=30*recruits;
  if(v.turns%2===0&&v.gold>=50){v.archers++;v.gold-=50}
  try{
@@ -2002,7 +2004,7 @@ async function rivalTurn(){
   // Keep the rival turn locked while the siege decision is awaiting the player.
   if(epoch===rivalEpoch&&!s.done){
    s.turn++;s.moves=s.faction==='Alianza del Alba'?5:4;
-   s.gold+=40+25*s.claimed.length+(s.buildings.includes('market')?30:0)+(s.faction==='Guardianes del Bosque'?15:0);
+   s.gold+=campaignGoldIncome(40+25*s.claimed.length+(s.buildings.includes('market')?30:0)+(s.faction==='Guardianes del Bosque'?15:0));
    if(s.buildings.includes('barracks'))s.soldiers++;
    s.crystals+=mineYield();applyVerifiedSiteTurn();
    lastCameraKey=null;render();
