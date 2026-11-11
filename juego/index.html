@@ -1597,7 +1597,7 @@ function interactVerifiedSite(site){
   if(state[site.id]!=='player'){
    if(s.moves<1)return message('Necesitas al menos un punto de movimiento para iniciar el asedio.');
    if(rivalHeroDefendingCastle(site)&&rivalCastleHeroBattle(site))return;
-   const profile=CASTLE_PROFILES[site.id],guard=profile.guard;
+   const profile=CASTLE_PROFILES[site.id],guard=siteGarrison(site.id).guard;
    const hp=guard.soldiers+guard.archers*2+guard.griffins*5+guard.dragons*14+(state[site.id]==='rival'?Math.max(8,rivalState().soldiers+2*rivalState().archers):0);
    battle={x:s.x,y:s.y,k:'site:'+site.id,siteId:site.id,siteLabel:profile.name,
     hp,defending:false,fort:true,ax:0,ay:2,ex:5,ey:2,range:1,
