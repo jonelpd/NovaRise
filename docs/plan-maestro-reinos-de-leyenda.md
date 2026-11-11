@@ -624,3 +624,9 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Dificultad inicial:** el rival recibe +4 soldados, +2 arqueros y +80 de oro por cada nivel adicional. La campaña antigua sin `campaignLevel` se interpreta como nivel 1.
 - **Límites:** aún no hay mapas diferentes, pantalla de elección de siguiente nivel, ni escalado exhaustivo de guarniciones y comandantes secundarios; el nivel 50 es un tope provisional.
 - **Pendiente prioritario:** verificar en navegador que la victoria no bloquea el movimiento, que el nuevo nivel persiste tras recargar y que el escalado de dificultad se aplica de forma consistente. Añadir pruebas automáticas específicas y comprobar GitHub Actions.
+
+### Regresión automatizada de progresión de campaña — 2026-11-11
+
+- **CI confirmado:** ejecución `42995545553` verde para la primera implementación de continuidad `b25d7dd`.
+- **Pruebas `908e225`:** nuevo `tests/p0-campaign-progression.test.cjs` comprueba la transición del nivel 1 al 2, continuidad de tropas, experiencia y oro, desbloqueo del estado `done`, aumento de soldados, arqueros y oro rivales y compatibilidad con partidas antiguas sin `campaignLevel`.
+- **Pendiente:** confirmar la nueva ejecución CI, realizar prueba manual completa de conquista y recarga, revisar escalado de comandantes y guarniciones, y evitar que el nivel 50 se repita sin un objetivo nuevo.
