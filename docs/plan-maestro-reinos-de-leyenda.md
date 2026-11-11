@@ -707,3 +707,11 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Defecto visual:** el texto del diálogo mostraba literalmente `\\n\\n` en lugar de separar los párrafos.
 - **Corrección:** `juego/index.html` (`890a9e1`) y `juego/combate-demo.html` (`fbfe83c`) sustituyen las secuencias escapadas dobles por saltos de línea interpretables por JavaScript; se conserva el estilo `white-space:pre-line` del diálogo.
 - **Pendiente:** CI verde y revisión de presentación en navegador móvil; singular/plural de unidades y texto de recompensas para una fase posterior.
+
+### Economía y dificultad progresiva por nivel — 2026-11-11
+
+- **Objetivo:** los niveles posteriores deben exigir más estrategia y hacer más difícil acumular oro, sin afectar al nivel 1 ni destruir el progreso del héroe.
+- **Implementado:** factor de ingresos de oro del jugador `max(0.45, 1 - 0.08*(nivel-1))` hasta nivel 8. Se aplica a la renta al terminar el turno y a la renta de castillos secundarios; el nivel 1 mantiene el 100 %, el nivel 2 recibe el 92 %, nivel 3 el 84 %, nivel 4 el 76 %, nivel 5 el 68 %, nivel 6 el 60 %, nivel 7 el 52 % y nivel 8+ el 45 %.
+- **Rival:** recibe +12 de oro por turno por nivel adicional (limitado a 20 niveles de incremento), además de los refuerzos de tropas y guarniciones ya existentes. No se reducen las recompensas de victoria ni el oro acumulado del héroe.
+- **Archivos:** `juego/index.html` (`d34f37d`) y `juego/combate-demo.html` (`33acf7c`).
+- **Pendiente:** CI, pruebas de balance en niveles 2–8 y controles de costes de reclutamiento; ajustar según experiencia real de juego.
