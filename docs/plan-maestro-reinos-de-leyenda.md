@@ -796,3 +796,7 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 ### Fase 3 — Economía y recompensas: ACTIVA
 
 **Alcance inmediato:** auditar recompensas de conquistas, tesoros, ingresos de minas y mercados, precios y posibilidades de explotación repetida; corregir fallos reproducibles, añadir pruebas y cerrar sin alargar revisiones opcionales.
+
+### Fase 3 — Ampliación del mapa real (2026-11-11)
+
+Se recibió y examinó visualmente el archivo original `mapa-grande.png`. Se mantiene el criterio obligatorio de **no inventar objetos ni construcciones**. Primera ampliación implementada en `juego/index.html`: tres puntos interactivos transparentes superpuestos a elementos identificados en la imagen: pozo antiguo del desierto (experiencia), cabaña del bosque central (tres soldados) y ruinas orientales del desierto (oro ajustado a la dificultad). Cada recompensa se entrega **una sola vez por nivel**, mediante `s.landmarkRewards`, y se conserva con el estado de la partida; la siguiente campaña reinicia el mapa y permite nuevas visitas. Prueba añadida en `tests/p0-map-landmark-rewards.test.cjs`. Confirmar resultado CI y posición exacta en el juego antes de dar por concluida la fase 3. Se mantienen intactas las minas y los molinos anteriores.
