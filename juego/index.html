@@ -1303,7 +1303,7 @@ function hitResolveVictory(){if(!battle)return;if(battle.defenseSiteId){finishDe
   if(mainRivalDefeated&&completeCampaignIfReady())return;
   render();return
  }
- let isFort=battle.fort,k=battle.k;s.x=battle.x;s.y=battle.y;s.moves=Math.max(0,s.moves-movementCost(battle.x,battle.y));if(!s.taken.includes(k))s.taken.push(k);if(outposts.includes(k)&&!s.claimed.includes(k)){s.claimed.push(k);s.gold+=150;s.message=(s.message||'')+awardHeroExperience(25);const rival=rivalState();rival.claimed=rival.claimed.filter(v=>v!==k)}if(isFort){const levelNote=awardHeroExperience(100);s.done=true;s.message='🏆 ¡Victoria! Has conquistado el castillo y ganado la campaña.'+levelNote}else{s.gold+=110;const levelNote=awardHeroExperience(15);s.message=(outposts.includes(k)?'🏯 Fortaleza conquistada. Recibes 260 de oro.':'⚔️ Guardianes derrotados. Obtienes 110 de oro.')+levelNote}battle=null;$('modal').hidden=true;reveal();render();return}
+ let isFort=battle.fort,k=battle.k;s.x=battle.x;s.y=battle.y;s.moves=Math.max(0,s.moves-movementCost(battle.x,battle.y));if(!s.taken.includes(k))s.taken.push(k);if(outposts.includes(k)&&!s.claimed.includes(k)){s.claimed.push(k);s.gold+=150;s.message=(s.message||'')+awardHeroExperience(25);const rival=rivalState();rival.claimed=rival.claimed.filter(v=>v!==k)}if(isFort){const levelNote=awardHeroExperience(100);s.message='🏰 Fortaleza conquistada. La campaña solo termina tras derrotar al héroe principal enemigo y tomar su castillo.'+levelNote}else{s.gold+=110;const levelNote=awardHeroExperience(15);s.message=(outposts.includes(k)?'🏯 Fortaleza conquistada. Recibes 260 de oro.':'⚔️ Guardianes derrotados. Obtienes 110 de oro.')+levelNote}battle=null;$('modal').hidden=true;reveal();render();return}
 function battleAttackDamage(type){
  const count=battleCount(type);
  if(!count)return 0;
@@ -2527,10 +2527,10 @@ function load(){
  if(!raw)return start();
  try{
   const v=JSON.parse(raw);
-  if(validGame(v)){s=v;selectedMine=s.ownedMines[0]||'';if(s.pendingSecondarySiege)recoverSecondarySiegeDecision();reveal();render();if(s.pendingSecondarySiege)resumeSecondarySiegeAfterLoad(s);return}
+  if(validGame(v)){s=v;if(s.done){s.done=false;s.message='⚠️ Partida antigua desbloqueada. La victoria requiere derrotar al héroe principal y conquistar su castillo.';}selectedMine=s.ownedMines[0]||'';if(s.pendingSecondarySiege)recoverSecondarySiegeDecision();reveal();render();if(s.pendingSecondarySiege)resumeSecondarySiegeAfterLoad(s);return}
  }catch(e){}
  // Recover the last valid snapshot when the primary save is damaged.
- try{const backup=localStorage.getItem(STORE+'-backup');if(backup){const restored=JSON.parse(backup);if(validGame(restored)){try{localStorage.setItem(STORE+'-recovery-'+Date.now(),raw)}catch(e){}s=restored;selectedMine=s.ownedMines[0]||'';if(s.pendingSecondarySiege)recoverSecondarySiegeDecision();reveal();render();message('⚠️ La última partida estaba dañada. Se ha recuperado la copia anterior válida.');if(s.pendingSecondarySiege)resumeSecondarySiegeAfterLoad(s);return}}}catch(e){}
+ try{const backup=localStorage.getItem(STORE+'-backup');if(backup){const restored=JSON.parse(backup);if(validGame(restored)){if(restored.done){restored.done=false;restored.message='⚠️ Partida antigua desbloqueada. Completa los dos objetivos de campaña.';}try{localStorage.setItem(STORE+'-recovery-'+Date.now(),raw)}catch(e){}s=restored;selectedMine=s.ownedMines[0]||'';if(s.pendingSecondarySiege)recoverSecondarySiegeDecision();reveal();render();message('⚠️ La última partida estaba dañada. Se ha recuperado la copia anterior válida.');if(s.pendingSecondarySiege)resumeSecondarySiegeAfterLoad(s);return}}}catch(e){}
  // Never overwrite an unreadable campaign with a new one.
  // Preserve the original bytes for manual recovery.
  try{localStorage.setItem(STORE+'-recovery-'+Date.now(),raw)}catch(e){}
