@@ -790,6 +790,12 @@ function animateTacticalStep(fromX,fromY,toX,toY,updatePosition){
  const target=destination.getBoundingClientRect();
  const ghost=sprite.cloneNode(true);
  ghost.style.cssText='position:fixed;z-index:10000;pointer-events:none;margin:0;animation:none!important;transition:none!important;left:'+origin.left+'px;top:'+origin.top+'px;width:'+origin.width+'px;height:'+origin.height+'px;transform:none;';
+ ghost.style.setProperty('position','fixed','important');
+ ghost.style.setProperty('left',origin.left+'px','important');
+ ghost.style.setProperty('top',origin.top+'px','important');
+ ghost.style.setProperty('width',origin.width+'px','important');
+ ghost.style.setProperty('height',origin.height+'px','important');
+ ghost.style.setProperty('bottom','auto','important');
  document.body.append(ghost);
  destination.style.visibility='hidden';
  const duration=1450;
