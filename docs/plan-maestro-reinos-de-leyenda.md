@@ -740,3 +740,9 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 7. Activar primero una modalidad informativa o simulada sin transferencias reales; habilitar operaciones en cadena únicamente tras las verificaciones anteriores.
 
 **Criterio de cierre:** integración funcional, documentada y probada, con límites económicos explícitos y sin comprometer el guardado de partidas. **Estado: pendiente.**
+
+### Fase 1 — Auditoría del equilibrio: primera batería de pruebas (2026-11-11)
+
+- **Auditoría iniciada:** identificadas las fórmulas centrales `campaignGoldFactor()`, `campaignGoldIncome()` y `awardHeroExperience()`. El nivel 1 mantiene recompensas completas; niveles 2–8 reducen progresivamente hasta el suelo del 45 %.
+- **Pruebas incorporadas:** `tests/p0-campaign-economy-balance.test.cjs` (commit `3cc82c6`) comprueba oro y experiencia en niveles 1–8 y 20, recompensa mínima positiva de 1 XP y compatibilidad con partidas antiguas sin `campaignLevel`, en `juego/index.html` y `juego/combate-demo.html`.
+- **Estado:** pendientes resultados de CI y simulaciones completas de capacidad de reclutamiento, gasto, guarniciones, recuperación del enemigo y ritmo de experiencia. Esta batería prueba fórmulas, no demuestra todavía que el juego esté equilibrado en partidas reales.
