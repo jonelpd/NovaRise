@@ -800,8 +800,11 @@ function duelEnemyTurn(done){
   if(distance<=(u.id==='archers'?3:1)&&(u.id!=='archers'||distance>=2)&&(u.id!=='archers'||clearShot(u.x,u.y,nearest.x,nearest.y))){
    const guarded=consumeBattleGuard(nearest.type);
    const losses=guarded?0:Math.min(battleCount(nearest.type),Math.max(0,Math.ceil(u.count/(u.id==='archers'?5:7))-mapTreasureEquipment().defense));
-   s[nearest.type]=Math.max(0,s[nearest.type]-losses);animateBattleFx(nearest.type,s[nearest.type]===0);
-   drawTactics();setTimeout(next,420);return
+   s[nearest.type]=Math.max(0,s[nearest.type]-losses);
+   window.novariseUnitAnimation?.('enemy','attack',850);
+   animateBattleFx(nearest.type,s[nearest.type]===0);
+   if(u.id==='archers')fireBattleProjectile();
+   drawTactics();setTimeout(next,1050);return
   }
   const queue=[[u.x,u.y]],seen=new Set([u.x+','+u.y]),parents=new Map();let destination=null;
   while(queue.length){
