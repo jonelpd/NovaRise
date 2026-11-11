@@ -679,3 +679,10 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Correcciones:** `juego/index.html` commit `3f19277` y `juego/combate-demo.html` commit `7c04227`. Las fortalezas genéricas ya no terminan la campaña; la carga principal y la recuperación desde backup desactivan el bloqueo `done` de partidas antiguas y muestran un mensaje de recuperación.
 - **Protección de datos:** no se fuerza nueva campaña ni se borran las partidas; se mantiene el estado del héroe y recursos.
 - **Pendiente:** verificar CI, comprobar la partida del usuario tras recarga y probar manualmente ambos órdenes de objetivos, el diálogo y los controles.
+
+### Visibilidad del objetivo real de campaña — 2026-11-11
+
+- **Reporte:** el usuario puede continuar jugando tras corregir el bloqueo, pero no observa la ventana de victoria.
+- **Diagnóstico:** hay castillos independientes, incluido `fort-south` en `4,7`, distintos del castillo principal `rival` en el extremo inferior izquierdo `0,9`; la interfaz aún decía vagamente «conquista las fortalezas hasta alcanzar el castillo final». El indicador visual del castillo rival dependía de `s.done` (bandera antigua) en vez de la propiedad real.
+- **Cambios:** `juego/index.html` (`50c2319`) muestra en «Objetivo de campaña» el nivel, estado del héroe principal y estado del castillo principal, con aviso de recuperación y ubicación; el estandarte del castillo principal usa `verifiedSiteState().rival`. `juego/combate-demo.html` (`f4f2362`) corrige el estandarte.
+- **Pendiente:** comprobar en partida real si se cumplen ambos objetivos; si ya aparecen marcados ambos sin ventana, investigar transición y estado guardado sin reiniciar campaña.
