@@ -2187,7 +2187,10 @@ async function enemyCastleHeroTurns(epoch){
    if(h.recovery>=3){
     const point=safeHeroPoint(site.x,site.y);
     h.x=point?point[0]:site.x;h.y=point?point[1]:site.y;
-    h.soldiers=3;h.archers=1;h.gold=0;h.moves=0;
+    const extra=Math.max(0,Math.min(49,(Number.isInteger(s.campaignLevel)?s.campaignLevel:1)-1));
+    h.soldiers=Math.max(1,Math.floor((CASTLE_PROFILES[site.id]?.guard.soldiers||4)/2))+2*extra;
+    h.archers=Math.max(0,Math.floor((CASTLE_PROFILES[site.id]?.guard.archers||0)/2))+extra;
+    h.gold=0;h.moves=0;
     h.defeated=false;h.active=true;h.recovery=0;
     s.message='⚔️ '+CASTLE_PROFILES[site.id].name+' ha reclutado un nuevo comandante.';
    }
