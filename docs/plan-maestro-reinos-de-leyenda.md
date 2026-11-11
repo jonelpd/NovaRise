@@ -655,3 +655,10 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Código `626ae69` y `5a748fb`:** tras derrotar al castillo principal se presenta un diálogo superpuesto del sistema `realmDialog`, con nivel completado, experiencia recibida, tropas y oro conservados y nivel siguiente. Botón «Continuar la campaña»; el nivel ya se ha preparado y guardado antes de mostrar el diálogo, evitando pérdidas si el jugador sale.
 - **Presentación:** detalles multilínea mediante `white-space:pre-line`; se reutiliza el diseño y la accesibilidad del sistema de diálogos del juego.
 - **Pruebas:** regresión de guarniciones `42998729259` verde; pendiente confirmar CI de la nueva ventana y comprobar visualmente en navegador su aparición, enfoque y cierre.
+
+### Corrección: ventana de victoria ausente en la demostración — 2026-11-11
+
+- **Incidencia reportada por jugador:** no apareció la ventana al conquistar el castillo principal.
+- **Causa identificada:** `juego/combate-demo.html` conservaba el antiguo `hitResolveVictory` que fijaba `s.done=true` y terminaba la partida sin diálogo; la mejora previa solo se había aplicado a `juego/index.html`.
+- **Corrección `846ba70`:** sincronizado el bloque de victoria de la demostración con la versión principal: progresión al nivel siguiente, conservación de ejército/experiencia/oro y diálogo de victoria. Se aplica formato multilínea al diálogo.
+- **Pendiente:** confirmar CI y reproducir manualmente la victoria en ambas páginas; verificar que el jugador recarga la versión nueva (sin caché).
