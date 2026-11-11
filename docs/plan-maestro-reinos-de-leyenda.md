@@ -611,3 +611,9 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Código `845f2a8`:** en `juego/combate-demo.html`, el ataque de una pila enemiga en un duelo activa explícitamente la animación de ataque, los arqueros lanzan el efecto de proyectil y la pausa de resolución visual pasa de 420 a 1050 ms.
 - **Objetivo visual:** ataques legibles y movimientos con transición perceptible, sin alterar las reglas ni el ritmo del mapa de aventura.
 - **Pendiente:** comprobar en navegador la sincronización entre proyectil, golpe y bajas; estudiar animación interpolada de desplazamiento en vez de limitarse a aumentar esperas. Ejecutar CI de regresión y comprobar que no hay fallos.
+
+### Desplazamiento visual continuo en el demo de combate — 2026-11-11
+
+- **Código `714a1ef` y ajuste `67948f9`:** `juego/combate-demo.html` incorpora `animateTacticalStep`, que interpola durante 1450 ms la imagen de la unidad entre casillas en movimientos aliados, enemigos y pilas enemigas. El estado táctico se actualiza una sola vez; la animación es únicamente visual.
+- **Accesibilidad:** se omite la interpolación cuando el sistema solicita movimiento reducido.
+- **Pendiente:** comprobar en navegador el movimiento con sprites ilustrados, cambios de ronda, interrupciones y redibujados del tablero. Confirmar GitHub Actions y corregir cualquier regresión antes de extender efectos de ataque.
