@@ -700,3 +700,10 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Causa verificada:** coexistían la interacción de sitio verificado `battle.rivalCastle` y la ruta heredada de combate por casilla `battle.fort`. Esta última otorgaba la victoria de combate pero no actualizaba `verifiedSites.rival`, y `hostileAt('0,9')` seguía dependiendo de `s.done`, por lo que el castillo parecía enemigo de nuevo y no se abría el diálogo.
 - **Corrección:** `juego/index.html` commit `7857593` y `juego/combate-demo.html` commit `d04f9cb`. La ruta heredada marca `verifiedSites.rival='player'`, evalúa `completeCampaignIfReady()` y `hostileAt` usa la propiedad real en vez de `s.done`. Se mantiene la doble condición de victoria.
 - **Pendiente:** confirmar CI y prueba manual de conquista en ambas rutas, persistencia tras recarga y diálogo de victoria.
+
+### Corrección visual confirmada por captura: ventana de victoria — 2026-11-11
+
+- **Validación del usuario:** la ventana de victoria aparece correctamente y anuncia el nivel 2 tras cumplir los dos objetivos.
+- **Defecto visual:** el texto del diálogo mostraba literalmente `\\n\\n` en lugar de separar los párrafos.
+- **Corrección:** `juego/index.html` (`890a9e1`) y `juego/combate-demo.html` (`fbfe83c`) sustituyen las secuencias escapadas dobles por saltos de línea interpretables por JavaScript; se conserva el estilo `white-space:pre-line` del diálogo.
+- **Pendiente:** CI verde y revisión de presentación en navegador móvil; singular/plural de unidades y texto de recompensas para una fase posterior.
