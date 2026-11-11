@@ -820,3 +820,9 @@ Siguiente fase: revisar la transición entre campañas, conservación de tropas 
 ### Fase 5 — Estabilidad y pruebas integrales: ACTIVA
 
 Comprobar la suite automática, persistencia, navegación, combate y progresión sin introducir regresiones. Corregir defectos reproducibles antes de pasar a la fase 6.
+
+### Fase 5 — Auditoría de persistencia y victoria final (2026-11-11)
+
+**Error crítico identificado y corregido:** el cargador de partidas desbloqueaba automáticamente **cualquier** partida marcada como `done`, incluso una victoria legítima del nivel 50. Al volver a entrar, la campaña podía reabrirse o volver a ejecutar la comprobación de victoria. Corregido en `juego/index.html` y `juego/combate-demo.html`: se preserva `done` cuando el nivel guardado es 50 y consta que el castillo principal está conquistado y el rival principal derrotado; se mantiene la recuperación de partidas antiguas marcadas como finalizadas sin cumplir ambos objetivos. La corrección se aplica tanto a la carga principal como a la copia de seguridad. La página principal tampoco reejecuta la transición de campaña si `s.done` es verdadero. Prueba de regresión añadida a `tests/p0-campaign-economy-balance.test.cjs`.
+
+La batería anterior de regresión del juego finalizó correctamente (ejecución `43027719715`). **Fase 5 continúa activa** hasta verificar la CI de esta corrección y completar comprobaciones restantes. No se considera validada una partida completa de 50 niveles únicamente con pruebas estáticas.
