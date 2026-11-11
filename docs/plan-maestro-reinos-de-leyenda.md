@@ -637,3 +637,9 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Código `bbd4edd`:** los comandantes secundarios nuevos reciben +2 soldados y +1 arquero por cada nivel adicional. El asedio del castillo principal sin comandante presente recibe +8 puntos de resistencia por nivel adicional. Los cálculos admiten partidas antiguas sin `campaignLevel` y respetan el máximo provisional de nivel 50.
 - **Importante:** los comandantes ya existentes en una partida guardada no se refuerzan retroactivamente; solo se aplica a su creación, evitando duplicar tropas en cada carga o renderizado.
 - **Pendiente:** validar CI de este cambio y la dificultad real en navegador, añadir pruebas de escalado de guarniciones y equilibrio de recompensas.
+
+### Guarniciones de castillos con dificultad progresiva — 2026-11-11
+
+- **Código `a4f2aff` y `fb20c44`:** las guarniciones nuevas de castillos secundarios escalan por nivel: +3 soldados y +2 arqueros por nivel adicional, +1 grifo cada 2 niveles y +1 dragón cada 4 niveles. El asedio calcula la resistencia con esa guarnición escalada, no con el perfil fijo original.
+- **Compatibilidad:** el nivel 1 conserva las cifras anteriores; las guarniciones guardadas mantienen su estado y no reciben refuerzos duplicados al volver a entrar.
+- **Pendiente:** verificar pruebas automáticas y equilibrar los recursos, la experiencia y las recompensas. La ventana de victoria entre niveles y la comprobación manual en navegador siguen pendientes.
