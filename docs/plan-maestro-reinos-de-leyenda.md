@@ -649,3 +649,9 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Incidencia:** las ejecuciones `42998647201` y `42998671829` fallaron en `p0-corrupt-garrison-recovery.test.cjs` porque el cálculo del nivel accedía a `s` en un entorno aislado sin ese estado.
 - **Corrección `352115b`:** cuando el estado de campaña no existe, el cálculo usa nivel 1. Mantiene el escalado real en partidas normales y la recuperación de guarniciones corruptas.
 - **Estado:** pendiente de confirmación verde en la ejecución posterior a esta corrección. No dar por completada la validación visual ni funcional.
+
+### Ventana de victoria entre niveles — 2026-11-11
+
+- **Código `626ae69` y `5a748fb`:** tras derrotar al castillo principal se presenta un diálogo superpuesto del sistema `realmDialog`, con nivel completado, experiencia recibida, tropas y oro conservados y nivel siguiente. Botón «Continuar la campaña»; el nivel ya se ha preparado y guardado antes de mostrar el diálogo, evitando pérdidas si el jugador sale.
+- **Presentación:** detalles multilínea mediante `white-space:pre-line`; se reutiliza el diseño y la accesibilidad del sistema de diálogos del juego.
+- **Pruebas:** regresión de guarniciones `42998729259` verde; pendiente confirmar CI de la nueva ventana y comprobar visualmente en navegador su aparición, enfoque y cierre.
