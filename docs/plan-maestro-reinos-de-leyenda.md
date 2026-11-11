@@ -662,3 +662,12 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Causa identificada:** `juego/combate-demo.html` conservaba el antiguo `hitResolveVictory` que fijaba `s.done=true` y terminaba la partida sin diálogo; la mejora previa solo se había aplicado a `juego/index.html`.
 - **Corrección `846ba70`:** sincronizado el bloque de victoria de la demostración con la versión principal: progresión al nivel siguiente, conservación de ejército/experiencia/oro y diálogo de victoria. Se aplica formato multilínea al diálogo.
 - **Pendiente:** confirmar CI y reproducir manualmente la victoria en ambas páginas; verificar que el jugador recarga la versión nueva (sin caché).
+
+### Condición definitiva de victoria de campaña: héroe y castillo — 2026-11-11
+
+- **Regla acordada:** cada nivel termina solo cuando el héroe principal enemigo está derrotado **y** el castillo principal está conquistado. Ambos objetivos pueden cumplirse en cualquier orden.
+- **Plazo de recuperación:** si el castillo sigue bajo control rival, el héroe principal se recupera tras tres turnos; el jugador debe capturarlo antes de su regreso. Con el castillo conquistado, el héroe derrotado no reaparece desde esa fortaleza.
+- **Asedio:** derrotar al héroe defensor del castillo no conquista automáticamente la fortaleza: hace falta el asedio posterior. Conquistar el castillo con el héroe fuera tampoco finaliza la campaña.
+- **Implementación:** `juego/index.html` (`9534206`, `4cadcf1`, `a017f0d`) y `juego/combate-demo.html` (`3fe5a28`, `5a44baa`).
+- **Regresión:** `tests/p0-campaign-progression.test.cjs` (`751d98d`) comprueba ambas órdenes, condiciones incompletas y asedio del héroe defensor en las dos páginas.
+- **Pendiente:** CI verde para las nuevas pruebas, revisión en navegador y verificación de la ventana de victoria real. No dar por validado hasta comprobarlo.
