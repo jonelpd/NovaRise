@@ -1475,7 +1475,12 @@ function siteGarrison(id){
  const profile=CASTLE_PROFILES[id]||CASTLE_PROFILES['fort-west'];
  let g=state.garrisons[id];
  if(!g||typeof g!=='object'||Array.isArray(g)||!g.stock||typeof g.stock!=='object'||Array.isArray(g.stock)){
-  g={stock:{...profile.stock},guard:{...profile.guard}};
+  const extra=Math.max(0,Math.min(49,(Number.isInteger(s.campaignLevel)?s.campaignLevel:1)-1));
+  g={stock:{...profile.stock},guard:{...profile.guard,
+   soldiers:profile.guard.soldiers+3*extra,
+   archers:profile.guard.archers+2*extra,
+   griffins:profile.guard.griffins+Math.floor(extra/2),
+   dragons:profile.guard.dragons+Math.floor(extra/4)}};
   state.garrisons[id]=g;
  }
  if(!g.defenders||typeof g.defenders!=='object'||Array.isArray(g.defenders))g.defenders={soldiers:0,archers:0,griffins:0,dragons:0};
