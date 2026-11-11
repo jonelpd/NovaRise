@@ -101,3 +101,13 @@ test('final victory remains completed after loading primary or backup saves',()=
  assert.match(main,/else if\(!s\.done&&typeof verifiedSiteState/);
  assert.match(main,/if\(!s\.done&&!s\.pendingSecondarySiege&&typeof verifiedSiteState/);
 });
+
+test('save validation rejects invalid campaign levels and malformed landmark claims',()=>{
+ for(const page of ['index.html','combate-demo.html']){
+  const html=fs.readFileSync(path.join(__dirname,'../juego',page),'utf8');
+  const section=html.slice(html.indexOf('function validGame(g)'),html.indexOf('function validGame(g)')+2200);
+  assert.match(section,/g\.campaignLevel<1\|\|g\.campaignLevel>50/);
+  assert.match(section,/g\.landmarkRewards\[k\]!==true/);
+  assert.match(section,/g\.landmarkRewards!==undefined/);
+ }
+});
