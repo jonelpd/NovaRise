@@ -57,3 +57,10 @@ for(const page of ['index.html','combate-demo.html']){
   }
  });
 }
+
+test('main game secondary commanders recover with level-scaled armies',()=>{
+ const html=fs.readFileSync(path.join(__dirname,'../juego/index.html'),'utf8');
+ assert.match(html,/h\.soldiers=Math\.max\(1,Math\.floor\(\(CASTLE_PROFILES\[site\.id\]\?\.guard\.soldiers\|\|4\)\/2\)\)\+2\*extra;/);
+ assert.match(html,/h\.archers=Math\.max\(0,Math\.floor\(\(CASTLE_PROFILES\[site\.id\]\?\.guard\.archers\|\|0\)\/2\)\)\+extra;/);
+ assert.doesNotMatch(html,/h\.soldiers=3;h\.archers=1;h\.gold=0;h\.moves=0;/);
+});
