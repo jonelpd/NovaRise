@@ -784,3 +784,15 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 **Objetivo de cierre:** auditar de forma conjunta guarniciones, comandantes, reclutamiento, defensas y capturas de castillos; corregir errores reproducibles y añadir pruebas de regresión; actualizar el plan y pasar a fase 3 sin prolongar la fase 2 por mejoras opcionales.
 
 **Secuencia pendiente:** fase 2 castillos y ejércitos → fase 3 economía y recompensas → fase 4 variedad de niveles → fase 5 estabilidad integral → fase 6 integración segura del token NVRA.
+
+### Fase 2 — Castillos y ejércitos estratégicos: cierre técnico (2026-11-11)
+
+**Auditoría conjunta:** revisados los mecanismos de guarnición y reclutamiento del castillo, conservación de comandantes al recargar, propiedad de castillos, recuperación y reclutamiento de comandantes secundarios y resolución de asedios.
+
+**Corrección aplicada:** los comandantes secundarios tenían topes fijos de reclutamiento de 40 soldados y 15 arqueros, aun en niveles donde comenzaban con ejércitos mayores. Los topes pasan a `40+2*(nivel-1)` soldados y `15+(nivel-1)` arqueros, con nivel limitado a 50, y siguen pagando sus tropas con la tesorería propia. Cambio en `juego/index.html` (commit `bad817d`), protegido por prueba de regresión `tests/p0-campaign-economy-balance.test.cjs` (commit `0bd0bbd`).
+
+**Cierre:** fase 2 cerrada para las reglas auditadas y las correcciones concretas. La aprobación de CI de esta última modificación debe verificarse; la fase no se considera validada hasta entonces. La experiencia real de asedios y el balance prolongado siguen dentro de la fase 5.
+
+### Fase 3 — Economía y recompensas: ACTIVA
+
+**Alcance inmediato:** auditar recompensas de conquistas, tesoros, ingresos de minas y mercados, precios y posibilidades de explotación repetida; corregir fallos reproducibles, añadir pruebas y cerrar sin alargar revisiones opcionales.
