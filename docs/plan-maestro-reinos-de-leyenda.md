@@ -760,3 +760,10 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Comparación de niveles 5, 10 y 20:** sin fuentes adicionales de oro, un soldado exige 2 turnos de renta en los tres niveles; un arquero exige 2 turnos en nivel 5 y 3 turnos en niveles 10 y 20. Se trata de capacidad de compra teórica, no de simulación completa de combates.
 - **Protección automatizada:** nueva prueba en `tests/p0-campaign-economy-balance.test.cjs` (commit `e0679d8`) verifica que un soldado siga siendo asequible con un máximo de dos turnos de renta base y un arquero con un máximo de tres en niveles 5, 10 y 20.
 - **Riesgo pendiente:** la reposición de unidades del enemigo puede superar la capacidad de compra del jugador, especialmente si pierde las tropas veteranas que conserva entre campañas. Hace falta una simulación integral de campañas, tropas y victorias antes de declarar equilibrados los niveles altos.
+
+### Fase 1 — Recuperación de comandantes secundarios (2026-11-11)
+
+- **Hallazgo:** en la página principal, los comandantes de castillos secundarios reaparecían con 3 soldados y 1 arquero después de tres turnos, ignorando el nivel de campaña y debilitando artificialmente al enemigo en niveles altos.
+- **Corrección:** al recuperarse, su ejército se reconstruye con la misma fórmula de soldados y arqueros escalados que al crearse inicialmente, según el perfil del castillo y el nivel de campaña; sin duplicar tropas de comandantes existentes.
+- **Cobertura:** `juego/index.html` (commit `3dec29a`) y prueba `tests/p0-campaign-economy-balance.test.cjs` (commit `514dd3a`). La demo no implementa `enemyCastleHeroTurns`, por lo que no corresponde modificar ese módulo allí.
+- **Pendiente:** confirmar CI y simular combates prolongados para calibrar la recuperación de los ejércitos frente a la economía del jugador.
