@@ -693,3 +693,10 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Corrección de recuperación:** `juego/index.html` (`29401cb`) y `juego/combate-demo.html` (`4c0641f`) detectan al cargar partidas con los dos objetivos del castillo principal cumplidos (`verifiedSites.rival='player'` y `rival.defeated=true`) y reanudan la transición con su ventana. No se reinicia la partida si falta alguno de los dos objetivos.
 - **Diagnóstico pendiente:** distinguir castillo principal `rival` de los cinco castillos secundarios `fort-*`; estos últimos pueden sufrir reconquistas de IA. Solicitar identificación del castillo que cambia de dueño para verificar si hubo un asedio real o un cambio de propiedad indebido.
 - **Pendiente:** CI y validación manual de la recuperación en móvil.
+
+### P0 corregido: doble ruta del castillo principal — 2026-11-11
+
+- **Confirmación del usuario:** el castillo que vuelve a control enemigo es el **castillo principal** (coordenada lógica `0,9`), no un castillo secundario.
+- **Causa verificada:** coexistían la interacción de sitio verificado `battle.rivalCastle` y la ruta heredada de combate por casilla `battle.fort`. Esta última otorgaba la victoria de combate pero no actualizaba `verifiedSites.rival`, y `hostileAt('0,9')` seguía dependiendo de `s.done`, por lo que el castillo parecía enemigo de nuevo y no se abría el diálogo.
+- **Corrección:** `juego/index.html` commit `7857593` y `juego/combate-demo.html` commit `d04f9cb`. La ruta heredada marca `verifiedSites.rival='player'`, evalúa `completeCampaignIfReady()` y `hostileAt` usa la propiedad real en vez de `s.done`. Se mantiene la doble condición de victoria.
+- **Pendiente:** confirmar CI y prueba manual de conquista en ambas rutas, persistencia tras recarga y diálogo de victoria.
