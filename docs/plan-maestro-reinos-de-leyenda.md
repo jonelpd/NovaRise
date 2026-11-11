@@ -617,3 +617,10 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Código `714a1ef` y ajuste `67948f9`:** `juego/combate-demo.html` incorpora `animateTacticalStep`, que interpola durante 1450 ms la imagen de la unidad entre casillas en movimientos aliados, enemigos y pilas enemigas. El estado táctico se actualiza una sola vez; la animación es únicamente visual.
 - **Accesibilidad:** se omite la interpolación cuando el sistema solicita movimiento reducido.
 - **Pendiente:** comprobar en navegador el movimiento con sprites ilustrados, cambios de ronda, interrupciones y redibujados del tablero. Confirmar GitHub Actions y corregir cualquier regresión antes de extender efectos de ataque.
+
+### Continuidad de campaña tras conquistar el castillo principal — 2026-11-11
+
+- **Código `b25d7dd`:** la victoria contra el defensor del castillo principal deja de fijar `s.done=true`. Tras otorgar experiencia, inicia una nueva etapa con `campaignLevel` incrementado (máximo 50), preserva tropas supervivientes, experiencia, facción y oro y reinicia el mapa, recursos y conquistas de la nueva etapa.
+- **Dificultad inicial:** el rival recibe +4 soldados, +2 arqueros y +80 de oro por cada nivel adicional. La campaña antigua sin `campaignLevel` se interpreta como nivel 1.
+- **Límites:** aún no hay mapas diferentes, pantalla de elección de siguiente nivel, ni escalado exhaustivo de guarniciones y comandantes secundarios; el nivel 50 es un tope provisional.
+- **Pendiente prioritario:** verificar en navegador que la victoria no bloquea el movimiento, que el nuevo nivel persiste tras recargar y que el escalado de dificultad se aplica de forma consistente. Añadir pruebas automáticas específicas y comprobar GitHub Actions.
