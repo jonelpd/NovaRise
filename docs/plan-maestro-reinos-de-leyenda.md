@@ -686,3 +686,10 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Diagnóstico:** hay castillos independientes, incluido `fort-south` en `4,7`, distintos del castillo principal `rival` en el extremo inferior izquierdo `0,9`; la interfaz aún decía vagamente «conquista las fortalezas hasta alcanzar el castillo final». El indicador visual del castillo rival dependía de `s.done` (bandera antigua) en vez de la propiedad real.
 - **Cambios:** `juego/index.html` (`50c2319`) muestra en «Objetivo de campaña» el nivel, estado del héroe principal y estado del castillo principal, con aviso de recuperación y ubicación; el estandarte del castillo principal usa `verifiedSiteState().rival`. `juego/combate-demo.html` (`f4f2362`) corrige el estandarte.
 - **Pendiente:** comprobar en partida real si se cumplen ambos objetivos; si ya aparecen marcados ambos sin ventana, investigar transición y estado guardado sin reiniciar campaña.
+
+### P0: victoria pendiente tras recargar — 2026-11-11
+
+- **Reporte:** después de derrotar a un héroe y conquistar su castillo no aparece el diálogo; un castillo vuelve a manos enemigas.
+- **Corrección de recuperación:** `juego/index.html` (`29401cb`) y `juego/combate-demo.html` (`4c0641f`) detectan al cargar partidas con los dos objetivos del castillo principal cumplidos (`verifiedSites.rival='player'` y `rival.defeated=true`) y reanudan la transición con su ventana. No se reinicia la partida si falta alguno de los dos objetivos.
+- **Diagnóstico pendiente:** distinguir castillo principal `rival` de los cinco castillos secundarios `fort-*`; estos últimos pueden sufrir reconquistas de IA. Solicitar identificación del castillo que cambia de dueño para verificar si hubo un asedio real o un cambio de propiedad indebido.
+- **Pendiente:** CI y validación manual de la recuperación en móvil.
