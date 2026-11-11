@@ -2133,6 +2133,8 @@ function exportSave(){if(rivalBusy)return message('Espera a que termine el turno
  if(!bounded(g.gold,100000000)||!bounded(g.crystals,100000000)||!bounded(g.seasonPoints,1000000))return false;
  if(!bounded(g.moves,7)||!bounded(g.soldiers,100000)||!bounded(g.archers,100000))return false;
  if(!bounded(g.griffins,100000)||!bounded(g.dragons,100000)||!bounded(g.experience,100000000))return false;
+ if(g.campaignLevel!==undefined&&(!Number.isInteger(g.campaignLevel)||g.campaignLevel<1||g.campaignLevel>50))return false;
+ if(g.landmarkRewards!==undefined&&(!g.landmarkRewards||typeof g.landmarkRewards!=='object'||Array.isArray(g.landmarkRewards)||Object.keys(g.landmarkRewards).some(k=>!/^relic-[a-z-]{1,60}$/.test(k)||g.landmarkRewards[k]!==true)))return false;
  if(!g.mineLevels||typeof g.mineLevels!=='object'||Array.isArray(g.mineLevels))return false;
  if(!g.miners||typeof g.miners!=='object'||Array.isArray(g.miners)||!Object.values(g.miners).every(n=>bounded(n,3)))return false;
  return ['Alianza del Alba','Reino Umbrío','Guardianes del Bosque'].includes(g.faction);
