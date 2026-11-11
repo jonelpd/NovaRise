@@ -1252,6 +1252,13 @@ function loseBattle(){if(battle&&battle.defenseSiteId){finishDefensiveSiege(fals
 function completeCampaignIfReady(){
  if(typeof verifiedSiteState!=='function'||verifiedSiteState().rival!=='player'||!rivalState().defeated)return false;
  const completed=Math.max(1,Math.min(50,Number.isInteger(s.campaignLevel)?s.campaignLevel:1));
+ if(completed>=50){
+  s.done=true;battle=null;$('modal').hidden=true;
+  s.message='🏆 ¡Victoria definitiva! Has completado los 50 niveles de Reinos de Leyenda.';
+  render();
+  if(typeof document!=='undefined'&&typeof realmDialog==='function')void realmDialog('🏆 ¡Campeón de los 50 reinos!','Has derrotado al comandante principal y conquistado su castillo en el nivel final. La campaña ha terminado.',[{label:'🏆 Ver mi reino',value:true}],null,false);
+  return true;
+ }
  const veteran={soldiers:s.soldiers,archers:s.archers,griffins:s.griffins,dragons:s.dragons,experience:s.experience,faction:s.faction,gold:s.gold};
  rivalEpoch++;rivalBusy=false;walkEpoch++;walking=false;clearAdventureRoute();
  s=fresh();s.campaignLevel=Math.min(50,completed+1);
