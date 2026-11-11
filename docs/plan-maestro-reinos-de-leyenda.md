@@ -605,3 +605,9 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Prueba `cb57ab9`:** ampliado `tests/p0-secondary-siege-manual.test.cjs` para simular un resultado táctico rechazado después de bajas en la guarnición, comprobar la restauración del ejército principal y verificar que el checkpoint local conserva el ejército y la decisión de asedio previos al combate.
 - **Alcance:** prueba Node con almacenamiento simulado; no equivale a cerrar y reabrir un navegador real ni a validar un ciclo E2E.
 - **Pendiente:** confirmar ejecución verde de GitHub Actions para esta revisión y probar en navegador victoria, derrota, resultado rechazado, cierre abrupto, recarga y resolución posterior de la defensa pendiente.
+
+### Inicio de mejoras de realismo del demo de combate — 2026-11-11
+
+- **Código `845f2a8`:** en `juego/combate-demo.html`, el ataque de una pila enemiga en un duelo activa explícitamente la animación de ataque, los arqueros lanzan el efecto de proyectil y la pausa de resolución visual pasa de 420 a 1050 ms.
+- **Objetivo visual:** ataques legibles y movimientos con transición perceptible, sin alterar las reglas ni el ritmo del mapa de aventura.
+- **Pendiente:** comprobar en navegador la sincronización entre proyectil, golpe y bajas; estudiar animación interpolada de desplazamiento en vez de limitarse a aumentar esperas. Ejecutar CI de regresión y comprobar que no hay fallos.
