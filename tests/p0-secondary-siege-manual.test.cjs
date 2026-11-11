@@ -129,3 +129,23 @@ test('checkpoint preserves recoverable army when browser reloads during battle',
  assert.equal(recovered.griffins,3);assert.equal(recovered.dragons,1);
  assert.equal(recovered.pendingSecondarySiege.commanderId,'fort-west');
 });
+
+test('rejected manual siege outcome keeps recoverable checkpoint across reload',()=>{
+ const f=setup(),store=new Map();
+ f.ctx.STORE='game-test';f.ctx.validGame=()=>true;
+ f.ctx.localStorage={getItem:key=>store.get(key)||null,setItem:(key,val)=>store.set(key,val)};
+ vm.runInContext(html.slice(a,html.indexOf('function launchSecondaryDefensiveSiege(',a)),f.ctx);
+ assert.equal(f.ctx.launchSecondaryDefensiveSiege(f.draft),true);
+ f.ctx.applySecondarySiegeOutcome=()=>false;
+ f.ctx.battle.enemyStacks.forEach(unit=>unit.count=0);
+ f.s.soldiers=2;f.s.archers=1;
+ assert.equal(f.ctx.finishSecondaryDefensiveSiege(true),false);
+ assert.equal(f.ctx.battle,null);
+ assert.equal(f.s.soldiers,15);assert.equal(f.s.archers,6);
+ assert.equal(f.s.pendingSecondarySiege.commanderId,'fort-west');
+ const recovered=JSON.parse(store.get('game-test'));
+ assert.equal(recovered.soldiers,15);assert.equal(recovered.archers,6);
+ assert.equal(recovered.griffins,3);assert.equal(recovered.dragons,1);
+ assert.equal(recovered.pendingSecondarySiege.commanderId,'fort-west');
+ assert.equal(recovered.pendingSecondarySiege.castleId,undefined);
+});
