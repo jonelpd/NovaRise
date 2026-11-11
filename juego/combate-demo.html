@@ -777,6 +777,30 @@ function duelApplyDamage(amount){
  battle.hp=duelEnemyHp();
  if(!u.count){const next=duelEnemies()[0];if(next)duelSelectEnemy(next)}
 }
+// Animación visual independiente de las reglas: el estado táctico cambia una sola vez.
+function animateTacticalStep(fromX,fromY,toX,toY,updatePosition){
+ const board=$('tactics');
+ const from=board?.children[fromY*6+fromX];
+ const sprite=from?.querySelector('.combat-sprite');
+ const origin=sprite?.getBoundingClientRect();
+ updatePosition();
+ drawTactics();
+ const destination=board?.children[toY*6+toX]?.querySelector('.combat-sprite');
+ if(!origin||!destination||!origin.width||!origin.height||window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)return;
+ const target=destination.getBoundingClientRect();
+ const ghost=sprite.cloneNode(true);
+ ghost.style.cssText='position:fixed;z-index:10000;pointer-events:none;margin:0;animation:none!important;transition:none!important;left:'+origin.left+'px;top:'+origin.top+'px;width:'+origin.width+'px;height:'+origin.height+'px;transform:none;';
+ document.body.append(ghost);
+ destination.style.visibility='hidden';
+ const duration=1450;
+ const animation=ghost.animate([
+  {transform:'translate(0px,0px)',opacity:1},
+  {transform:'translate('+(target.left-origin.left)+'px,'+(target.top-origin.top)+'px)',opacity:1}
+ ],{duration,easing:'ease-in-out',fill:'forwards'});
+ const finish=()=>{ghost.remove();destination.style.visibility=''};
+ animation.onfinish=finish;
+ animation.oncancel=finish;
+}
 function duelEnemyTurn(done){
  const current=battle,units=duelEnemies(),targets=['soldiers','archers','griffins','dragons'];
  const blocked=(x,y,self)=>x<0||x>5||y<0||y>4||current.obstacles?.some(p=>p[0]===x&&p[1]===y)||duelEnemies().some(u=>u!==self&&u.x===x&&u.y===y)||targets.some(t=>battleCount(t)>0&&pos(t)[0]===x&&pos(t)[1]===y);
@@ -822,7 +846,7 @@ function duelEnemyTurn(done){
   let n=0;const advance=()=>{
    if(battle!==current)return;
    if(n>=Math.min(steps.length,u.id==='archers'?1:2)){setTimeout(next,220);return}
-   [u.x,u.y]=steps[n++];if(u.id===current.targetEnemyId){current.ex=u.x;current.ey=u.y}drawTactics();setTimeout(advance,2200)
+   const [fromX,fromY]=[u.x,u.y], [toX,toY]=steps[n++];animateTacticalStep(fromX,fromY,toX,toY,()=>{u.x=toX;u.y=toY;if(u.id===current.targetEnemyId){current.ex=u.x;current.ey=u.y}});setTimeout(advance,2200)
   };advance()
  };next()
 }
@@ -929,7 +953,7 @@ function enemyAdvance(onComplete){
     const animate=()=>{
      if(battle!==current)return;
      if(index>=path.length){current.moving=false;current.defending=false;current.round++;if(onComplete)onComplete();return}
-     [current.ex,current.ey]=path[index++];drawTactics();setTimeout(animate,2200);
+     const [fromX,fromY]=[current.ex,current.ey], [toX,toY]=path[index++];animateTacticalStep(fromX,fromY,toX,toY,()=>{current.ex=toX;current.ey=toY});setTimeout(animate,2200);
     };
     animate();return;
    }
@@ -963,7 +987,8 @@ function tacticalMove(x,y){
  const advance=()=>{
   if(battle!==current)return;
   if(i>=steps.length){current.moving=false;battleFinishAction('Movimiento realizado.');return}
-  place(...steps[i++]);drawTactics();
+  const [fromX,fromY]=pos(type),[toX,toY]=steps[i++];
+  animateTacticalStep(fromX,fromY,toX,toY,()=>place(toX,toY));
   setTimeout(advance,2100);
  };
  advance();
