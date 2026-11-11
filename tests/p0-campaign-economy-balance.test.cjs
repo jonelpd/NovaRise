@@ -89,3 +89,15 @@ test('level 50 is a final victory, not an infinite campaign loop',()=>{
   assert.ok(section.indexOf('if(completed>=50)')<section.indexOf('s=fresh()'));
  }
 });
+
+test('final victory remains completed after loading primary or backup saves',()=>{
+ for(const page of ['index.html','combate-demo.html']){
+  const html=fs.readFileSync(path.join(__dirname,'../juego',page),'utf8');
+  for(const variable of ['s','restored']){
+   assert.ok(html.includes(variable+".campaignLevel>=50&&"+variable+".verifiedSites?.rival==='player'&&"+variable+".rival?.defeated"),page+' '+variable);
+  }
+ }
+ const main=fs.readFileSync(path.join(__dirname,'../juego/index.html'),'utf8');
+ assert.match(main,/else if\(!s\.done&&typeof verifiedSiteState/);
+ assert.match(main,/if\(!s\.done&&!s\.pendingSecondarySiege&&typeof verifiedSiteState/);
+});
