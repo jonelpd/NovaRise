@@ -536,7 +536,7 @@ function terrainKind(x,y){
 }
 // Los encuentros enemigos detienen el desplazamiento: no pueden utilizarse como atajos.
 function hostileAt(k){
- return (monsters.includes(k)&&!s.taken.includes(k))||(outposts.includes(k)&&!s.claimed.includes(k))||(k===fort&&!s.done)
+ return (monsters.includes(k)&&!s.taken.includes(k))||(outposts.includes(k)&&!s.claimed.includes(k))||(k===fort&&verifiedSiteState().rival!=='player')
 }
 // Navegación de precisión sobre la imagen: máscara 80x80 extraída del mapa aportado.
 let navBlocked=null;
@@ -1328,7 +1328,7 @@ function hitResolveVictory(){if(!battle)return;if(battle.defenseSiteId){finishDe
   if(mainRivalDefeated&&completeCampaignIfReady())return;
   render();return
  }
- let isFort=battle.fort,k=battle.k;s.x=battle.x;s.y=battle.y;s.moves=Math.max(0,s.moves-movementCost(battle.x,battle.y));if(!s.taken.includes(k))s.taken.push(k);if(outposts.includes(k)&&!s.claimed.includes(k)){s.claimed.push(k);s.gold+=150;s.message=(s.message||'')+awardHeroExperience(25);const rival=rivalState();rival.claimed=rival.claimed.filter(v=>v!==k)}if(isFort){const levelNote=awardHeroExperience(100);s.message='🏰 Fortaleza conquistada. La campaña solo termina tras derrotar al héroe principal enemigo y tomar su castillo.'+levelNote}else{s.gold+=110;const levelNote=awardHeroExperience(15);s.message=(outposts.includes(k)?'🏯 Fortaleza conquistada. Recibes 260 de oro.':'⚔️ Guardianes derrotados. Obtienes 110 de oro.')+levelNote}battle=null;$('modal').hidden=true;reveal();render();return}
+ let isFort=battle.fort,k=battle.k;s.x=battle.x;s.y=battle.y;s.moves=Math.max(0,s.moves-movementCost(battle.x,battle.y));if(!s.taken.includes(k))s.taken.push(k);if(outposts.includes(k)&&!s.claimed.includes(k)){s.claimed.push(k);s.gold+=150;s.message=(s.message||'')+awardHeroExperience(25);const rival=rivalState();rival.claimed=rival.claimed.filter(v=>v!==k)}if(isFort){verifiedSiteState().rival='player';const levelNote=awardHeroExperience(100);s.message='🏰 Castillo principal del Reino Umbrío conquistado. '+(rivalState().defeated?'El héroe principal está derrotado: campaña completada.':'Aún debes derrotar al héroe principal enemigo.')+levelNote}else{s.gold+=110;const levelNote=awardHeroExperience(15);s.message=(outposts.includes(k)?'🏯 Fortaleza conquistada. Recibes 260 de oro.':'⚔️ Guardianes derrotados. Obtienes 110 de oro.')+levelNote}battle=null;$('modal').hidden=true;reveal();if(isFort&&completeCampaignIfReady())return;render();return}
 function battleAttackDamage(type){
  const count=battleCount(type);
  if(!count)return 0;
