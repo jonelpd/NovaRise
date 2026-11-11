@@ -111,3 +111,13 @@ test('save validation rejects invalid campaign levels and malformed landmark cla
   assert.match(section,/g\.landmarkRewards!==undefined/);
  }
 });
+
+test('saved landmark reward claims only reference five real map locations',()=>{
+ const allowed=['relic-desert-well','relic-north-cabin','relic-east-ruin','relic-desert-hut','relic-mountain-hut'];
+ for(const page of ['index.html','combate-demo.html']){
+  const html=fs.readFileSync(path.join(__dirname,'../juego',page),'utf8');
+  const validation=html.slice(html.indexOf('function validGame(g)'),html.indexOf('function validGame(g)')+2000);
+  for(const id of allowed)assert.ok(validation.includes("'"+id+"'"),page+' '+id);
+  assert.match(validation,/\.includes\(k\)\|\|g\.landmarkRewards\[k\]!==true/);
+ }
+});
