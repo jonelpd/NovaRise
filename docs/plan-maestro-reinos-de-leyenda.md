@@ -753,3 +753,10 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Corregido en ambas páginas:** la recuperación ahora restablece `4+4*(nivel-1)` soldados y `1+2*(nivel-1)` arqueros, respetando el nivel de campaña (1–50). El comportamiento del nivel 1 se mantiene.
 - **Prueba de regresión añadida:** `tests/p0-campaign-economy-balance.test.cjs` comprueba que la fórmula de recuperación no vuelva a los valores fijos.
 - **Pendiente:** validar CI, evaluar ingresos netos, costes de reclutamiento y capacidad real de victoria en campañas avanzadas.
+
+### Fase 1 — Auditoría de asequibilidad del reclutamiento (2026-11-11)
+
+- **Datos del código:** coste de reclutamiento básico: soldado 30 de oro, arquero 50; renta base inicial 40 de oro/turno, antes de edificios y castillos. La renta reducida es de 27 de oro/turno en nivel 5 y 18 de oro/turno en niveles 8+.
+- **Comparación de niveles 5, 10 y 20:** sin fuentes adicionales de oro, un soldado exige 2 turnos de renta en los tres niveles; un arquero exige 2 turnos en nivel 5 y 3 turnos en niveles 10 y 20. Se trata de capacidad de compra teórica, no de simulación completa de combates.
+- **Protección automatizada:** nueva prueba en `tests/p0-campaign-economy-balance.test.cjs` (commit `e0679d8`) verifica que un soldado siga siendo asequible con un máximo de dos turnos de renta base y un arquero con un máximo de tres en niveles 5, 10 y 20.
+- **Riesgo pendiente:** la reposición de unidades del enemigo puede superar la capacidad de compra del jugador, especialmente si pierde las tropas veteranas que conserva entre campañas. Hace falta una simulación integral de campañas, tropas y victorias antes de declarar equilibrados los niveles altos.
