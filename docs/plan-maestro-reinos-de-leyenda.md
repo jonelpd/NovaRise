@@ -715,3 +715,10 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Rival:** recibe +12 de oro por turno por nivel adicional (limitado a 20 niveles de incremento), además de los refuerzos de tropas y guarniciones ya existentes. No se reducen las recompensas de victoria ni el oro acumulado del héroe.
 - **Archivos:** `juego/index.html` (`d34f37d`) y `juego/combate-demo.html` (`33acf7c`).
 - **Pendiente:** CI, pruebas de balance en niveles 2–8 y controles de costes de reclutamiento; ajustar según experiencia real de juego.
+
+### Experiencia progresivamente más escasa — 2026-11-11
+
+- **Solicitud:** aplicar a la experiencia del héroe la misma reducción progresiva que a los ingresos de oro en niveles posteriores.
+- **Implementado:** `awardHeroExperience(amount)` calcula la experiencia ganada con factor `max(0.45, 1-0.08*min(7,nivel-1))`: nivel 1 100 %, nivel 2 92 %, nivel 3 84 %, nivel 4 76 %, nivel 5 68 %, nivel 6 60 %, nivel 7 52 %, nivel 8+ 45 %. Se redondea hacia abajo y toda recompensa positiva otorga al menos 1 XP. La experiencia acumulada no se reduce.
+- **Cobertura:** todas las fuentes de experiencia que usan la función central, incluidos combates, conquistas y recompensas; `juego/index.html` (`3718bc5`) y `juego/combate-demo.html` (`5e3642b`).
+- **Pendiente:** confirmar CI y revisar balance de progresión de héroes en niveles altos.
