@@ -1939,7 +1939,7 @@ async function rivalTurn(){
  const v=rivalState();v.turns++;
  if(v.defeated){
   v.recovery=(v.recovery||0)+1;
-  if(v.recovery>=3&&verifiedSiteState().rival!=='player'){v.defeated=false;v.recovery=0;v.soldiers=4;v.archers=1;v.x=7.5;v.y=93;s.message='⚔️ El Reino Umbrío ha reclutado un nuevo comandante.'}
+  if(v.recovery>=3&&verifiedSiteState().rival!=='player'){v.defeated=false;v.recovery=0;const campaign=Math.max(1,Math.min(50,Number.isInteger(s.campaignLevel)?s.campaignLevel:1));v.soldiers=4+4*(campaign-1);v.archers=1+2*(campaign-1);v.x=7.5;v.y=93;s.message='⚔️ El Reino Umbrío ha reclutado un nuevo comandante.'}
   else s.message='El Reino Umbrío reconstruye su ejército ('+v.recovery+'/3 turnos).';
   rivalBusy=false;
   s.turn++;s.moves=s.faction==='Alianza del Alba'?5:4;
