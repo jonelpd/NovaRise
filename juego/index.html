@@ -2200,8 +2200,10 @@ async function enemyCastleHeroTurns(epoch){
   h.turns++;h.moves=4;
   // Reclutamiento con tesorería propia: los refuerzos no aparecen gratis.
   h.gold=Math.max(0,Math.min(100000,Math.floor(Number(h.gold)||0)+20));
-  if(h.turns%2===0&&h.gold>=30&&h.soldiers<40){h.soldiers++;h.gold-=30}
-  if(h.turns%3===0&&h.gold>=50&&h.archers<15){h.archers++;h.gold-=50}
+  const campaignExtra=Math.max(0,Math.min(49,(Number.isInteger(s.campaignLevel)?s.campaignLevel:1)-1));
+  const soldierLimit=40+2*campaignExtra,archerLimit=15+campaignExtra;
+  if(h.turns%2===0&&h.gold>=30&&h.soldiers<soldierLimit){h.soldiers++;h.gold-=30}
+  if(h.turns%3===0&&h.gold>=50&&h.archers<archerLimit){h.archers++;h.gold-=50}
   // La IA secundaria prioriza recursos cercanos sin abandonar indefinidamente su castillo.
   const goal=safeHeroPoint(site.x,site.y);
   if(!goal)continue;
