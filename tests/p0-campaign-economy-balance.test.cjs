@@ -76,3 +76,16 @@ test('secondary commanders can continue recruiting beyond level-one caps',()=>{
   assert.ok(15+extra>=15);
  }
 });
+
+test('level 50 is a final victory, not an infinite campaign loop',()=>{
+ for(const page of ['index.html','combate-demo.html']){
+  const html=fs.readFileSync(path.join(__dirname,'../juego',page),'utf8');
+  const start=html.indexOf('function completeCampaignIfReady()');
+  assert.ok(start>=0,page);
+  const section=html.slice(start,start+2200);
+  assert.match(section,/if\(completed>=50\)\{/);
+  assert.match(section,/s\.done=true;battle=null;/);
+  assert.match(section,/return true;/);
+  assert.ok(section.indexOf('if(completed>=50)')<section.indexOf('s=fresh()'));
+ }
+});
