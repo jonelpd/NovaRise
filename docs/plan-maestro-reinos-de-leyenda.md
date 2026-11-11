@@ -836,3 +836,7 @@ Se detectó que `validGame()` no validaba el nivel de campaña ni el registro de
 ### Fase 5 — Validación estricta de lugares del mapa (2026-11-11)
 
 Se ha reforzado la comprobación de partidas importadas y guardadas: ya no basta con que el identificador de una recompensa siga el patrón `relic-...`. Ahora debe coincidir con uno de los cinco lugares reales registrados en `mapa-grande.png`; las entradas desconocidas o con valores distintos de `true` invalidan el estado, activando los mecanismos de recuperación existentes. Aplicado a `juego/index.html` y `juego/combate-demo.html`, con prueba de regresión adicional. La compatibilidad con partidas sin `landmarkRewards` se mantiene. **CI pendiente:** GitHub Actions permanecía en cola durante esta revisión; no se declara cierre definitivo de fase 5 hasta confirmar resultados.
+
+### Fase 5 — Prevención de dobles cierres de campaña (2026-11-11)
+
+Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`: si `s.done` ya indica campaña finalizada, no vuelve a ejecutarse la victoria ni se abre otro diálogo. Aplicada al juego y la demo, con prueba de regresión. Las ejecuciones de GitHub Actions permanecían en cola al consultar; por tanto, la fase sigue abierta y sin validación integral manual.
