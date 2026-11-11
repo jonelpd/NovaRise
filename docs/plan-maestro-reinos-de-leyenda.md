@@ -643,3 +643,9 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Código `a4f2aff` y `fb20c44`:** las guarniciones nuevas de castillos secundarios escalan por nivel: +3 soldados y +2 arqueros por nivel adicional, +1 grifo cada 2 niveles y +1 dragón cada 4 niveles. El asedio calcula la resistencia con esa guarnición escalada, no con el perfil fijo original.
 - **Compatibilidad:** el nivel 1 conserva las cifras anteriores; las guarniciones guardadas mantienen su estado y no reciben refuerzos duplicados al volver a entrar.
 - **Pendiente:** verificar pruebas automáticas y equilibrar los recursos, la experiencia y las recompensas. La ventana de victoria entre niveles y la comprobación manual en navegador siguen pendientes.
+
+### Corrección de regresión en guarniciones — 2026-11-11
+
+- **Incidencia:** las ejecuciones `42998647201` y `42998671829` fallaron en `p0-corrupt-garrison-recovery.test.cjs` porque el cálculo del nivel accedía a `s` en un entorno aislado sin ese estado.
+- **Corrección `352115b`:** cuando el estado de campaña no existe, el cálculo usa nivel 1. Mantiene el escalado real en partidas normales y la recuperación de guarniciones corruptas.
+- **Estado:** pendiente de confirmación verde en la ejecución posterior a esta corrección. No dar por completada la validación visual ni funcional.
