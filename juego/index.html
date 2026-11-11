@@ -1255,7 +1255,18 @@ function hitResolveVictory(){if(!battle)return;if(battle.defenseSiteId){finishDe
   const enemy=rivalState();enemy.soldiers+=4*(s.campaignLevel-1);enemy.archers+=2*(s.campaignLevel-1);enemy.gold+=80*(s.campaignLevel-1);
   battle=null;$('modal').hidden=true;selectedMine='';reveal();
   s.message='🏆 ¡Victoria en el nivel '+completed+'! El héroe conserva sus tropas, experiencia y oro. Comienza el nivel '+s.campaignLevel+' con un ejército enemigo más poderoso.'+note;
-  render();return}
+  render();
+  // La nueva etapa ya está guardada antes de mostrar la celebración.
+  // La ventana es informativa: cerrar o confirmar no reinicia el estado.
+  if(typeof document!=='undefined'&&typeof realmDialog==='function'){
+   void realmDialog('🏆 ¡Victoria! Nivel '+completed+' completado',
+    'Has conquistado el castillo principal del Reino Umbrío.\\n\\n'+
+    'Recompensa: +100 de experiencia.\\n'+
+    'Conservas: '+s.soldiers+' soldados, '+s.archers+' arqueros, '+s.griffins+' grifos, '+s.dragons+' dragones y '+s.gold+' de oro.\\n\\n'+
+    'Próximo desafío: nivel '+s.campaignLevel+'. Los comandantes y castillos enemigos serán más poderosos.',
+    [{label:'⚔️ Continuar la campaña',value:true}],null,false);
+  }
+  return}
  if(battle.siteId){
   if(battle.castleHeroDefender){const v=battle.enemyCommanderId?s.enemyCastleHeroes?.[battle.enemyCommanderId]:rivalState();if(v){v.defeated=true;v.active=false;v.recovery=0;v.soldiers=0;v.archers=0}}
   const id=battle.siteId,label=battle.siteLabel||'Castillo independiente';
