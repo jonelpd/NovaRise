@@ -1260,9 +1260,9 @@ function hitResolveVictory(){if(!battle)return;if(battle.defenseSiteId){finishDe
   // La ventana es informativa: cerrar o confirmar no reinicia el estado.
   if(typeof document!=='undefined'&&typeof realmDialog==='function'){
    void realmDialog('🏆 ¡Victoria! Nivel '+completed+' completado',
-    'Has conquistado el castillo principal del Reino Umbrío.\\n\\n'+
-    'Recompensa: +100 de experiencia.\\n'+
-    'Conservas: '+s.soldiers+' soldados, '+s.archers+' arqueros, '+s.griffins+' grifos, '+s.dragons+' dragones y '+s.gold+' de oro.\\n\\n'+
+    'Has conquistado el castillo principal del Reino Umbrío.\n\n'+
+    'Recompensa: +100 de experiencia.\n'+
+    'Conservas: '+s.soldiers+' soldados, '+s.archers+' arqueros, '+s.griffins+' grifos, '+s.dragons+' dragones y '+s.gold+' de oro.\n\n'+
     'Próximo desafío: nivel '+s.campaignLevel+'. Los comandantes y castillos enemigos serán más poderosos.',
     [{label:'⚔️ Continuar la campaña',value:true}],null,false);
   }
@@ -1409,7 +1409,7 @@ function realmDialog(title,detail,choices,inputValue=null,allowDismiss=true){
   const panel=document.createElement('section');panel.className='realm-dialog-panel';
   const crest=document.createElement('div');crest.className='realm-dialog-crest';crest.textContent='⚜️';
   const h=document.createElement('h2');h.textContent=title;
-  const p=document.createElement('p');p.textContent=detail;
+  const p=document.createElement('p');p.textContent=detail;p.style.whiteSpace='pre-line';
   const actions=document.createElement('div');actions.className='realm-dialog-actions';
   panel.append(crest,h,p);
   let field;
