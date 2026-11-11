@@ -800,3 +800,11 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 ### Fase 3 — Ampliación del mapa real (2026-11-11)
 
 Se recibió y examinó visualmente el archivo original `mapa-grande.png`. Se mantiene el criterio obligatorio de **no inventar objetos ni construcciones**. Primera ampliación implementada en `juego/index.html`: tres puntos interactivos transparentes superpuestos a elementos identificados en la imagen: pozo antiguo del desierto (experiencia), cabaña del bosque central (tres soldados) y ruinas orientales del desierto (oro ajustado a la dificultad). Cada recompensa se entrega **una sola vez por nivel**, mediante `s.landmarkRewards`, y se conserva con el estado de la partida; la siguiente campaña reinicia el mapa y permite nuevas visitas. Prueba añadida en `tests/p0-map-landmark-rewards.test.cjs`. Confirmar resultado CI y posición exacta en el juego antes de dar por concluida la fase 3. Se mantienen intactas las minas y los molinos anteriores.
+
+### Fase 3 — Cierre de la ampliación inicial de exploración del mapa (2026-11-11)
+
+La inspección de `mapa-grande.png` permitió añadir dos construcciones reales más: refugio del desierto occidental (reclutamiento) y refugio entre las montañas centrales (experiencia). Se dispone ahora de **cinco puntos adicionales** (dos de experiencia, dos de reclutamiento y uno de oro) sobre elementos identificables del mapa original, con activación transparente sin dibujar edificios ficticios. La recompensa es única por lugar y campaña, guardada en `s.landmarkRewards`. La fase 3 queda **cerrada en este alcance de ampliación y reglas de recompensa**, condicionada a que pase CI; el ajuste visual fino de coordenadas y el ensayo manual completo permanecen para fase 5.
+
+### Fase 4 — Variedad de niveles y objetivos: ACTIVA
+
+Siguiente fase: revisar la transición entre campañas, conservación de tropas y experiencia, objetivos de victoria y diferenciación de niveles; corregir defectos verificables, probar y cerrar en un bloque.
