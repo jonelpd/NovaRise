@@ -671,3 +671,11 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Implementación:** `juego/index.html` (`9534206`, `4cadcf1`, `a017f0d`) y `juego/combate-demo.html` (`3fe5a28`, `5a44baa`).
 - **Regresión:** `tests/p0-campaign-progression.test.cjs` (`751d98d`) comprueba ambas órdenes, condiciones incompletas y asedio del héroe defensor en las dos páginas.
 - **Pendiente:** CI verde para las nuevas pruebas, revisión en navegador y verificación de la ventana de victoria real. No dar por validado hasta comprobarlo.
+
+### P0: partida bloqueada tras supuesta victoria — 2026-11-11
+
+- **Reporte con captura móvil:** el jugador derrota al héroe y conquista un castillo, no ve ventana de victoria y pierde capacidad de movimiento y de finalizar turno.
+- **Causa adicional identificada:** la ruta antigua `hitResolveVictory()` de combate genérico `battle.fort` seguía fijando `s.done=true` sin evaluar la doble condición de victoria; además, `load()` reabría partidas antiguas con `done=true`, manteniendo los controles bloqueados.
+- **Correcciones:** `juego/index.html` commit `3f19277` y `juego/combate-demo.html` commit `7c04227`. Las fortalezas genéricas ya no terminan la campaña; la carga principal y la recuperación desde backup desactivan el bloqueo `done` de partidas antiguas y muestran un mensaje de recuperación.
+- **Protección de datos:** no se fuerza nueva campaña ni se borran las partidas; se mantiene el estado del héroe y recursos.
+- **Pendiente:** verificar CI, comprobar la partida del usuario tras recarga y probar manualmente ambos órdenes de objetivos, el diálogo y los controles.
