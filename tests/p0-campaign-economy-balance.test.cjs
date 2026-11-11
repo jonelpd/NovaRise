@@ -121,3 +121,11 @@ test('saved landmark reward claims only reference five real map locations',()=>{
   assert.match(validation,/\.includes\(k\)\|\|g\.landmarkRewards\[k\]!==true/);
  }
 });
+
+test('campaign completion is idempotent after final victory',()=>{
+ for(const page of ['index.html','combate-demo.html']){
+  const html=fs.readFileSync(path.join(__dirname,'../juego',page),'utf8');
+  const section=html.slice(html.indexOf('function completeCampaignIfReady()'),html.indexOf('function completeCampaignIfReady()')+450);
+  assert.match(section,/function completeCampaignIfReady\(\)\{\s*if\(s\.done\)return false;/);
+ }
+});
