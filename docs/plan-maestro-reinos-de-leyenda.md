@@ -808,3 +808,15 @@ La inspección de `mapa-grande.png` permitió añadir dos construcciones reales 
 ### Fase 4 — Variedad de niveles y objetivos: ACTIVA
 
 Siguiente fase: revisar la transición entre campañas, conservación de tropas y experiencia, objetivos de victoria y diferenciación de niveles; corregir defectos verificables, probar y cerrar en un bloque.
+
+### Fase 4 — Cierre técnico de progresión de campañas (2026-11-11)
+
+**Auditoría:** condiciones de victoria (héroe principal derrotado y castillo principal conquistado), continuidad de tropas, experiencia, facción y oro; reinicio del mapa y progresión del nivel 1 al 50. **Defecto detectado:** al completar el nivel 50, el juego reiniciaba el mismo nivel indefinidamente, permitiendo repetir recompensas y sin final de campaña.
+
+**Corrección:** al completar el nivel 50 se marca `s.done=true`, se cierra el combate y aparece una ventana de victoria definitiva, sin reiniciar la campaña ni duplicar recompensas. Se aplicó a `juego/index.html` y `juego/combate-demo.html`. La transición habitual de niveles 1–49 permanece intacta. Prueba añadida a `tests/p0-campaign-economy-balance.test.cjs`.
+
+**Cierre:** fase 4 cerrada en su alcance técnico, pendiente de verificar CI del cambio final. Las pruebas de partida completa y verificación visual quedan en fase 5.
+
+### Fase 5 — Estabilidad y pruebas integrales: ACTIVA
+
+Comprobar la suite automática, persistencia, navegación, combate y progresión sin introducir regresiones. Corregir defectos reproducibles antes de pasar a la fase 6.
