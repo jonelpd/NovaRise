@@ -1267,6 +1267,14 @@ function completeCampaignIfReady(){
 }
 function hitResolveVictory(){if(!battle)return;if(battle.defenseSiteId){finishDefensiveSiege(true);return}
  if(battle.rivalCastle){
+  if(battle.castleHeroDefender){
+   const hero=battle.enemyCommanderId?s.enemyCastleHeroes?.[battle.enemyCommanderId]:rivalState();
+   if(hero){hero.defeated=true;hero.active=false;hero.recovery=0;hero.soldiers=0;hero.archers=0}
+   battle=null;$('modal').hidden=true;
+   s.message='⚔️ Héroe defensor derrotado. El castillo principal aún debe ser conquistado antes de que el comandante se recupere.';
+   if(!completeCampaignIfReady())render();
+   return
+  }
   verifiedSiteState().rival='player';
   s.moves=Math.max(0,s.moves-1);
   const note=awardHeroExperience(100);
