@@ -38,3 +38,22 @@ for(const page of ['index.html','combate-demo.html']){
   }
  });
 }
+
+for(const page of ['index.html','combate-demo.html']){
+ const html=fs.readFileSync(path.join(__dirname,'../juego',page),'utf8');
+ test(page+' recruitment costs and baseline income stay viable at levels 5, 10 and 20',()=>{
+  const match=html.match(/const CASTLE_RECRUIT_COST=\{soldiers:(\d+),archers:(\d+),griffins:(\d+),dragons:(\d+)\}/);
+  assert.ok(match,'Recruitment costs must be inspectable');
+  const costs=match.slice(1).map(Number);
+  assert.ok(costs.every(c=>c>0));
+  for(const level of [5,10,20]){
+   const factor=Math.max(.45,1-.08*Math.min(7,level-1));
+   const income=Math.floor(40*factor);
+   const soldierTurns=Math.ceil(costs[0]/income);
+   const archerTurns=Math.ceil(costs[1]/income);
+   assert.ok(income>=18,'Base income must not fall below 18 gold per turn');
+   assert.ok(soldierTurns<=2,'A basic soldier must be affordable within two baseline income turns');
+   assert.ok(archerTurns<=3,'A basic archer must be affordable within three baseline income turns');
+  }
+ });
+}
