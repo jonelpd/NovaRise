@@ -1779,7 +1779,7 @@ const CASTLE_BANNER_COLORS={
 };
 function castleBannerOwner(site){
  if(site.id==='home')return 'player';
- if(site.id==='rival')return s.done?'player':'rival';
+ if(site.id==='rival')return verifiedSiteState().rival==='player'?'player':'rival';
  const owner=verifiedSiteState()[site.id];
  if(owner==='player'||owner==='rival')return owner;
  if(site.id==='fort-south'&&s.claimed.includes('4,7'))return 'player';
