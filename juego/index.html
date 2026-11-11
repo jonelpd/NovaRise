@@ -1583,7 +1583,7 @@ function interactVerifiedSite(site){
   const v=rivalState();
   if(rivalHeroDefendingCastle(site)&&rivalCastleHeroBattle(site))return;
   battle={x:s.x,y:s.y,k:'rival-castle',rivalCastle:true,rival:true,fort:true,
-   hp:Math.max(18,12+v.soldiers*2+v.archers*3),defending:false,
+   hp:Math.max(18,12+v.soldiers*2+v.archers*3)+8*Math.max(0,Math.min(49,(Number.isInteger(s.campaignLevel)?s.campaignLevel:1)-1)),defending:false,
    ax:0,ay:2,ex:5,ey:2,range:1,selected:'soldiers',
    sx:0,sy:2,rx:0,ry:3,round:0};
   showBattle();return;
@@ -2114,8 +2114,8 @@ function enemyCastleHeroes(){
   if(!hero){
    const point=safeHeroPoint(site.x,site.y);
    s.enemyCastleHeroes[site.id]={castleId:site.id,x:point?point[0]:site.x,y:point?point[1]:site.y,
-    soldiers:Math.max(1,Math.floor((CASTLE_PROFILES[site.id]?.guard.soldiers||4)/2)),
-    archers:Math.max(0,Math.floor((CASTLE_PROFILES[site.id]?.guard.archers||0)/2)),
+    soldiers:Math.max(1,Math.floor((CASTLE_PROFILES[site.id]?.guard.soldiers||4)/2))+2*Math.max(0,Math.min(49,(Number.isInteger(s.campaignLevel)?s.campaignLevel:1)-1)),
+    archers:Math.max(0,Math.floor((CASTLE_PROFILES[site.id]?.guard.archers||0)/2))+Math.max(0,Math.min(49,(Number.isInteger(s.campaignLevel)?s.campaignLevel:1)-1)),
     moves:0,turns:0,gold:0,defeated:false,recovery:0,active:true};
   }
  }
