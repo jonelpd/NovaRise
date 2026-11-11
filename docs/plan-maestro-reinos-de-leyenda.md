@@ -630,3 +630,10 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **CI confirmado:** ejecución `42995545553` verde para la primera implementación de continuidad `b25d7dd`.
 - **Pruebas `908e225`:** nuevo `tests/p0-campaign-progression.test.cjs` comprueba la transición del nivel 1 al 2, continuidad de tropas, experiencia y oro, desbloqueo del estado `done`, aumento de soldados, arqueros y oro rivales y compatibilidad con partidas antiguas sin `campaignLevel`.
 - **Pendiente:** confirmar la nueva ejecución CI, realizar prueba manual completa de conquista y recarga, revisar escalado de comandantes y guarniciones, y evitar que el nivel 50 se repita sin un objetivo nuevo.
+
+### Escalado de fortalezas secundarias en niveles posteriores — 2026-11-11
+
+- **Regresión validada:** `42996439344` verde para `tests/p0-campaign-progression.test.cjs`.
+- **Código `bbd4edd`:** los comandantes secundarios nuevos reciben +2 soldados y +1 arquero por cada nivel adicional. El asedio del castillo principal sin comandante presente recibe +8 puntos de resistencia por nivel adicional. Los cálculos admiten partidas antiguas sin `campaignLevel` y respetan el máximo provisional de nivel 50.
+- **Importante:** los comandantes ya existentes en una partida guardada no se refuerzan retroactivamente; solo se aplica a su creación, evitando duplicar tropas en cada carga o renderizado.
+- **Pendiente:** validar CI de este cambio y la dificultad real en navegador, añadir pruebas de escalado de guarniciones y equilibrio de recompensas.
