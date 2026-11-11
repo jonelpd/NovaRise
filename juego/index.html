@@ -2527,10 +2527,10 @@ function load(){
  if(!raw)return start();
  try{
   const v=JSON.parse(raw);
-  if(validGame(v)){s=v;if(s.done){s.done=false;s.message='⚠️ Partida antigua desbloqueada. La victoria requiere derrotar al héroe principal y conquistar su castillo.';}selectedMine=s.ownedMines[0]||'';if(s.pendingSecondarySiege)recoverSecondarySiegeDecision();reveal();render();if(s.pendingSecondarySiege)resumeSecondarySiegeAfterLoad(s);return}
+  if(validGame(v)){s=v;if(s.done){s.done=false;s.message='⚠️ Partida antigua desbloqueada. La victoria requiere derrotar al héroe principal y conquistar su castillo.';}selectedMine=s.ownedMines[0]||'';if(s.pendingSecondarySiege)recoverSecondarySiegeDecision();reveal();render();if(s.pendingSecondarySiege)resumeSecondarySiegeAfterLoad(s);else if(verifiedSiteState().rival==='player'&&rivalState().defeated)setTimeout(()=>{if(!battle&&!rivalBusy)completeCampaignIfReady()},0);return}
  }catch(e){}
  // Recover the last valid snapshot when the primary save is damaged.
- try{const backup=localStorage.getItem(STORE+'-backup');if(backup){const restored=JSON.parse(backup);if(validGame(restored)){if(restored.done){restored.done=false;restored.message='⚠️ Partida antigua desbloqueada. Completa los dos objetivos de campaña.';}try{localStorage.setItem(STORE+'-recovery-'+Date.now(),raw)}catch(e){}s=restored;selectedMine=s.ownedMines[0]||'';if(s.pendingSecondarySiege)recoverSecondarySiegeDecision();reveal();render();message('⚠️ La última partida estaba dañada. Se ha recuperado la copia anterior válida.');if(s.pendingSecondarySiege)resumeSecondarySiegeAfterLoad(s);return}}}catch(e){}
+ try{const backup=localStorage.getItem(STORE+'-backup');if(backup){const restored=JSON.parse(backup);if(validGame(restored)){if(restored.done){restored.done=false;restored.message='⚠️ Partida antigua desbloqueada. Completa los dos objetivos de campaña.';}try{localStorage.setItem(STORE+'-recovery-'+Date.now(),raw)}catch(e){}s=restored;selectedMine=s.ownedMines[0]||'';if(s.pendingSecondarySiege)recoverSecondarySiegeDecision();reveal();render();if(!s.pendingSecondarySiege&&verifiedSiteState().rival==='player'&&rivalState().defeated)setTimeout(()=>{if(!battle&&!rivalBusy)completeCampaignIfReady()},0);message('⚠️ La última partida estaba dañada. Se ha recuperado la copia anterior válida.');if(s.pendingSecondarySiege)resumeSecondarySiegeAfterLoad(s);return}}}catch(e){}
  // Never overwrite an unreadable campaign with a new one.
  // Preserve the original bytes for manual recovery.
  try{localStorage.setItem(STORE+'-recovery-'+Date.now(),raw)}catch(e){}
