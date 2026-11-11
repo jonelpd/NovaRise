@@ -746,3 +746,10 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Auditoría iniciada:** identificadas las fórmulas centrales `campaignGoldFactor()`, `campaignGoldIncome()` y `awardHeroExperience()`. El nivel 1 mantiene recompensas completas; niveles 2–8 reducen progresivamente hasta el suelo del 45 %.
 - **Pruebas incorporadas:** `tests/p0-campaign-economy-balance.test.cjs` (commit `3cc82c6`) comprueba oro y experiencia en niveles 1–8 y 20, recompensa mínima positiva de 1 XP y compatibilidad con partidas antiguas sin `campaignLevel`, en `juego/index.html` y `juego/combate-demo.html`.
 - **Estado:** pendientes resultados de CI y simulaciones completas de capacidad de reclutamiento, gasto, guarniciones, recuperación del enemigo y ritmo de experiencia. Esta batería prueba fórmulas, no demuestra todavía que el juego esté equilibrado en partidas reales.
+
+### Fase 1 — Corrección de recuperación del héroe rival (2026-11-11)
+
+- **Error de equilibrio detectado:** cuando el héroe principal enemigo era derrotado y se recuperaba tres turnos después, reaparecía con solo 4 soldados y 1 arquero incluso en campañas avanzadas. Esto anulaba parte del aumento de dificultad.
+- **Corregido en ambas páginas:** la recuperación ahora restablece `4+4*(nivel-1)` soldados y `1+2*(nivel-1)` arqueros, respetando el nivel de campaña (1–50). El comportamiento del nivel 1 se mantiene.
+- **Prueba de regresión añadida:** `tests/p0-campaign-economy-balance.test.cjs` comprueba que la fórmula de recuperación no vuelva a los valores fijos.
+- **Pendiente:** validar CI, evaluar ingresos netos, costes de reclutamiento y capacidad real de victoria en campañas avanzadas.
