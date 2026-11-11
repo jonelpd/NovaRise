@@ -599,3 +599,9 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Código `baa0bb3e`:** después de la última espera asíncrona de movimiento se vuelve a verificar el identificador de turno, el estado de la campaña y la propiedad del castillo de origen antes de solicitar un asedio o capturar un recurso. Evita acciones tardías de un turno cancelado o de un comandante cuyo castillo cambió de propietario.
 - **Prueba `89e86bc0`:** garantiza que la comprobación se encuentre después de la pausa final y antes de ambas acciones estratégicas.
 - **Pendiente:** validación manual de interrupciones durante el movimiento y confirmación del CI.
+
+### Prueba de recuperación tras rechazo de resultado de asedio — 2026-11-11
+
+- **Prueba `cb57ab9`:** ampliado `tests/p0-secondary-siege-manual.test.cjs` para simular un resultado táctico rechazado después de bajas en la guarnición, comprobar la restauración del ejército principal y verificar que el checkpoint local conserva el ejército y la decisión de asedio previos al combate.
+- **Alcance:** prueba Node con almacenamiento simulado; no equivale a cerrar y reabrir un navegador real ni a validar un ciclo E2E.
+- **Pendiente:** confirmar ejecución verde de GitHub Actions para esta revisión y probar en navegador victoria, derrota, resultado rechazado, cierre abrupto, recarga y resolución posterior de la defensa pendiente.
