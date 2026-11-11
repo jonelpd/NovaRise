@@ -722,3 +722,21 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Implementado:** `awardHeroExperience(amount)` calcula la experiencia ganada con factor `max(0.45, 1-0.08*min(7,nivel-1))`: nivel 1 100 %, nivel 2 92 %, nivel 3 84 %, nivel 4 76 %, nivel 5 68 %, nivel 6 60 %, nivel 7 52 %, nivel 8+ 45 %. Se redondea hacia abajo y toda recompensa positiva otorga al menos 1 XP. La experiencia acumulada no se reduce.
 - **Cobertura:** todas las fuentes de experiencia que usan la función central, incluidos combates, conquistas y recompensas; `juego/index.html` (`3718bc5`) y `juego/combate-demo.html` (`5e3642b`).
 - **Pendiente:** confirmar CI y revisar balance de progresión de héroes en niveles altos.
+
+
+## Fase 6 — Integración de NVRA y economía tokenizada (planificada, no implementada)
+
+**Objetivo:** incorporar el token NVRA del ecosistema NovaRise en Reinos de Leyenda sin confundir las monedas de oro, los cristales o la experiencia del juego con activos transferibles.
+
+**Dependencias:** completar la auditoría de estabilidad, verificar el contrato y la red Base del token real, documentar tesorería y asignación de recompensas, y validar riesgos legales, de seguridad y económicos antes de habilitar pagos o retiros.
+
+**Tareas:**
+1. Verificar la dirección y el código del contrato NVRA en Base, su suministro, permisos administrativos y estado de seguridad; no suponer que está auditado.
+2. Diseñar conexión opcional de carteras compatibles con Base, sin custodiar ni solicitar frases semilla o claves privadas.
+3. Diferenciar la minería y los recursos internos de cualquier derecho a recibir NVRA real; definir conversiones, límites, temporadas y controles contra automatización y cuentas múltiples.
+4. Diseñar un sistema de recompensas con presupuesto máximo, tesorería financiada y registro verificable de operaciones. No prometer rentabilidad, liquidez ni valor de mercado.
+5. Evaluar utilidades opcionales de NVRA dentro del juego sin impedir la progresión de jugadores gratuitos ni introducir ventajas desproporcionadas.
+6. Crear pruebas de seguridad, integridad de partidas, resistencia a duplicaciones y recuperación de errores de red, además de revisión legal y económica previa al lanzamiento.
+7. Activar primero una modalidad informativa o simulada sin transferencias reales; habilitar operaciones en cadena únicamente tras las verificaciones anteriores.
+
+**Criterio de cierre:** integración funcional, documentada y probada, con límites económicos explícitos y sin comprometer el guardado de partidas. **Estado: pendiente.**
