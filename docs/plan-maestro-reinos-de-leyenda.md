@@ -767,3 +767,20 @@ Fase 2: inventario técnico de habilidades, criaturas, construcciones y economí
 - **Corrección:** al recuperarse, su ejército se reconstruye con la misma fórmula de soldados y arqueros escalados que al crearse inicialmente, según el perfil del castillo y el nivel de campaña; sin duplicar tropas de comandantes existentes.
 - **Cobertura:** `juego/index.html` (commit `3dec29a`) y prueba `tests/p0-campaign-economy-balance.test.cjs` (commit `514dd3a`). La demo no implementa `enemyCastleHeroTurns`, por lo que no corresponde modificar ese módulo allí.
 - **Pendiente:** confirmar CI y simular combates prolongados para calibrar la recuperación de los ejércitos frente a la economía del jugador.
+
+
+## Cierre operativo de fases — 2026-11-11
+
+**Nueva regla de ejecución acordada:** no fragmentar indefinidamente una fase en pequeñas revisiones. Analizar la fase de manera integral, corregir los problemas verificables, ejecutar las pruebas, registrar lo que quede fuera del alcance y pasar inmediatamente a la siguiente. No declarar superadas pruebas que no se hayan ejecutado.
+
+### Fase 1 — Auditoría de equilibrio y dificultad progresiva: CERRADA para el alcance técnico definido
+
+**Revisado y corregido:** escalado del oro y la experiencia por nivel, asequibilidad mínima de reclutamiento en niveles 5/10/20, fuerza y recuperación del héroe principal y de comandantes secundarios, y compatibilidad de fórmulas con partidas antiguas. La batería de regresión del juego terminó correctamente en GitHub Actions, ejecución `43019564196`.
+
+**Alcance del cierre:** validación de reglas y pruebas automáticas existentes; **no equivale a afirmar que se hayan completado partidas reales de principio a fin en los niveles 10 y 20**. El balance fino de campañas prolongadas queda como seguimiento transversal en pruebas integrales (fase 5), sin bloquear la siguiente fase.
+
+### Fase 2 — Castillos y ejércitos estratégicos: ACTIVA
+
+**Objetivo de cierre:** auditar de forma conjunta guarniciones, comandantes, reclutamiento, defensas y capturas de castillos; corregir errores reproducibles y añadir pruebas de regresión; actualizar el plan y pasar a fase 3 sin prolongar la fase 2 por mejoras opcionales.
+
+**Secuencia pendiente:** fase 2 castillos y ejércitos → fase 3 economía y recompensas → fase 4 variedad de niveles → fase 5 estabilidad integral → fase 6 integración segura del token NVRA.
