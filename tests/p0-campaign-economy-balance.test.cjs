@@ -25,3 +25,16 @@ for(const page of ['index.html','combate-demo.html']){
   assert.equal(ctx.campaignGoldIncome(100),100);ctx.awardHeroExperience(100);assert.equal(ctx.s.experience,120);
  });
 }
+
+for(const page of ['index.html','combate-demo.html']){
+ const html=fs.readFileSync(path.join(__dirname,'../juego',page),'utf8');
+ test(page+' recovered rival hero retains campaign difficulty',()=>{
+  assert.match(html,/v\.soldiers=4\+4\*\(campaign-1\);v\.archers=1\+2\*\(campaign-1\)/);
+  assert.doesNotMatch(html,/v\.defeated=false;v\.recovery=0;v\.soldiers=4;v\.archers=1;/);
+  for(const level of [1,5,10,20]){
+   const campaign=Math.max(1,Math.min(50,level));
+   assert.ok(4+4*(campaign-1)>=4);
+   assert.ok(1+2*(campaign-1)>=1);
+  }
+ });
+}
