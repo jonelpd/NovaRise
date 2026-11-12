@@ -927,3 +927,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - La ejecución de regresión `43204513064` correspondiente al commit `50ba3788` finalizó **completed / success** según GitHub Actions. La captura del jugador también mostraba el job `game-regression` verde.
 - Se considera **corregido y cerrado el fallo del test de recuento** entre las variantes principal (30 puntos) y demo (25 puntos). Los diez nuevos hotspots pasan las comprobaciones automatizadas de creación de botones y despacho de clics en ambas variantes.
 - Esta validación automática **no sustituye** la comprobación manual de que los clics lleguen a través de las capas del navegador y de que las rutas sean transitables en partida real.
+
+
+### Corrección de respuesta perceptible de hotspots (2026-11-12)
+
+- Tras el reporte del jugador de que los lugares nuevos no parecían funcionar, se modificaron `juego/index.html` (`eca7e0f2`) y `juego/combate-demo.html` (`f27eec3d`).
+- `interactVerifiedSite()` ya no ignora silenciosamente los clics durante la marcha: explica que debe esperarse al fin del movimiento. Si no quedan puntos de movimiento, pide finalizar turno antes de volver a seleccionar el lugar.
+- Los hotspots de recompensa reciben un área mínima de pulsación de 34×34 px, resaltado solo al pasar el cursor/enfocarlos, y los clics detienen propagación para evitar que una casilla inferior reciba el mismo evento. Se mantiene intacta la ilustración original y el catálogo de 30/25 lugares de las dos variantes.
+- **Pendiente**: confirmar CI de `f27eec3d` (regresión `43204982997`) y prueba real del usuario. No afirmar que el problema de acceso a todos los lugares esté resuelto hasta confirmar clic y movimiento en navegador.
