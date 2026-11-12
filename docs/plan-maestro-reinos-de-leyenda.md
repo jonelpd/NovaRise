@@ -935,3 +935,10 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - `interactVerifiedSite()` ya no ignora silenciosamente los clics durante la marcha: explica que debe esperarse al fin del movimiento. Si no quedan puntos de movimiento, pide finalizar turno antes de volver a seleccionar el lugar.
 - Los hotspots de recompensa reciben un área mínima de pulsación de 34×34 px, resaltado solo al pasar el cursor/enfocarlos, y los clics detienen propagación para evitar que una casilla inferior reciba el mismo evento. Se mantiene intacta la ilustración original y el catálogo de 30/25 lugares de las dos variantes.
 - **Pendiente**: confirmar CI de `f27eec3d` (regresión `43204982997`) y prueba real del usuario. No afirmar que el problema de acceso a todos los lugares esté resuelto hasta confirmar clic y movimiento en navegador.
+
+
+### Reparación de regresión tras mejora de hotspots (2026-11-12)
+
+- El jugador aportó captura de `Game regression tests` en rojo para commit `eca7e0f2`. Se inspeccionaron registros de la ejecución `43204990177` (`f27eec3d`), que mostraron dos fallos de tests: mock DOM sin `classList.add()` en `p0-map-hotspot-clicks.test.cjs`, y aserción desactualizada del antiguo `b.onclick=()=>interactVerifiedSite(site)` en `p0-map-landmark-rewards.test.cjs`.
+- Se corrigieron ambos tests sin deshacer las mejoras del juego: commits `5f033098` y `17894bbf`. La nueva ejecución de regresión `43208953858` queda **pendiente de resultado** al registrar este cambio.
+- Mantener pendiente la aceptación manual del usuario: un CI verde comprueba el cableado, pero no garantiza por sí solo que todos los nuevos hotspots reciban clics en un navegador real.
