@@ -865,3 +865,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - Añadido `tests/p0-final-victory-runtime.test.cjs` (commit `89539392`): prueba con `node:test` y `vm` la función real `completeCampaignIfReady` extraída de las dos variantes del juego. Verifica que la victoria en nivel 50 termine la campaña, no reinicie el mapa, y no abra dos diálogos ni ejecute dos cierres.
 - El mismo archivo ejecuta `validGame` de ambas variantes y comprueba el rechazo de niveles 0, 51 y decimales, de recompensas en lugares ficticios y de reclamaciones malformadas; también acepta un estado legítimo del nivel 50.
 - **Estado de aceptación:** pruebas añadidas al repositorio; confirmar resultado de CI que las ejecute antes de marcarlas aprobadas. Estas pruebas de funciones aisladas no sustituyen un recorrido completo de navegador.
+
+
+### Fase 5 — Validación manual de campaña comunicada por el jugador (2026-11-12)
+
+- **Comprobación manual positiva informada por el jugador:** jugó una partida real hasta completar el nivel; confirmó que **los datos se guardan correctamente** y que **la campaña cambia al nivel siguiente**.
+- Esta evidencia permite marcar como **validados manualmente en el escenario probado** el cierre de nivel, la persistencia observada y la transición de campaña. No implica que se hayan recorrido los 50 niveles ni todas las rutas de carga, recuperación, combate y asedio.
+- Las pruebas automáticas añadidas en `89539392` terminaron **verdes**: `Game regression tests` ejecución `43190924820`. También quedaron verdes las pruebas estáticas `43190948587` y el despliegue Pages `43190948852` del commit de documentación `3094853f`.
+- **Pendientes para cierre integral de fase 5:** recuperación de guardado corrupto/backup en navegador, asedios principales y secundarios con guardado/reanudación, visualización y clics de las cinco ubicaciones reales, compatibilidad móvil y aceptación del nivel 50. No repetir la prueba de avance de nivel ya superada salvo regresión.
