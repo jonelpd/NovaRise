@@ -873,3 +873,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - Esta evidencia permite marcar como **validados manualmente en el escenario probado** el cierre de nivel, la persistencia observada y la transición de campaña. No implica que se hayan recorrido los 50 niveles ni todas las rutas de carga, recuperación, combate y asedio.
 - Las pruebas automáticas añadidas en `89539392` terminaron **verdes**: `Game regression tests` ejecución `43190924820`. También quedaron verdes las pruebas estáticas `43190948587` y el despliegue Pages `43190948852` del commit de documentación `3094853f`.
 - **Pendientes para cierre integral de fase 5:** recuperación de guardado corrupto/backup en navegador, asedios principales y secundarios con guardado/reanudación, visualización y clics de las cinco ubicaciones reales, compatibilidad móvil y aceptación del nivel 50. No repetir la prueba de avance de nivel ya superada salvo regresión.
+
+
+### Fase 5 — Prioridad: interacciones con elementos reales del mapa (2026-11-12)
+
+- Por decisión del jugador, se priorizan **únicamente** las interacciones con construcciones/objetos ya visibles en `juego/mapa-grande.png`. No añadir edificios, minas ni artefactos ficticios sobre la ilustración.
+- Auditoría del código: `VERIFIED_MAP_SITES` define cinco reliquias, minas, molinos y castillos; `drawWorldLandmarks()` sitúa botones transparentes sobre coordenadas porcentuales; `interactVerifiedSite()` permite caminar hacia ellos y aplica recompensas, propiedad o provisiones. Los cinco lugares de recompensa se reclaman una sola vez por nivel.
+- Se incorpora `tests/p0-map-interaction-runtime.test.cjs` (commit `dcbef13b`): pruebas ejecutables de las cinco reliquias, prohibición de doble recompensa, propiedad de minas sin emisión de NVRA y límite semanal de molinos. **Pendiente confirmar CI**.
+- Aceptación visual pendiente: contrastar manualmente cada hotspot con el píxel exacto del elemento de `mapa-grande.png`, verificar acceso y distancia de interacción desde el héroe en navegador y probar los puntos táctiles en móvil. No considerar las coordenadas verificadas visualmente solo por existir en el código.
