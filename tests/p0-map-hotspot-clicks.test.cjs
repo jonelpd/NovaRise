@@ -12,7 +12,7 @@ for(const page of ['index.html','combate-demo.html']){
   vm.createContext(ctx);
   vm.runInContext(html.slice(catalogStart,catalogEnd)+'\n'+html.slice(drawStart,drawEnd),ctx);
   ctx.globalButtons=buttons;vm.runInContext('drawWorldLandmarks({appendChild:b=>globalButtons.push(b)})',ctx);
-  assert.equal(buttons.length,30);
+  assert.equal(buttons.length,page==='index.html'?30:25,'all sites in this variant should create buttons');
   for(const id of expected){const site=vm.runInContext('VERIFIED_MAP_SITES.find(v=>v.id==='+JSON.stringify(id)+')',ctx);assert.ok(site,id);const b=buttons.find(b=>b.title===site.label);assert.ok(b,id+' button missing');assert.equal(b.style.left,site.x+'%');assert.equal(b.style.top,site.y+'%');assert.equal(typeof b.onclick,'function');b.onclick()}
   assert.deepEqual(clicks,expected);
  });
