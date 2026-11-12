@@ -920,3 +920,10 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 
 - Se analizó el fallo real de GitHub Actions `43204317174`: `tests/p0-map-hotspot-clicks.test.cjs` exigía **30** botones en `combate-demo.html`, pero su catálogo tenía **15** lugares anteriores más **10** nuevos = **25**. La variante principal `juego/index.html` sí tiene 20 anteriores más 10 nuevos = 30.
 - Se corrigió el test (commit `50ba3788`) para comprobar el total correcto de cada variante y seguir pulsando y validando los **diez lugares nuevos** en ambas. No se alteraron ubicaciones, mapa ni lógica del juego. CI de corrección `43204513064` pendiente al documentarlo.
+
+
+### Confirmación de CI de hotspots — 2026-11-12
+
+- La ejecución de regresión `43204513064` correspondiente al commit `50ba3788` finalizó **completed / success** según GitHub Actions. La captura del jugador también mostraba el job `game-regression` verde.
+- Se considera **corregido y cerrado el fallo del test de recuento** entre las variantes principal (30 puntos) y demo (25 puntos). Los diez nuevos hotspots pasan las comprobaciones automatizadas de creación de botones y despacho de clics en ambas variantes.
+- Esta validación automática **no sustituye** la comprobación manual de que los clics lleguen a través de las capas del navegador y de que las rutas sean transitables en partida real.
