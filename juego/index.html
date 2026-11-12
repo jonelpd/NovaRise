@@ -189,6 +189,7 @@ body:has(#auth-screen:not([hidden])){min-height:100vh;background:linear-gradient
 #world-viewport .map .tile:not(.hero){font-size:0!important;color:transparent!important;text-shadow:none!important}
 #world-viewport .map .tile.landmark:before,#world-viewport .map .tile.landmark:after{display:none!important;content:none!important}
 #world-viewport .map .mounted-hero-flag{display:none!important}
+#world-viewport .map .world-hotspot.discoverable-hotspot:hover,#world-viewport .map .world-hotspot.discoverable-hotspot:focus-visible{outline:3px solid #ffe7a0!important;outline-offset:2px!important;border-radius:50%!important;background:#ffe7a01c!important}
 </style><style id="novarise-hero-desktop-visibility-v51">
 #world-viewport .map .mounted-hero-marker{position:absolute!important;z-index:9999!important;display:flex!important;visibility:visible!important;opacity:1!important;overflow:visible!important;pointer-events:none!important;transform:translate(-50%,-85%)!important;min-width:34px!important;min-height:43px!important}
 #world-viewport .map .mounted-hero-rider{display:block!important;width:34px!important;height:43px!important;font-size:initial!important;line-height:normal!important;flex:none!important}
@@ -1622,7 +1623,9 @@ function rivalCastleHeroBattle(site){
  showBattle();return true
 }
 function interactVerifiedSite(site){
- if(s.done||battle||walking||rivalBusy)return;
+ if(s.done||battle||rivalBusy)return;
+ if(walking)return message('El héroe está caminando. Espera a que termine el movimiento antes de seleccionar otro lugar.');
+ if(s.moves<1)return message('No quedan puntos de movimiento. Termina el turno y vuelve a seleccionar '+site.label+'.');
  const [hx,hy]=heroVisualPosition();
  if(Math.hypot(hx-site.x,hy-site.y)>8){
   const candidates=[];
@@ -2108,7 +2111,11 @@ function drawWorldLandmarks(map){
   b.style.width=site.w+'%';b.style.height=site.h+'%';
   b.style.background='transparent';b.style.border='0';b.style.boxShadow='none';b.style.opacity='0';
   b.setAttribute('aria-label',site.label);b.title=site.label;
-  b.onclick=()=>interactVerifiedSite(site);
+  if(site.id.startsWith('relic-')){
+   b.classList.add('discoverable-hotspot');
+   b.style.minWidth='34px';b.style.minHeight='34px';
+  }
+  b.onclick=e=>{if(e){e.preventDefault();e.stopPropagation()}interactVerifiedSite(site)};
   map.appendChild(b)
  }
 }
