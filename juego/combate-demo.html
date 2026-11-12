@@ -1522,6 +1522,17 @@ const VERIFIED_MAP_SITES=[
  {id:'mill-lake-south',label:'Molino del lago meridional',x:44.4,y:71.2,w:5,h:5,kind:'mill'},
  {id:'mill-lake-east',label:'Molino del lago oriental',x:57,y:64.7,w:5,h:5,kind:'mill'},
  {id:'mill-south',label:'Molino del sur',x:41,y:92.9,w:5,h:5,kind:'mill'}
+,
+ {id:'relic-north-mountain-dwelling',label:'Refugio de las montañas del norte',x:29.1,y:11.3,w:3.5,h:3.5,kind:'relic',reward:'soldiers'},
+ {id:'relic-north-wooden-hall',label:'Salón de madera del norte',x:46.1,y:18.3,w:3.5,h:3.5,kind:'relic',reward:'soldiers'},
+ {id:'relic-east-mountain-shelter',label:'Refugio de la ladera oriental',x:59,y:25,w:3.5,h:3.5,kind:'relic',reward:'experience'},
+ {id:'relic-northeast-desert-cabin',label:'Cabaña del límite del desierto',x:80,y:18.1,w:3.5,h:3.5,kind:'relic',reward:'soldiers'},
+ {id:'relic-central-stone-arch',label:'Arco de piedra de las montañas',x:56.5,y:37.7,w:3.5,h:3.5,kind:'relic',reward:'experience'},
+ {id:'relic-west-lake-shelter',label:'Refugio del oeste del lago',x:10.9,y:66.2,w:3.5,h:3.5,kind:'relic',reward:'gold'},
+ {id:'relic-south-lake-cottage',label:'Cabaña del bosque al sur del lago',x:33.7,y:74.3,w:3.5,h:3.5,kind:'relic',reward:'soldiers'},
+ {id:'relic-southwest-forest-hut',label:'Cabaña del bosque suroccidental',x:12,y:83.1,w:3.5,h:3.5,kind:'relic',reward:'soldiers'},
+ {id:'relic-southeast-lava-site',label:'Fumarola de las montañas orientales',x:91.3,y:84.3,w:3.5,h:3.5,kind:'relic',reward:'experience'},
+ {id:'relic-far-southeast-house',label:'Casa de piedra del extremo sureste',x:92.5,y:93.8,w:3.5,h:3.5,kind:'relic',reward:'gold'}
 ];
 function verifiedSiteState(){
  if(!s.verifiedSites||typeof s.verifiedSites!=='object'||Array.isArray(s.verifiedSites))s.verifiedSites={};
@@ -2135,7 +2146,7 @@ function exportSave(){if(rivalBusy)return message('Espera a que termine el turno
  if(!bounded(g.moves,7)||!bounded(g.soldiers,100000)||!bounded(g.archers,100000))return false;
  if(!bounded(g.griffins,100000)||!bounded(g.dragons,100000)||!bounded(g.experience,100000000))return false;
  if(g.campaignLevel!==undefined&&(!Number.isInteger(g.campaignLevel)||g.campaignLevel<1||g.campaignLevel>50))return false;
- if(g.landmarkRewards!==undefined&&(!g.landmarkRewards||typeof g.landmarkRewards!=='object'||Array.isArray(g.landmarkRewards)||Object.keys(g.landmarkRewards).some(k=>!['relic-desert-well','relic-north-cabin','relic-east-ruin','relic-desert-hut','relic-mountain-hut'].includes(k)||g.landmarkRewards[k]!==true)))return false;
+ if(g.landmarkRewards!==undefined&&(!g.landmarkRewards||typeof g.landmarkRewards!=='object'||Array.isArray(g.landmarkRewards)||Object.keys(g.landmarkRewards).some(k=>!['relic-desert-well','relic-north-cabin','relic-east-ruin','relic-desert-hut','relic-mountain-hut','relic-north-mountain-dwelling','relic-north-wooden-hall','relic-east-mountain-shelter','relic-northeast-desert-cabin','relic-central-stone-arch','relic-west-lake-shelter','relic-south-lake-cottage','relic-southwest-forest-hut','relic-southeast-lava-site','relic-far-southeast-house'].includes(k)||g.landmarkRewards[k]!==true)))return false;
  if(!g.mineLevels||typeof g.mineLevels!=='object'||Array.isArray(g.mineLevels))return false;
  if(!g.miners||typeof g.miners!=='object'||Array.isArray(g.miners)||!Object.values(g.miners).every(n=>bounded(n,3)))return false;
  return ['Alianza del Alba','Reino Umbrío','Guardianes del Bosque'].includes(g.faction);
