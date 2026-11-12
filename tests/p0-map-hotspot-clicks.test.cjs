@@ -8,7 +8,7 @@ for(const page of ['index.html','combate-demo.html']){
  assert.ok(catalogStart>=0&&catalogEnd>catalogStart&&drawStart>=0&&drawEnd>drawStart);
  test(page+': each of ten new sites creates a clickable map button at its coordinates',()=>{
   const clicks=[],buttons=[];
-  const ctx={document:{createElement:()=>({style:{},setAttribute(k,v){this[k]=v}})},interactVerifiedSite:site=>clicks.push(site.id)};
+  const ctx={document:{createElement:()=>({style:{},classList:{add(){}},setAttribute(k,v){this[k]=v}})},interactVerifiedSite:site=>clicks.push(site.id)};
   vm.createContext(ctx);
   vm.runInContext(html.slice(catalogStart,catalogEnd)+'\n'+html.slice(drawStart,drawEnd),ctx);
   ctx.globalButtons=buttons;vm.runInContext('drawWorldLandmarks({appendChild:b=>globalButtons.push(b)})',ctx);
