@@ -899,3 +899,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - Se reutiliza la mecánica existente de interacción por proximidad/ruta y recompensa **una vez por nivel** (+3 soldados, +55 PX base o +100 oro ajustado por campaña). Sin token NVRA ni gráficos añadidos al mapa. Total nuevo: **30 hotspots, 15 de recompensa**.
 - El validador de partidas acepta las 10 claves nuevas de recompensa, manteniendo el rechazo de claves desconocidas; prueba de ejecución ampliada a 15 reliquias. Commits `42949ba6`, `108ff9bd`, `48bc983b`.
 - **Verificación pendiente:** resultado de CI del commit `48bc983b`, y prueba visual/manual de los diez clics y caminos transitables. Los centros y tamaños se estimaron sobre el mapa anotado; ajustar únicamente tras observar errores reales.
+
+
+### Fase 5 — Verificación de rutas hacia los diez lugares añadidos (2026-11-12)
+
+- Confirmado **verde** en commit `48bc983b`: `Game regression tests` `43199035277`, y pruebas estáticas `43199037369`. En commit `76ff46e8`, también verdes validación estática `43199069151` y publicación Pages `43199069655`.
+- Auditoría de `interactVerifiedSite()` y `walkTo()`: los clics a distancia buscan una casilla transitable próxima al elemento, dejan una interacción pendiente y solo entregan la recompensa tras llegar; si no existe ruta, informan del obstáculo sin entregar recompensa.
+- Añadidas pruebas ejecutables de **ruta disponible** y **lugar inaccesible** a `tests/p0-map-interaction-runtime.test.cjs` (commit `b0efd1f`), verificando que no se entregue recompensa por anticipado ni se teletransporte el héroe. **Resultado de esta nueva ejecución de CI aún pendiente**.
+- Falta aceptación manual en navegador de las diez rutas con el mapa original y del movimiento por turnos; estas pruebas con rutas simuladas no garantizan que todas las rutas físicas sean transitables en la imagen real.
