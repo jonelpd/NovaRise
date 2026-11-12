@@ -858,3 +858,10 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - Revisión estática adicional de `juego/index.html` y `juego/combate-demo.html`: ambas variantes contienen guardia de victoria idempotente, límite final en nivel 50, validación de niveles y de cinco ubicaciones del mapa; el cargador principal intenta restaurar un backup válido si el guardado principal falla. Son observaciones del código, **no pruebas de ejecución en navegador**.
 - El workflow de anuncio especial Telegram `telegram-nvra-announcement-20261107.yml` sigue fallando; no afecta al estado verde de los tests de juego y web, pero requiere tratamiento independiente.
 - **Fase 5 permanece abierta** hasta completar pruebas reales de navegador: guardado/recarga y recuperación, combates y asedios, continuidad de los 50 niveles, mapa y pantallas móviles. No iniciar recompensas tokenizadas en producción antes de esta aceptación.
+
+
+### Fase 5 — Pruebas de ejecución de funciones críticas (2026-11-12)
+
+- Añadido `tests/p0-final-victory-runtime.test.cjs` (commit `89539392`): prueba con `node:test` y `vm` la función real `completeCampaignIfReady` extraída de las dos variantes del juego. Verifica que la victoria en nivel 50 termine la campaña, no reinicie el mapa, y no abra dos diálogos ni ejecute dos cierres.
+- El mismo archivo ejecuta `validGame` de ambas variantes y comprueba el rechazo de niveles 0, 51 y decimales, de recompensas en lugares ficticios y de reclamaciones malformadas; también acepta un estado legítimo del nivel 50.
+- **Estado de aceptación:** pruebas añadidas al repositorio; confirmar resultado de CI que las ejecute antes de marcarlas aprobadas. Estas pruebas de funciones aisladas no sustituyen un recorrido completo de navegador.
