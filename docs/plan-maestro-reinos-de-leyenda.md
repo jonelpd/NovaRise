@@ -907,3 +907,10 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - Auditoría de `interactVerifiedSite()` y `walkTo()`: los clics a distancia buscan una casilla transitable próxima al elemento, dejan una interacción pendiente y solo entregan la recompensa tras llegar; si no existe ruta, informan del obstáculo sin entregar recompensa.
 - Añadidas pruebas ejecutables de **ruta disponible** y **lugar inaccesible** a `tests/p0-map-interaction-runtime.test.cjs` (commit `b0efd1f`), verificando que no se entregue recompensa por anticipado ni se teletransporte el héroe. **Resultado de esta nueva ejecución de CI aún pendiente**.
 - Falta aceptación manual en navegador de las diez rutas con el mapa original y del movimiento por turnos; estas pruebas con rutas simuladas no garantizan que todas las rutas físicas sean transitables en la imagen real.
+
+
+### Diagnóstico de respuesta de las nuevas ubicaciones (2026-11-12)
+
+- A petición del jugador se revisó que los diez lugares nuevos se creen como botones reales en `drawWorldLandmarks()`, con coordenadas del catálogo y `onclick=()=>interactVerifiedSite(site)`. La existencia de un botón invisible no garantiza que un clic real del navegador lo alcance si hay capas superpuestas.
+- Añadido `tests/p0-map-hotspot-clicks.test.cjs` (commits `9275eb1c` y `dbaaa4a6`): ejecuta la creación de hotspots para ambas variantes, comprueba los 30 botones y pulsa los diez nuevos para verificar el despacho al lugar correcto. **CI pendiente** al registrar este punto.
+- **No afirmar aún aceptación en navegador:** falta comprobar orden de capas y captura real de eventos táctiles/ratón, distancias, obstáculos y mensajes al usuario en las diez ubicaciones. Las pruebas VM comprueban el cableado de eventos, no un navegador gráfico.
