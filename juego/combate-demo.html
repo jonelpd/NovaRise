@@ -1843,6 +1843,22 @@ function drawCastleBanners(map){
  }
 }
 function drawWorldLandmarks(map){
+ // Capture clicks on the actual map, even when a tile overlays a transparent hotspot.
+ // Only the ten user-marked additions use this fallback; legacy sites are untouched.
+ if(!map.dataset.newLandmarkClickCapture){
+  map.dataset.newLandmarkClickCapture='1';
+  map.addEventListener('click',event=>{
+   if(event.target.closest&&event.target.closest('.world-hotspot'))return;
+   const rect=map.getBoundingClientRect();
+   if(!rect.width||!rect.height)return;
+   const x=(event.clientX-rect.left)/rect.width*100;
+   const y=(event.clientY-rect.top)/rect.height*100;
+   const site=VERIFIED_MAP_SITES.find(v=>v.id.startsWith('relic-')&&v.id!=='relic-desert-well'&&v.id!=='relic-north-cabin'&&v.id!=='relic-east-ruin'&&v.id!=='relic-desert-hut'&&v.id!=='relic-mountain-hut'&&Math.abs(x-v.x)<=Math.max(v.w/2,1.7)&&Math.abs(y-v.y)<=Math.max(v.h/2,1.7));
+   if(!site)return;
+   event.preventDefault();event.stopImmediatePropagation();
+   interactVerifiedSite(site);
+  },true);
+ }
  for(const site of VERIFIED_MAP_SITES){
   const b=document.createElement('button');b.type='button';
   b.className='world-hotspot hotspot-'+site.kind;
