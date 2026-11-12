@@ -914,3 +914,9 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - A petición del jugador se revisó que los diez lugares nuevos se creen como botones reales en `drawWorldLandmarks()`, con coordenadas del catálogo y `onclick=()=>interactVerifiedSite(site)`. La existencia de un botón invisible no garantiza que un clic real del navegador lo alcance si hay capas superpuestas.
 - Añadido `tests/p0-map-hotspot-clicks.test.cjs` (commits `9275eb1c` y `dbaaa4a6`): ejecuta la creación de hotspots para ambas variantes, comprueba los 30 botones y pulsa los diez nuevos para verificar el despacho al lugar correcto. **CI pendiente** al registrar este punto.
 - **No afirmar aún aceptación en navegador:** falta comprobar orden de capas y captura real de eventos táctiles/ratón, distancias, obstáculos y mensajes al usuario en las diez ubicaciones. Las pruebas VM comprueban el cableado de eventos, no un navegador gráfico.
+
+
+### Corrección de regresión en comprobación de clics (2026-11-12)
+
+- Se analizó el fallo real de GitHub Actions `43204317174`: `tests/p0-map-hotspot-clicks.test.cjs` exigía **30** botones en `combate-demo.html`, pero su catálogo tenía **15** lugares anteriores más **10** nuevos = **25**. La variante principal `juego/index.html` sí tiene 20 anteriores más 10 nuevos = 30.
+- Se corrigió el test (commit `50ba3788`) para comprobar el total correcto de cada variante y seguir pulsando y validando los **diez lugares nuevos** en ambas. No se alteraron ubicaciones, mapa ni lógica del juego. CI de corrección `43204513064` pendiente al documentarlo.
