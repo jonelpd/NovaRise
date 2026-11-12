@@ -11,9 +11,10 @@ for(const page of ['index.html','combate-demo.html']){
   const ctx={document:{createElement:()=>({style:{},classList:{add(){}},setAttribute(k,v){this[k]=v}})},interactVerifiedSite:site=>clicks.push(site.id)};
   vm.createContext(ctx);
   vm.runInContext(html.slice(catalogStart,catalogEnd)+'\n'+html.slice(drawStart,drawEnd),ctx);
-  ctx.globalButtons=buttons;vm.runInContext('drawWorldLandmarks({appendChild:b=>globalButtons.push(b)})',ctx);
+  ctx.globalButtons=buttons;ctx.mapMock={dataset:{},appendChild:b=>buttons.push(b),addEventListener(type,handler,capture){this.clickHandler=handler;this.capture=capture},getBoundingClientRect:()=>({left:0,top:0,width:1000,height:1000})};vm.runInContext('drawWorldLandmarks(mapMock)',ctx);
   assert.equal(buttons.length,page==='index.html'?30:25,'all sites in this variant should create buttons');
   for(const id of expected){const site=vm.runInContext('VERIFIED_MAP_SITES.find(v=>v.id==='+JSON.stringify(id)+')',ctx);assert.ok(site,id);const b=buttons.find(b=>b.title===site.label);assert.ok(b,id+' button missing');assert.equal(b.style.left,site.x+'%');assert.equal(b.style.top,site.y+'%');assert.equal(typeof b.onclick,'function');b.onclick()}
   assert.deepEqual(clicks,expected);
+  const target={closest:()=>null};const added=vm.runInContext('VERIFIED_MAP_SITES.find(v=>v.id==="relic-north-wooden-hall")',ctx);ctx.mapMock.clickHandler({target,clientX:added.x*10,clientY:added.y*10,preventDefault(){},stopImmediatePropagation(){}});assert.equal(clicks.at(-1),added.id,'click captured even when a map tile is the target');
  });
 }
