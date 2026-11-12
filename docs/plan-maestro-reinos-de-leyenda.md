@@ -942,3 +942,9 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - El jugador aportó captura de `Game regression tests` en rojo para commit `eca7e0f2`. Se inspeccionaron registros de la ejecución `43204990177` (`f27eec3d`), que mostraron dos fallos de tests: mock DOM sin `classList.add()` en `p0-map-hotspot-clicks.test.cjs`, y aserción desactualizada del antiguo `b.onclick=()=>interactVerifiedSite(site)` en `p0-map-landmark-rewards.test.cjs`.
 - Se corrigieron ambos tests sin deshacer las mejoras del juego: commits `5f033098` y `17894bbf`. La nueva ejecución de regresión `43208953858` queda **pendiente de resultado** al registrar este cambio.
 - Mantener pendiente la aceptación manual del usuario: un CI verde comprueba el cableado, pero no garantiza por sí solo que todos los nuevos hotspots reciban clics en un navegador real.
+
+
+### Confirmación de pruebas de clics y recompensas — 2026-11-12
+
+- El jugador mostró captura de la ejecución `Game regression tests` del commit `17894bbf` en verde; comprobación adicional por API: ejecución `43208953858` con `status=completed` y `conclusion=success`.
+- Se cierra la incidencia **de regresión automática** causada por mocks DOM y aserciones obsoletas tras cambiar los controladores de clic. No se da por cerrada la incidencia **de uso real** hasta que el jugador confirme que las nuevas ubicaciones responden en el mapa publicado.
