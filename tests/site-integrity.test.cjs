@@ -17,7 +17,11 @@ for (const [page,html] of Object.entries(text)) {
     if (/^javascript:/i.test(href)) { issues.push(page+": unsafe URL "+href); continue; }
     const [filePart,fragment]=href.split("#");
     const rawTarget=filePart.split("?")[0] || page;
-    const target=rawTarget.endsWith("/") ? rawTarget+"index.html" : rawTarget;
+    // HTML URLs encode spaces and non-ASCII characters; the filesystem stores decoded names.
+    let decodedTarget;
+    try { decodedTarget=decodeURIComponent(rawTarget); }
+    catch { issues.push(page+": invalid URL encoding "+rawTarget); continue; }
+    const target=decodedTarget.endsWith("/") ? decodedTarget+"index.html" : decodedTarget;
     if (!fs.existsSync(target) || !fs.statSync(target).isFile()) {
       issues.push(page+": missing local file "+target);
       continue;
