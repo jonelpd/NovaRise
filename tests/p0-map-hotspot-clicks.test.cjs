@@ -11,6 +11,9 @@ for(const page of ['index.html','combate-demo.html']){
   const ctx={document:{createElement:()=>({style:{},setAttribute(k,v){this[k]=v}})},interactVerifiedSite:site=>clicks.push(site.id)};
   vm.createContext(ctx);
   vm.runInContext(html.slice(catalogStart,catalogEnd)+'\n'+html.slice(drawStart,drawEnd),ctx);
-  ctx.globalButtons=buttons;vm.runInContext('drawWorldLandmarks({appendChild:b=>globalButtons.push(b)})',ctx);\n  assert.equal(buttons.length,30);\n  for(const id of expected){const site=vm.runInContext('VERIFIED_MAP_SITES.find(v=>v.id==='+JSON.stringify(id)+')',ctx);assert.ok(site,id);const b=buttons.find(b=>b.title===site.label);assert.ok(b,id+' button missing');assert.equal(b.style.left,site.x+'%');assert.equal(b.style.top,site.y+'%');assert.equal(typeof b.onclick,'function');b.onclick()}\n  assert.deepEqual(clicks,expected);
+  ctx.globalButtons=buttons;vm.runInContext('drawWorldLandmarks({appendChild:b=>globalButtons.push(b)})',ctx);
+  assert.equal(buttons.length,30);
+  for(const id of expected){const site=vm.runInContext('VERIFIED_MAP_SITES.find(v=>v.id==='+JSON.stringify(id)+')',ctx);assert.ok(site,id);const b=buttons.find(b=>b.title===site.label);assert.ok(b,id+' button missing');assert.equal(b.style.left,site.x+'%');assert.equal(b.style.top,site.y+'%');assert.equal(typeof b.onclick,'function');b.onclick()}
+  assert.deepEqual(clicks,expected);
  });
 }
