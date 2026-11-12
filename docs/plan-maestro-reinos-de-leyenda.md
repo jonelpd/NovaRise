@@ -840,3 +840,12 @@ Se ha reforzado la comprobación de partidas importadas y guardadas: ya no basta
 ### Fase 5 — Prevención de dobles cierres de campaña (2026-11-11)
 
 Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`: si `s.done` ya indica campaña finalizada, no vuelve a ejecutarse la victoria ni se abre otro diálogo. Aplicada al juego y la demo, con prueba de regresión. Las ejecuciones de GitHub Actions permanecían en cola al consultar; por tanto, la fase sigue abierta y sin validación integral manual.
+
+
+### Reanudación y auditoría de CI — 2026-11-12
+
+- Se confirma como **fase activa la fase 5 (estabilidad y pruebas integrales)** del plan operativo de seis fases. Las cuatro primeras tienen cierre técnico documentado, sin que ello sustituya las pruebas manuales pendientes.
+- Última regresión del juego consultada: **verde**, ejecución GitHub Actions `43106340840` (commit `95bd854e`). El despliegue Pages del commit `39345cede` fue correcto (`43106364353`).
+- La validación estática general de NovaRise fallaba en `43106364269` porque `tests/site-integrity.test.cjs` interpretaba una URL con caracteres porcentualmente codificados como nombre literal de archivo. Se comprobó que el archivo real `assets/Logotipo circular N verde neón.png` sí existe. Corregido el test para decodificar la ruta y rechazar codificaciones inválidas (commit `1d53818b`); **verificar el resultado del nuevo CI antes de declararlo verde**. No se modificó la imagen ni el diseño público.
+- Aceptación pendiente: recorrido de campaña en navegador, persistencia de guardados y copias, asedios principales/secundarios, condiciones de victoria y recarga, posición de los cinco lugares reales, compatibilidad móvil y dos sesiones para nube. No declarar estas pruebas superadas por una suite Node.
+- La fase 6 (NVRA) permanece sin activar hasta superar las salvaguardas pertinentes; el índice histórico inicial de cuatro fases se conserva como historial, pero el plan operativo vigente es el de seis fases.
