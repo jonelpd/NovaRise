@@ -17,7 +17,7 @@ test('original map landmarks provide three distinct one-time rewards',()=>{
 
 test('relic hotspots are transparent and rewards are tied to campaign state',()=>{
  assert.match(html,/b\.style\.opacity='0'/);
- assert.match(html,/b\.onclick=\(\)=>interactVerifiedSite\(site\)/);
+ assert.match(html,/b\.onclick=e=>\{if\(e\)\{e\.preventDefault\(\);e\.stopPropagation\(\)\}interactVerifiedSite\(site\)\}/);
  assert.match(html,/if\(site\.kind==='relic'\)/);
  assert.match(html,/s\.landmarkRewards\[site\.id\]=true/);
  assert.match(html,/const veteran=\{soldiers:s\.soldiers/);
