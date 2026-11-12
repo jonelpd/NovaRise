@@ -948,3 +948,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 
 - El jugador mostró captura de la ejecución `Game regression tests` del commit `17894bbf` en verde; comprobación adicional por API: ejecución `43208953858` con `status=completed` y `conclusion=success`.
 - Se cierra la incidencia **de regresión automática** causada por mocks DOM y aserciones obsoletas tras cambiar los controladores de clic. No se da por cerrada la incidencia **de uso real** hasta que el jugador confirme que las nuevas ubicaciones responden en el mapa publicado.
+
+
+### Corrección adicional: clics invisibles en diez ubicaciones (2026-11-12)
+
+- El jugador confirmó que, pese a CI verde, al pulsar los nuevos elementos **no sucedía absolutamente nada**. No se considera validada la interacción real.
+- Implementada captura de clic en el contenedor del mapa para las diez ubicaciones añadidas, calculando coordenadas porcentuales del clic y despachando `interactVerifiedSite(site)` cuando una casilla del mapa intercepta la pulsación. Se evita duplicar el evento si el objetivo ya es un `.world-hotspot`. Se mantienen los veinte puntos anteriores intactos y no se altera `mapa-grande.png`. Commits `7f5ffd37`, `880f283f`.
+- Prueba ampliada en `tests/p0-map-hotspot-clicks.test.cjs` para simular clic sobre una casilla superpuesta (commit `75a301f8`). **CI pendiente:** ejecución `43210048136`.
+- **Pendiente indispensable:** comprobar en navegador real con versión publicada que un clic en una de las diez ubicaciones produce movimiento o mensaje; si no, investigar capas fuera del contenedor, escala/offset del mapa y controles táctiles.
