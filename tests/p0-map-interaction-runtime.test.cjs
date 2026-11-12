@@ -23,9 +23,9 @@ function setup(){
  vm.createContext(ctx);vm.runInContext(source,ctx);
  return {ctx,s,notice:()=>notice};
 }
-test('all five mapped relics grant exactly one reward per level',()=>{
+test('all fifteen mapped relics grant exactly one reward per level',()=>{
  const relics=catalog.filter(s=>s.kind==='relic');
- assert.equal(relics.length,5);
+ assert.equal(relics.length,15);
  for(const site of relics){
   const {ctx,s,notice}=setup();
   ctx.heroVisualPosition=()=>[site.x,site.y];
