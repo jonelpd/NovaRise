@@ -42,3 +42,16 @@ La alerta MetaMask está bajo revisión en https://github.com/MetaMask/eth-phish
 ## Criterio de cierre
 
 La fase solo se considerará implementada cuando el registro de eventos sea verificable en servidor, sus permisos estén auditados, las pruebas automáticas y funcionales pasen y el plan maestro quede actualizado. Esta especificación **no cierra** la implementación de minería NVRA.
+
+
+## Migración aplicada en Supabase (13-11-2026)
+
+Migración `prepare_secure_game_merit_event_identity_20261113` aplicada sobre `public.nvr_game_reward_events` en el proyecto `spaafpqczvqahhwjxxrz`:
+
+- Añadidos campos opcionales `campaign_id text`, `site_id text`, `save_revision bigint`, `verification_source text`.
+- Restricciones de formato para campaña y sitio, revisión positiva y fuente limitada a `server_verified`.
+- Índice único parcial `(user_id,campaign_id,event_type,site_id)` cuando campaña y sitio no son nulos. **No** garantiza por sí solo legitimidad de un evento; únicamente evita la duplicación exacta de esa combinación.
+- Revocados permisos de cliente; `authenticated` conserva solo `SELECT`, protegido por RLS. No hay permisos `anon`.
+- Verificación: cuatro columnas presentes, RLS activo, concesiones cliente `authenticated:SELECT`, cero registros previos. No se modificaron partidas.
+- No se ha habilitado RPC de acreditación: una partida JSON enviada desde el navegador no es prueba suficiente de un evento real. Antes de escribir eventos `server_verified` hace falta un flujo de acciones autoritativo de servidor, catálogo de ubicaciones verificado y pruebas de concurrencia. Ningún token se paga.
+- Security Advisor: siguen avisos anteriores sobre RPC `SECURITY DEFINER` de guardado y protección de contraseñas filtradas; no surgió un nuevo aviso sobre esta tabla.
