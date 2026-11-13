@@ -1021,3 +1021,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - Revisado `completeCampaignIfReady()` del juego principal: al completar los dos objetivos, los niveles 1–49 trasladan soldados, arqueros, grifos, dragones, experiencia y facción, y conservan oro entre 120 y 100.000.000. El rival recibe refuerzos por nivel (`+4 × nivel anterior` soldados, `+2 × nivel anterior` arqueros y `+80 × nivel anterior` oro). El nivel 50 concluye la campaña sin crear nivel 51.
 - Añadido `tests/p0-campaign-carryover-economy.test.cjs` (commit `1279a2d1`) para ejecutar la transición en todos los niveles 1–49, verificar límites de oro, fin de nivel 50 y bloqueo cuando falta conquistar el castillo. CI `43403277506` **pendiente**.
 - **Alcance:** estas pruebas ejercitan la transición y las fórmulas de arrastre; no sustituyen partidas reales de 50 niveles ni miden directamente la dificultad de cada combate. Se mantiene el balance actual hasta contar con evidencia de desequilibrio.
+
+
+### Fase 5 — Cierre de verificación de transición y objetivos (2026-11-13)
+
+- Confirmado `Game regression tests` **completed/success** en ejecución `43403277506` para el test de arrastre de tropas, experiencia, oro y refuerzos del rival a lo largo de las 49 transiciones, más victoria final en nivel 50.
+- Ampliado `tests/p0-campaign-carryover-economy.test.cjs` (commit `578c81e8`) para comprobar en niveles 1, 10, 25, 49 y 50 que **ninguno de los dos objetivos por separado** (derrotar al comandante o conquistar su castillo) provoca un avance prematuro, y que tras ganar el nivel 50 no se puede volver a avanzar ni repetir el cierre.
+- **Nueva regresión `43403524811` pendiente** al registrar el resultado. No se han modificado reglas ni cifras económicas: se refuerza exclusivamente la cobertura de pruebas.
+- La auditoría económica y de transición queda técnicamente avanzada; queda pendiente confirmar este último CI y la evaluación de dificultad real de combates y rutas durante partidas largas antes de declarar cerrada toda la fase 5.
