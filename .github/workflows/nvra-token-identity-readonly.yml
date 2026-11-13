@@ -1,0 +1,22 @@
+name: NVRA token identity on Base (read only)
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-token:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify documented token contract using Base RPC (no signing)
+        env:
+          BASE_MAINNET_RPC_URL: https://mainnet.base.org
+        run: node contracts/scripts/verify-nvra-base-readonly.cjs
