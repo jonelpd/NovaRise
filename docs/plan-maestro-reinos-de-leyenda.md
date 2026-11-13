@@ -1044,3 +1044,10 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 **Fase 6: iniciada en diseño, no en transacciones.** Documento técnico y de seguridad `docs/nvra-integracion-juego-fase-6.md` (commit `c52919ed`). Ya existe en el juego un Centro NVRA informativo, sin billetera ni pagos. Antes de desarrollar la conexión real hay que verificar la dirección ERC-20 de NVRA en Base mainnet (chain ID 8453), sus parámetros, permisos y seguridad. Se prevé conexión voluntaria, lectura sin gasto y utilidad optativa, con activación gradual; no hay recompensas automáticas por minería local. El contrato no se ha identificado ni verificado en esta revisión.
 
 **Siguiente paso:** verificar datos del contrato y preparar pruebas de conexión de billetera sin afectar partidas existentes. No declarar fase 6 completada por haber redactado su diseño.
+
+
+### Fase 6 — Identificación documental de contrato NVRA (13-11-2026)
+
+- Encontrada en `docs/nvra-auditoria-contrato-liquidez-2026-11-08.md` la dirección **comunicada** de NVRA en Base: `0xa1128B1F4CB8394c179eb2558608a7302972EcBF` (chain ID 8453).
+- BaseScan no estuvo accesible en esta sesión para contrastar bytecode, decimales, suministro, titularidad o permisos; **no se afirma verificación on-chain** ni equivalencia con el candidato Solidity del repositorio.
+- Actualizado `docs/nvra-integracion-juego-fase-6.md` (commit `d9588603`) con dirección, enlaces a exploradores y criterio de bloqueo. No se han activado lecturas de saldo, conexiones de billetera ni transacciones. Próximo trabajo: lectura RPC independiente y pruebas de identidad del contrato antes de utilizarlo en el juego.
