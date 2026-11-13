@@ -41,14 +41,15 @@ async function readBalance(){
 async function connectWallet(){
  const candidate=window.ethereum;
  if(!candidate||typeof candidate.request!=='function'){message('No se detecta una billetera compatible en este navegador.');return}
- connect.disabled=true;message('Esperando autorización de acceso a la cuenta…');
+ const requestEpoch=++epoch;connect.disabled=true;message('Esperando autorización de acceso a la cuenta…');
  try{
   const accounts=await candidate.request({method:'eth_requestAccounts'});
+  if(requestEpoch!==epoch)return;
   if(!Array.isArray(accounts)||!validAddress(accounts[0]))throw Error('No se obtuvo una cuenta EVM válida');
   provider=candidate;account=accounts[0];accountText.textContent='Cuenta: '+account;
   disconnect.disabled=false;connect.disabled=true;refresh.disabled=false;
   await readBalance();
- }catch(e){reset('Conexión no realizada: '+(e&&e.message?e.message:'cancelada'))}
+ }catch(e){if(requestEpoch===epoch)reset('Conexión no realizada: '+(e&&e.message?e.message:'cancelada'))}
 }
 connect.addEventListener('click',connectWallet);
 refresh.addEventListener('click',readBalance);
