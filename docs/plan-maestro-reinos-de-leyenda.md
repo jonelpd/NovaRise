@@ -1156,3 +1156,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 
 - **Incidencia oficial creada:** https://github.com/MetaMask/eth-phishing-detect/issues/312215 (estado inicial: OPEN). Presentada por la cuenta `jonelpd`, con pruebas del despliegue, informe de seguridad, contrato NVRA y petición de identificación de la señal de riesgo.
 - Pendiente de respuesta del equipo de clasificación. No se afirma falso positivo ni se reactiva la billetera; no aconsejar ignorar el aviso.
+
+
+### Fase 6.2 — Preparación segura de méritos/minería (13-11-2026)
+
+- Inventariados los tres indicadores **ya existentes** del Centro NVRA (minas, tesoros y fortalezas), vinculados a los catálogos reales del mapa. No se han añadido objetos ficticios ni alterado la jugabilidad.
+- Especificación de eventos verificables, controles anti-duplicado, validación de servidor y separación entre méritos y token real: `docs/nvra-fase-6-2-meritos-y-mineria.md` (commit `07a4161d`).
+- Pruebas automáticas nuevas `tests/p0-nvra-merits-no-payout.test.cjs` (commit `3477ed21`): garantizan que el panel sigue siendo informativo, que no acredita pagos y que la billetera continúa suspendida. **Pendiente confirmar resultado de GitHub Actions** tras este cambio.
+- **Fase 6.2 no cerrada:** falta implementación y prueba de eventos verificados en servidor; no hay pagos ni conversión NVRA.
