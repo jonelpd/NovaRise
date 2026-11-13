@@ -1164,3 +1164,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - Especificación de eventos verificables, controles anti-duplicado, validación de servidor y separación entre méritos y token real: `docs/nvra-fase-6-2-meritos-y-mineria.md` (commit `07a4161d`).
 - Pruebas automáticas nuevas `tests/p0-nvra-merits-no-payout.test.cjs` (commit `3477ed21`): garantizan que el panel sigue siendo informativo, que no acredita pagos y que la billetera continúa suspendida. **Pendiente confirmar resultado de GitHub Actions** tras este cambio.
 - **Fase 6.2 no cerrada:** falta implementación y prueba de eventos verificados en servidor; no hay pagos ni conversión NVRA.
+
+
+### Fase 6.2 — Validación aislada previa a cambios de producción (13-11-2026)
+
+- Confirmadas **352/352 pruebas de regresión** en verde (run `43424765002`) y pruebas estáticas en verde (run `43424765159`) tras corregir el test de capitalización.
+- Consultado el esquema real de Supabase: `nvr_game_reward_events` ya contiene `id,user_id,event_type,points,created_at,verified`, pero no contiene `site_id`, `campaign_id` ni `revision`. No se ha cambiado el esquema ni escrito ningún evento real.
+- Añadido validador aislado `juego/nvra-merit-validation.cjs` y pruebas negativas `tests/p0-nvra-merit-validation.test.cjs`: catálogo permitido, tipos de evento, campaña, revisión y clave de idempotencia candidata. Es **lógica preparatoria**, no autenticación de servidor ni acreditación de recompensas.
+- Próximo paso: diseñar migración compatible con datos existentes y RPC transaccional de verificación **del lado servidor**, con pruebas antes de habilitarla. MetaMask sigue suspendido.
