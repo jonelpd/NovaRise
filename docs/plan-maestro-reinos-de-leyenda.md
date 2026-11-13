@@ -1128,3 +1128,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - Supabase Security Advisor: advertencia por RPC `SECURITY DEFINER` de guardado ejecutable por `authenticated` (posiblemente necesaria, requiere revisar permisos efectivos); protección contra contraseñas filtradas desactivada; aviso informativo de tabla interna `novarise_signup_limits` sin políticas. **No se han aplicado cambios de base de datos**.
 - Se identificaron seis asignaciones `innerHTML` en `juego/index.html`; las revisadas usan SVG/sprites predefinidos o escape de texto, pero los informes de asedio y los datos importados requieren pruebas negativas adicionales. No se puede declarar ausencia de XSS solo con esta inspección.
 - Detalles y enlaces de remediación en `docs/nvra-seguridad-alerta-metamask-2026-11-13.md`. MetaMask sigue bloqueado y la billetera desactivada.
+
+
+### Fase 6 — Corrección crítica de permisos Supabase (13-11-2026)
+
+- Auditoría de GRANT efectivos descubrió privilegios `TRUNCATE/TRIGGER/REFERENCES` innecesarios para `anon` y `authenticated` en tablas de juego; `TRUNCATE` elude RLS. Se corrigió en Supabase NovaRise con migración `revoke_excess_game_table_privileges_20261113`, además de `DELETE` innecesario en perfiles.
+- Migración `revoke_anon_game_profile_and_save_data_access_20261113`: eliminado acceso directo `anon` a perfiles y partidas guardadas. Consulta posterior confirmó **solo** `authenticated`: perfiles `SELECT/INSERT/UPDATE`, guardados `SELECT`, recompensas `SELECT`. Sin permisos peligrosos ni acceso `anon` en las tres tablas. No se tocaron registros de usuarios.
+- RPC de guardado revisada en vivo: `anon_exec=false`, `auth_exec=true`; utiliza `auth.uid()`, control de revisión y tamaño. Pendiente prueba manual autenticada de guardado/recuperación para cerrar validación funcional.
+- Documentado en `docs/nvra-seguridad-alerta-metamask-2026-11-13.md`. La alerta de MetaMask sigue sin causa confirmada y la billetera desactivada.
