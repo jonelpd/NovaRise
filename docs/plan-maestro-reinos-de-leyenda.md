@@ -1120,3 +1120,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - La primera verificación `43413288024` falló por respuestas HTTP inconsistentes en rutas antiguas; se conservó el historial y se ajustó el control para distinguir entre seguridad del HTML cargado y posibles URLs obsoletas. La ejecución posterior verificó los estados esperados.
 - **MetaMask continúa bloqueado**: aún no se ha demostrado la causa ni se ha presentado reclamación. Próximos pasos: auditoría de flujos `innerHTML`/RLS, comprobación de reputación de dominio y solicitud fundamentada de revisión a MetaMask/ChainPatrol si procede. Sin conexión, firmas ni operaciones NVRA.
 - Informe actualizado: `docs/nvra-seguridad-alerta-metamask-2026-11-13.md`.
+
+
+### Fase 6 — Auditoría de RLS y renderizado HTML (13-11-2026)
+
+- Revisión **en vivo** de Supabase NovaRise `spaafpqczvqahhwjxxrz`: RLS activo en `nvr_game_profiles`, `nvr_game_saves` y `nvr_game_reward_events`; políticas de propiedad basadas en `auth.uid() = user_id` para usuarios no anónimos.
+- Supabase Security Advisor: advertencia por RPC `SECURITY DEFINER` de guardado ejecutable por `authenticated` (posiblemente necesaria, requiere revisar permisos efectivos); protección contra contraseñas filtradas desactivada; aviso informativo de tabla interna `novarise_signup_limits` sin políticas. **No se han aplicado cambios de base de datos**.
+- Se identificaron seis asignaciones `innerHTML` en `juego/index.html`; las revisadas usan SVG/sprites predefinidos o escape de texto, pero los informes de asedio y los datos importados requieren pruebas negativas adicionales. No se puede declarar ausencia de XSS solo con esta inspección.
+- Detalles y enlaces de remediación en `docs/nvra-seguridad-alerta-metamask-2026-11-13.md`. MetaMask sigue bloqueado y la billetera desactivada.
