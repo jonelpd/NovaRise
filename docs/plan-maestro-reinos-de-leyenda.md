@@ -1029,3 +1029,9 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - Ampliado `tests/p0-campaign-carryover-economy.test.cjs` (commit `578c81e8`) para comprobar en niveles 1, 10, 25, 49 y 50 que **ninguno de los dos objetivos por separado** (derrotar al comandante o conquistar su castillo) provoca un avance prematuro, y que tras ganar el nivel 50 no se puede volver a avanzar ni repetir el cierre.
 - **Nueva regresión `43403524811` pendiente** al registrar el resultado. No se han modificado reglas ni cifras económicas: se refuerza exclusivamente la cobertura de pruebas.
 - La auditoría económica y de transición queda técnicamente avanzada; queda pendiente confirmar este último CI y la evaluación de dificultad real de combates y rutas durante partidas largas antes de declarar cerrada toda la fase 5.
+
+
+### Ajuste de prueba de objetivos — 2026-11-13
+
+- La nueva regresión `43403524811` falló porque los tests adicionales reutilizaban el estado de una transición simulada (`fresh()` mock), que no incluía la propiedad `done`; la aserción esperaba `false` y recibió `undefined`. No se identificó un fallo de transición del juego.
+- Corregida la inicialización del estado simulado antes de comprobar objetivos incompletos (commit `bdfef321`). Pendiente confirmar la siguiente ejecución de CI antes de cerrar esta verificación.
