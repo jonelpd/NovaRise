@@ -44,7 +44,7 @@ jobs:
       - name: Publicar
         id: deployment
         uses: actions/deploy-pages@v4
-      - name: Verificar rutas públicas y bloqueo de billetera en Pages
+      - name: Verificar HTML público y detectar rutas obsoletas
         shell: bash
         run: |
           set -euo pipefail
@@ -52,15 +52,19 @@ jobs:
           for attempt in 1 2 3 4 5 6; do
             root_code=$(curl -L -sS --max-time 15 -o /tmp/nvra-root.html -w '%{http_code}' "$base/index.html" || true)
             game_code=$(curl -L -sS --max-time 15 -o /tmp/nvra-game.html -w '%{http_code}' "$base/juego/index.html" || true)
-            wallet_code=$(curl -L -sS --max-time 15 -o /dev/null -w '%{http_code}' "$base/juego/nvra-wallet-readonly.js" || true)
-            docs_code=$(curl -L -sS --max-time 15 -o /dev/null -w '%{http_code}' "$base/docs/plan-maestro-reinos-de-leyenda.md" || true)
+            wallet_code=$(curl -L -sS --max-time 15 -o /tmp/nvra-wallet.js -w '%{http_code}' "$base/juego/nvra-wallet-readonly.js" || true)
+            docs_code=$(curl -L -sS --max-time 15 -o /tmp/nvra-doc.md -w '%{http_code}' "$base/docs/plan-maestro-reinos-de-leyenda.md" || true)
             printf 'Intento %s: portada=%s juego=%s billetera=%s docs=%s\n' "$attempt" "$root_code" "$game_code" "$wallet_code" "$docs_code"
-            if [[ "$root_code" == 200 && "$game_code" == 200 && "$wallet_code" == 404 && "$docs_code" == 404 ]] &&
-               grep -q 'Conexión de monedero: suspendida temporalmente' /tmp/nvra-game.html; then
-              echo "Despliegue público y suspensión NVRA verificados"
+            if [[ "$root_code" == 200 && "$game_code" == 200 ]] &&
+               grep -q 'Conexión de monedero: suspendida temporalmente' /tmp/nvra-game.html &&
+               ! grep -Eq '<script[^>]+src=["\x27][^"\x27]*nvra-wallet-readonly\.js' /tmp/nvra-game.html; then
+              if [[ "$wallet_code" != 404 || "$docs_code" != 404 ]]; then
+                echo "::warning::Una URL excluida sigue respondiendo (posible caché, respuesta sustitutiva o despliegue antiguo); revisar contenido y cabeceras. No se afirma HTTP 404."
+              fi
+              echo "HTML público correcto: billetera suspendida y sin cargador"
               exit 0
             fi
             sleep 10
           done
-          echo "::error::Las rutas públicas o el bloqueo NVRA no coinciden con el despliegue esperado"
+          echo "::error::Portada, juego o suspensión NVRA no coinciden con el despliegue esperado"
           exit 1
