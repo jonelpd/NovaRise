@@ -35,7 +35,7 @@ test('Pages publishes an explicit public allowlist and omits wallet script',()=>
 
 test('Pages deployment smoke-checks public routes and suspended wallet exclusion',()=>{
  const workflow=fs.readFileSync(path.join(root,'.github/workflows/pages.yml'),'utf8');
- assert.match(workflow,/Verificar rutas públicas y bloqueo de billetera en Pages/);
+ assert.match(workflow,/Verificar HTML público y detectar rutas obsoletas/);
  assert.match(workflow,/juego\/index\.html/);
  assert.match(workflow,/juego\/nvra-wallet-readonly\.js/);
  assert.match(workflow,/docs\/plan-maestro-reinos-de-leyenda\.md/);
