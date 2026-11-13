@@ -61,3 +61,11 @@ Captura del propietario: al intentar conectar `https://jonelpd.github.io/NovaRis
 - MetaMask recomienda que el propietario solicite revisión mediante https://github.com/MetaMask/eth-phishing-detect/issues cuando crea que hay una clasificación incorrecta. La documentación de MetaMask también describe su colaboración con ChainPatrol: https://metamask.io/es/news/metamask-chainpatrol-protect-users-with-phishing-warnings .
 - ChainPatrol ofrece el formulario https://app.chainpatrol.io/dispute y el soporte https://chainpatrol.com/legal/support . **No se ha presentado ninguna solicitud ni se afirma que sea un falso positivo.**
 - Para una revisión, aportar URL exacta, fecha/captura de alerta, titularidad de GitHub Pages, commit y logs de despliegue, enlace a código de billetera desactivado, resultados de pruebas, y pedir explícitamente **motivo/indicador** del bloqueo. Evitar asegurar que el sitio es seguro hasta terminar auditoría de XSS, dependencias, RLS y tráfico real.
+
+## Resultado final de la prueba de rutas — 13-11-2026
+
+- La primera prueba remota `43413288024` **falló**: portada/juego 200, pero la URL antigua del módulo y la documentación pasaron de 404/503 a 200 durante los reintentos. Causa no confirmada (posible caché/propagación/respuesta sustitutiva); no se ha establecido una exposición persistente.
+- Se ajustó la prueba para validar como condición de seguridad que el HTML real muestra la suspensión y **no incluye un cargador de billetera**, y para advertir si URLs antiguas responden (commit `4467aed7`). Prueba estática actualizada (commit `2f238441`).
+- **GitHub Pages `43413553559`: completed/success**, con prueba remota posterior al despliegue: portada **200**, juego **200**, módulo de billetera **404**, documentación **404** en el primer intento; HTML del juego contiene el aviso de suspensión y no carga el módulo.
+- **Game regression tests `43413553545`: completed/success**.
+- Estos resultados confirman el estado de las rutas **en el momento de la ejecución**, no resuelven el origen de la advertencia MetaMask ni sustituyen la auditoría dinámica de scripts, tráfico, RLS y permisos.
