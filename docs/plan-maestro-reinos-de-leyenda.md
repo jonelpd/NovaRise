@@ -972,3 +972,10 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - Se detectó y corrigió una diferencia funcional: `juego/combate-demo.html` tenía los hotspots de tipo `relic`, pero no una rama `interactVerifiedSite()` que concediera sus recompensas. Se incorporó esa lógica, equivalente a la del juego principal. Commits `a92f2534`, `84a1cad3`.
 - Añadido `tests/p0-landmark-reward-balance.test.cjs` para ejecutar las recompensas de los **15 lugares** en ambas variantes, comprobar valores originales/nuevos y evitar doble cobro (commit `ebfb108f`). **CI aún pendiente:** `43396537953`.
 - Los 20 lugares antiguos y las posiciones de los 10 nuevos permanecen intactos; tampoco se altera `mapa-grande.png`. La aceptación manual de los clics continúa vigente; el balance de recompensas modificado requiere la nueva validación automática.
+
+
+### Corrección de pruebas de balance tras reporte del jugador — 2026-11-13
+
+- Captura de GitHub Actions del commit `ebfb108f` mostró regresión roja. Los registros de la ejecución `43396537953` identificaron dos causas: el test nuevo esperaba cinco reliquias originales en la demo, aunque su catálogo contiene solo las diez añadidas (`0 !== 5`), y el test estático antiguo exigía expresiones literales `campaignGoldIncome(100)`, `awardHeroExperience(55)` y `s.soldiers+=3` que fueron reemplazadas por cantidades condicionadas al origen del lugar.
+- Ajustados los tests, **sin alterar la lógica de recompensas**: commits `44d3e709` y `7ffeedbd`. El test nuevo comprueba 5 originales + 10 nuevos en el juego principal, y 10 nuevos en la demo; el test antiguo acepta las nuevas expresiones de recompensa.
+- Nueva regresión `43397261213` **pendiente** al registrar este cambio. No declarar verde hasta consultar su resultado.
