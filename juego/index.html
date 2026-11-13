@@ -1672,9 +1672,11 @@ function interactVerifiedSite(site){
   if(!s.landmarkRewards||typeof s.landmarkRewards!=='object'||Array.isArray(s.landmarkRewards))s.landmarkRewards={};
   if(s.landmarkRewards[site.id])return message('🏛️ Ya has explorado '+site.label+'. Este lugar no vuelve a entregar recompensas en este nivel.');
   s.landmarkRewards[site.id]=true;
-  if(site.reward==='experience'){const note=awardHeroExperience(55);return message('📜 '+site.label+': conocimiento ancestral descubierto. +55 puntos de experiencia base'+note+'.')}
-  if(site.reward==='soldiers'){s.soldiers+=3;return message('⚔️ '+site.label+': tres soldados se unen a tu ejército.')}
-  const gold=campaignGoldIncome(100);s.gold+=gold;return message('💰 '+site.label+': recuperas '+gold+' monedas de oro.')
+  // The five original sites keep their rewards; new sites grant smaller bonuses.
+  const newLandmark=!['relic-desert-well','relic-north-cabin','relic-east-ruin','relic-desert-hut','relic-mountain-hut'].includes(site.id);
+  if(site.reward==='experience'){const amount=newLandmark?45:55;const note=awardHeroExperience(amount);return message('📜 '+site.label+': conocimiento ancestral descubierto. +'+amount+' puntos de experiencia base'+note+'.')}
+  if(site.reward==='soldiers'){const amount=newLandmark?2:3;s.soldiers+=amount;return message('⚔️ '+site.label+': '+amount+' soldados se unen a tu ejército.')}
+  const gold=campaignGoldIncome(newLandmark?80:100);s.gold+=gold;return message('💰 '+site.label+': recuperas '+gold+' monedas de oro.')
  }
  if(site.kind==='mine'){
   if(state[site.id]!=='player'){state[site.id]='player';return message('⛏️ Mina controlada. Produce +10 cristales por turno. Los cristales del juego no son NVRA.')}
