@@ -1105,3 +1105,10 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - Auditoría estática ampliada: el juego no carga `script src` externos, pero sí importa remotamente Supabase desde `esm.sh` y Three.js desde `jsdelivr`. Pages publica el repositorio completo mediante `upload-pages-artifact path: .`; se recomienda reducir la superficie pública tras revisar las rutas. Se identificaron puntos `innerHTML` y RLS que requieren análisis de entradas y permisos.
 - Añadido test `tests/p0-nvra-site-security-hold.test.cjs` (commit `be4ed786`) para impedir la reactivación accidental de billetera y vigilar importaciones; **CI pendiente**. Auditoría detallada en `docs/nvra-seguridad-alerta-metamask-2026-11-13.md` (commit `e7fd444f`).
 - No se pudo inspeccionar el despliegue web directamente ni atribuir la clasificación de MetaMask a una causa específica. La conexión sigue suspendida. No afirmar que la alerta es un falso positivo.
+
+
+### Fase 6 — Endurecimiento de publicación GitHub Pages (13-11-2026)
+
+- Sustituida la publicación de todo el repositorio por lista permitida de HTML, feeds, `robots.txt`, `sitemap.xml`, `assets/` y `juego/` en `.github/workflows/pages.yml` (commit `1a6587b5`). Se excluyen archivos de desarrollo y el módulo suspendido `juego/nvra-wallet-readonly.js` del artefacto web.
+- Nueva prueba de protección del flujo de Pages (commit `195f1b13`). Regresión `43412712880` y despliegue `43412712948` pendientes de confirmación. No se reanuda conexión de billeteras ni se declara resuelta la alerta MetaMask.
+- Documento de investigación ampliado: `docs/nvra-seguridad-alerta-metamask-2026-11-13.md`.
