@@ -1084,3 +1084,9 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - Corregido `juego/nvra-wallet-readonly.js` (commit `eef92822`): el resultado de `eth_requestAccounts` se descarta si la cuenta/proveedor ha cambiado o se ha desvinculado durante la espera, evitando recuperar una sesión obsoleta. Sin firmas, aprobaciones ni transacciones.
 - El workflow de regresión se dispara por cambios en `juego/**` o `tests/**`; los commits exclusivamente documentales no disparan esa suite. Nueva ejecución `43408530403`, pendiente al registrar esta nota.
 - **Pendiente:** confirmar regresión verde y prueba manual en navegador con billetera instalada, sin compartir frases de recuperación ni claves privadas.
+
+
+### Fase 6 — Corrección definitiva de selector en test NVRA (13-11-2026)
+
+- El CI `43408530403` volvió a fallar en `tests/p0-nvra-wallet-readonly.test.cjs`: la sustitución anterior de la expresión regular no había surtido efecto y seguía buscando `getElementById('nvra-center')` en lugar del helper real `byId('nvra-center')`.
+- Aplicada sustitución exacta y verificada en el archivo (commit `6f595c17`). Nuevo CI `43408856992` en ejecución al actualizar este documento. No se ha cambiado la lógica de la billetera. No declarar éxito hasta que termine.
