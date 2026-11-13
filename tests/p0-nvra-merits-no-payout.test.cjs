@@ -8,7 +8,7 @@ const pages=fs.readFileSync(path.join(root,'.github/workflows/pages.yml'),'utf8'
 
 test('NVRA merits are visible but explicitly non-redeemable',()=>{
  for(const id of ['nvra-merit-mines','nvra-merit-treasures','nvra-merit-castles']) assert.ok(html.includes('id="'+id+'"'),id);
- assert.match(html,/no están verificados por un servidor y no generan derechos sobre NVRA/);
+ assert.match(html,/no están verificados por un servidor y no generan derechos sobre NVRA/i);
  assert.match(html,/La importación o edición de partidas no acredita recompensas/);
  assert.match(html,/Recompensas NVRA: no habilitadas/);
 });
