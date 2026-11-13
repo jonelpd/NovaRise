@@ -80,3 +80,17 @@ Captura del propietario: al intentar conectar `https://jonelpd.github.io/NovaRis
 - No se han detectado en esta revisión pruebas que atribuyan el bloqueo de MetaMask a Supabase o a estas plantillas. La conexión permanece suspendida.
 
 **Siguientes verificaciones:** revisar GRANT efectivos y `pg_get_functiondef` de la RPC de guardado; evaluar activación de protección de contraseñas filtradas; introducir pruebas negativas de entrada HTML/partidas importadas. No reactivar billetera por el mero hecho de tener RLS.
+
+## Corrección crítica de privilegios en Supabase — 13-11-2026
+
+**Hallazgo confirmado mediante `information_schema.role_table_grants`:** antes de la corrección, los roles `anon` y `authenticated` tenían privilegios `TRUNCATE`, `TRIGGER` y `REFERENCES` sobre tablas de juego; la tabla de perfiles también exponía `DELETE`. `TRUNCATE` no está restringido por RLS, por lo que era un riesgo real de destrucción masiva de datos si el endpoint permitía ejecutar la operación.
+
+**Correcciones aplicadas en el proyecto Supabase NovaRise** `spaafpqczvqahhwjxxrz`, mediante migraciones:
+1. `revoke_excess_game_table_privileges_20261113`: revocados `TRUNCATE`, `TRIGGER` y `REFERENCES` de `public`, `anon`, `authenticated` en `nvr_game_profiles`, `nvr_game_saves`, `nvr_game_reward_events`; revocado `DELETE` en perfiles.
+2. `revoke_anon_game_profile_and_save_data_access_20261113`: revocados `SELECT/INSERT/UPDATE` de perfiles y `SELECT` de guardados para `public` y `anon`.
+
+**Verificación posterior (consulta de solo lectura):** roles cliente conservan únicamente `authenticated`: perfiles `SELECT,INSERT,UPDATE`; guardados `SELECT`; eventos de recompensas `SELECT`. No queda ningún permiso `anon` en estas tres tablas ni privilegios `TRUNCATE/TRIGGER/REFERENCES/DELETE` para estos roles. RLS de propiedad sigue activado. **No se borraron ni modificaron registros** en estas migraciones.
+
+**RPC de guardado verificada en vivo:** `public.nvr_save_campaign_if_revision(jsonb,bigint)` es `SECURITY DEFINER`, `anon_exec=false`, `auth_exec=true`. Su implementación utiliza `auth.uid()` para fijar el propietario, rechaza cuentas anónimas y objetos JSON de tamaño >=65536 bytes, y actualiza únicamente si coincide la revisión esperada. El aviso del Security Advisor sobre `SECURITY DEFINER` persiste por diseño; requiere pruebas de integración de usuario autenticado y conflicto de revisión, pero no es por sí solo evidencia de vulnerabilidad.
+
+**Pendiente:** prueba funcional de guardado con cuenta real en navegador y análisis de reputación MetaMask; el módulo de billetera permanece suspendido.
