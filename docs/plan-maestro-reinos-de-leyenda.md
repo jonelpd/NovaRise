@@ -1232,3 +1232,10 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - Validada en Supabase una transacción temporal con `ROLLBACK`: captura de `mine-west` correcta, incremento de revisión y descuento de movimiento; rechazados revisión obsoleta, doble captura y mina ficticia mediante aserciones SQL.
 - Verificado tras revertir: 0 campañas autoritativas, 0 eventos de recompensa y 0 minas habilitadas. Sin cambios en partidas de jugadores.
 - **No confundir con concurrencia real:** falta ensayar dos sesiones simultáneas y validar rutas/combates desde servidor. Evidencia y límites en `docs/nvra-fase-6-2-meritos-y-mineria.md` (commit `a6dbc635`).
+
+
+### Fase 6.2 — Prefiltro de movimiento sobre mapa real (13-11-2026)
+
+- Añadido `server/nvra-authoritative-movement.cjs`: comprobación preliminar de paso contiguo, límites del tablero 10×10, agua, coste de terreno accidentado y movimientos restantes, con catálogos extraídos de `juego/index.html`.
+- Añadidas pruebas `tests/p0-nvra-authoritative-movement.test.cjs` para movimientos inválidos y comparación de los catálogos de agua/terreno con el juego. El prefiltro **no mueve al héroe ni autoriza capturas**: devuelve `requires_precise_navigation=true` porque faltan máscara real `nav-terrain.json`, ruta de precisión, enemigos, combates y estado de casilla en servidor.
+- Pendiente conectar navegación precisa al backend, añadir coordenadas de cuadrícula a campañas autoritativas mediante migración compatible, y probar concurrencia en dos conexiones reales. No se ha alterado el guardado ni se han habilitado méritos NVRA.
