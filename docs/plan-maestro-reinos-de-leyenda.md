@@ -1172,3 +1172,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - Consultado el esquema real de Supabase: `nvr_game_reward_events` ya contiene `id,user_id,event_type,points,created_at,verified`, pero no contiene `site_id`, `campaign_id` ni `revision`. No se ha cambiado el esquema ni escrito ningún evento real.
 - Añadido validador aislado `juego/nvra-merit-validation.cjs` y pruebas negativas `tests/p0-nvra-merit-validation.test.cjs`: catálogo permitido, tipos de evento, campaña, revisión y clave de idempotencia candidata. Es **lógica preparatoria**, no autenticación de servidor ni acreditación de recompensas.
 - Próximo paso: diseñar migración compatible con datos existentes y RPC transaccional de verificación **del lado servidor**, con pruebas antes de habilitarla. MetaMask sigue suspendido.
+
+
+### Fase 6.2 — Esquema de eventos reforzado en producción (13-11-2026)
+
+- Migración Supabase `prepare_secure_game_merit_event_identity_20261113` aplicada y verificada: `campaign_id`, `site_id`, `save_revision`, `verification_source`, restricciones de formato e índice único por jugador/campaña/tipo/lugar.
+- Permisos comprobados: `authenticated` solo `SELECT` con RLS; `anon` sin acceso; tabla de eventos vacía antes y después. Sin cambios en partidas ni habilitación de pagos.
+- Detalles y límites de seguridad en `docs/nvra-fase-6-2-meritos-y-mineria.md` (commit `361fd6c0`).
+- **No cerrar fase:** falta sistema autoritativo del servidor que valide acciones reales del mapa antes de emitir eventos. Los archivos guardados manipulables no pueden servir de prueba; no habilitar RPC de acreditación directa desde cliente.
