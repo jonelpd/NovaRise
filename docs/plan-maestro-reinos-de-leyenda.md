@@ -1051,3 +1051,9 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - Encontrada en `docs/nvra-auditoria-contrato-liquidez-2026-11-08.md` la dirección **comunicada** de NVRA en Base: `0xa1128B1F4CB8394c179eb2558608a7302972EcBF` (chain ID 8453).
 - BaseScan no estuvo accesible en esta sesión para contrastar bytecode, decimales, suministro, titularidad o permisos; **no se afirma verificación on-chain** ni equivalencia con el candidato Solidity del repositorio.
 - Actualizado `docs/nvra-integracion-juego-fase-6.md` (commit `d9588603`) con dirección, enlaces a exploradores y criterio de bloqueo. No se han activado lecturas de saldo, conexiones de billetera ni transacciones. Próximo trabajo: lectura RPC independiente y pruebas de identidad del contrato antes de utilizarlo en el juego.
+
+
+### Fase 6 — Verificación RPC preparada (13-11-2026)
+
+- Añadido script `contracts/scripts/verify-nvra-base-readonly.cjs` y workflow manual `nvra-token-identity-readonly.yml`: lectura de red, bytecode, nombre, símbolo, decimales y suministro de la dirección NVRA documentada. Sin firmas, transacciones, aprobaciones ni conexiones a billeteras.
+- **No ejecutado ni verificado on-chain todavía:** acceso a RPC desde el entorno de trabajo bloqueado y sin acción disponible para disparar `workflow_dispatch` en GitHub. Se requiere ejecución manual en Actions y revisión de logs. No activar saldo o transacciones hasta comprobar resultados y auditar código desplegado. Detalles en `docs/nvra-integracion-juego-fase-6.md`.
