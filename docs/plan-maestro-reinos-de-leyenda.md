@@ -1136,3 +1136,10 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - Migración `revoke_anon_game_profile_and_save_data_access_20261113`: eliminado acceso directo `anon` a perfiles y partidas guardadas. Consulta posterior confirmó **solo** `authenticated`: perfiles `SELECT/INSERT/UPDATE`, guardados `SELECT`, recompensas `SELECT`. Sin permisos peligrosos ni acceso `anon` en las tres tablas. No se tocaron registros de usuarios.
 - RPC de guardado revisada en vivo: `anon_exec=false`, `auth_exec=true`; utiliza `auth.uid()`, control de revisión y tamaño. Pendiente prueba manual autenticada de guardado/recuperación para cerrar validación funcional.
 - Documentado en `docs/nvra-seguridad-alerta-metamask-2026-11-13.md`. La alerta de MetaMask sigue sin causa confirmada y la billetera desactivada.
+
+
+### Fase 6 — Validación manual del guardado (13-11-2026)
+
+- **Comprobación funcional confirmada por el usuario:** ha probado el juego publicado y confirma que la partida se guarda correctamente y puede recuperarla. Se cierra la tarea pendiente de prueba manual de guardado/recuperación tras el endurecimiento de permisos de Supabase.
+- Alcance: validación funcional reportada por el usuario; no constituye por sí sola una auditoría de seguridad completa ni prueba todos los escenarios de conflicto, desconexión o sesiones simultáneas.
+- Se mantiene suspendida la conexión de billetera NVRA mientras se investiga la advertencia de MetaMask.
