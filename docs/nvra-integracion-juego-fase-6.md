@@ -52,3 +52,10 @@ La fase 6 no se considera terminada hasta disponer de conexión voluntaria funci
 - Evidencia: https://github.com/jonelpd/NovaRise/actions/runs/43406947102
 - **Alcance limitado:** identidad y suministro verificados por RPC; NO se ha auditado el código desplegado, permisos, titularidad, posibilidad de upgrade, custodia o liquidez. No autoriza transacciones, pagos ni minería de NVRA.
 - **Próxima implementación permitida:** lectura de saldo ERC-20 mediante `balanceOf` sin firma y conexión voluntaria de cuenta; mantener gastos y recompensas deshabilitados.
+
+## Centro NVRA: conexión voluntaria y saldo de solo lectura (13-11-2026)
+
+- Implementado `juego/nvra-wallet-readonly.js` (commit `515f1306`) e incluido en `juego/index.html` (commit `8d62b8b1`). Aparece en el Centro NVRA; no altera guardado ni economía.
+- El usuario pulsa **Conectar billetera** para solicitar `eth_requestAccounts`; después se verifica `eth_chainId` = `0x2105` (Base) y se consulta `balanceOf(address)` mediante `eth_call` a la dirección NVRA verificada. Botones **Actualizar saldo** y **Desvincular**; gestión de cambios de cuenta/red y errores. No hay firmas, transferencias, aprobaciones ni cambio automático de red.
+- Prueba de restricciones `tests/p0-nvra-wallet-readonly.test.cjs` (commit `e46d436c`); CI de regresión `43407462817` **pendiente** al registrar esta nota. La prueba automatizada no reemplaza la comprobación manual en navegador con una billetera real.
+- La desvinculación es local a la interfaz: revocar permisos persistentes de la extensión requiere hacerlo desde la propia billetera. **No** se permite gasto o recompensas de NVRA.
