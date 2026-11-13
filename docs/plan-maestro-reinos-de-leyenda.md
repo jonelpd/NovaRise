@@ -1195,3 +1195,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - Aplicada migración `block_unverified_game_merit_event_inserts_20261113`: trigger `SECURITY INVOKER` con verificación obligatoria de tipo, campaña, sitio, revisión, fuente y estado; requiere sitio habilitado y mantiene `points=0`.
 - Prueba negativa en producción: intento de inserción en mina real deshabilitada **rechazado**; verificados 1 trigger, 0 sitios habilitados y 0 eventos persistidos. No se tocaron partidas ni billeteras.
 - Documentado en `docs/nvra-fase-6-2-meritos-y-mineria.md` (commit `35ce1b28`). **Fase no cerrada:** todavía no existe motor de acciones autoritativo ni acreditación de méritos; no activar pagos ni cambiar `enabled` sin ello.
+
+
+### Fase 6.2 — Prototipo aislado de transición de captura (13-11-2026)
+
+- Implementado `server/nvra-authoritative-mines.cjs`, **fuera del directorio `juego/` publicado por Pages**. Es una función pura preparatoria: recibe un estado **que deberá provenir de almacenamiento controlado por el servidor**, comprueba mina conocida, campaña activa, posición del héroe, movimientos y captura previa; devuelve siguiente estado y evento con `points=0`.
+- Añadidas pruebas `tests/p0-nvra-authoritative-mines.test.cjs` de rechazo de minas falsas, distancia excesiva, movimientos agotados, duplicados, campaña inactiva y concordancia de las 3 minas con `VERIFIED_MAP_SITES` del mapa real.
+- **No existe todavía endpoint ni almacenamiento de estado autoritativo**: este módulo no se invoca desde el juego y no constituye una validación completa del movimiento, terreno, batallas o rutas. No se han habilitado sitios, eventos, tokens ni conexión de monedero.
+- Pendiente comprobar GitHub Actions de este commit y construir la fuente de verdad de movimientos en servidor antes de conectar el validador a producción.
