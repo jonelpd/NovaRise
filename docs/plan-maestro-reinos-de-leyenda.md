@@ -1057,3 +1057,10 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 
 - Añadido script `contracts/scripts/verify-nvra-base-readonly.cjs` y workflow manual `nvra-token-identity-readonly.yml`: lectura de red, bytecode, nombre, símbolo, decimales y suministro de la dirección NVRA documentada. Sin firmas, transacciones, aprobaciones ni conexiones a billeteras.
 - **No ejecutado ni verificado on-chain todavía:** acceso a RPC desde el entorno de trabajo bloqueado y sin acción disponible para disparar `workflow_dispatch` en GitHub. Se requiere ejecución manual en Actions y revisión de logs. No activar saldo o transacciones hasta comprobar resultados y auditar código desplegado. Detalles en `docs/nvra-integracion-juego-fase-6.md`.
+
+
+### Fase 6 — Identidad de NVRA confirmada en Base (13-11-2026)
+
+- **CI verde** ejecución `43406947102` (`verify-token`): lectura RPC directa en Base 8453, contrato `0xa1128B1F4CB8394c179eb2558608a7302972EcBF` con 1.814 bytes de código, nombre `NovaRise Utility Token`, símbolo `NVRA`, 18 decimales y `totalSupply()` equivalente a 1.000.000 NVRA. Cuatro checks de metadatos aprobados.
+- Queda superado el bloqueo de **identidad básica del token**, no el de auditoría del contrato, custodia ni permisos. Se autoriza técnicamente preparar únicamente la **consulta de saldos de solo lectura** y conexión opcional de billetera; no habilitar transferencias, recompensas ni minería de NVRA.
+- Evidencia: https://github.com/jonelpd/NovaRise/actions/runs/43406947102 . Detalle: `docs/nvra-integracion-juego-fase-6.md`.
