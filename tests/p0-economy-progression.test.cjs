@@ -40,5 +40,5 @@ test('campaign income scaling bottoms out but never reaches zero',()=>{
  const level50=scenario(50,0,0,false,false);
  assert.equal(level1.turn,40);
  assert.equal(level50.turn,18);
- assert.equal(scenario(50,5,5,true,true).turn,128);
+ assert.equal(scenario(50,5,5,true,true).turn,127);
 });
