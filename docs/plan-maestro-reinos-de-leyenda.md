@@ -1211,3 +1211,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - Comprobado: tabla vacía; `anon` y `authenticated` sin acceso de lectura/escritura. **No se han importado partidas existentes ni habilitado la creación de campañas desde el navegador.**
 - Añadido `server/nvra-authoritative-campaign-service.cjs`: orquestación que carga el estado del repositorio del servidor, valida captura con `server/nvra-authoritative-mines.cjs` y requiere `compareAndSwap` sobre la revisión; sin puntos, sin eventos acreditados, sin token.
 - Añadidas pruebas `tests/p0-nvra-authoritative-campaign-service.test.cjs` para rechazos y dos capturas concurrentes. Las pruebas usan un repositorio simulado; **todavía no hay adaptador SQL transaccional, endpoint autenticado ni prueba de concurrencia en Postgres real**. No integrar al juego hasta completarlos.
+
+
+### Fase 6.2 — CAS transaccional de minas en Supabase (13-11-2026)
+
+- Aplicada migración `server_only_atomic_mine_capture_cas_20261113`: función `public.nvr_cas_authoritative_mine_capture(uuid,text,bigint,text)` con `SECURITY INVOKER`, `UPDATE` atómico condicionado por usuario/campaña, revisión, mina del mapa real, distancia, movimientos y propiedad anterior. Incrementa revisión y descuenta un movimiento, sin crear eventos ni puntos.
+- Permisos comprobados: `anon` y `authenticated` **sin EXECUTE**; `service_role` sí. Casos negativos ejecutados: campaña inexistente y mina falsa devuelven `false`; 0 campañas existentes. **No se ha probado todavía una captura positiva ni concurrencia real con dos conexiones PostgreSQL**.
+- Añadido `server/nvra-supabase-campaign-repository.cjs` como adaptador de backend para lectura y RPC CAS, con pruebas unitarias en `tests/p0-nvra-supabase-campaign-repository.test.cjs`. No hay credenciales ni endpoint público, no se conecta al juego.
+- **Pendiente:** arranque autoritativo de campañas, validación de trayectos y batallas, pruebas de integración/concurrencia real, autenticación de endpoint, y solo después registro de méritos. No activar pagos NVRA ni MetaMask.
