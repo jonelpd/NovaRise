@@ -21,10 +21,26 @@ jobs:
         uses: actions/checkout@v4
       - name: Configurar Pages
         uses: actions/configure-pages@v5
+      - name: Preparar sitio público con lista permitida
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p _site
+          cp -- *.html *.atom robots.txt sitemap.xml _site/
+          cp -R assets juego _site/
+          # El módulo de billetera sigue suspendido y no debe publicarse.
+          rm -f _site/juego/nvra-wallet-readonly.js
+          test -f _site/index.html
+          test -f _site/juego/index.html
+          test ! -e _site/contracts
+          test ! -e _site/docs
+          test ! -e _site/.github
+          test ! -e _site/tests
+          test ! -e _site/juego/nvra-wallet-readonly.js
       - name: Preparar archivos estáticos
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: _site
       - name: Publicar
         id: deployment
         uses: actions/deploy-pages@v4
