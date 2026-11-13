@@ -1098,3 +1098,10 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - **Conexión suspendida:** eliminado el cargador de `juego/nvra-wallet-readonly.js` de `juego/index.html` (commit `1f028540`); texto del Centro NVRA actualizado para advertirlo. El código de consulta permanece en el repositorio, pero no se ejecuta desde el juego. Prueba de no reactivación accidental ajustada en `tests/p0-nvra-wallet-readonly.test.cjs` (commit `3a46c507`).
 - Investigación y criterios de reactivación en `docs/nvra-seguridad-alerta-metamask-2026-11-13.md` (commit `fd8ef77c`). Requiere auditoría de sitio desplegado/código y aclarar clasificación con MetaMask. **No conectar ni ignorar la advertencia.** Las utilidades NVRA y operaciones siguen deshabilitadas.
 - La regresión posterior al bloqueo debe confirmarse verde; una prueba automática verde no implica resolución de la alerta externa.
+
+
+### Fase 6 — Auditoría ampliada de seguridad y publicación (13-11-2026)
+
+- Auditoría estática ampliada: el juego no carga `script src` externos, pero sí importa remotamente Supabase desde `esm.sh` y Three.js desde `jsdelivr`. Pages publica el repositorio completo mediante `upload-pages-artifact path: .`; se recomienda reducir la superficie pública tras revisar las rutas. Se identificaron puntos `innerHTML` y RLS que requieren análisis de entradas y permisos.
+- Añadido test `tests/p0-nvra-site-security-hold.test.cjs` (commit `be4ed786`) para impedir la reactivación accidental de billetera y vigilar importaciones; **CI pendiente**. Auditoría detallada en `docs/nvra-seguridad-alerta-metamask-2026-11-13.md` (commit `e7fd444f`).
+- No se pudo inspeccionar el despliegue web directamente ni atribuir la clasificación de MetaMask a una causa específica. La conexión sigue suspendida. No afirmar que la alerta es un falso positivo.
