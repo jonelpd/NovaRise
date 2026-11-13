@@ -1150,3 +1150,9 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - Preparado borrador en inglés, basado en evidencias, para solicitar explicación y revisión de la clasificación del sitio: `docs/solicitud-revision-metamask-novarise-2026-11-13.md` (commit `2280e511`). Incluye URL del juego, contrato Base, despliegue validado, cambios de seguridad y límites de la auditoría.
 - **No se ha presentado una incidencia externa**, ni se afirma falso positivo. Antes de enviar, adjuntar captura original y confirmar el alcance exacto de la alerta (dominio GitHub Pages compartido, ruta o contrato).
 - Siguiente: enviar solicitud con autorización del titular y analizar respuesta; continuar pruebas negativas de HTML y dependencias. Conexión NVRA suspendida.
+
+
+### Fase 6 — Solicitud MetaMask presentada (13-11-2026)
+
+- **Incidencia oficial creada:** https://github.com/MetaMask/eth-phishing-detect/issues/312215 (estado inicial: OPEN). Presentada por la cuenta `jonelpd`, con pruebas del despliegue, informe de seguridad, contrato NVRA y petición de identificación de la señal de riesgo.
+- Pendiente de respuesta del equipo de clasificación. No se afirma falso positivo ni se reactiva la billetera; no aconsejar ignorar el aviso.
