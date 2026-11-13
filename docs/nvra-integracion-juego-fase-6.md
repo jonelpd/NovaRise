@@ -37,3 +37,9 @@ La fase 6 no se considera terminada hasta disponer de conexión voluntaria funci
 - Blockscout: https://base.blockscout.com/address/0xa1128B1F4CB8394c179eb2558608a7302972EcBF
 - La consulta de BaseScan no estuvo disponible desde la herramienta de navegación en esta sesión. No hay evidencia suficiente para afirmar que los metadatos del contrato o su código desplegado coinciden con el repositorio.
 - **Decisión:** mantener desactivadas la lectura de saldos NVRA en el juego y las transacciones hasta verificar el contrato. La conexión opcional de billetera puede prepararse independientemente, sin solicitar firmas ni permisos.
+
+## Verificador de identidad RPC de solo lectura — 13-11-2026
+
+- Implementado `contracts/scripts/verify-nvra-base-readonly.cjs` (commit `d45a2246`): consulta por JSON-RPC HTTPS `eth_chainId`, `eth_getCode` y llamadas `eth_call` ERC-20 para `name`, `symbol`, `decimals`, `totalSupply`; exige Base 8453, bytecode no vacío, nombre `NovaRise Utility Token`, símbolo `NVRA`, 18 decimales y 1.000.000 unidades. No firma ni envía transacciones.
+- Creado workflow manual `.github/workflows/nvra-token-identity-readonly.yml` (commit `297cc0b4`) para ejecutarlo en GitHub Actions con el RPC público `https://mainnet.base.org`.
+- **Ejecución no realizada todavía:** la herramienta de GitHub disponible no expone inicio de `workflow_dispatch` y el entorno local no puede resolver los hosts RPC. No afirmar que el contrato está verificado. Para lanzarlo: GitHub → Actions → `NVRA token identity on Base (read only)` → Run workflow → main. Revisar resultado y logs. Un resultado correcto valida solo identidad básica, no auditoría de seguridad, proxy ni titularidad.
