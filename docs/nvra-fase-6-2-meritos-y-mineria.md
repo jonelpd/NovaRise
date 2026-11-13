@@ -55,3 +55,16 @@ Migración `prepare_secure_game_merit_event_identity_20261113` aplicada sobre `p
 - Verificación: cuatro columnas presentes, RLS activo, concesiones cliente `authenticated:SELECT`, cero registros previos. No se modificaron partidas.
 - No se ha habilitado RPC de acreditación: una partida JSON enviada desde el navegador no es prueba suficiente de un evento real. Antes de escribir eventos `server_verified` hace falta un flujo de acciones autoritativo de servidor, catálogo de ubicaciones verificado y pruebas de concurrencia. Ningún token se paga.
 - Security Advisor: siguen avisos anteriores sobre RPC `SECURITY DEFINER` de guardado y protección de contraseñas filtradas; no surgió un nuevo aviso sobre esta tabla.
+
+
+## Catálogo de minas reales y control referencial (13-11-2026)
+
+Migración `register_real_map_mines_for_future_server_merits_20261113` aplicada:
+
+- Tabla `public.nvr_game_merit_sites` con clave primaria `(event_type,site_id)`, RLS activo y **sin permisos de acceso para `anon` ni `authenticated`**. No hay políticas de lectura pública intencionadamente.
+- Tres entradas extraídas del catálogo `VERIFIED_MAP_SITES` de `juego/index.html`: `mine-west`, `mine-center`, `mine-east`, todas `event_type='mine_capture'`, `enabled=false`.
+- Clave foránea compuesta desde `nvr_game_reward_events(event_type,site_id)` al catálogo. Los eventos con `site_id` nulo (legado) no quedan cubiertos por esa FK; los eventos nuevos acreditados deberán exigirlo.
+- Restricción de coherencia: `verification_source='server_verified'` exige `verified=true`, campaña, sitio y revisión presentes.
+- Verificación posterior: 3 lugares, 0 habilitados, 0 eventos; RLS activo y ningún permiso de cliente sobre el catálogo.
+- Security Advisor: aviso informativo de RLS sin políticas para el catálogo es **intencionado** (tabla cerrada al cliente); persisten avisos anteriores sobre la RPC de guardado y contraseñas filtradas.
+- **Importante:** la FK garantiza que un identificador pertenece al catálogo, pero no prueba que un jugador haya capturado la mina. Aún falta motor de acciones autoritativo en servidor, comprobación de estado anterior/nuevo y protección de carreras antes de habilitar eventos.
