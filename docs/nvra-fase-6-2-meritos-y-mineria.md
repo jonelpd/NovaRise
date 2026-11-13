@@ -68,3 +68,14 @@ Migración `register_real_map_mines_for_future_server_merits_20261113` aplicada:
 - Verificación posterior: 3 lugares, 0 habilitados, 0 eventos; RLS activo y ningún permiso de cliente sobre el catálogo.
 - Security Advisor: aviso informativo de RLS sin políticas para el catálogo es **intencionado** (tabla cerrada al cliente); persisten avisos anteriores sobre la RPC de guardado y contraseñas filtradas.
 - **Importante:** la FK garantiza que un identificador pertenece al catálogo, pero no prueba que un jugador haya capturado la mina. Aún falta motor de acciones autoritativo en servidor, comprobación de estado anterior/nuevo y protección de carreras antes de habilitar eventos.
+
+
+## Barrera obligatoria de escritura en servidor (13-11-2026, continuación)
+
+Migración aplicada `block_unverified_game_merit_event_inserts_20261113`: trigger `nvr_guard_merit_event_insert_trigger` sobre `public.nvr_game_reward_events` que invoca `public.nvr_guard_merit_event_insert()` como `SECURITY INVOKER`, con `search_path=''` y sin `EXECUTE` público, anónimo ni autenticado.
+
+En cada `INSERT` exige tipo admitido, campaña/sitio/revisión, `verification_source='server_verified'`, `verified=true`, `points=0` y que el lugar figure `enabled=true` en el catálogo protegido. Todas las minas están actualmente deshabilitadas, de modo que **ningún evento de mina puede insertarse**. Esta es una barrera defensiva, **no** una prueba de captura legítima; un futuro servicio con permisos de escritura deberá verificar de forma autoritativa el movimiento y el combate antes de habilitar sitios o registrar méritos.
+
+Prueba SQL negativa: se intentó insertar un evento de `mine-west` con todos los campos de prueba; el trigger lo rechazó con `check_violation`. Verificación posterior: 1 trigger activo, 0 minas habilitadas, 0 eventos persistidos. La primera tentativa de prueba incluía un ID manual incompatible con la columna `GENERATED ALWAYS`; se corrigió la prueba para usar el ID automático, sin modificar datos.
+
+**Pendiente:** diseñar motor de acciones autoritativo, pruebas de concurrencia y una política de puntos. No se han tocado las partidas guardadas ni las billeteras.
