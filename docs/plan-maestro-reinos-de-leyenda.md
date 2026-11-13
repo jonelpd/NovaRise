@@ -1090,3 +1090,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 
 - El CI `43408530403` volvió a fallar en `tests/p0-nvra-wallet-readonly.test.cjs`: la sustitución anterior de la expresión regular no había surtido efecto y seguía buscando `getElementById('nvra-center')` en lugar del helper real `byId('nvra-center')`.
 - Aplicada sustitución exacta y verificada en el archivo (commit `6f595c17`). Nuevo CI `43408856992` en ejecución al actualizar este documento. No se ha cambiado la lógica de la billetera. No declarar éxito hasta que termine.
+
+
+### Fase 6 — BLOQUEO DE SEGURIDAD: alerta MetaMask (13-11-2026)
+
+- El usuario aportó captura de MetaMask clasificando `jonelpd.github.io` como **«Malicioso: marcado como no seguro»** al intentar conectar la billetera en el juego. No se presupone falso positivo.
+- **Conexión suspendida:** eliminado el cargador de `juego/nvra-wallet-readonly.js` de `juego/index.html` (commit `1f028540`); texto del Centro NVRA actualizado para advertirlo. El código de consulta permanece en el repositorio, pero no se ejecuta desde el juego. Prueba de no reactivación accidental ajustada en `tests/p0-nvra-wallet-readonly.test.cjs` (commit `3a46c507`).
+- Investigación y criterios de reactivación en `docs/nvra-seguridad-alerta-metamask-2026-11-13.md` (commit `fd8ef77c`). Requiere auditoría de sitio desplegado/código y aclarar clasificación con MetaMask. **No conectar ni ignorar la advertencia.** Las utilidades NVRA y operaciones siguen deshabilitadas.
+- La regresión posterior al bloqueo debe confirmarse verde; una prueba automática verde no implica resolución de la alerta externa.
