@@ -23,3 +23,12 @@ test('game contains no remote script tag; document known dynamic imports',()=>{
  assert.match(html,/https:\/\/esm\.sh\/@supabase\/supabase-js@2\.57\.0/);
  assert.match(html,/https:\/\/cdn\.jsdelivr\.net\/npm\/three@0\.169\.0/);
 });
+
+test('Pages publishes an explicit public allowlist and omits wallet script',()=>{
+ const workflow=fs.readFileSync(path.join(root,'.github/workflows/pages.yml'),'utf8');
+ assert.match(workflow,/cp -- \*\.html \*\.atom robots\.txt sitemap\.xml _site\//);
+ assert.match(workflow,/cp -R assets juego _site\//);
+ assert.match(workflow,/rm -f _site\/juego\/nvra-wallet-readonly\.js/);
+ assert.match(workflow,/path: _site/);
+ assert.doesNotMatch(workflow,/path: \.(?:\r?\n|$)/);
+});
