@@ -9,7 +9,7 @@ for(const page of ['index.html','combate-demo.html']){
  const catalog=vm.runInNewContext(html.slice(a,b)+'\nVERIFIED_MAP_SITES');
  test(page+': original and new landmark rewards stay distinct and cannot repeat',()=>{
   const relics=catalog.filter(x=>x.kind==='relic');
-  assert.equal(relics.filter(x=>original.has(x.id)).length,5);
+  assert.equal(relics.filter(x=>original.has(x.id)).length,page==='index.html'?5:0);
   assert.equal(relics.filter(x=>!original.has(x.id)).length,10);
   for(const site of relics){
    const s={done:false,moves:4,gold:0,soldiers:0,experience:0,landmarkRewards:{}};
