@@ -1004,3 +1004,12 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - Ejemplo de ingresos pasivos *modelados* sin gasto ni conquistas adicionales: nivel 1 sin castillos ni mercado **40 oro/turno**; nivel 50 en la misma situación **18 oro/turno**. En nivel 50 con cinco castillos adicionales, cinco emplazamientos reclamados, mercado y bonificación de facción: **127 oro/turno** (94 de ingreso base ajustado + 33 por castillos; el juego redondea cada componente por separado).
 - **Limitación explícita:** estas pruebas verifican fórmulas y escenarios, no simulan 50 partidas reales con rutas, combates, bajas, turnos ni compras. La progresión de 50 niveles y los costes de reclutamiento requieren seguimiento jugable adicional; no se modifican cifras del juego antes de detectar un desequilibrio reproducible.
 - CI de esta ampliación `43399888734` pendiente al documentarlo.
+
+
+### Fase 5 — Auditoría de crecimiento de ejércitos y castillos (2026-11-13)
+
+- Confirmado verde el CI `43399888734` para los 200 escenarios de ingresos y asequibilidad de unidades en niveles 1–50.
+- Revisados los **cinco castillos capturables** y sus perfiles de reclutamiento. Precios por unidad: soldado 30, arquero 50, grifo 110 y dragón 300 de oro. La compra requiere población disponible y oro suficiente; descuenta ambas cantidades.
+- La población disponible en cada castillo se repone por turno (soldados +2, arqueros +1, grifos +1 cada dos turnos, dragones +1 cada cuatro turnos, solo donde el perfil permita la unidad), con **límite de tres veces el stock inicial** por tipo. Las guarniciones enemigas se refuerzan según el nivel de campaña hasta el 50.
+- Añadido `tests/p0-castle-army-economy.test.cjs` (commit `0575c2b6`) para comprobar precios positivos, stock inicial acotado, defensores de cinco castillos en niveles 1/2/10/25/50 y normalización de poblaciones guardadas. **CI pendiente:** `43403093045`.
+- **Riesgo a observar, sin cambio de reglas:** el jugador conserva tropas y oro al pasar de nivel, mientras los enemigos crecen por nivel; comprobar en partidas largas si el arrastre de ejércitos causa victorias demasiado fáciles o bloqueos de dificultad. No se modifica el balance antes de evidencia reproducible.
