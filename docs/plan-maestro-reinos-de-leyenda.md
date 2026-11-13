@@ -1112,3 +1112,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - Sustituida la publicación de todo el repositorio por lista permitida de HTML, feeds, `robots.txt`, `sitemap.xml`, `assets/` y `juego/` en `.github/workflows/pages.yml` (commit `1a6587b5`). Se excluyen archivos de desarrollo y el módulo suspendido `juego/nvra-wallet-readonly.js` del artefacto web.
 - Nueva prueba de protección del flujo de Pages (commit `195f1b13`). Regresión `43412712880` y despliegue `43412712948` pendientes de confirmación. No se reanuda conexión de billeteras ni se declara resuelta la alerta MetaMask.
 - Documento de investigación ampliado: `docs/nvra-seguridad-alerta-metamask-2026-11-13.md`.
+
+
+### Fase 6 — Validación de despliegue público y suspensión NVRA (13-11-2026)
+
+- GitHub Pages **`43413553559` SUCCESS**: comprobación HTTPS tras desplegar, `index.html` y `juego/index.html` HTTP 200; `juego/nvra-wallet-readonly.js` y `docs/plan-maestro-reinos-de-leyenda.md` HTTP 404; HTML publicado contiene advertencia de suspensión y no carga el módulo de billetera. Pruebas automáticas **`43413553545` SUCCESS**.
+- La primera verificación `43413288024` falló por respuestas HTTP inconsistentes en rutas antiguas; se conservó el historial y se ajustó el control para distinguir entre seguridad del HTML cargado y posibles URLs obsoletas. La ejecución posterior verificó los estados esperados.
+- **MetaMask continúa bloqueado**: aún no se ha demostrado la causa ni se ha presentado reclamación. Próximos pasos: auditoría de flujos `innerHTML`/RLS, comprobación de reputación de dominio y solicitud fundamentada de revisión a MetaMask/ChainPatrol si procede. Sin conexión, firmas ni operaciones NVRA.
+- Informe actualizado: `docs/nvra-seguridad-alerta-metamask-2026-11-13.md`.
