@@ -47,3 +47,17 @@ Captura del propietario: al intentar conectar `https://jonelpd.github.io/NovaRis
 - Eliminado explícitamente `_site/juego/nvra-wallet-readonly.js` del artefacto de publicación durante la suspensión de billeteras. No se borra el archivo del repositorio.
 - Test `tests/p0-nvra-site-security-hold.test.cjs` ampliado para comprobar lista permitida y exclusión del módulo (commit `195f1b13`). CI `43412712880` y despliegue `43412712948` pendientes al redactar esta nota.
 - **Precaución:** reducir archivos publicados no prueba ni elimina por sí solo la clasificación maliciosa de MetaMask. Se mantiene el bloqueo. Confirmar que la web publicada funciona y que no hay rutas rotas antes de cerrar este cambio.
+
+## Comprobación del despliegue público — 13-11-2026
+
+- El despliegue de Pages de la lista permitida **43412769323** terminó con `completed/success`. La ejecución confirma que GitHub aceptó el artefacto, pero **no prueba por sí sola** el HTTP de cada ruta.
+- Se ha añadido una prueba de humo **posterior al despliegue** en `.github/workflows/pages.yml` (commit `757e541e`), que consulta mediante HTTPS: `/NovaRise/index.html` = 200, `/NovaRise/juego/index.html` = 200, `/NovaRise/juego/nvra-wallet-readonly.js` = 404, `/NovaRise/docs/plan-maestro-reinos-de-leyenda.md` = 404; además busca el aviso de suspensión en el HTML publicado. Reintenta seis veces por propagación.
+- Test estático de la prueba de humo en `tests/p0-nvra-site-security-hold.test.cjs` (commit `d09e8635`). Pendiente comprobar los nuevos resultados de Actions; **no declarar rutas verificadas antes del resultado**.
+- El entorno de trabajo no consiguió abrir `jonelpd.github.io` directamente (restricción de red), por lo que la comprobación remota se ejecutará desde el runner de GitHub.
+
+## Investigación del bloqueo y vías oficiales
+
+- MetaMask distingue alertas de reputación de URL, listas de phishing y señales de proveedores de seguridad. No se conoce todavía cuál ha originado el aviso específico. Referencia: https://support.metamask.io/configure/wallet/security-alerts/
+- MetaMask recomienda que el propietario solicite revisión mediante https://github.com/MetaMask/eth-phishing-detect/issues cuando crea que hay una clasificación incorrecta. La documentación de MetaMask también describe su colaboración con ChainPatrol: https://metamask.io/es/news/metamask-chainpatrol-protect-users-with-phishing-warnings .
+- ChainPatrol ofrece el formulario https://app.chainpatrol.io/dispute y el soporte https://chainpatrol.com/legal/support . **No se ha presentado ninguna solicitud ni se afirma que sea un falso positivo.**
+- Para una revisión, aportar URL exacta, fecha/captura de alerta, titularidad de GitHub Pages, commit y logs de despliegue, enlace a código de billetera desactivado, resultados de pruebas, y pedir explícitamente **motivo/indicador** del bloqueo. Evitar asegurar que el sitio es seguro hasta terminar auditoría de XSS, dependencias, RLS y tráfico real.
