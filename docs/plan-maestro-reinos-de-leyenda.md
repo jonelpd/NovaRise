@@ -1180,3 +1180,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - Permisos comprobados: `authenticated` solo `SELECT` con RLS; `anon` sin acceso; tabla de eventos vacía antes y después. Sin cambios en partidas ni habilitación de pagos.
 - Detalles y límites de seguridad en `docs/nvra-fase-6-2-meritos-y-mineria.md` (commit `361fd6c0`).
 - **No cerrar fase:** falta sistema autoritativo del servidor que valide acciones reales del mapa antes de emitir eventos. Los archivos guardados manipulables no pueden servir de prueba; no habilitar RPC de acreditación directa desde cliente.
+
+
+### Fase 6.2 — Catálogo real de minas, sin pagos (13-11-2026)
+
+- Aplicada migración `register_real_map_mines_for_future_server_merits_20261113`: catálogo protegido de las minas `mine-west`, `mine-center`, `mine-east` existentes en `VERIFIED_MAP_SITES` del mapa real.
+- Todas las minas del catálogo están `enabled=false`; sin permisos de cliente, con RLS y clave foránea para los eventos con sitio definido. Restricción adicional exige campos de prueba en registros marcados `server_verified`.
+- Verificación de producción: **3 minas, 0 habilitadas, 0 eventos**. Sin cambios en partidas ni billeteras. Documentación técnica en `docs/nvra-fase-6-2-meritos-y-mineria.md` (commit `4f00a250`).
+- La fase sigue abierta: la base de datos no puede inferir una captura legítima de un JSON del cliente; falta implementar un flujo autoritativo de acciones antes de acreditar méritos.
