@@ -10,9 +10,9 @@ test('original map landmarks provide three distinct one-time rewards',()=>{
  }
  assert.match(html,/if\(s\.landmarkRewards\[site\.id\]\)return message/);
  assert.match(html,/s\.landmarkRewards\[site\.id\]=true/);
- assert.match(html,/campaignGoldIncome\(100\)/);
- assert.match(html,/awardHeroExperience\(55\)/);
- assert.match(html,/s\.soldiers\+=3/);
+ assert.match(html,/campaignGoldIncome\(newLandmark\?80:100\)/);
+ assert.match(html,/awardHeroExperience\(amount\)/);
+ assert.match(html,/s\.soldiers\+=amount/);
 });
 
 test('relic hotspots are transparent and rewards are tied to campaign state',()=>{
