@@ -1035,3 +1035,12 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 
 - La nueva regresión `43403524811` falló porque los tests adicionales reutilizaban el estado de una transición simulada (`fresh()` mock), que no incluía la propiedad `done`; la aserción esperaba `false` y recibió `undefined`. No se identificó un fallo de transición del juego.
 - Corregida la inicialización del estado simulado antes de comprobar objetivos incompletos (commit `bdfef321`). Pendiente confirmar la siguiente ejecución de CI antes de cerrar esta verificación.
+
+
+## Hito de transición fase 5 → fase 6 — 13-11-2026
+
+**Fase 5: cierre de validación automática económica y de campaña.** Confirmado `Game regression tests` `43403579199` con resultado `completed/success`: pruebas de economía, castillos, arrastre en 49 transiciones, objetivos obligatorios y final de nivel 50. No se han modificado valores de equilibrio. **Pendiente para cierre integral de fase 5:** aceptación manual en navegador y móvil de combates, asedios, guardado/restauración, rutas y dificultad real durante partidas prolongadas; no presentar esta parte como ya verificada.
+
+**Fase 6: iniciada en diseño, no en transacciones.** Documento técnico y de seguridad `docs/nvra-integracion-juego-fase-6.md` (commit `c52919ed`). Ya existe en el juego un Centro NVRA informativo, sin billetera ni pagos. Antes de desarrollar la conexión real hay que verificar la dirección ERC-20 de NVRA en Base mainnet (chain ID 8453), sus parámetros, permisos y seguridad. Se prevé conexión voluntaria, lectura sin gasto y utilidad optativa, con activación gradual; no hay recompensas automáticas por minería local. El contrato no se ha identificado ni verificado en esta revisión.
+
+**Siguiente paso:** verificar datos del contrato y preparar pruebas de conexión de billetera sin afectar partidas existentes. No declarar fase 6 completada por haber redactado su diseño.
