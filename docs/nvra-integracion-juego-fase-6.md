@@ -6,7 +6,7 @@
 
 - `juego/index.html` ya incorpora un **Centro NVRA** accesible desde el encabezado. Presenta minas, cristales y méritos **informativos** de la partida, sin saldo en cadena, monedero conectado ni recompensas reales.
 - Las minas generan recursos internos del juego; los méritos de partidas guardadas o importadas **no constituyen prueba verificable de trabajo** y no se convertirán automáticamente en tokens.
-- La red prevista es **Base mainnet** (chain ID 8453). El suministro total previsto para NVRA es **1.000.000**. La dirección del contrato, sus decimales, la propiedad/roles y el estado de seguridad deben verificarse con documentación y explorador de bloques antes de introducirlos en código. No se presupone una dirección.
+- La red prevista es **Base mainnet** (chain ID 8453). El suministro total previsto para NVRA es **1.000.000**. La documentación del proyecto identifica como **dirección comunicada, todavía no verificada on-chain**, `0xa1128B1F4CB8394c179eb2558608a7302972EcBF` (véase `docs/nvra-auditoria-contrato-liquidez-2026-11-08.md`). Los decimales previstos son 18 y el suministro previsto 1.000.000, pero ambos deben comprobarse directamente en Base. La propiedad/roles, el bytecode y la seguridad también siguen pendientes. No activar el contrato en código de producción sin esa verificación.
 - **No** existe aún una integración de billetera verificada en el juego.
 
 ## Orden de ejecución
@@ -29,3 +29,11 @@
 ## Criterios de cierre
 
 La fase 6 no se considera terminada hasta disponer de conexión voluntaria funcional, lectura de saldo verificada, pruebas de seguridad y usabilidad, y una utilidad definida y aprobada. El diseño por sí solo **no** habilita minería ni pagos reales.
+
+## Localización documental del contrato — 13-11-2026
+
+- Dirección **comunicada en la auditoría existente**, no corroborada mediante una lectura directa de la blockchain: `0xa1128B1F4CB8394c179eb2558608a7302972EcBF`.
+- BaseScan: https://basescan.org/address/0xa1128B1F4CB8394c179eb2558608a7302972EcBF#code
+- Blockscout: https://base.blockscout.com/address/0xa1128B1F4CB8394c179eb2558608a7302972EcBF
+- La consulta de BaseScan no estuvo disponible desde la herramienta de navegación en esta sesión. No hay evidencia suficiente para afirmar que los metadatos del contrato o su código desplegado coinciden con el repositorio.
+- **Decisión:** mantener desactivadas la lectura de saldos NVRA en el juego y las transacciones hasta verificar el contrato. La conexión opcional de billetera puede prepararse independientemente, sin solicitar firmas ni permisos.
