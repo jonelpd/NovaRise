@@ -956,3 +956,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - Implementada captura de clic en el contenedor del mapa para las diez ubicaciones añadidas, calculando coordenadas porcentuales del clic y despachando `interactVerifiedSite(site)` cuando una casilla del mapa intercepta la pulsación. Se evita duplicar el evento si el objetivo ya es un `.world-hotspot`. Se mantienen los veinte puntos anteriores intactos y no se altera `mapa-grande.png`. Commits `7f5ffd37`, `880f283f`.
 - Prueba ampliada en `tests/p0-map-hotspot-clicks.test.cjs` para simular clic sobre una casilla superpuesta (commit `75a301f8`). **CI pendiente:** ejecución `43210048136`.
 - **Pendiente indispensable:** comprobar en navegador real con versión publicada que un clic en una de las diez ubicaciones produce movimiento o mensaje; si no, investigar capas fuera del contenedor, escala/offset del mapa y controles táctiles.
+
+
+### Aceptación manual de los nuevos lugares del mapa — 2026-11-13
+
+- **El jugador confirma expresamente que los nuevos elementos interactivos ya funcionan en una partida real** después de la corrección de captura de clics del mapa. Se cierra la incidencia concreta «al pulsar los diez nuevos lugares no sucede nada».
+- La ejecución de regresión del commit `75a301f8` (`43210048136`) terminó en verde y la publicación de GitHub Pages del commit `8f57d8f1` (`43210082989`) terminó correctamente.
+- El mapa principal conserva sus 20 ubicaciones previas y suma 10 nuevos lugares señalados por el jugador: **30 hotspots en total, 15 de recompensa**, sin modificar la imagen original.
+- **Alcance de aceptación:** respuesta a la pulsación en los nuevos lugares confirmada por el jugador. No implica una validación individual de cada ruta, recompensa o comportamiento en todos los dispositivos; mantener esas verificaciones como tareas independientes si resultan necesarias.
