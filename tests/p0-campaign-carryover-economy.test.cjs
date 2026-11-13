@@ -44,3 +44,31 @@ test('unfulfilled objective prevents a premature campaign transition',()=>{
  assert.equal(ctx.completeCampaignIfReady(),false);
  assert.equal(ctx.s.campaignLevel,8);
 });
+
+test('defeating the commander without conquering the rival castle never advances',()=>{
+ for(const level of [1,10,25,49,50]){
+  const {ctx}=run(level);
+  ctx.s.campaignLevel=level;
+  ctx.verifiedSiteState=()=>({rival:'rival'});
+  ctx.rivalState=()=>({defeated:true});
+  assert.equal(ctx.completeCampaignIfReady(),false);
+  assert.equal(ctx.s.campaignLevel,level);
+  assert.equal(ctx.s.done,false);
+ }
+});
+test('conquering the castle without defeating the commander never advances',()=>{
+ for(const level of [1,10,25,49,50]){
+  const {ctx}=run(level);
+  ctx.s.campaignLevel=level;
+  ctx.verifiedSiteState=()=>({rival:'player'});
+  ctx.rivalState=()=>({defeated:false});
+  assert.equal(ctx.completeCampaignIfReady(),false);
+  assert.equal(ctx.s.campaignLevel,level);
+  assert.equal(ctx.s.done,false);
+ }
+});
+test('completed campaign cannot advance again or duplicate rewards',()=>{
+ const {ctx}=run(50);
+ assert.equal(ctx.completeCampaignIfReady(),false);
+ assert.equal(ctx.s.campaignLevel,50);
+});
