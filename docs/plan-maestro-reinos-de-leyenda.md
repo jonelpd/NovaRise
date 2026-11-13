@@ -1013,3 +1013,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - La población disponible en cada castillo se repone por turno (soldados +2, arqueros +1, grifos +1 cada dos turnos, dragones +1 cada cuatro turnos, solo donde el perfil permita la unidad), con **límite de tres veces el stock inicial** por tipo. Las guarniciones enemigas se refuerzan según el nivel de campaña hasta el 50.
 - Añadido `tests/p0-castle-army-economy.test.cjs` (commit `0575c2b6`) para comprobar precios positivos, stock inicial acotado, defensores de cinco castillos en niveles 1/2/10/25/50 y normalización de poblaciones guardadas. **CI pendiente:** `43403093045`.
 - **Riesgo a observar, sin cambio de reglas:** el jugador conserva tropas y oro al pasar de nivel, mientras los enemigos crecen por nivel; comprobar en partidas largas si el arrastre de ejércitos causa victorias demasiado fáciles o bloqueos de dificultad. No se modifica el balance antes de evidencia reproducible.
+
+
+### Fase 5 — Verificación de arrastre entre niveles (2026-11-13)
+
+- Confirmado verde el CI de auditoría de castillos `43403093045` (`completed/success`).
+- Revisado `completeCampaignIfReady()` del juego principal: al completar los dos objetivos, los niveles 1–49 trasladan soldados, arqueros, grifos, dragones, experiencia y facción, y conservan oro entre 120 y 100.000.000. El rival recibe refuerzos por nivel (`+4 × nivel anterior` soldados, `+2 × nivel anterior` arqueros y `+80 × nivel anterior` oro). El nivel 50 concluye la campaña sin crear nivel 51.
+- Añadido `tests/p0-campaign-carryover-economy.test.cjs` (commit `1279a2d1`) para ejecutar la transición en todos los niveles 1–49, verificar límites de oro, fin de nivel 50 y bloqueo cuando falta conquistar el castillo. CI `43403277506` **pendiente**.
+- **Alcance:** estas pruebas ejercitan la transición y las fórmulas de arrastre; no sustituyen partidas reales de 50 niveles ni miden directamente la dificultad de cada combate. Se mantiene el balance actual hasta contar con evidencia de desequilibrio.
