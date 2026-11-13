@@ -1071,3 +1071,9 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - Implementada en `juego/index.html` + `juego/nvra-wallet-readonly.js` una interfaz opcional en el Centro NVRA para conectar una cuenta EVM con consentimiento explícito, comprobar Base Mainnet y leer `balanceOf` NVRA mediante `eth_call`. Admite actualizar saldo, desvincular interfaz y detectar cambios de cuenta/red.
 - No se habilitan firmas, aprobaciones, transferencias, recompensas ni conversión de cristales. No se altera el guardado de partidas. La desconexión local no revoca automáticamente los permisos de la extensión.
 - Nueva prueba de restricciones `tests/p0-nvra-wallet-readonly.test.cjs`; `Game regression tests` ejecución `43407462817` **pendiente** al actualizar el plan. Próximo requisito: confirmar CI verde y realizar prueba manual de conexión/lectura en navegador antes de cerrar esta subfase.
+
+
+### Fase 6 — Ajuste de prueba de billetera (13-11-2026)
+
+- La regresión `43407462817` falló en una aserción de texto que buscaba `getElementById('nvra-center')` directamente; el código usa el helper `byId('nvra-center')`. La interfaz se había incluido en el juego y la regresión anterior `43407445767` fue verde, pero esta nueva prueba falló.
+- Corregida la expectativa de prueba en commit `bba2c83d`, sin cambiar la lógica de conexión. **Nueva validación pendiente**; no declarar CI verde hasta confirmación. Queda pendiente probar manualmente con extensión de billetera y revisar eventos de cuenta/red.
