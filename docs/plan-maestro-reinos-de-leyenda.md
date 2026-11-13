@@ -995,3 +995,12 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - Añadida prueba de invariantes `tests/p0-economy-audit.test.cjs` (commit `57cf2920`) para verificar producción minera según nivel y trabajadores, escalado de oro de niveles 1–50, acumulación y límite de movimientos de molinos, y ausencia de ingresos de sitios no capturados. **CI pendiente:** `43398288042`.
 - **Hallazgo de balance a vigilar:** al controlar los cinco molinos, se generan cinco provisiones por turno pero solo se consumen hasta dos; la reserva puede crecer hasta 20, aunque los movimientos están limitados a siete. No se modifican todavía los valores ni se reduce el beneficio de lugares ya aceptados sin una prueba comparativa de progresión.
 - Pendiente simular progresión económica completa en los 50 niveles y comparar costes/ingresos en escenarios con pocos y muchos castillos; no declarar la auditoría integral cerrada solo con invariantes unitarios.
+
+
+### Fase 5 — Comparativa de progresión económica en 50 niveles (2026-11-13)
+
+- CI confirmado verde para la primera prueba económica `43398288042` (`completed/success`).
+- Añadida `tests/p0-economy-progression.test.cjs` (commits `c223f842`, `4d44ca79`), que compara **200 escenarios** de ingresos por turno (50 niveles × cuatro perfiles de control territorial), verifica asequibilidad relativa de soldados/arqueros/grifos/dragones, que controlar castillos mejora los ingresos y que el factor de dificultad no produce rentas negativas.
+- Ejemplo de ingresos pasivos *modelados* sin gasto ni conquistas adicionales: nivel 1 sin castillos ni mercado **40 oro/turno**; nivel 50 en la misma situación **18 oro/turno**. En nivel 50 con cinco castillos adicionales, cinco emplazamientos reclamados, mercado y bonificación de facción: **127 oro/turno** (94 de ingreso base ajustado + 33 por castillos; el juego redondea cada componente por separado).
+- **Limitación explícita:** estas pruebas verifican fórmulas y escenarios, no simulan 50 partidas reales con rutas, combates, bajas, turnos ni compras. La progresión de 50 niveles y los costes de reclutamiento requieren seguimiento jugable adicional; no se modifican cifras del juego antes de detectar un desequilibrio reproducible.
+- CI de esta ampliación `43399888734` pendiente al documentarlo.
