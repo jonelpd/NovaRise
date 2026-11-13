@@ -1225,3 +1225,10 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 
 - Aplicadas migraciones `validate_authoritative_campaign_mines_unique_real_20261113` y `handle_nonarray_authoritative_mine_state_safely_20261113`: restricción SQL de integridad para que `owned_mines` solo contenga minas reales, sin duplicados ni valores malformados. Pruebas directas válidas/negativas verificadas; 0 campañas modificadas.
 - Se mantiene la fase **abierta**: falta validación autoritativa de movimiento, rutas y combates, inicialización confiable de campañas y prueba transaccional real. La comprobación de integridad no acredita capturas ni genera NVRA. Detalles en `docs/nvra-fase-6-2-meritos-y-mineria.md`.
+
+
+### Fase 6.2 — Prueba SQL de captura real, sin persistencia (13-11-2026)
+
+- Validada en Supabase una transacción temporal con `ROLLBACK`: captura de `mine-west` correcta, incremento de revisión y descuento de movimiento; rechazados revisión obsoleta, doble captura y mina ficticia mediante aserciones SQL.
+- Verificado tras revertir: 0 campañas autoritativas, 0 eventos de recompensa y 0 minas habilitadas. Sin cambios en partidas de jugadores.
+- **No confundir con concurrencia real:** falta ensayar dos sesiones simultáneas y validar rutas/combates desde servidor. Evidencia y límites en `docs/nvra-fase-6-2-meritos-y-mineria.md` (commit `a6dbc635`).
