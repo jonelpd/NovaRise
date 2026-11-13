@@ -43,3 +43,12 @@ La fase 6 no se considera terminada hasta disponer de conexión voluntaria funci
 - Implementado `contracts/scripts/verify-nvra-base-readonly.cjs` (commit `d45a2246`): consulta por JSON-RPC HTTPS `eth_chainId`, `eth_getCode` y llamadas `eth_call` ERC-20 para `name`, `symbol`, `decimals`, `totalSupply`; exige Base 8453, bytecode no vacío, nombre `NovaRise Utility Token`, símbolo `NVRA`, 18 decimales y 1.000.000 unidades. No firma ni envía transacciones.
 - Creado workflow manual `.github/workflows/nvra-token-identity-readonly.yml` (commit `297cc0b4`) para ejecutarlo en GitHub Actions con el RPC público `https://mainnet.base.org`.
 - **Ejecución no realizada todavía:** la herramienta de GitHub disponible no expone inicio de `workflow_dispatch` y el entorno local no puede resolver los hosts RPC. No afirmar que el contrato está verificado. Para lanzarlo: GitHub → Actions → `NVRA token identity on Base (read only)` → Run workflow → main. Revisar resultado y logs. Un resultado correcto valida solo identidad básica, no auditoría de seguridad, proxy ni titularidad.
+
+## Verificación on-chain confirmada — 13-11-2026
+
+- GitHub Actions `NVRA token identity on Base (read only)` ejecución **43406947102**, job `verify-token`, **completed/success**. Logs consultados directamente.
+- RPC Base Mainnet: chain ID **8453**, dirección `0xa1128B1F4CB8394c179eb2558608a7302972EcBF`, bytecode desplegado **1.814 bytes**.
+- Llamadas ERC-20: `name()` = `NovaRise Utility Token`; `symbol()` = `NVRA`; `decimals()` = `18`; `totalSupply()` = `1000000000000000000000000` unidades mínimas (**1.000.000 NVRA**). Los cuatro checks devolvieron `true`.
+- Evidencia: https://github.com/jonelpd/NovaRise/actions/runs/43406947102
+- **Alcance limitado:** identidad y suministro verificados por RPC; NO se ha auditado el código desplegado, permisos, titularidad, posibilidad de upgrade, custodia o liquidez. No autoriza transacciones, pagos ni minería de NVRA.
+- **Próxima implementación permitida:** lectura de saldo ERC-20 mediante `balanceOf` sin firma y conexión voluntaria de cuenta; mantener gastos y recompensas deshabilitados.
