@@ -1219,3 +1219,9 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - Permisos comprobados: `anon` y `authenticated` **sin EXECUTE**; `service_role` sí. Casos negativos ejecutados: campaña inexistente y mina falsa devuelven `false`; 0 campañas existentes. **No se ha probado todavía una captura positiva ni concurrencia real con dos conexiones PostgreSQL**.
 - Añadido `server/nvra-supabase-campaign-repository.cjs` como adaptador de backend para lectura y RPC CAS, con pruebas unitarias en `tests/p0-nvra-supabase-campaign-repository.test.cjs`. No hay credenciales ni endpoint público, no se conecta al juego.
 - **Pendiente:** arranque autoritativo de campañas, validación de trayectos y batallas, pruebas de integración/concurrencia real, autenticación de endpoint, y solo después registro de méritos. No activar pagos NVRA ni MetaMask.
+
+
+### Fase 6.2 — Restricciones adicionales del estado servidor (13-11-2026)
+
+- Aplicadas migraciones `validate_authoritative_campaign_mines_unique_real_20261113` y `handle_nonarray_authoritative_mine_state_safely_20261113`: restricción SQL de integridad para que `owned_mines` solo contenga minas reales, sin duplicados ni valores malformados. Pruebas directas válidas/negativas verificadas; 0 campañas modificadas.
+- Se mantiene la fase **abierta**: falta validación autoritativa de movimiento, rutas y combates, inicialización confiable de campañas y prueba transaccional real. La comprobación de integridad no acredita capturas ni genera NVRA. Detalles en `docs/nvra-fase-6-2-meritos-y-mineria.md`.
