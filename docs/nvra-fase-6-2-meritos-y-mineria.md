@@ -91,3 +91,16 @@ El módulo `server/nvra-authoritative-campaign-service.cjs` carga estado desde u
 ## Integridad de minas en estado servidor (13-11-2026)
 
 Aplicadas migraciones `validate_authoritative_campaign_mines_unique_real_20261113` y `handle_nonarray_authoritative_mine_state_safely_20261113`. La función inmutable `public.nvr_valid_authoritative_mines(jsonb)` y la restricción `nvr_authoritative_mines_real_unique` de `nvr_authoritative_campaigns` impiden guardar minas ajenas al mapa real, repetidas, no textuales o JSON que no sea una matriz; admite una lista vacía. Función sin permisos `EXECUTE` para clientes. Pruebas SQL directas: lista real válida=true, duplicados=false, mina inventada=false, número=false, objeto=false, null JSON=false, lista vacía=true. Tabla de campañas: 0 filas. Esta restricción no demuestra legitimidad de captura ni sustituye validación de movimientos o CAS bajo concurrencia real.
+
+
+## Prueba de integración SQL con reversión (13-11-2026)
+
+Ejecutada en Supabase de producción una transacción explícita `BEGIN ... ROLLBACK` con una campaña temporal `__nvra_cas_assert_test__` vinculada a un usuario de Auth existente (sin modificar ese usuario). Dentro de un bloque `DO` con aserciones que lanzan error en caso de fallo:
+
+- Captura válida `mine-west` con revisión 1: `true`; estado resultante revisión 2, movimientos 2, `owned_mines=['mine-west']`.
+- Repetición con revisión antigua 1: `false`.
+- Repetición con revisión actual 2 sobre mina ya poseída: `false`.
+- Intento sobre mina inventada: `false`.
+- Transacción revertida expresamente; comprobación posterior: **0 campañas, 0 eventos, 0 sitios habilitados**.
+
+**Alcance:** prueba real de integración de SQL y CAS secuencial; no hay aún dos conexiones concurrentes ni un backend de acciones autoritativo desplegado. No se habilitaron méritos ni recompensas.
