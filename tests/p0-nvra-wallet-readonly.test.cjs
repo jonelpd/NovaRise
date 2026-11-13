@@ -7,7 +7,7 @@ const js=fs.readFileSync(path.join(root,'juego/nvra-wallet-readonly.js'),'utf8')
 const html=fs.readFileSync(path.join(root,'juego/index.html'),'utf8');
 test('wallet viewer is loaded in game and only inside NVRA center',()=>{
  assert.match(html,/<script src="nvra-wallet-readonly\.js" defer><\/script>/);
- assert.match(js,/getElementById\('nvra-center'\)/);
+ assert.match(js,/byId\('nvra-center'\)/);
  assert.match(js,/eth_requestAccounts/);
  assert.match(js,/eth_chainId/);
  assert.match(js,/eth_call/);
