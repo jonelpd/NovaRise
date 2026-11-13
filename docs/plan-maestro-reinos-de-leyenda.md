@@ -979,3 +979,10 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - Captura de GitHub Actions del commit `ebfb108f` mostró regresión roja. Los registros de la ejecución `43396537953` identificaron dos causas: el test nuevo esperaba cinco reliquias originales en la demo, aunque su catálogo contiene solo las diez añadidas (`0 !== 5`), y el test estático antiguo exigía expresiones literales `campaignGoldIncome(100)`, `awardHeroExperience(55)` y `s.soldiers+=3` que fueron reemplazadas por cantidades condicionadas al origen del lugar.
 - Ajustados los tests, **sin alterar la lógica de recompensas**: commits `44d3e709` y `7ffeedbd`. El test nuevo comprueba 5 originales + 10 nuevos en el juego principal, y 10 nuevos en la demo; el test antiguo acepta las nuevas expresiones de recompensa.
 - Nueva regresión `43397261213` **pendiente** al registrar este cambio. No declarar verde hasta consultar su resultado.
+
+
+### Cierre de verificación automática de balance — 2026-11-13
+
+- El jugador presentó captura de la ejecución `#393` de `Game regression tests` correspondiente al commit `7ffeedbd`, en verde. Comprobación independiente en GitHub Actions: ejecución `43397261213` con `status=completed` y `conclusion=success`.
+- Se **cierra la incidencia de pruebas de balance**: los valores de recompensa diferenciados entre los lugares originales y los diez nuevos superan la regresión automática en ambas variantes del juego. No se alteraron los 30 puntos del mapa principal ni la ilustración.
+- La validación automática no sustituye una comprobación manual de cantidades recibidas durante una partida; mantenerla como verificación opcional antes del cierre completo de la fase 5.
