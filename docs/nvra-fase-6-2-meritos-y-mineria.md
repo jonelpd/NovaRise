@@ -79,3 +79,10 @@ En cada `INSERT` exige tipo admitido, campaña/sitio/revisión, `verification_so
 Prueba SQL negativa: se intentó insertar un evento de `mine-west` con todos los campos de prueba; el trigger lo rechazó con `check_violation`. Verificación posterior: 1 trigger activo, 0 minas habilitadas, 0 eventos persistidos. La primera tentativa de prueba incluía un ID manual incompatible con la columna `GENERATED ALWAYS`; se corrigió la prueba para usar el ID automático, sin modificar datos.
 
 **Pendiente:** diseñar motor de acciones autoritativo, pruebas de concurrencia y una política de puntos. No se han tocado las partidas guardadas ni las billeteras.
+
+
+## Estado de campaña aislado (13-11-2026)
+
+Migración `create_server_owned_game_campaign_state_20261113`: `public.nvr_authoritative_campaigns`, clave primaria `(user_id,campaign_id)`, revisión positiva, estado de campaña, posición acotada, movimientos y minas en JSONB con límite de 3. RLS activo, sin permisos de cliente. Comprobado en producción: 0 campañas, sin permisos `SELECT/INSERT/UPDATE` para `authenticated`, ni `INSERT` para `anon`. La tabla `nvr_game_saves` no se modificó.
+
+El módulo `server/nvra-authoritative-campaign-service.cjs` carga estado desde una interfaz de repositorio servidor y requiere compare-and-swap antes de confirmar captura. Las pruebas `tests/p0-nvra-authoritative-campaign-service.test.cjs` cubren concurrencia simulada y rechazo de eventos falsos. **No es todavía un backend desplegado**: faltan adaptador transaccional real, autenticación, generación autoritativa de movimientos y rutas, inicialización confiable y pruebas de integración. El estado actual del navegador no es fuente confiable. No se emiten recompensas ni NVRA.
