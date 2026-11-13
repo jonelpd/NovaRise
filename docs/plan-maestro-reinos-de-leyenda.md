@@ -1203,3 +1203,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - Añadidas pruebas `tests/p0-nvra-authoritative-mines.test.cjs` de rechazo de minas falsas, distancia excesiva, movimientos agotados, duplicados, campaña inactiva y concordancia de las 3 minas con `VERIFIED_MAP_SITES` del mapa real.
 - **No existe todavía endpoint ni almacenamiento de estado autoritativo**: este módulo no se invoca desde el juego y no constituye una validación completa del movimiento, terreno, batallas o rutas. No se han habilitado sitios, eventos, tokens ni conexión de monedero.
 - Pendiente comprobar GitHub Actions de este commit y construir la fuente de verdad de movimientos en servidor antes de conectar el validador a producción.
+
+
+### Fase 6.2 — Estado autoritativo aislado y concurrencia (13-11-2026)
+
+- Migración de producción `create_server_owned_game_campaign_state_20261113`: tabla `public.nvr_authoritative_campaigns` separada de `nvr_game_saves`, con propietario, campaña, revisión, posición, movimientos, minas, restricciones de integridad y RLS.
+- Comprobado: tabla vacía; `anon` y `authenticated` sin acceso de lectura/escritura. **No se han importado partidas existentes ni habilitado la creación de campañas desde el navegador.**
+- Añadido `server/nvra-authoritative-campaign-service.cjs`: orquestación que carga el estado del repositorio del servidor, valida captura con `server/nvra-authoritative-mines.cjs` y requiere `compareAndSwap` sobre la revisión; sin puntos, sin eventos acreditados, sin token.
+- Añadidas pruebas `tests/p0-nvra-authoritative-campaign-service.test.cjs` para rechazos y dos capturas concurrentes. Las pruebas usan un repositorio simulado; **todavía no hay adaptador SQL transaccional, endpoint autenticado ni prueba de concurrencia en Postgres real**. No integrar al juego hasta completarlos.
