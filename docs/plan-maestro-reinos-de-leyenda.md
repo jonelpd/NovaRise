@@ -1143,3 +1143,10 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - **Comprobación funcional confirmada por el usuario:** ha probado el juego publicado y confirma que la partida se guarda correctamente y puede recuperarla. Se cierra la tarea pendiente de prueba manual de guardado/recuperación tras el endurecimiento de permisos de Supabase.
 - Alcance: validación funcional reportada por el usuario; no constituye por sí sola una auditoría de seguridad completa ni prueba todos los escenarios de conflicto, desconexión o sesiones simultáneas.
 - Se mantiene suspendida la conexión de billetera NVRA mientras se investiga la advertencia de MetaMask.
+
+
+### Fase 6 — Preparación de revisión MetaMask (13-11-2026)
+
+- Preparado borrador en inglés, basado en evidencias, para solicitar explicación y revisión de la clasificación del sitio: `docs/solicitud-revision-metamask-novarise-2026-11-13.md` (commit `2280e511`). Incluye URL del juego, contrato Base, despliegue validado, cambios de seguridad y límites de la auditoría.
+- **No se ha presentado una incidencia externa**, ni se afirma falso positivo. Antes de enviar, adjuntar captura original y confirmar el alcance exacto de la alerta (dominio GitHub Pages compartido, ruta o contrato).
+- Siguiente: enviar solicitud con autorización del titular y analizar respuesta; continuar pruebas negativas de HTML y dependencias. Conexión NVRA suspendida.
