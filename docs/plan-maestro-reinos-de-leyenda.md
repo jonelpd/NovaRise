@@ -1077,3 +1077,10 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 
 - La regresión `43407462817` falló en una aserción de texto que buscaba `getElementById('nvra-center')` directamente; el código usa el helper `byId('nvra-center')`. La interfaz se había incluido en el juego y la regresión anterior `43407445767` fue verde, pero esta nueva prueba falló.
 - Corregida la expectativa de prueba en commit `bba2c83d`, sin cambiar la lógica de conexión. **Nueva validación pendiente**; no declarar CI verde hasta confirmación. Queda pendiente probar manualmente con extensión de billetera y revisar eventos de cuenta/red.
+
+
+### Fase 6 — Protección frente a autorizaciones de billetera obsoletas (13-11-2026)
+
+- Corregido `juego/nvra-wallet-readonly.js` (commit `eef92822`): el resultado de `eth_requestAccounts` se descarta si la cuenta/proveedor ha cambiado o se ha desvinculado durante la espera, evitando recuperar una sesión obsoleta. Sin firmas, aprobaciones ni transacciones.
+- El workflow de regresión se dispara por cambios en `juego/**` o `tests/**`; los commits exclusivamente documentales no disparan esa suite. Nueva ejecución `43408530403`, pendiente al registrar esta nota.
+- **Pendiente:** confirmar regresión verde y prueba manual en navegador con billetera instalada, sin compartir frases de recuperación ni claves privadas.
