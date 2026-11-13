@@ -1188,3 +1188,10 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - Todas las minas del catálogo están `enabled=false`; sin permisos de cliente, con RLS y clave foránea para los eventos con sitio definido. Restricción adicional exige campos de prueba en registros marcados `server_verified`.
 - Verificación de producción: **3 minas, 0 habilitadas, 0 eventos**. Sin cambios en partidas ni billeteras. Documentación técnica en `docs/nvra-fase-6-2-meritos-y-mineria.md` (commit `4f00a250`).
 - La fase sigue abierta: la base de datos no puede inferir una captura legítima de un JSON del cliente; falta implementar un flujo autoritativo de acciones antes de acreditar méritos.
+
+
+### Fase 6.2 — Bloqueo de eventos no acreditados en base de datos (13-11-2026)
+
+- Aplicada migración `block_unverified_game_merit_event_inserts_20261113`: trigger `SECURITY INVOKER` con verificación obligatoria de tipo, campaña, sitio, revisión, fuente y estado; requiere sitio habilitado y mantiene `points=0`.
+- Prueba negativa en producción: intento de inserción en mina real deshabilitada **rechazado**; verificados 1 trigger, 0 sitios habilitados y 0 eventos persistidos. No se tocaron partidas ni billeteras.
+- Documentado en `docs/nvra-fase-6-2-meritos-y-mineria.md` (commit `35ce1b28`). **Fase no cerrada:** todavía no existe motor de acciones autoritativo ni acreditación de méritos; no activar pagos ni cambiar `enabled` sin ello.
