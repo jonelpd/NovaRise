@@ -40,3 +40,10 @@ Captura del propietario: al intentar conectar `https://jonelpd.github.io/NovaRis
 **Control automatizado nuevo:** `tests/p0-nvra-site-security-hold.test.cjs` comprueba el bloqueo de la billetera y registra la presencia de las dos dependencias remotas; CI pendiente.
 
 **Siguientes acciones priorizadas:** (1) confirmar CI y Pages desplegado; (2) inspeccionar los recursos reales de red y alertas de MetaMask, sin conectar billetera; (3) auditar las entradas hacia `innerHTML` y RLS; (4) preparar publicación limitada a archivos públicos y política CSP compatible; (5) con evidencias, solicitar revisión del bloqueo a MetaMask. La guía oficial distingue blocklist, fuzzylist y allowlist, y advierte que una revisión puede ser necesaria si un dominio legítimo resulta bloqueado: https://github.com/MetaMask/eth-phishing-detect/blob/main/doc/lists-ref.md .
+
+## Reducción de superficie publicada — 13-11-2026
+
+- Modificado `.github/workflows/pages.yml` (commit `1a6587b5`): Pages ya no empaqueta `path: .`; prepara `_site` con archivos `*.html`, `*.atom`, `robots.txt`, `sitemap.xml`, carpetas `assets/` y `juego/`. Quedan fuera `contracts/`, `docs/`, `tests/`, `.github/` y otros archivos de desarrollo.
+- Eliminado explícitamente `_site/juego/nvra-wallet-readonly.js` del artefacto de publicación durante la suspensión de billeteras. No se borra el archivo del repositorio.
+- Test `tests/p0-nvra-site-security-hold.test.cjs` ampliado para comprobar lista permitida y exclusión del módulo (commit `195f1b13`). CI `43412712880` y despliegue `43412712948` pendientes al redactar esta nota.
+- **Precaución:** reducir archivos publicados no prueba ni elimina por sí solo la clasificación maliciosa de MetaMask. Se mantiene el bloqueo. Confirmar que la web publicada funciona y que no hay rutas rotas antes de cerrar este cambio.
