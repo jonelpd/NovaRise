@@ -964,3 +964,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - La ejecución de regresión del commit `75a301f8` (`43210048136`) terminó en verde y la publicación de GitHub Pages del commit `8f57d8f1` (`43210082989`) terminó correctamente.
 - El mapa principal conserva sus 20 ubicaciones previas y suma 10 nuevos lugares señalados por el jugador: **30 hotspots en total, 15 de recompensa**, sin modificar la imagen original.
 - **Alcance de aceptación:** respuesta a la pulsación en los nuevos lugares confirmada por el jugador. No implica una validación individual de cada ruta, recompensa o comportamiento en todos los dispositivos; mantener esas verificaciones como tareas independientes si resultan necesarias.
+
+
+### Balance de los diez nuevos lugares — 2026-11-13
+
+- Tras la aceptación del jugador de los clics reales, se revisaron las recompensas de los diez lugares añadidos. Los cinco lugares originales conservan sus valores (**3 soldados, 55 PX base o 100 oro base**); los diez nuevos otorgan **2 soldados, 45 PX base o 80 oro base**, según su tipo. Siguen aplicándose los factores de campaña para oro y experiencia, y la recompensa se limita a una vez por nivel.
+- Se detectó y corrigió una diferencia funcional: `juego/combate-demo.html` tenía los hotspots de tipo `relic`, pero no una rama `interactVerifiedSite()` que concediera sus recompensas. Se incorporó esa lógica, equivalente a la del juego principal. Commits `a92f2534`, `84a1cad3`.
+- Añadido `tests/p0-landmark-reward-balance.test.cjs` para ejecutar las recompensas de los **15 lugares** en ambas variantes, comprobar valores originales/nuevos y evitar doble cobro (commit `ebfb108f`). **CI aún pendiente:** `43396537953`.
+- Los 20 lugares antiguos y las posiciones de los 10 nuevos permanecen intactos; tampoco se altera `mapa-grande.png`. La aceptación manual de los clics continúa vigente; el balance de recompensas modificado requiere la nueva validación automática.
