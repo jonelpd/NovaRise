@@ -1064,3 +1064,10 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - **CI verde** ejecución `43406947102` (`verify-token`): lectura RPC directa en Base 8453, contrato `0xa1128B1F4CB8394c179eb2558608a7302972EcBF` con 1.814 bytes de código, nombre `NovaRise Utility Token`, símbolo `NVRA`, 18 decimales y `totalSupply()` equivalente a 1.000.000 NVRA. Cuatro checks de metadatos aprobados.
 - Queda superado el bloqueo de **identidad básica del token**, no el de auditoría del contrato, custodia ni permisos. Se autoriza técnicamente preparar únicamente la **consulta de saldos de solo lectura** y conexión opcional de billetera; no habilitar transferencias, recompensas ni minería de NVRA.
 - Evidencia: https://github.com/jonelpd/NovaRise/actions/runs/43406947102 . Detalle: `docs/nvra-integracion-juego-fase-6.md`.
+
+
+### Fase 6 — Billetera opcional y consulta de saldo (13-11-2026)
+
+- Implementada en `juego/index.html` + `juego/nvra-wallet-readonly.js` una interfaz opcional en el Centro NVRA para conectar una cuenta EVM con consentimiento explícito, comprobar Base Mainnet y leer `balanceOf` NVRA mediante `eth_call`. Admite actualizar saldo, desvincular interfaz y detectar cambios de cuenta/red.
+- No se habilitan firmas, aprobaciones, transferencias, recompensas ni conversión de cristales. No se altera el guardado de partidas. La desconexión local no revoca automáticamente los permisos de la extensión.
+- Nueva prueba de restricciones `tests/p0-nvra-wallet-readonly.test.cjs`; `Game regression tests` ejecución `43407462817` **pendiente** al actualizar el plan. Próximo requisito: confirmar CI verde y realizar prueba manual de conexión/lectura en navegador antes de cerrar esta subfase.
