@@ -1319,3 +1319,46 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - Añadido `tests/p0-nvra-hero-movement-cas-race.test.cjs`: simulación determinista de dos peticiones rivales para la misma revisión; solo una debe consumir movimientos. **No equivale a un ensayo de concurrencia en PostgreSQL real**.
 - La tabla autoritativa está ligada por clave foránea a `auth.users`; no se han creado usuarios ficticios ni tocado partidas reales para forzar un ensayo de producción. Próxima prueba real: entorno aislado o cuenta de ensayo autorizada y limpia, con transacciones simultáneas y verificación de rollback/limpieza.
 - Sin integración pública ni recompensas NVRA; mantener las protecciones de guardado.
+
+
+## Ampliación estratégica — Distribución multiplataforma y monetización (2026-11-14)
+**Decisión aprobada:** mantener Reinos de Leyenda en NovaRise con la futura utilidad de recompensas NVRA; desarrollar además una edición comercial para Steam y una edición HTML5 gratuita con donaciones en itch.io. No sustituir ni detener el desarrollo actual.
+
+### Tres ediciones y límites
+1. **NovaRise (web):** experiencia principal, partidas y progresión; diseñar y auditar el sistema de recompensas NVRA antes de activarlo. Recompensas reales sujetas a antifraude, presupuesto, seguridad de contratos, cumplimiento legal y sostenibilidad; no prometer rentabilidad.
+2. **itch.io (HTML5):** edición jugable en navegador, sin necesidad de instalar; monetización mediante donaciones voluntarias. Preparar ZIP con `index.html` y recursos locales, rutas relativas y prueba en iframe; revisar políticas de la plataforma para cualquier funcionalidad cripto. Lanzamiento solo después de probar persistencia y licencias.
+3. **Steam (PC):** edición instalable de pago para Windows; **sin emisión, intercambio, minería ni recompensas en criptomonedas/NFT**, y sin publicidad. Eliminar dependencias de billetera, pagos blockchain y endpoints de NVRA de la compilación, no solo ocultar botones. Someter la edición a revisión de normas y aprobación de Steam. Precio tentativo de estudio: 4,99–6,99 EUR, no aprobado definitivamente.
+
+### Arquitectura objetivo (pendiente de implementar)
+- Una fuente común para motor de juego, mapa real, combate, IA, interfaz y activos autorizados; configuraciones de compilación separadas por canal.
+- Adaptadores por edición para identidad, persistencia, pagos/donaciones, servicios y distribución. La economía NVRA queda fuera del paquete Steam.
+- Guardados versionados, migraciones y pruebas de ida/vuelta por canal; nunca compartir credenciales o secretos en archivos cliente.
+- Compilaciones reproducibles y aisladas con listas de recursos permitidos; no modificar el juego de producción hasta comprobar equivalencia funcional.
+- Revisar licencias y originalidad de imágenes, música, textos y recursos; inspiración en Heroes III sin reutilizar material protegido sin permiso.
+
+### Nueva línea de trabajo comercial — fases y criterios
+- [ ] **M0 Inventario y auditoría:** identificar dependencias, estructura de archivos, recursos, guardado y puntos de integración NVRA. Criterio: matriz de compatibilidad y riesgos documentada.
+- [ ] **M1 Separación por ediciones:** extraer configuración sin alterar jugabilidad ni guardados; añadir pruebas de aislamiento de NVRA. Criterio: tres compilaciones reproducibles con pruebas verdes.
+- [ ] **M2 itch.io:** generar ZIP HTML5 con index.html y rutas relativas; verificar carga, interfaz, combate y persistencia en iframe y navegador real. Criterio: paquete probado, descripción ES/EN, capturas y donaciones configurables; publicación tras aprobación.
+- [ ] **M3 Steam:** preparar instalador/ejecutable Windows, guardar partidas localmente, comprobar ausencia de código blockchain, configurar ficha, tráiler/capturas y precio. Criterio: revisión legal, funcional, de plataforma y aceptación de Steam antes de publicar.
+- [ ] **M4 NovaRise NVRA:** completar economía de recompensas, auditoría de seguridad, antifraude, pruebas y revisión legal antes de activar NVRA real. Criterio: autorización expresa para producción y monitorización de emisión.
+- [ ] **M5 Promoción y métricas:** campaña coordinada desde web NovaRise, Facebook y Telegram, analítica de visitas, partidas, donaciones y ventas respetando privacidad. Criterio: informes periódicos con métricas reales y sin atribuir ingresos no verificados.
+
+### Prioridad y dependencias
+1. Continuar fase activa de jugabilidad/estabilidad sin declarar completadas las pruebas pendientes.
+2. Ejecutar M0 antes de editar el motor o publicar; M1 precede a M2 y M3.
+3. Publicar itch.io antes de Steam cuando M2 esté aprobado, manteniendo ambas ediciones independientes de la activación de NVRA.
+4. Las tareas de M4 se coordinan con la fase 4 existente y no habilitan recompensas anticipadamente.
+
+### Costes y cumplimiento
+- Steam Direct exige 100 USD por producto, recuperables según umbral de 1.000 USD de ingresos brutos ajustados; verificar condiciones vigentes al inscribirse.
+- itch.io permite HTML5 con donaciones y opciones de reparto de ingresos; verificar pasarelas, comisiones y fiscalidad antes de cobrar.
+- Antes de monetizar: verificar titularidad de recursos, datos personales, clasificación por edades aplicable, derechos de consumidores, fiscalidad española y obligaciones de cualquier recompensa cripto.
+
+### Registro de ejecución — 2026-11-14
+- [x] Estrategia de tres ediciones documentada y aprobada conceptualmente.
+- [ ] Auditoría M0 del repositorio completo y prototipo de empaquetado: **no realizados en esta actualización documental**.
+- [ ] Publicaciones en Steam/itch.io: **no realizadas**.
+- [ ] Pruebas automáticas de esta línea comercial: **no ejecutadas**.
+
+**Referencias oficiales:** https://itch.io/docs/creators/html5 · https://itch.io/docs/creators/pricing · https://partner.steamgames.com/steamdirect
