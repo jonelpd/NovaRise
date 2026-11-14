@@ -1458,3 +1458,13 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [ ] Probar juego real en navegador HTTPS/iframe: arranque, navegación, combate, guardar, recargar, recuperar; inspeccionar solicitudes de red y errores de consola.
 - [ ] Resolver menciones NVRA restantes que representen funcionalidades externas; no confundir la ausencia de archivos con eliminación completa de la lógica.
 **Estado:** artefacto #2 auditado; paquete no aprobado para publicación. NovaRise no modificado.
+
+
+### Validación de paquete itch.io tras exclusión NVRA — 2026-11-14
+- [x] Inspeccionado archivo aportado `reinos-de-leyenda-itchio-candidate (2).zip`: ZIP exterior con `reinos-de-leyenda-itchio-candidate.zip` e `itchio-external-audit.json`; integridad de ambos ZIP correcta.
+- [x] ZIP interior con 48 entradas y `index.html` en raíz; **no contiene** `nvra-wallet-readonly.js` ni `nvra-merit-validation.cjs`. Se verifica el efecto de la corrección del generador.
+- [x] HTML invitado contiene `itchio-guest-v1` y carece de cliente Supabase; informe automático: `supabase_client=false`, `remote_auth=false`, `local_storage=true`, `release_approved=false`.
+- [!] Persisten 118 menciones de NVRA en el HTML, incluidos estilos y elementos de interfaz ocultos. No declarar aislamiento total sin revisión de lógica y referencias.
+- [!] Dependencia externa de Three.js desde jsDelivr; probar comportamiento en red restringida y fallback 2D.
+- [ ] Pruebas funcionales en HTTPS/iframe: inicio, mapa, combate, guardado y recuperación tras recarga; revisión de consola, red y licencias.
+**Estado:** integridad del artefacto y exclusión de archivos verificadas; **no publicado** y no aprobado aún para donaciones.
