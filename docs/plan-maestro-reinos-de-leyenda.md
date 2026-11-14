@@ -1517,3 +1517,14 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [ ] Revisar derechos/licencias de mapas, ilustraciones, sprites, música y dependencias externas; comprobar consola y funcionamiento en navegadores adicionales.
 - [ ] Solo tras estas revisiones, preparar portada/capturas y decidir habilitación de donaciones y publicación.
 **Estado:** actualización visual y recuperación de partida aprobadas manualmente; proyecto sigue en Draft, sin aprobación final de publicación.
+
+
+### Mejora de experiencia: desplazamiento contemplativo de héroes — 2026-11-15
+- [x] Reducida la velocidad de desplazamiento de **ambos bandos** en `juego/index.html`, que alimenta NovaRise y la compilación itch.io: héroe del jugador, rival principal y comandantes secundarios.
+- [x] Recorrido fino del jugador: pausa por punto de navegación de 85 ms a **240 ms**, transición visual de 90 ms a **220 ms**, intervalo entre tramos estratégicos de 120 ms a **320 ms**.
+- [x] Rival principal: transición de 90 ms a **350 ms** y pausa por punto de 95 ms a **370 ms**.
+- [x] Comandantes secundarios: transición de 150 ms a **350 ms** y pausa por punto de 160 ms a **370 ms**. Se mantiene el límite de pasos y las comprobaciones de cancelación existentes.
+- [x] Añadido `tests/p0-map-hero-slow-travel.test.cjs` para verificar la presencia de los parámetros y funciones de desplazamiento.
+- [ ] Ejecutar regresiones GitHub Actions y probar visualmente en NovaRise; ejecutar de nuevo workflow itch.io y sustituir el ZIP en Draft para verificar el cambio allí.
+- [ ] Evaluar si la duración es suficientemente contemplativa o si conviene añadir una opción de velocidad configurable.
+**Nota:** los valores son de temporización visual, no cambian coste de movimiento ni reglas de combate. La prueba estática no sustituye la comprobación en navegador. Steam permanece cancelado.
