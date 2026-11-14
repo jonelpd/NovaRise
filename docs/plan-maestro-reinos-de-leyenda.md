@@ -1362,3 +1362,14 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [ ] Pruebas automáticas de esta línea comercial: **no ejecutadas**.
 
 **Referencias oficiales:** https://itch.io/docs/creators/html5 · https://itch.io/docs/creators/pricing · https://partner.steamgames.com/steamdirect
+
+
+### Avance técnico de M0/M2 — 2026-11-14
+- [x] Inspección inicial de `juego/index.html` (HTML monolítico con estilos y scripts integrados), `.github/workflows/game-regression.yml` y ausencia de `package.json` en la raíz. Esta revisión no equivale a una auditoría completa del repositorio.
+- [x] Identificadas referencias relativas a mapa, sprites, estandartes, terreno y fondos; detectado uso de `localStorage` y referencias a Supabase/NVRA que requieren revisión antes de publicar ediciones externas.
+- [x] Añadido flujo manual `.github/workflows/itchio-candidate.yml`: ejecuta regresión, copia `juego/` a la raíz del paquete HTML5, comprueba referencias literales y genera ZIP como artefacto descargable de Actions; **no publica** en itch.io.
+- [x] Añadido `scripts/check-itchio-assets.cjs` para comprobar recursos relativos literales. Las rutas generadas dinámicamente, red, permisos, guardados e integración de terceros siguen pendientes de verificación real.
+- [ ] Ejecutar el flujo manual y verificar su resultado; si falla, corregir antes de ofrecer el ZIP como candidato.
+- [ ] Validar navegador/iframe y almacenamiento; decidir separación de servicios NovaRise y cumplimiento de itch.io antes de distribuir.
+- [ ] Revisar licencias, dependencias y recursos; no publicar ni aceptar donaciones hasta aprobación.
+**Estado:** M0 parcial; empaquetado candidato implementado, sin ejecución ni aceptación confirmada. No se ha modificado el juego de producción.
