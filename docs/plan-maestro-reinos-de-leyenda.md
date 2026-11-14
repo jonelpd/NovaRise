@@ -1282,3 +1282,13 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - Verificado por consulta de esquema que las columnas existen y admiten NULL. Verificado que la tabla sigue con **0 campañas autoritativas**. Las partidas locales del navegador no se modifican.
 - Actualizado `server/nvra-supabase-campaign-repository.cjs` para leer ambas coordenadas en el backend; la lógica de captura anterior permanece intacta.
 - **Pendiente:** verificación de CI y permisos/RLS tras migración, inicialización confiable de posiciones, validación de encuentros y CAS atómico de movimiento con pruebas de concurrencia reales. No se habilitan minas, méritos, transferencias NVRA ni conexión MetaMask.
+
+
+### Fase 6.2 — Auditoría de permisos de guardado y minería (14-11-2026)
+
+- Inspeccionadas directamente las funciones PostgreSQL `public.nvr_save_campaign_if_revision(jsonb,bigint)` y `public.nvr_cas_authoritative_mine_capture(uuid,text,bigint,text)` del proyecto Supabase NovaRise.
+- Guardado: `nvr_save_campaign_if_revision` es `SECURITY DEFINER`, comprueba `auth.uid()`, rechaza sesiones anónimas y aplica control de revisión; `anon` no tiene EXECUTE, `authenticated` sí. El asesor de seguridad advierte del uso de SECURITY DEFINER por usuarios autenticados. **No se cambia su permiso sin una alternativa probada**, para no romper las partidas guardadas.
+- Captura: `nvr_cas_authoritative_mine_capture` es `SECURITY INVOKER`; ni `anon` ni `authenticated` pueden ejecutarla; `service_role` sí. Mantener el secreto del rol de servicio solo en backend.
+- Añadido `tests/p0-nvra-campaign-navigation-repository.test.cjs` para verificar que el repositorio lee `nav_x/nav_y` nulos sin inventar posiciones y sin escrituras.
+- El asesor informa además de protección contra contraseñas filtradas desactivada; revisar configuración de Auth por separado. Las tablas autoritativas con RLS sin políticas son intencionalmente inaccesibles desde roles públicos.
+- **Pendiente:** comprobar CI; diseñar endpoint autenticado y transacción CAS de movimiento, validar encuentros/combates, pruebas reales de concurrencia y un eventual rediseño seguro del guardado sin interrumpir su funcionamiento.
