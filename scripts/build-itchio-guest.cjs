@@ -25,7 +25,17 @@ const guest=`<style id="itchio-guest-style">
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
 })();
 </script>`;
-const built=html.replace(auth,guest);
+let built=html.replace(auth,guest);
+const titleChanges=[
+  ['<title>NovaRise · Reinos de Leyenda</title>','<title>Reinos de Leyenda · Edición itch.io</title>'],
+  ['<h1>⚔️ NovaRise: Reinos de Leyenda</h1>','<h1>⚔️ Reinos de Leyenda</h1>'],
+  ['<small>Versión 1.3 · Beta pública · mapa ilustrado v1.7</small>','<small>Edición itch.io · En desarrollo · mapa ilustrado v1.7</small>']
+];
+for(const [before,after] of titleChanges){
+  if(!built.includes(before))throw Error('Expected edition heading missing: '+before);
+  built=built.replace(before,after);
+}
+
 if(/esm\.sh\/@supabase|spaafpqczvqahhwjxxrz\.supabase\.co|createClient\s*\(/.test(built))throw Error('Supabase auth still referenced');
 fs.mkdirSync(out,{recursive:true});
 fs.cpSync(src,out,{recursive:true,force:true});
