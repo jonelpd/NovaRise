@@ -1476,3 +1476,13 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [ ] Ejecutar pruebas en un entorno HTTPS accesible (preferentemente borrador privado de itch.io o staging aislado), sin activar publicación ni donaciones; revisar consola, peticiones de red y almacenamiento.
 - [ ] Registrar resultados observados de inicio de invitado, mapa, combate, guardado, recarga y recuperación antes de aprobar el lanzamiento.
 **Estado:** prueba funcional no concluyente por bloqueo del entorno, no por un fallo demostrado del juego. No publicar aún.
+
+
+### Pruebas manuales itch.io confirmadas por el usuario — 2026-11-15
+- [x] El usuario abrió la edición HTML5 en el proyecto itch.io en modo **Draft** y mostró una captura con mapa, héroe, minimapa, panel derecho y perfil `Invitado itch.io` visibles.
+- [x] El usuario confirmó que el héroe se mueve correctamente en el mapa.
+- [x] El usuario confirmó que el progreso se guarda y se conserva tras la prueba de recarga solicitada. Evidencia: confirmación manual del usuario; no equivale a una prueba automatizada multisesión/multinavegador.
+- [ ] Validar reclutamiento y actualización de oro/ejército, combate contra criaturas y héroes, turnos rivales, persistencia después de combate y errores de consola.
+- [ ] Mejorar encabezado exclusivo itch.io (el título actual aún muestra `NovaRise: Reinos de Leyenda` y `Beta pública`), sin cambiar la edición NovaRise.
+- [ ] Auditar referencias NVRA residuales y licencias antes de publicar; mantener visibilidad **Draft** y donaciones desactivadas.
+**Estado:** movimiento y guardado manuales aprobados; combate y revisión final aún pendientes.
