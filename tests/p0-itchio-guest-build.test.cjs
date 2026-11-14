@@ -12,5 +12,7 @@ test('guest edition build excludes remote auth without changing NovaRise source'
   assert.match(built,/nvrSwitchPlayer\('itchio-guest-v1'\)/);
   assert.doesNotMatch(built,/esm\.sh\/@supabase|spaafpqczvqahhwjxxrz\.supabase\.co|createClient\s*\(/);
   assert.match(built,/id="game-screen"/);
+  assert.equal(fs.existsSync(path.join(tmp,'nvra-wallet-readonly.js')),false);
+  assert.equal(fs.existsSync(path.join(tmp,'nvra-merit-validation.cjs')),false);
  }finally{fs.rmSync(tmp,{recursive:true,force:true})}
 });
