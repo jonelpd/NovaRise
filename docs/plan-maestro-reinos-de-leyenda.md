@@ -1429,3 +1429,12 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - La planificación activa queda: M0 auditoría, M1 separación de dos ediciones, M2 itch.io, M4 NovaRise NVRA y M5 promoción (sin ventas Steam).
 
 **Estado:** cambio de alcance aprobado y documentado; no implica que las pruebas pendientes de itch.io estén completadas.
+
+
+### M1 — Generador reproducible de dos variantes (2026-11-14)
+- [x] Añadido `scripts/build-itchio-guest.cjs`: copia `juego/` a `dist/itchio/`, sustituye únicamente el módulo conocido de autenticación Supabase en el HTML resultante, instala inicio de invitado `itchio-guest-v1` y oculta controles exclusivos de cuenta/NVRA. El archivo `juego/index.html` no se modifica.
+- [x] Añadida prueba `tests/p0-itchio-guest-build.test.cjs` para verificar generación, ausencia de las referencias de autenticación conocidas y conservación de la fuente.
+- [x] Actualizado `.github/workflows/itchio-candidate.yml` para ejecutar el generador antes de empaquetar y rechazar referencias conocidas al endpoint de Supabase.
+- [ ] Ejecutar GitHub Actions tras estos cambios y verificar que las regresiones y la nueva prueba pasan, y que el ZIP se genera.
+- [ ] Revisar dependencias de red, elementos NVRA residuales, seguridad y privacidad, y comprobar inicio, guardado/recarga y combate en HTTPS e iframe.
+**Estado:** generador integrado en GitHub; ejecución CI y aceptación de edición itch.io aún pendientes. NovaRise sigue siendo la edición principal sin modificaciones del motor en este paso. Steam permanece cancelado.
