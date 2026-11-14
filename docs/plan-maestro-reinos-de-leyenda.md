@@ -1264,3 +1264,12 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - Nuevo `tests/p0-nvra-navigation-water.test.cjs` comprueba la coincidencia de polígonos con el juego y que la máscara original permanezca inmutable. Se mantienen las pruebas previas de ruta y obstáculos.
 - **Sin cambios de guardado, interfaz, estado de campañas, recompensas ni contratos.** El prefiltro de ruta no equivale a una autorización de movimiento o captura.
 - **Por verificar:** resultado de GitHub Actions; compatibilidad exacta del comportamiento diagonal y fronteras con el cliente; integrar posición autoritativa y encuentros del servidor; migración de coordenadas y pruebas de concurrencia en Supabase. Minas y pagos NVRA siguen desactivados; MetaMask suspendido.
+
+
+### Fase 6.2 — Posición autoritativa y revisión de ruta (14-11-2026)
+
+- Corregido `server/nvra-precise-route.cjs` para rechazar diagonales cuando **cualquiera** de las dos celdas laterales está bloqueada, en coherencia con `fineRoute()` del navegador; actualizado el test de regresión.
+- Añadido `server/nvra-server-route-preflight.cjs`: prefiltro de solo lectura que requiere campaña activa, revisión segura, `nav_x/nav_y` del **estado confiable del servidor**, origen de ruta idéntico, pasos adyacentes válidos y movimientos suficientes.
+- Añadido `tests/p0-nvra-server-route-preflight.test.cjs` con casos de revisión antigua, origen falso, posición ausente, campaña inactiva, movimientos insuficientes y no mutación del estado.
+- **No se ha creado migración ni se ha modificado Supabase:** `nav_x/nav_y` son un contrato propuesto para una futura ampliación de esquema; el repositorio actual sigue cargando `hero_x/hero_y`. No hay endpoint de movimiento ni actualización persistente.
+- **Pendiente:** validar CI, diseñar y aplicar migración compatible y permisos, cargar posición confiable del servidor, comprobar enemigos/combate y efectuar CAS de movimiento con pruebas de concurrencia antes de habilitar capturas o méritos. MetaMask y pagos NVRA siguen suspendidos.
