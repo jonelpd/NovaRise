@@ -1310,3 +1310,12 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - Corregida la sintaxis YAML del bloque Python y eliminado su disparador `push`; el anuncio puntual del 7 de noviembre queda **solo manual** mediante `workflow_dispatch`, para impedir republicaciones involuntarias con cada commit.
 - Este cambio **no modifica** el workflow de Telegram diario ni los secretos; no se ha ejecutado el anuncio ni publicado un mensaje. La ausencia de nuevos fallos deberá confirmarse en Actions.
 - Continúa pendiente el test de concurrencia real de CAS de movimiento y la inicialización segura de posiciones; no habilitar recompensas NVRA.
+
+
+### Fase 6.2 — Revisión de CI y prueba simulada de solicitudes rivales (14-11-2026)
+
+- Verificado en GitHub Actions el commit `9fd3735e`: pruebas estáticas, publicación y Pages completados correctamente; el antiguo anuncio de Telegram no vuelve a dispararse en esos pushes.
+- Revisada la función real `nvr_cas_authoritative_hero_move` en PostgreSQL y sus restricciones de tabla: la condición CAS compara revisión, origen, campaña activa y movimientos; el estado solo se actualiza en una sentencia.
+- Añadido `tests/p0-nvra-hero-movement-cas-race.test.cjs`: simulación determinista de dos peticiones rivales para la misma revisión; solo una debe consumir movimientos. **No equivale a un ensayo de concurrencia en PostgreSQL real**.
+- La tabla autoritativa está ligada por clave foránea a `auth.users`; no se han creado usuarios ficticios ni tocado partidas reales para forzar un ensayo de producción. Próxima prueba real: entorno aislado o cuenta de ensayo autorizada y limpia, con transacciones simultáneas y verificación de rollback/limpieza.
+- Sin integración pública ni recompensas NVRA; mantener las protecciones de guardado.
