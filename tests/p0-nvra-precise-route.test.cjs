@@ -12,7 +12,8 @@ test('rejects route jumps, missing paths and blocked cells',()=>{
 test('blocks diagonal squeezing between obstacles',()=>{
  const m=mask([[2,1],[1,2]]);
  assert.equal(validatePreciseRoute([{x:1,y:1},{x:2,y:2}],m).reason,'blocked_diagonal_corner');
- assert.equal(validatePreciseRoute([{x:1,y:1},{x:2,y:2}],mask([[2,1]])).ok,true);
+ assert.equal(validatePreciseRoute([{x:1,y:1},{x:2,y:2}],mask([[2,1]])).reason,'blocked_diagonal_corner');
+ assert.equal(validatePreciseRoute([{x:1,y:1},{x:2,y:2}],mask([])).ok,true);
 });
 test('open route is only a precheck, not permission to move or mine',()=>{
  assert.deepEqual(validatePreciseRoute([{x:1,y:1},{x:2,y:1},{x:2,y:2}],mask([])),{ok:true,requires_server_state_and_encounter_validation:true,steps:2});
