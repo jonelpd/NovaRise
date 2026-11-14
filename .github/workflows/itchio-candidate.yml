@@ -20,10 +20,11 @@ jobs:
           set -euo pipefail
           test -s juego/index.html
           mkdir -p dist/itchio
-          cp -a juego/. dist/itchio/
+          node scripts/build-itchio-guest.cjs juego dist/itchio
           test -s dist/itchio/index.html
           # Detect missing relative asset paths referenced directly in the HTML.
           node scripts/check-itchio-assets.cjs dist/itchio
+          ! grep -Eq 'esm.sh/@supabase|spaafpqczvqahhwjxxrz.supabase.co' dist/itchio/index.html
           node scripts/audit-itchio-external.cjs dist/itchio dist/itchio-external-audit.json
           cd dist/itchio
           zip -q -r ../reinos-de-leyenda-itchio-candidate.zip .
