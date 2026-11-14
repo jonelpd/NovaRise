@@ -1468,3 +1468,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [!] Dependencia externa de Three.js desde jsDelivr; probar comportamiento en red restringida y fallback 2D.
 - [ ] Pruebas funcionales en HTTPS/iframe: inicio, mapa, combate, guardado y recuperación tras recarga; revisión de consola, red y licencias.
 **Estado:** integridad del artefacto y exclusión de archivos verificadas; **no publicado** y no aprobado aún para donaciones.
+
+
+### Intento de prueba funcional de itch.io — 2026-11-14
+- [x] Extraído el artefacto `reinos-de-leyenda-itchio-candidate (2).zip` y su ZIP HTML5 interior para prueba en Chromium.
+- [!] La navegación de Chromium al servidor local de prueba fue bloqueada por el entorno (`net::ERR_BLOCKED_BY_ADMINISTRATOR`); no se pudo observar ni validar el arranque, movimiento, combate, guardado o recarga.
+- [ ] Ejecutar pruebas en un entorno HTTPS accesible (preferentemente borrador privado de itch.io o staging aislado), sin activar publicación ni donaciones; revisar consola, peticiones de red y almacenamiento.
+- [ ] Registrar resultados observados de inicio de invitado, mapa, combate, guardado, recarga y recuperación antes de aprobar el lanzamiento.
+**Estado:** prueba funcional no concluyente por bloqueo del entorno, no por un fallo demostrado del juego. No publicar aún.
