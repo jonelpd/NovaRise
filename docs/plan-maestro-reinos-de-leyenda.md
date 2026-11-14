@@ -1239,3 +1239,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - Añadido `server/nvra-authoritative-movement.cjs`: comprobación preliminar de paso contiguo, límites del tablero 10×10, agua, coste de terreno accidentado y movimientos restantes, con catálogos extraídos de `juego/index.html`.
 - Añadidas pruebas `tests/p0-nvra-authoritative-movement.test.cjs` para movimientos inválidos y comparación de los catálogos de agua/terreno con el juego. El prefiltro **no mueve al héroe ni autoriza capturas**: devuelve `requires_precise_navigation=true` porque faltan máscara real `nav-terrain.json`, ruta de precisión, enemigos, combates y estado de casilla en servidor.
 - Pendiente conectar navegación precisa al backend, añadir coordenadas de cuadrícula a campañas autoritativas mediante migración compatible, y probar concurrencia en dos conexiones reales. No se ha alterado el guardado ni se han habilitado méritos NVRA.
+
+
+### Fase 6.2 — Puerta de terreno preciso del mapa (14-11-2026)
+
+- Añadido `server/nvra-precise-terrain.cjs`: decodifica de manera estricta la máscara real `juego/nav-terrain.json` (80×80, 800 bytes), valida coordenadas y rechaza celdas bloqueadas. No modifica el juego ni el estado de campañas.
+- Añadidas pruebas `tests/p0-nvra-precise-terrain.test.cjs` para máscara real, celdas bloqueadas/libres, coordenadas inválidas y máscaras corruptas.
+- **Alcance limitado:** una celda libre no autoriza movimientos ni capturas; el resultado exige validación adicional de ruta, bosques, enemigos, combates y estado autoritativo del servidor. La máscara publicada es preliminar y requiere revisión en juego.
+- **Pendiente:** confirmar CI del nuevo commit, integrar restricciones forestales y navegación precisa completa con validación de trayectos, persistencia de coordenadas en campañas del servidor y pruebas reales de concurrencia. No se habilitan minas, méritos, pagos NVRA ni MetaMask.
