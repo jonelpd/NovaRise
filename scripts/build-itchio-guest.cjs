@@ -29,5 +29,11 @@ const built=html.replace(auth,guest);
 if(/esm\.sh\/@supabase|spaafpqczvqahhwjxxrz\.supabase\.co|createClient\s*\(/.test(built))throw Error('Supabase auth still referenced');
 fs.mkdirSync(out,{recursive:true});
 fs.cpSync(src,out,{recursive:true,force:true});
+for(const filename of ['nvra-wallet-readonly.js','nvra-merit-validation.cjs']){
+  fs.rmSync(path.join(out,filename),{force:true});
+}
+for(const filename of ['nvra-wallet-readonly.js','nvra-merit-validation.cjs']){
+  if(fs.existsSync(path.join(out,filename)))throw Error('NVRA-only file leaked: '+filename);
+}
 fs.writeFileSync(path.join(out,'index.html'),built);
 console.log('itch.io guest edition generated; source untouched');
