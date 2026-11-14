@@ -1391,3 +1391,13 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [ ] Comprobar ausencia de conexiones NVRA/Supabase no deseadas en la edición externa, funcionamiento en iframe HTTPS y guardado tras recarga.
 - [ ] Revisar licencias y aprobar publicación. **No publicar todavía ni activar donaciones.**
 **Estado:** M0 continúa; el ZIP es un candidato empaquetado, no una versión independiente validada.
+
+
+### Prototipo de edición invitado itch.io — 2026-11-14
+- [x] Generado localmente un ZIP candidato independiente a partir del paquete HTML5 aportado por el usuario (46 archivos, ~25 MB); la versión NovaRise del repositorio **no se ha modificado**.
+- [x] Eliminado del HTML candidato el módulo de autenticación y nube Supabase, ocultados controles de NVRA y habilitada pantalla de juego para un perfil invitado local mediante `window.nvrSwitchPlayer('itchio-guest-v1')`. Se reutiliza la lógica de guardado local existente y su espacio de claves específico.
+- [x] Comprobado que el ZIP abre sin errores de integridad, contiene `index.html` en la raíz y no conserva la importación `esm.sh/@supabase` en dicho HTML.
+- [ ] **Pendiente crítico:** pruebas reales en navegador HTTPS/iframe para confirmar inicio, movimiento, combate, guardado y recarga; el código no se ha ejecutado funcionalmente en un navegador durante este paso.
+- [ ] Revisar todas las dependencias de red y rutas dinámicas, incluyendo Three.js y referencias NVRA no visibles, antes de considerar la edición completamente aislada.
+- [ ] Integrar un generador reproducible de esta variante en el repositorio y añadir pruebas automáticas; el ZIP local todavía no está publicado en itch.io.
+**Estado:** prototipo de invitado entregado para pruebas; M1/M2 siguen abiertos y no hay autorización de publicación ni de donaciones.
