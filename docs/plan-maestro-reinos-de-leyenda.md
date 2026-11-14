@@ -1373,3 +1373,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [ ] Validar navegador/iframe y almacenamiento; decidir separación de servicios NovaRise y cumplimiento de itch.io antes de distribuir.
 - [ ] Revisar licencias, dependencias y recursos; no publicar ni aceptar donaciones hasta aprobación.
 **Estado:** M0 parcial; empaquetado candidato implementado, sin ejecución ni aceptación confirmada. No se ha modificado el juego de producción.
+
+
+### Validación del paquete itch.io y auditoría de dependencias externas — 14-11-2026
+
+- Verificado directamente el flujo manual `Build itch.io HTML5 candidate` de GitHub Actions: ejecución **43615239137**, completada correctamente, con regresiones y empaquetado en verde. Artefacto `reinos-de-leyenda-itchio-candidate` generado (25.410.134 bytes de descarga de artefacto); **no publicado**.
+- Detectado en `juego/index.html` uso de `localStorage` para guardado, importación externa de `@supabase/supabase-js` desde esm.sh y cliente Supabase. Estas dependencias requieren validación y decisión explícita antes de publicar una edición comercial independiente.
+- Añadido `scripts/audit-itchio-external.cjs` para producir informe JSON de dependencias externas, almacenamiento y verificaciones manuales; actualizado `.github/workflows/itchio-candidate.yml` para adjuntar el informe junto al ZIP en las **próximas ejecuciones manuales**.
+- **Pendiente:** ejecutar de nuevo el flujo manual, confirmar informe, probar iframe HTTPS y guardado real en itch.io, separar o autorizar expresamente Auth/Supabase y revisar licencias de recursos. Este informe no certifica preparación comercial ni realiza publicación.
