@@ -1273,3 +1273,12 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - Añadido `tests/p0-nvra-server-route-preflight.test.cjs` con casos de revisión antigua, origen falso, posición ausente, campaña inactiva, movimientos insuficientes y no mutación del estado.
 - **No se ha creado migración ni se ha modificado Supabase:** `nav_x/nav_y` son un contrato propuesto para una futura ampliación de esquema; el repositorio actual sigue cargando `hero_x/hero_y`. No hay endpoint de movimiento ni actualización persistente.
 - **Pendiente:** validar CI, diseñar y aplicar migración compatible y permisos, cargar posición confiable del servidor, comprobar enemigos/combate y efectuar CAS de movimiento con pruebas de concurrencia antes de habilitar capturas o méritos. MetaMask y pagos NVRA siguen suspendidos.
+
+
+### Fase 6.2 — Migración compatible de posición precisa en Supabase (14-11-2026)
+
+- Migración aplicada correctamente **solo al proyecto Supabase NovaRise**: `authoritative_campaign_nullable_navigation_coordinates`.
+- La tabla `public.nvr_authoritative_campaigns` incorpora `nav_x smallint NULL` y `nav_y smallint NULL`, con restricción de par: ambos nulos o ambos entre 1 y 78. No hay valores predeterminados ni se ha rellenado ninguna posición a partir del cliente.
+- Verificado por consulta de esquema que las columnas existen y admiten NULL. Verificado que la tabla sigue con **0 campañas autoritativas**. Las partidas locales del navegador no se modifican.
+- Actualizado `server/nvra-supabase-campaign-repository.cjs` para leer ambas coordenadas en el backend; la lógica de captura anterior permanece intacta.
+- **Pendiente:** verificación de CI y permisos/RLS tras migración, inicialización confiable de posiciones, validación de encuentros y CAS atómico de movimiento con pruebas de concurrencia reales. No se habilitan minas, méritos, transferencias NVRA ni conexión MetaMask.
