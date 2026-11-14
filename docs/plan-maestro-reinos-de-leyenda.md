@@ -1506,3 +1506,14 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [ ] Auditar y aislar la lógica NVRA residual de forma segura: existen referencias de DOM y código de juego compartido, por lo que no debe eliminarse indiscriminadamente sin pruebas.
 - [ ] Auditoría de licencias y origen de arte, audio y contenido; comprobación de consola/red y revisión de políticas antes de habilitar donaciones y hacer público el juego.
 **Estado:** mejora visual implementada en generador, pendiente de CI y despliegue al borrador. Steam cancelado; solo NovaRise e itch.io.
+
+
+### Edición itch.io — actualización visual y compatibilidad de partidas confirmadas (2026-11-15)
+- [x] El usuario sustituyó el ZIP del borrador de itch.io y aportó captura de la nueva ejecución en `novarisegames.itch.io/reinos-de-leyenda`.
+- [x] Verificados visualmente encabezado `Reinos de Leyenda`, subtítulo `Edición itch.io · En desarrollo` y perfil `Invitado itch.io`.
+- [x] El usuario confirma que **se puede recuperar la partida guardada con la compilación anterior** después de actualizar. Captura muestra turno 4, 220 de oro, ejército de 4 soldados y 4 arqueros, fuerza 12, experiencia 80 y mapa/minimapa activos.
+- [x] Con pruebas manuales previas, se considera superada la validación básica de movimiento, reclutamiento, combate, guardado y compatibilidad de partida entre estas dos compilaciones.
+- [ ] Auditar referencias NVRA remanentes y peticiones de red reales; verificar ausencia de funciones económicas en itch.io.
+- [ ] Revisar derechos/licencias de mapas, ilustraciones, sprites, música y dependencias externas; comprobar consola y funcionamiento en navegadores adicionales.
+- [ ] Solo tras estas revisiones, preparar portada/capturas y decidir habilitación de donaciones y publicación.
+**Estado:** actualización visual y recuperación de partida aprobadas manualmente; proyecto sigue en Draft, sin aprobación final de publicación.
