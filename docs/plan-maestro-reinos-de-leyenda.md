@@ -1381,3 +1381,13 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - Detectado en `juego/index.html` uso de `localStorage` para guardado, importación externa de `@supabase/supabase-js` desde esm.sh y cliente Supabase. Estas dependencias requieren validación y decisión explícita antes de publicar una edición comercial independiente.
 - Añadido `scripts/audit-itchio-external.cjs` para producir informe JSON de dependencias externas, almacenamiento y verificaciones manuales; actualizado `.github/workflows/itchio-candidate.yml` para adjuntar el informe junto al ZIP en las **próximas ejecuciones manuales**.
 - **Pendiente:** ejecutar de nuevo el flujo manual, confirmar informe, probar iframe HTTPS y guardado real en itch.io, separar o autorizar expresamente Auth/Supabase y revisar licencias de recursos. Este informe no certifica preparación comercial ni realiza publicación.
+
+
+### Auditoría del ZIP real itch.io — 2026-11-14
+- [x] Inspeccionado el ZIP HTML5 aportado por el usuario (48 archivos); informe en [auditoria-itchio-2026-11-14.md](auditoria-itchio-2026-11-14.md).
+- [x] Identificado bloqueo principal de distribución autónoma: el juego depende de autenticación Supabase para mostrar la pantalla principal; eliminar el módulo sin rediseñar el acceso rompería la edición.
+- [x] Identificadas dependencias de CDN de Supabase y Three.js, guardado local y referencias NVRA que requieren aislamiento por canal.
+- [ ] Implementar y probar acceso invitado local específico de itch.io, sin afectar la versión NovaRise.
+- [ ] Comprobar ausencia de conexiones NVRA/Supabase no deseadas en la edición externa, funcionamiento en iframe HTTPS y guardado tras recarga.
+- [ ] Revisar licencias y aprobar publicación. **No publicar todavía ni activar donaciones.**
+**Estado:** M0 continúa; el ZIP es un candidato empaquetado, no una versión independiente validada.
