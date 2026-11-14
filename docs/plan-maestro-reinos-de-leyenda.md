@@ -1255,3 +1255,12 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - Añadidas pruebas `tests/p0-nvra-precise-route.test.cjs` para casos válidos y negativos. Se requiere verificar ejecución en GitHub Actions; crear el archivo no equivale a confirmar CI verde.
 - **Límite explícito:** es un prefiltro de terreno, no una autorización. No comprueba todavía polígonos forestales del navegador, enemigos, batallas, propiedad de mina, coordenadas iniciales confiables ni movimientos y revisiones en Postgres. No se conecta al cliente ni a la RPC de captura.
 - Próximo paso: integrar los polígonos forestales reales del juego y diseñar un estado de posición de precisión del lado servidor con migración compatible; después probar trayectos y concurrencia en Postgres. Mantener minas y eventos deshabilitados, puntos a cero, sin pagos NVRA y MetaMask suspendido.
+
+
+### Fase 6.2 — Lagos reales y accesos a castillos en navegación de servidor (14-11-2026)
+
+- Revisión del código real `juego/index.html`: `FOREST_REGIONS` son bosques transitables, no muros; `blockForests()` añade **lagos** delimitados por `WATER_REGIONS` y mantiene accesos de castillos. Se corrige el planteamiento anterior de «bloquear bosques».
+- Nuevo `server/nvra-navigation-water.cjs` reproduce los polígonos de agua y las excepciones de acceso del navegador sin alterar `nav-terrain.json`; `server/nvra-precise-route.cjs` aplica esa máscara efectiva para rechazar rutas.
+- Nuevo `tests/p0-nvra-navigation-water.test.cjs` comprueba la coincidencia de polígonos con el juego y que la máscara original permanezca inmutable. Se mantienen las pruebas previas de ruta y obstáculos.
+- **Sin cambios de guardado, interfaz, estado de campañas, recompensas ni contratos.** El prefiltro de ruta no equivale a una autorización de movimiento o captura.
+- **Por verificar:** resultado de GitHub Actions; compatibilidad exacta del comportamiento diagonal y fronteras con el cliente; integrar posición autoritativa y encuentros del servidor; migración de coordenadas y pruebas de concurrencia en Supabase. Minas y pagos NVRA siguen desactivados; MetaMask suspendido.
