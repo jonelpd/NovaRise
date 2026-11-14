@@ -160,7 +160,7 @@ body:has(#auth-screen:not([hidden])){min-height:100vh;background:linear-gradient
 #world-viewport .map .tile.hero{filter:none!important;background:radial-gradient(circle,#ffdf6933,transparent 65%)!important}
 @media(prefers-reduced-motion:no-preference){#world-viewport .map .mounted-hero-rider{animation:novarise-horse-bob 1.5s ease-in-out infinite}@keyframes novarise-horse-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}}
 </style><style id="novarise-hero-walking-v36">
-#world-viewport .map .mounted-hero-marker{transition:left .09s linear,top .09s linear!important;will-change:left,top}
+#world-viewport .map .mounted-hero-marker{transition:left .22s linear,top .22s linear!important;will-change:left,top}
 #world-viewport .map .mounted-hero-marker.hero-facing-left .mounted-hero-rider{transform:scaleX(-1)}
 #world-viewport .map .mounted-hero-marker.hero-traveling .mounted-hero-flag{background:#355947f0;border-color:#ffe19a}
 @media(prefers-reduced-motion:reduce){#world-viewport .map .mounted-hero-marker{transition:none!important}}
@@ -198,7 +198,7 @@ body:has(#auth-screen:not([hidden])){min-height:100vh;background:linear-gradient
 #world-viewport .map .mounted-hero-marker.hero-facing-left .mounted-hero-rider{transform:scaleX(-1)!important}
 @media(prefers-reduced-motion:no-preference){#world-viewport .map .mounted-hero-rider{animation:none!important}}
 </style><style id="novarise-rival-v54">
-#world-viewport .map .novarise-rival-hero{position:absolute!important;z-index:9998!important;transform:translate(-50%,-86%);width:34px;height:43px;pointer-events:none!important;filter:drop-shadow(1px 3px 3px #000b);transition:left .11s linear,top .11s linear}
+#world-viewport .map .novarise-rival-hero{position:absolute!important;z-index:9998!important;transform:translate(-50%,-86%);width:34px;height:43px;pointer-events:none!important;filter:drop-shadow(1px 3px 3px #000b);transition:left .35s linear,top .35s linear}
 #world-viewport .map .novarise-rival-hero svg{display:block;width:34px;height:43px;image-rendering:pixelated}
 </style><style id="novarise-tactical-v58">
 #modal{background:rgba(6,10,17,.87);backdrop-filter:blur(5px);padding:12px}
@@ -650,7 +650,7 @@ function animateHeroHeading(marker,from,to){
  marker.classList.add('hero-traveling');
  marker.style.setProperty('--travel-tilt',(dy<-.08?'-3deg':dy>.08?'3deg':'0deg'));
  clearTimeout(marker._travelTimer);
- marker._travelTimer=setTimeout(()=>marker.classList.remove('hero-traveling'),240)
+ marker._travelTimer=setTimeout(()=>marker.classList.remove('hero-traveling'),360)
 }
 async function travelFinePath(path,epoch){
  if(!path)return false;
@@ -660,7 +660,7 @@ async function travelFinePath(path,epoch){
   if(epoch!==walkEpoch||battle||!$('adventure-discovery').hidden||!$('castle-screen').hidden)return false;
   if(persistentHero){animateHeroHeading(persistentHero,previous,path[i]);persistentHero.style.left=path[i][0]+'%';persistentHero.style.top=path[i][1]+'%'}
   previous=path[i];
-  await new Promise(resolve=>setTimeout(resolve,85));
+  await new Promise(resolve=>setTimeout(resolve,240));
  }
  return true
 }
@@ -754,7 +754,7 @@ function walkTo(tx,ty){
    return
   }
   if(battle||!$('adventure-discovery').hidden||!$('castle-screen').hidden||s.x===beforeX&&s.y===beforeY){walking=false;clearAdventureRoute();return}
-  if(index<route.length&&s.moves>=movementCost(route[index][0],route[index][1])&&$('adventure-discovery').hidden&&$('castle-screen').hidden)setTimeout(step,120);else {walking=false;if(index>=route.length&&!battle&&!s.done&&(key(tx,ty)==='1,1'||key(tx,ty)==='4,7'&&s.claimed.includes('4,7')))setTimeout(()=>{if(epoch===walkEpoch&&!walking&&!battle&&s.x===tx&&s.y===ty&&$('adventure-discovery').hidden&&$('castle-screen').hidden)visitKnownLocation(tx,ty)},260)}
+  if(index<route.length&&s.moves>=movementCost(route[index][0],route[index][1])&&$('adventure-discovery').hidden&&$('castle-screen').hidden)setTimeout(step,320);else {walking=false;if(index>=route.length&&!battle&&!s.done&&(key(tx,ty)==='1,1'||key(tx,ty)==='4,7'&&s.claimed.includes('4,7')))setTimeout(()=>{if(epoch===walkEpoch&&!walking&&!battle&&s.x===tx&&s.y===ty&&$('adventure-discovery').hidden&&$('castle-screen').hidden)visitKnownLocation(tx,ty)},260)}
  }
  step()
 }
@@ -2301,8 +2301,8 @@ async function enemyCastleHeroTurns(epoch){
    if(epoch!==rivalEpoch||s.done||verifiedSiteState()[site.id]!=='rival')return;
    if(!navSegmentClear([h.x,h.y],[x,y]))break;
    h.x=x;h.y=y;h.moves--;completed++;
-   if(marker){marker.style.transition='left 150ms linear, top 150ms linear';marker.style.left=x+'%';marker.style.top=y+'%'}
-   await new Promise(resolve=>setTimeout(resolve,160));
+   if(marker){marker.style.transition='left 350ms linear, top 350ms linear';marker.style.left=x+'%';marker.style.top=y+'%'}
+   await new Promise(resolve=>setTimeout(resolve,370));
   }
   // La campaña puede cambiar durante la última pausa de movimiento.
   // Nunca capturar recursos ni abrir asedios desde un turno cancelado.
@@ -2439,7 +2439,7 @@ async function rivalTurn(){
   if(!best){s.message='El héroe rival no encuentra una ruta transitable y mantiene su posición.';return}
   // Mantener al héroe rival visible durante su recorrido incluso tras redibujados.
   if(!rivalMarker||!rivalMarker.isConnected)drawRivalHero($('map'));
-  rivalMarker.style.transition='left 90ms linear, top 90ms linear';
+  rivalMarker.style.transition='left 350ms linear, top 350ms linear';
   rivalMarker.style.willChange='left, top';
   focusRivalCamera(v.x,v.y);
   const steps=Math.min(best.path.length,24);
@@ -2450,7 +2450,7 @@ async function rivalTurn(){
    animateHeroHeading(rivalMarker,previousRival,[x,y]);
    if(rivalMarker){rivalMarker.style.left=x+'%';rivalMarker.style.top=y+'%'}
    if(i%3===0)focusRivalCamera(x,y);
-   await new Promise(resolve=>setTimeout(resolve,95))
+   await new Promise(resolve=>setTimeout(resolve,370))
   }
   if(epoch!==rivalEpoch)return;
   if(completed===best.path.length){
