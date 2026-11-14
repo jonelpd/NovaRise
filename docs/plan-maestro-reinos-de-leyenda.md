@@ -1247,3 +1247,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - Añadidas pruebas `tests/p0-nvra-precise-terrain.test.cjs` para máscara real, celdas bloqueadas/libres, coordenadas inválidas y máscaras corruptas.
 - **Alcance limitado:** una celda libre no autoriza movimientos ni capturas; el resultado exige validación adicional de ruta, bosques, enemigos, combates y estado autoritativo del servidor. La máscara publicada es preliminar y requiere revisión en juego.
 - **Pendiente:** confirmar CI del nuevo commit, integrar restricciones forestales y navegación precisa completa con validación de trayectos, persistencia de coordenadas en campañas del servidor y pruebas reales de concurrencia. No se habilitan minas, méritos, pagos NVRA ni MetaMask.
+
+
+### Fase 6.2 — Prefiltro de rutas precisas (14-11-2026)
+
+- Añadido `server/nvra-precise-route.cjs`: comprueba una secuencia de casillas 80×80 contra la máscara real; rechaza saltos no adyacentes, celdas bloqueadas, coordenadas fuera de límites, rutas malformadas y diagonales que atraviesan una esquina cerrada por dos obstáculos.
+- Añadidas pruebas `tests/p0-nvra-precise-route.test.cjs` para casos válidos y negativos. Se requiere verificar ejecución en GitHub Actions; crear el archivo no equivale a confirmar CI verde.
+- **Límite explícito:** es un prefiltro de terreno, no una autorización. No comprueba todavía polígonos forestales del navegador, enemigos, batallas, propiedad de mina, coordenadas iniciales confiables ni movimientos y revisiones en Postgres. No se conecta al cliente ni a la RPC de captura.
+- Próximo paso: integrar los polígonos forestales reales del juego y diseñar un estado de posición de precisión del lado servidor con migración compatible; después probar trayectos y concurrencia en Postgres. Mantener minas y eventos deshabilitados, puntos a cero, sin pagos NVRA y MetaMask suspendido.
