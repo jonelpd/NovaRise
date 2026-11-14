@@ -1486,3 +1486,13 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [ ] Mejorar encabezado exclusivo itch.io (el título actual aún muestra `NovaRise: Reinos de Leyenda` y `Beta pública`), sin cambiar la edición NovaRise.
 - [ ] Auditar referencias NVRA residuales y licencias antes de publicar; mantener visibilidad **Draft** y donaciones desactivadas.
 **Estado:** movimiento y guardado manuales aprobados; combate y revisión final aún pendientes.
+
+
+### Validación manual de combate y reclutamiento en itch.io — 2026-11-15
+- [x] El usuario confirmó en la edición itch.io Draft que el reclutamiento de soldados funciona y descuenta el oro.
+- [x] El usuario inició y terminó un combate; confirmó que el escenario se visualiza correctamente y que las unidades aparecen.
+- [x] El usuario confirmó que guardó el progreso tras finalizar el combate y que todo estaba bien.
+- [x] Se mantienen las validaciones manuales previas: acceso invitado, movimiento por mapa y persistencia tras recarga.
+- [ ] No consta aún prueba independiente de ataques/IA turno a turno, guardado tras cerrar completamente el navegador, múltiples navegadores, consola/red o iframe móvil.
+- [ ] Preparación previa a publicación: retirar referencias NovaRise/NVRA no aplicables del canal itch.io, corregir rótulos `Beta pública`, verificar licencias de recursos y accesibilidad; configurar donaciones solo tras aprobación.
+**Estado:** pruebas manuales principales de jugabilidad satisfactorias según usuario; **Draft**, sin aprobación de lanzamiento.
