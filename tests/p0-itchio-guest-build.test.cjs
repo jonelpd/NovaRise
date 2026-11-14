@@ -12,6 +12,10 @@ test('guest edition build excludes remote auth without changing NovaRise source'
   assert.match(built,/nvrSwitchPlayer\('itchio-guest-v1'\)/);
   assert.doesNotMatch(built,/esm\.sh\/@supabase|spaafpqczvqahhwjxxrz\.supabase\.co|createClient\s*\(/);
   assert.match(built,/id="game-screen"/);
+  assert.match(built,/<title>Reinos de Leyenda · Edición itch.io<\/title>/);
+  assert.match(built,/<h1>⚔️ Reinos de Leyenda<\/h1>/);
+  assert.match(built,/Edición itch.io · En desarrollo/);
+  assert.doesNotMatch(built,/Beta pública|<h1>⚔️ NovaRise: Reinos de Leyenda<\/h1>/);
   assert.equal(fs.existsSync(path.join(tmp,'nvra-wallet-readonly.js')),false);
   assert.equal(fs.existsSync(path.join(tmp,'nvra-merit-validation.cjs')),false);
  }finally{fs.rmSync(tmp,{recursive:true,force:true})}
