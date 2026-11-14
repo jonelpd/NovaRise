@@ -8,7 +8,7 @@ function createCampaignRepository(supabase){
  return {
   async load(userId,campaignId){
    const {data,error}=await supabase.from('nvr_authoritative_campaigns')
-    .select('revision,status,hero_x,hero_y,moves,owned_mines')
+    .select('revision,status,hero_x,hero_y,nav_x,nav_y,moves,owned_mines')
     .eq('user_id',userId).eq('campaign_id',campaignId).maybeSingle();
    if(error)throw error;
    return data;
