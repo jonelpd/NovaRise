@@ -1536,3 +1536,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Corregida prueba para reconocer una pausa numérica mediante expresión regular, manteniendo la verificación de que el control de cancelación se ejecuta tras la espera y antes de asedio/conquista. Commit `4736aa03aba27c49033c034d41924af2e68d42b8`.
 - [ ] Volver a ejecutar el workflow itch.io y confirmar 383/383 pruebas y generación del ZIP; no se ha confirmado todavía una nueva ejecución verde.
 **Estado:** fallo diagnosticado y test corregido; no se alteran las nuevas velocidades de los héroes.
+
+
+### Confirmación del usuario: edición itch.io actualizada y operativa — 2026-11-15
+- [x] El usuario confirmó que subió a itch.io una nueva versión posterior a la corrección de la prueba de temporización y que **funciona bien**.
+- [x] Se da por completada la incorporación del movimiento pausado de héroes del jugador y rivales a la versión itch.io a nivel de despliegue y comprobación manual general.
+- [ ] No se ha inspeccionado en esta conversación el resultado concreto de la nueva ejecución de CI; evitar afirmar un recuento de pruebas o estado verde sin evidencia.
+- [ ] Mantener itch.io en borrador hasta auditar lógica residual NVRA, recursos y licencias, red/consola y presentación comercial.
+**Estado:** versión actualizada en itch.io y funcionamiento confirmado por el usuario; lanzamiento público aún pendiente.
