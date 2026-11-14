@@ -1292,3 +1292,13 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - Añadido `tests/p0-nvra-campaign-navigation-repository.test.cjs` para verificar que el repositorio lee `nav_x/nav_y` nulos sin inventar posiciones y sin escrituras.
 - El asesor informa además de protección contra contraseñas filtradas desactivada; revisar configuración de Auth por separado. Las tablas autoritativas con RLS sin políticas son intencionalmente inaccesibles desde roles públicos.
 - **Pendiente:** comprobar CI; diseñar endpoint autenticado y transacción CAS de movimiento, validar encuentros/combates, pruebas reales de concurrencia y un eventual rediseño seguro del guardado sin interrumpir su funcionamiento.
+
+
+### Fase 6.2 — CAS de movimiento de héroe en Supabase (14-11-2026)
+
+- Migración aplicada a Supabase **NovaRise**: `server_only_cas_authoritative_hero_move`, función `public.nvr_cas_authoritative_hero_move(uuid,text,bigint,smallint,smallint,smallint,smallint,integer)` con `SECURITY INVOKER`.
+- La función actualiza en una única sentencia SQL `nav_x/nav_y`, `moves`, `revision` y `updated_at`, exigiendo campaña activa, revisión exacta, posición inicial coincidente, coordenadas válidas y saldo de movimientos suficiente. Una segunda petición con la misma revisión no debe prosperar.
+- Permisos verificados por SQL: `anon=false`, `authenticated=false`, `service_role=true`. No se concede acceso al navegador.
+- Añadido `server/nvra-hero-movement-repository.cjs` como adaptador de backend y `tests/p0-nvra-hero-movement-repository.test.cjs` para argumentos, entradas inválidas, conflictos y errores.
+- **Importante:** la RPC no comprueba trayectorias, terrenos ni encuentros y no debe invocarse sin autorización y validación de servidor previas. No se conecta al cliente, no hay movimientos en producción ni recompensas NVRA.
+- **Pendiente:** CI, test de concurrencia real contra una campaña de prueba aislada, flujo de inicialización de posición autoritativa, combates/encuentros y endpoint autenticado con verificación de identidad.
