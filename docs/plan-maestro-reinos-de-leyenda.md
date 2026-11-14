@@ -1447,3 +1447,14 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [ ] Verificar en navegador la nueva ejecución verde #2 de GitHub Actions: la captura confirma éxito de CI en ~15 s, pero no demuestra jugabilidad ni integridad funcional en iframe.
 - [ ] Inspeccionar el artefacto ZIP exacto de esa ejecución y probar guardado y recuperación de partidas; el ZIP disponible localmente corresponde al prototipo anterior, no está confirmado como el artefacto de la ejecución #2.
 **Estado:** CI verde según captura del usuario; aprobación funcional y aislamiento de NVRA pendientes.
+
+
+### Verificación del artefacto GitHub Actions #2 y endurecimiento itch.io — 2026-11-14
+- [x] Abierto el artefacto aportado por el usuario `reinos-de-leyenda-itchio-candidate (1).zip`: ZIP exterior con ZIP de juego e informe `itchio-external-audit.json`. Ambos ZIP superaron prueba de integridad; el interior contiene 50 entradas.
+- [x] El informe de esa ejecución indica `supabase_client=false`, `remote_auth=false`, `local_storage=true`; único CDN de ejecución enumerado: Three.js vía jsDelivr. `release_approved=false`.
+- [x] Comprobado que el HTML incluye arranque de invitado `itchio-guest-v1`, sin referencias a `supabase`; conserva 118 menciones de NVRA, que requieren clasificación antes de declarar aislamiento completo.
+- [x] Detectados archivos innecesarios `nvra-wallet-readonly.js` y `nvra-merit-validation.cjs` dentro del ZIP. Actualizado `scripts/build-itchio-guest.cjs` para excluirlos del paquete itch.io y ampliada la prueba automatizada para verificar su ausencia.
+- [ ] Ejecutar nuevamente Actions para validar el endurecimiento y descargar el ZIP actualizado. La compilación #2 **precede** a esta corrección.
+- [ ] Probar juego real en navegador HTTPS/iframe: arranque, navegación, combate, guardar, recargar, recuperar; inspeccionar solicitudes de red y errores de consola.
+- [ ] Resolver menciones NVRA restantes que representen funcionalidades externas; no confundir la ausencia de archivos con eliminación completa de la lógica.
+**Estado:** artefacto #2 auditado; paquete no aprobado para publicación. NovaRise no modificado.
