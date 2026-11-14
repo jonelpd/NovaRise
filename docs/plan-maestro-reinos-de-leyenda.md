@@ -1401,3 +1401,31 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [ ] Revisar todas las dependencias de red y rutas dinámicas, incluyendo Three.js y referencias NVRA no visibles, antes de considerar la edición completamente aislada.
 - [ ] Integrar un generador reproducible de esta variante en el repositorio y añadir pruebas automáticas; el ZIP local todavía no está publicado en itch.io.
 **Estado:** prototipo de invitado entregado para pruebas; M1/M2 siguen abiertos y no hay autorización de publicación ni de donaciones.
+
+
+## Decisión vigente — Dos ediciones exclusivamente (2026-11-14)
+**Esta decisión sustituye la estrategia anterior de tres ediciones.** Se cancela la línea Steam y se concentrarán recursos exclusivamente en las siguientes variantes separadas:
+
+### A. NovaRise — edición principal con NVRA
+- Mantener la versión web actual, autenticación y persistencia existentes, jugabilidad, progreso y la futura integración de recompensas NVRA.
+- No habilitar NVRA real hasta completar controles de seguridad, economía, antifraude y cumplimiento legal.
+- Los cambios de la edición itch.io no se trasladarán automáticamente a producción NovaRise.
+
+### B. itch.io — edición HTML5 gratuita con donaciones
+- Acceso invitado sin cuenta NovaRise, guardado local propio y publicación web HTML5.
+- Sin dependencias obligatorias de autenticación Supabase, sin recompensas NVRA y sin mezclar partidas o identidad con NovaRise.
+- Mantener juego, mapa, combates y recursos compartidos cuando su licencia lo permita; configurar donaciones voluntarias tras validación.
+
+### Trabajo separado y verificable
+- [ ] Terminar la variante invitado itch.io como compilación reproducible en GitHub (el prototipo local aún no está integrado como generador).
+- [ ] Ejecutar pruebas de inicio, combate, guardado y recarga en HTTPS/iframe para itch.io.
+- [ ] Verificar ausencia de conexiones a servicios de cuenta/NVRA de NovaRise en el paquete itch.io.
+- [ ] Continuar pruebas de estabilidad, persistencia y economía NVRA de NovaRise sin alterar su flujo de acceso.
+- [ ] Revisar derechos de recursos y condiciones de donaciones antes de publicar itch.io.
+
+### Alcance descartado
+- **Steam cancelado por decisión del responsable del proyecto.** No crear ejecutables Windows, fichas de Steam, instaladores, pruebas específicas ni presupuestos para Steam.
+- Los apartados históricos anteriores que mencionan Steam se conservan como registro de decisiones previas, pero **no son tareas vigentes**. En adelante, las referencias a «tres ediciones», «M3 Steam» o «Steam antes/después de itch.io» quedan anuladas.
+- La planificación activa queda: M0 auditoría, M1 separación de dos ediciones, M2 itch.io, M4 NovaRise NVRA y M5 promoción (sin ventas Steam).
+
+**Estado:** cambio de alcance aprobado y documentado; no implica que las pruebas pendientes de itch.io estén completadas.
