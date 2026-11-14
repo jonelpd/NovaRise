@@ -1302,3 +1302,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - Añadido `server/nvra-hero-movement-repository.cjs` como adaptador de backend y `tests/p0-nvra-hero-movement-repository.test.cjs` para argumentos, entradas inválidas, conflictos y errores.
 - **Importante:** la RPC no comprueba trayectorias, terrenos ni encuentros y no debe invocarse sin autorización y validación de servidor previas. No se conecta al cliente, no hay movimientos en producción ni recompensas NVRA.
 - **Pendiente:** CI, test de concurrencia real contra una campaña de prueba aislada, flujo de inicialización de posición autoritativa, combates/encuentros y endpoint autenticado con verificación de identidad.
+
+
+### Mantenimiento CI — Workflow histórico de Telegram (14-11-2026)
+
+- GitHub Actions revisado: las ejecuciones recientes de `NovaRise - pruebas estáticas` y `Game regression tests` aparecen completadas correctamente; el workflow puntual `.github/workflows/telegram-nvra-announcement-20261107.yml` aparecía en rojo y sin jobs.
+- Corregida la sintaxis YAML del bloque Python y eliminado su disparador `push`; el anuncio puntual del 7 de noviembre queda **solo manual** mediante `workflow_dispatch`, para impedir republicaciones involuntarias con cada commit.
+- Este cambio **no modifica** el workflow de Telegram diario ni los secretos; no se ha ejecutado el anuncio ni publicado un mensaje. La ausencia de nuevos fallos deberá confirmarse en Actions.
+- Continúa pendiente el test de concurrencia real de CAS de movimiento y la inicialización segura de posiciones; no habilitar recompensas NVRA.
