@@ -28,7 +28,7 @@ test('secondary siege only plans an attack when force advantage exists',()=>{
 
 test('cancelled rival epoch is checked after last movement await before siege or conquest',()=>{
  const turn=source.slice(a,b);
- const lastAwait=turn.indexOf('await new Promise(resolve=>setTimeout(resolve,160));');
+ const lastAwait=turn.search(/await new Promise\(resolve=>setTimeout\(resolve,\d+\)\);/);
  const guard=turn.indexOf("if(epoch!==rivalEpoch||s.done||verifiedSiteState()[site.id]!=='rival')return;",lastAwait);
  const siege=turn.indexOf('if(siegeObjective&&Math.hypot(',lastAwait);
  const resource=turn.indexOf('if(objective&&completed===path.length',lastAwait);
