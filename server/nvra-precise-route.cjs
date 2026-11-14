@@ -14,7 +14,7 @@ function validatePreciseRoute(route,data){
   const prev=route[i-1],dx=Math.abs(p.x-prev.x),dy=Math.abs(p.y-prev.y);
   if(Math.max(dx,dy)!==1)return {ok:false,reason:'non_adjacent_step',index:i};
   // Diagonal corners cannot be used to slip between two blocked cells.
-  if(dx===1&&dy===1&&!clear(prev.x,p.y)&&!clear(p.x,prev.y))
+  if(dx===1&&dy===1&&(!clear(prev.x,p.y)||!clear(p.x,prev.y)))
    return {ok:false,reason:'blocked_diagonal_corner',index:i};
  }
  return {ok:true,requires_server_state_and_encounter_validation:true,steps:route.length-1};
