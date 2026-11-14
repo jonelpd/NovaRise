@@ -1528,3 +1528,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [ ] Ejecutar regresiones GitHub Actions y probar visualmente en NovaRise; ejecutar de nuevo workflow itch.io y sustituir el ZIP en Draft para verificar el cambio allí.
 - [ ] Evaluar si la duración es suficientemente contemplativa o si conviene añadir una opción de velocidad configurable.
 **Nota:** los valores son de temporización visual, no cambian coste de movimiento ni reglas de combate. La prueba estática no sustituye la comprobación en navegador. Steam permanece cancelado.
+
+
+### Corrección de CI tras ralentizar héroes — 2026-11-15
+- [x] Inspeccionados logs de GitHub Actions ejecución #5, trabajo `package-html5`, ID `132628777337`: 383 pruebas, 382 correctas y 1 fallida.
+- [x] Identificada causa exacta: `tests/p0-secondary-siege-turn-integration.test.cjs` buscaba literalmente `await new Promise(resolve=>setTimeout(resolve,160));`, pero la pausa de comandantes secundarios fue aumentada a 370 ms.
+- [x] Corregida prueba para reconocer una pausa numérica mediante expresión regular, manteniendo la verificación de que el control de cancelación se ejecuta tras la espera y antes de asedio/conquista. Commit `4736aa03aba27c49033c034d41924af2e68d42b8`.
+- [ ] Volver a ejecutar el workflow itch.io y confirmar 383/383 pruebas y generación del ZIP; no se ha confirmado todavía una nueva ejecución verde.
+**Estado:** fallo diagnosticado y test corregido; no se alteran las nuevas velocidades de los héroes.
