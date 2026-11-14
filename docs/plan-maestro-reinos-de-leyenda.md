@@ -1438,3 +1438,12 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [ ] Ejecutar GitHub Actions tras estos cambios y verificar que las regresiones y la nueva prueba pasan, y que el ZIP se genera.
 - [ ] Revisar dependencias de red, elementos NVRA residuales, seguridad y privacidad, y comprobar inicio, guardado/recarga y combate en HTTPS e iframe.
 **Estado:** generador integrado en GitHub; ejecución CI y aceptación de edición itch.io aún pendientes. NovaRise sigue siendo la edición principal sin modificaciones del motor en este paso. Steam permanece cancelado.
+
+
+### Revisión adicional del prototipo invitado (2026-11-14)
+- [x] Reinspeccionado el ZIP invitado local de 46 archivos: `index.html` contiene siete bloques `script`; los bloques JavaScript clásicos extraídos superaron `node --check`.
+- [x] Confirmado que el HTML invitado no contiene las cadenas `supabase` ni `createClient`, y que conserva el identificador `itchio-guest-v1`.
+- [!] **Separación NVRA incompleta:** persisten aproximadamente 118 menciones textuales a `nvra` en el HTML invitado, aunque sus controles estén ocultos. Antes de lanzar se debe determinar cuáles son lógica, textos o datos de juego y retirar/aislar los elementos específicos del ecosistema sin romper mecánicas.
+- [ ] Verificar en navegador la nueva ejecución verde #2 de GitHub Actions: la captura confirma éxito de CI en ~15 s, pero no demuestra jugabilidad ni integridad funcional en iframe.
+- [ ] Inspeccionar el artefacto ZIP exacto de esa ejecución y probar guardado y recuperación de partidas; el ZIP disponible localmente corresponde al prototipo anterior, no está confirmado como el artefacto de la ejecución #2.
+**Estado:** CI verde según captura del usuario; aprobación funcional y aislamiento de NVRA pendientes.
