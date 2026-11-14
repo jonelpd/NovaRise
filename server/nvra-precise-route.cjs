@@ -1,10 +1,11 @@
 'use strict';
 // A read-only terrain-only path precheck. Never authorizes campaign actions.
 const {decodeTerrain}=require('./nvra-precise-terrain.cjs');
+const {effectiveNavigationMask}=require('./nvra-navigation-water.cjs');
 function validatePreciseRoute(route,data){
  if(!Array.isArray(route)||route.length<2||route.length>6400)return {ok:false,reason:'invalid_route'};
  let bytes;
- try{bytes=decodeTerrain(data)}catch{return {ok:false,reason:'invalid_navigation_mask'}};
+ try{bytes=effectiveNavigationMask(decodeTerrain(data))}catch{return {ok:false,reason:'invalid_navigation_mask'}};
  const clear=(x,y)=>Number.isInteger(x)&&Number.isInteger(y)&&x>=0&&x<80&&y>=0&&y<80&&!(bytes[(y*80+x)>>3]&(128>>((y*80+x)&7)));
  for(let i=0;i<route.length;i++){
   const p=route[i];
