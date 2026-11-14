@@ -1,9 +1,7 @@
+# Archived one-time announcement. Manual-only; no push-triggered re-publication.
 name: NovaRise one-time announcement 2026-11-07
 on:
-  push:
-    branches: [main]
-    paths:
-      - '.github/workflows/telegram-nvra-announcement-20261107.yml'
+  workflow_dispatch:
 permissions:
   contents: read
 jobs:
@@ -19,28 +17,27 @@ jobs:
           token = os.environ.get("TELEGRAM_BOT_TOKEN")
           if not token:
               sys.exit("Missing TELEGRAM_BOT_TOKEN")
-          caption = """🚀 NOVARISE | AVANCES OFICIALES
-
-🟢 NVRA ya está emitido en Base Mainnet: 1.000.000 tokens de suministro fijo.
-✅ Código del contrato verificado en BaseScan.
-🎨 Solicitud del logotipo oficial recibida por BaseScan (ticket #877695); pendiente de revisión.
-
-🎮 Reinos de Leyenda continúa en desarrollo.
-📚 Juegos educativos y herramientas accesibles: objetivos futuros, aún no lanzados.
-
-🔎 https://basescan.org/token/0xa1128B1F4CB8394c179eb2558608a7302972EcBF
-🌐 https://jonelpd.github.io/NovaRise/
-Sin venta pública ni rentabilidad garantizada.
-#NovaRise #NVRA #Base"""
+          caption = (
+              "🚀 NOVARISE | AVANCES OFICIALES\n\n"
+              "🟢 NVRA ya está emitido en Base Mainnet: 1.000.000 tokens de suministro fijo.\n"
+              "✅ Código del contrato verificado en BaseScan.\n"
+              "🎨 Solicitud del logotipo oficial recibida por BaseScan (ticket #877695); pendiente de revisión.\n\n"
+              "🎮 Reinos de Leyenda continúa en desarrollo.\n"
+              "📚 Juegos educativos y herramientas accesibles: objetivos futuros, aún no lanzados.\n\n"
+              "🔎 https://basescan.org/token/0xa1128B1F4CB8394c179eb2558608a7302972EcBF\n"
+              "🌐 https://jonelpd.github.io/NovaRise/\n"
+              "Sin venta pública ni rentabilidad garantizada.\n"
+              "#NovaRise #NVRA #Base"
+          )
           data = urllib.parse.urlencode({
-            "chat_id": "@NovaRiseNVRA",
-            "photo": "https://jonelpd.github.io/NovaRise/assets/a_high_contrast_glowing_futuristic_logo_banner.png",
-            "caption": caption
+              "chat_id": "@NovaRiseNVRA",
+              "photo": "https://jonelpd.github.io/NovaRise/assets/a_high_contrast_glowing_futuristic_logo_banner.png",
+              "caption": caption
           }).encode()
-          req=urllib.request.Request("https://api.telegram.org/bot"+token+"/sendPhoto",data=data)
-          with urllib.request.urlopen(req,timeout=40) as response:
-              result=json.load(response)
+          req = urllib.request.Request("https://api.telegram.org/bot"+token+"/sendPhoto", data=data)
+          with urllib.request.urlopen(req, timeout=40) as response:
+              result = json.load(response)
           if not result.get("ok"):
               sys.exit("Telegram rejected publication")
-          print("Published Telegram message ID:",result["result"]["message_id"])
+          print("Published Telegram message ID:", result["result"]["message_id"])
           PY
