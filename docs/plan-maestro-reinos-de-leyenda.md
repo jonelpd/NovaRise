@@ -1496,3 +1496,13 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [ ] No consta aún prueba independiente de ataques/IA turno a turno, guardado tras cerrar completamente el navegador, múltiples navegadores, consola/red o iframe móvil.
 - [ ] Preparación previa a publicación: retirar referencias NovaRise/NVRA no aplicables del canal itch.io, corregir rótulos `Beta pública`, verificar licencias de recursos y accesibilidad; configurar donaciones solo tras aprobación.
 **Estado:** pruebas manuales principales de jugabilidad satisfactorias según usuario; **Draft**, sin aprobación de lanzamiento.
+
+
+### Acabado de identidad itch.io — 2026-11-15
+- [x] Actualizado `scripts/build-itchio-guest.cjs` para reemplazar **solo en el paquete generado** el título de la pestaña, encabezado `NovaRise: Reinos de Leyenda` y subtítulo `Beta pública` por `Reinos de Leyenda · Edición itch.io` y `Edición itch.io · En desarrollo`.
+- [x] Ampliado `tests/p0-itchio-guest-build.test.cjs` con aserciones de identidad específica y ausencia de los rótulos antiguos.
+- [x] El archivo fuente `juego/index.html` de NovaRise no se ha modificado.
+- [ ] Ejecutar nuevo workflow itch.io y sustituir el ZIP del borrador en itch.io tras comprobar regresiones; los cambios aún no aparecen en la página publicada como borrador.
+- [ ] Auditar y aislar la lógica NVRA residual de forma segura: existen referencias de DOM y código de juego compartido, por lo que no debe eliminarse indiscriminadamente sin pruebas.
+- [ ] Auditoría de licencias y origen de arte, audio y contenido; comprobación de consola/red y revisión de políticas antes de habilitar donaciones y hacer público el juego.
+**Estado:** mejora visual implementada en generador, pendiente de CI y despliegue al borrador. Steam cancelado; solo NovaRise e itch.io.
