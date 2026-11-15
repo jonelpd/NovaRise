@@ -7,7 +7,7 @@
 <div class="layout"><div class="stage" id="stage"><div class="map" id="map"><img src="../juego/mapa-rutas-marcadas.png" alt="Mapa original con caminos negros dibujados por el usuario"><svg viewBox="0 0 1254 1254" id="overlay" aria-label="Superposición de rutas provisionales"></svg></div></div>
 <aside><strong>Inspección de rutas</strong><label>Recorrido <select id="route"><option value="all">Todos los tramos</option><option value="central">Central y oriental</option><option value="west">Occidental</option><option value="north">Septentrional</option></select></label>
 <label><input id="lines" type="checkbox" checked> Mostrar conexiones propuestas</label><label><input id="nodes" type="checkbox" checked> Mostrar puntos</label><label><input id="labels" type="checkbox"> Mostrar identificadores</label>
-<label><input id="hazards" type="checkbox" checked> Señalar cruces sin paso confirmado</label><button id="focusTower" type="button">Examinar torre y ruinas</button> <button id="reset">Mostrar todo</button><output id="report" aria-live="polite">Cargando trazados...</output><p class="warning">No se permite aprobar caminos desde esta vista. Cada segmento requiere revisión contra el trazo negro.</p><p><a href="../docs/mapa-rutas-marcadas-tramo-central.json">Abrir datos originales</a></p></aside></div>
+<label><input id="hazards" type="checkbox" checked> Señalar cruces sin paso confirmado</label><button id="focusTower" type="button">Examinar torre y ruinas</button> <button id="focusEast" type="button">Examinar estanque y caminos orientales</button> <button id="reset">Mostrar todo</button><output id="report" aria-live="polite">Cargando trazados...</output><p class="warning">No se permite aprobar caminos desde esta vista. Cada segmento requiere revisión contra el trazo negro.</p><p><a href="../docs/mapa-rutas-marcadas-tramo-central.json">Abrir datos originales</a></p></aside></div>
 <script>
 'use strict';
 const svg=document.getElementById('overlay'),report=document.getElementById('report'),NS='http://www.w3.org/2000/svg';
@@ -49,6 +49,11 @@ fetch('../docs/mapa-rutas-marcadas-tramo-central.json',{cache:'no-store'}).then(
  data=d;draw();
 }).catch(e=>{report.textContent='No se pudo cargar el borrador: '+e.message});
 fetch('../docs/auditoria-bifurcaciones-torre-central.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('HTTP '+r.status);return r.json()}).then(a=>{audit=a;draw()}).catch(()=>{audit=null;draw()});
+document.getElementById('focusEast').addEventListener('click',()=>{
+ document.getElementById('route').value='central';draw();
+ const stage=document.getElementById('stage');stage.scrollLeft=Math.max(0,920-stage.clientWidth/2);stage.scrollTop=Math.max(0,455-stage.clientHeight/2);
+ if(audit?.east_branch_review)report.textContent+='\\nRamas visibles hacia el este: '+audit.east_branch_review.visible_candidates.length+' candidatas independientes; correspondencia con grafo sin resolver; ninguna aprobada.';
+});
 document.getElementById('focusTower').addEventListener('click',()=>{
  document.getElementById('route').value='central';draw();
  const stage=document.getElementById('stage');stage.scrollLeft=Math.max(0,820-stage.clientWidth/2);stage.scrollTop=Math.max(0,500-stage.clientHeight/2);
