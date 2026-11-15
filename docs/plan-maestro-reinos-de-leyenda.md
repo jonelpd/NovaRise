@@ -2381,3 +2381,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [!] Los 44 centros son aproximados y las puertas no están verificadas; la máscara tiene cuatro componentes y el fallback todavía permite trayectos fuera de los trazos turquesa.
 - [ ] Revisar sobre el mapa marcado original las 44 puertas, las cuatro componentes y los puentes/cruces; integrar accesos explícitos, corregir rutas sin inventar uniones, probar todas las funciones y persistencia en NovaRise e itch.io.
 - [!] No se declara completada la auditoría ni aprobada la jugabilidad. Mantener congeladas las mejoras estéticas del caballo hasta estabilizar navegación y elementos.
+
+
+### Decisión de estabilización — 2026-11-15 (partidas de prueba descartables)
+- El propietario confirma que las partidas existentes son de prueba y **no exige compatibilidad de guardados**. Se autorizan reinicios de prueba y cambios de estructura si mejoran la navegación. No se ha borrado almacenamiento local de los navegadores de los usuarios.
+- Se congela el trabajo estético del caballo para concentrarse en rutas turquesas y 44 interacciones del mapa marcado original.
+- [x] Primera corrección de navegación: `fineRoute` en `juego/index.html` deja de usar rutas alternativas por terreno fuera de los trazos cuando ya se cargó la máscara turquesa (commit `ee8ada16`).
+- [!] **Limitación conocida:** cuatro componentes turquesas siguen separadas; al eliminar el fallback, algunos destinos quedarán bloqueados hasta reconstruir sus conexiones aprobadas. No inventar pasos por agua, roca o murallas. Pendiente de pruebas de navegador y CI.
+- [ ] Contrastar cada unión de los cuatro componentes con la imagen original y corregir la máscara; luego validar las 44 entradas, interacciones y las dos ediciones.
