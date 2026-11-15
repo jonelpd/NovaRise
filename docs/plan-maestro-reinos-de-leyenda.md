@@ -2432,3 +2432,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] El workflow ejecuta `node scripts/audit-turquoise-map.cjs --json`, verifica 44 elementos y consistencia del número de componentes, y publica `turquoise-audit-report.json` como artefacto.
 - [!] La ejecución de GitHub Actions y sus resultados todavía no están confirmados; no se afirma que el workflow esté verde.
 - [ ] Revisar el informe generado, contrastar los posibles cortes con el mapa dibujado y aprobar solo conexiones visibles antes de modificar la máscara.
+
+
+### Corrección del fallo de auditoría automática — 2026-11-16
+- [x] Captura de GitHub Actions: error en `scripts/audit-turquoise-map.cjs:55`, «Invariante de catálogo/topología incumplida». La condición combinaba el total de 44 elementos con la igualdad entre componentes declarados y componentes calculados; no permite determinar por sí sola cuál de los dos falló.
+- [x] Corregido el analizador (commit `deed7fed`): el total de 44 elementos sigue siendo obligatorio; una discrepancia topológica se comunica como aviso y no impide producir el JSON de diagnóstico.
+- [x] Corregido workflow (commit `94a3dd0c`): el recuento de componentes divergente no cancela el informe; el resultado se conserva para investigar la causa.
+- [!] Una ejecución verde ahora significa que el diagnóstico se ha generado correctamente, **no** que las cuatro componentes estén conectadas ni que el mapa sea transitable de extremo a extremo.
+- [ ] Consultar el siguiente artefacto `turquoise-map-audit`, determinar componentes calculadas, distancias entre tramos y accesos de los 44 elementos; contrastar visualmente con el mapa aprobado.
