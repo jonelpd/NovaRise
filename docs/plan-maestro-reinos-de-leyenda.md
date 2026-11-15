@@ -2156,3 +2156,12 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [ ] Revisar en lote los 126 candidatos, además de las intersecciones en mitad de segmento; comprobar obstáculos, puentes y puertas antes de conectar y aprobar.
 - [ ] Verificar la identidad del fondo del repositorio y probar la navegación en las dos ediciones, incluida la recuperación de partidas; ejecutar Node y GitHub Actions.
 - [!] No se ha modificado el movimiento activo del héroe ni el esquema de guardados. Grafo `draft-unverified`, no publicable como navegación real.
+
+
+### Auditoría masiva de uniones candidatas — 2026-11-15
+- [x] Creado `scripts/audit-bulk-road-junctions.cjs` para inspeccionar todos los pares de extremos entre fragmentos del grafo provisional.
+- [x] Contrastado el cálculo contra `docs/mapa-caminos-actualizados-grafo.json`: **126 pares de fragmentos** con extremos separados ≤4 píxeles, contemplando una tolerancia de 0,002 píxeles por cuantización de coordenadas.
+- [x] Añadido `tests/p0-map-bulk-junctions.test.cjs` y corregida la tolerancia para mantener estable el resultado esperado.
+- [!] Los 126 pares son **candidatos**, no pasos transitables verificados. El auditor no analiza aún intersecciones entre extremos y puntos interiores ni obstáculos reales.
+- [ ] Completar auditoría geométrica de intersecciones, revisar visualmente los candidatos y accesos, validar el fondo original, ejecutar CI y conectar solo rutas aprobadas al movimiento y guardados.
+- [!] No se ha activado la navegación; tampoco se ha confirmado una ejecución de la suite completa.
