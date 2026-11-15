@@ -20,6 +20,20 @@ test('guest edition build excludes remote auth without changing NovaRise source'
   assert.equal(fs.existsSync(path.join(tmp,'nvra-merit-validation.cjs')),false);
   const shared=JSON.parse(fs.readFileSync(path.join(tmp,'shared-map-hashes.json'),'utf8'));
   assert.equal(shared.status,'draft-not-active');
+  assert.equal(shared.active_status,'turquoise-map-active');
+  for(const [source,target] of [
+   ['juego/mapa-reinos-2048.jpg','mapa-reinos-2048.jpg'],
+   ['juego/rutas-turquesa-160.json','rutas-turquesa-160.json']
+  ]){
+   const hash=file=>crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex');
+   assert.equal(hash(source),hash(path.join(tmp,target)));
+   assert.equal(shared.active_files[source],hash(source));
+  }
+  assert.match(built,/function turquoiseRoadRoute\\(a,b\\)/);
+  assert.match(built,/const VERIFIED_MAP_SITES=\\[/);
+  const {verify}=require('../scripts/verify-shared-map-editions.cjs');
+  assert.equal(verify('.',tmp).ok,true,'both editions must share live map and roads');
+
   for(const [source,target] of [
    ['juego/mapa-rutas-marcadas.png','mapa-rutas-marcadas.png'],
    ['docs/mapa-rutas-marcadas-tramo-central.json','mapa-rutas-marcadas-tramo-central.json']
