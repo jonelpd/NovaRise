@@ -24,8 +24,8 @@ function validateRoadRelease(data,requiredAccessIds=[]){
   if(edge.verified!==true)errors.push('Unverified road connection');
  }
  if(!data.edges.length)errors.push('No road connections');
- if(data.map_asset==='mapa-rutas-marcadas.png'){
-  // Never approve the original marked map merely by flipping edge flags.
+ {
+  // No map path or filename may bypass fork obstacle-clearance review.
   // Every graph fork must have explicit obstacle-clearance and visual approval.
   const degree=new Map([...ids].map(id=>[id,new Set()]));
   for(const edge of data.edges){
