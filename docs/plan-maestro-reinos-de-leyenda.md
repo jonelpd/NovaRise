@@ -1862,3 +1862,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Añadido `tests/p0-map-road-geometry-inspection.test.cjs` para comprobar cruces y estado no publicable del borrador de 57 nodos y 54 aristas. Integrado en el workflow de navegación.
 - [!] La geometría de líneas rectas no prueba que se siga la tinta negra del PNG. **Ningún tramo se marca `verified:true`** y no se cambia el mapa activo de NovaRise ni itch.io.
 - [ ] Ejecutar CI y el informe de cruces sobre el borrador, cotejar cada advertencia con la imagen negra y corregir puntos desviados; comprobar ZIP de itch.io y los SHA-256 antes de aprobar publicación.
+
+
+### Primer cruce conflictivo identificado y contrastado con la imagen — 2026-11-15
+- [x] Analizado el JSON real de 57 nodos y 54 aristas mediante intersección estricta de segmentos: **un cruce geométrico sin nodo compartido** entre `central-mill-06 → central-mill-07` y `central-ruins-01 → central-ruins-02`.
+- [x] Reabierta la imagen original aportada por el usuario y examinada la zona ampliada `x=680..900, y=390..590`, junto a la torre de vigilancia. Los puntos `central-mill-07=[802,480]` y `central-ruins-02=[801,480]` están casi superpuestos en el borrador.
+- [x] Registrado el hallazgo y la acción correctiva en `docs/informe-cruces-mapa-marcado.json`. **No se ha inventado un cruce ni aprobado el paso**; la topología requiere revisión precisa de los caminos negros.
+- [!] El informe procede de inspección geométrica y visual localizada, no de una validación completa del mapa. Los 54 segmentos continúan `verified:false` y no se ha confirmado CI.
+- [ ] Corregir orden y unión de nodos del entorno de la torre solo tras verificar exactamente el ramal; después ejecutar tests de geometría y navegación, revisar puentes y continuar la auditoría del resto de corredores.
