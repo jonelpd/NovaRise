@@ -1587,7 +1587,7 @@ function setupCastleScreen(){
  for(const id of ['soldier','archer','market','forge','barracks'])$('castle-'+id)?.addEventListener('click',()=>{const original=$(id);if(original&&!original.disabled){original.click();refreshCastleScreen()}});
  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('castle-screen')&&!$('castle-screen').hidden)$('castle-screen').hidden=true});
 }
-const HERO_LANDMARK_ANCHORS={'1,1':[25.8,16.4],'8,3':[91.4,31.8],'4,7':[55.3,88.3],'0,9':[88.6,52.1]};
+const HERO_LANDMARK_ANCHORS={'1,1':[25.9,15.3],'8,3':[93.4,32.8],'4,7':[57.8,87.8],'0,9':[89.7,48.4]};
 function heroVisualPosition(){
  return safeHeroPoint(s.x,s.y)||logicalHeroPoint(s.x,s.y)
 }
@@ -1660,37 +1660,50 @@ function selectWorldDestination(x,y){
 // Localizaciones verificadas en el mapa señalado por el usuario (porcentaje de imagen).
 // Las zonas son transparentes; las anotaciones de colores nunca se dibujan.
 const VERIFIED_MAP_SITES=[
- {id:'home',label:'Castillo del jugador · costa occidental',x:22.8,y:11.1,w:6,h:6,kind:'home',k:'1,1'},
- {id:'rival',label:'Castillo enemigo · tierras volcánicas',x:91.6,y:47.6,w:8,h:8,kind:'rival',k:'0,9'},
- {id:'fort-west',label:'Castillo independiente occidental',x:12.6,y:57.9,w:5.5,h:6,kind:'fort'},
- {id:'fort-center',label:'Castillo independiente central',x:50.8,y:25.2,w:5.5,h:6,kind:'fort'},
- {id:'fort-east',label:'Castillo independiente oriental · desierto',x:91.2,y:80.4,w:6,h:7,kind:'fort'},
- {id:'fort-north',label:'Castillo independiente septentrional · nieve',x:89.6,y:7.8,w:6,h:6,kind:'fort'},
- {id:'fort-south',label:'Castillo independiente meridional · isla',x:54.4,y:84.7,w:6,h:6,kind:'fort',k:'4,7'},
- {id:'mine-west',label:'Mina occidental · montaña',x:10.5,y:37.2,w:5,h:5,kind:'mine'},
- {id:'mine-center',label:'Mina central · cueva',x:39.1,y:48.1,w:5,h:5,kind:'mine'},
- {id:'mine-east',label:'Mina oriental · montaña nevada',x:93.3,y:19.6,w:5,h:5,kind:'mine'},
- {id:'mill-west',label:'Molino occidental',x:19.2,y:54.9,w:5,h:5,kind:'mill'},
- {id:'mill-lake-west',label:'Molino del lago occidental',x:25.1,y:66.2,w:5,h:5,kind:'mill'},
- {id:'mill-lake-south',label:'Molino del lago meridional',x:44.4,y:71.2,w:5,h:5,kind:'mill'},
- {id:'mill-lake-east',label:'Molino del lago oriental',x:57,y:64.7,w:5,h:5,kind:'mill'},
- {id:'mill-south',label:'Molino del sur',x:41,y:92.9,w:5,h:5,kind:'mill'},
- {id:'relic-desert-well',label:'Pozo antiguo del desierto',x:38.1,y:43.4,w:3,h:3,kind:'relic',reward:'experience'},
- {id:'relic-north-cabin',label:'Cabaña del bosque central',x:44.8,y:24.3,w:3,h:3,kind:'relic',reward:'soldiers'},
- {id:'relic-east-ruin',label:'Ruinas orientales del desierto',x:86.3,y:43.7,w:3,h:3,kind:'relic',reward:'gold'},
- {id:'relic-desert-hut',label:'Refugio del desierto occidental',x:23.2,y:37.8,w:3,h:3,kind:'relic',reward:'soldiers'},
- {id:'relic-mountain-hut',label:'Refugio entre las montañas centrales',x:54.1,y:30.6,w:3,h:3,kind:'relic',reward:'experience'}
-,
- {id:'relic-north-mountain-dwelling',label:'Refugio de las montañas del norte',x:29.1,y:11.3,w:3.5,h:3.5,kind:'relic',reward:'soldiers'},
- {id:'relic-north-wooden-hall',label:'Salón de madera del norte',x:46.1,y:18.3,w:3.5,h:3.5,kind:'relic',reward:'soldiers'},
- {id:'relic-east-mountain-shelter',label:'Refugio de la ladera oriental',x:59,y:25,w:3.5,h:3.5,kind:'relic',reward:'experience'},
- {id:'relic-northeast-desert-cabin',label:'Cabaña del límite del desierto',x:80,y:18.1,w:3.5,h:3.5,kind:'relic',reward:'soldiers'},
- {id:'relic-central-stone-arch',label:'Arco de piedra de las montañas',x:56.5,y:37.7,w:3.5,h:3.5,kind:'relic',reward:'experience'},
- {id:'relic-west-lake-shelter',label:'Refugio del oeste del lago',x:10.9,y:66.2,w:3.5,h:3.5,kind:'relic',reward:'gold'},
- {id:'relic-south-lake-cottage',label:'Cabaña del bosque al sur del lago',x:33.7,y:74.3,w:3.5,h:3.5,kind:'relic',reward:'soldiers'},
- {id:'relic-southwest-forest-hut',label:'Cabaña del bosque suroccidental',x:12,y:83.1,w:3.5,h:3.5,kind:'relic',reward:'soldiers'},
- {id:'relic-southeast-lava-site',label:'Fumarola de las montañas orientales',x:91.3,y:84.3,w:3.5,h:3.5,kind:'relic',reward:'experience'},
- {id:'relic-far-southeast-house',label:'Casa de piedra del extremo sureste',x:92.5,y:93.8,w:3.5,h:3.5,kind:'relic',reward:'gold'}
+ {'id':'home','label':'castillo costero','kind':'home','x':18.74,'y':9.89,'w':6,'h':6,'k':'1,1'},
+ {'id':'fort-center','label':'castillo central','kind':'fort','x':51.12,'y':24.16,'w':6,'h':6},
+ {'id':'fort-north','label':'castillo nevado','kind':'fort','x':88.76,'y':6.86,'w':6,'h':6},
+ {'id':'fort-west','label':'castillo suroeste','kind':'fort','x':13.72,'y':56.62,'w':6,'h':6},
+ {'id':'fort-south','label':'castillo isla','kind':'fort','x':54.63,'y':83.89,'w':6,'h':6,'k':'4,7'},
+ {'id':'fort-east','label':'castillo desierto','kind':'fort','x':91.15,'y':80.54,'w':6,'h':6},
+ {'id':'rival','label':'castillo volcan','kind':'rival','x':90.91,'y':49.28,'w':6,'h':6,'k':'0,9'},
+ {'id':'mine-west','label':'mina cueva oeste','kind':'mine','x':9.65,'y':24.16,'w':4,'h':4},
+ {'id':'mine-center','label':'mina oeste','kind':'mine','x':9.65,'y':35.96,'w':4,'h':4},
+ {'id':'mine-east','label':'mina cueva central','kind':'mine','x':36.04,'y':45.69,'w':4,'h':4},
+ {'id':'mine-mina-cueva-norte','label':'mina cueva norte','kind':'mine','x':62.92,'y':5.74,'w':4,'h':4},
+ {'id':'mine-mina-cueva-noreste','label':'mina cueva noreste','kind':'mine','x':71.69,'y':18.98,'w':4,'h':4},
+ {'id':'mine-mina-nieve-norte','label':'mina nieve norte','kind':'mine','x':92.19,'y':18.1,'w':4,'h':4},
+ {'id':'mine-mina-nieve-este','label':'mina nieve este','kind':'mine','x':92.11,'y':30.94,'w':4,'h':4},
+ {'id':'mine-mina-sur-este','label':'mina sur este','kind':'mine','x':89.95,'y':65.95,'w':4,'h':4},
+ {'id':'mine-mina-cueva-sur','label':'mina cueva sur','kind':'mine','x':69.94,'y':72.57,'w':4,'h':4},
+ {'id':'mine-mina-suroeste','label':'mina suroeste','kind':'mine','x':5.34,'y':82.7,'w':4,'h':4},
+ {'id':'mill-west','label':'Molino oriental','kind':'mill','x':80.14,'y':32.3,'w':5,'h':5},
+ {'id':'relic-desert-well','label':'templo norte','kind':'relic','x':37.24,'y':3.83,'w':3.5,'h':3.5,'reward':'experience'},
+ {'id':'relic-north-cabin','label':'piedras norte','kind':'relic','x':51.44,'y':8.93,'w':3.5,'h':3.5,'reward':'gold'},
+ {'id':'relic-east-ruin','label':'casa oeste','kind':'relic','x':23.68,'y':22.65,'w':3.5,'h':3.5,'reward':'soldiers'},
+ {'id':'relic-desert-hut','label':'torre oeste','kind':'relic','x':27.75,'y':32.7,'w':3.5,'h':3.5,'reward':'experience'},
+ {'id':'relic-mountain-hut','label':'ruinas oeste','kind':'relic','x':19.78,'y':46.09,'w':3.5,'h':3.5,'reward':'gold'},
+ {'id':'relic-north-mountain-dwelling','label':'templo centro este','kind':'relic','x':62.52,'y':42.03,'w':3.5,'h':3.5,'reward':'soldiers'},
+ {'id':'relic-north-wooden-hall','label':'torre isla','kind':'relic','x':43.54,'y':54.55,'w':3.5,'h':3.5,'reward':'experience'},
+ {'id':'relic-east-mountain-shelter','label':'ruinas isla','kind':'relic','x':50.48,'y':57.02,'w':3.5,'h':3.5,'reward':'gold'},
+ {'id':'relic-northeast-desert-cabin','label':'estatua centro','kind':'relic','x':47.85,'y':65.39,'w':3.5,'h':3.5,'reward':'soldiers'},
+ {'id':'relic-central-stone-arch','label':'templo suroeste','kind':'relic','x':29.43,'y':72.01,'w':3.5,'h':3.5,'reward':'experience'},
+ {'id':'relic-west-lake-shelter','label':'cofre suroeste','kind':'relic','x':19.46,'y':79.51,'w':3.5,'h':3.5,'reward':'gold'},
+ {'id':'relic-south-lake-cottage','label':'piedras sur','kind':'relic','x':22.65,'y':90.59,'w':3.5,'h':3.5,'reward':'soldiers'},
+ {'id':'relic-southwest-forest-hut','label':'cofre oriente','kind':'relic','x':72.73,'y':52.87,'w':3.5,'h':3.5,'reward':'experience'},
+ {'id':'relic-southeast-lava-site','label':'ruinas desierto','kind':'relic','x':77.35,'y':84.85,'w':3.5,'h':3.5,'reward':'gold'},
+ {'id':'relic-far-southeast-house','label':'casa desierto','kind':'relic','x':76.71,'y':91.71,'w':3.5,'h':3.5,'reward':'soldiers'},
+ {'id':'recruit-torre-norte','label':'torre norte','kind':'recruit','x':57.1,'y':15.87,'w':3.5,'h':3.5},
+ {'id':'recruit-torre-noreste','label':'torre noreste','kind':'recruit','x':75.36,'y':26.24,'w':3.5,'h':3.5},
+ {'id':'recruit-casa-nieve','label':'casa nieve','kind':'recruit','x':82.46,'y':15.23,'w':3.5,'h':3.5},
+ {'id':'recruit-torre-centro-este','label':'torre centro este','kind':'recruit','x':66.83,'y':33.65,'w':3.5,'h':3.5},
+ {'id':'recruit-torre-centro','label':'torre centro','kind':'recruit','x':43.06,'y':33.97,'w':3.5,'h':3.5},
+ {'id':'recruit-torre-volcan','label':'torre volcan','kind':'recruit','x':80.22,'y':49.12,'w':3.5,'h':3.5},
+ {'id':'recruit-torre-pantano','label':'torre pantano','kind':'recruit','x':73.76,'y':58.93,'w':3.5,'h':3.5},
+ {'id':'recruit-torre-sur-centro','label':'torre sur centro','kind':'recruit','x':62.28,'y':65.23,'w':3.5,'h':3.5},
+ {'id':'recruit-torre-suroeste','label':'torre suroeste','kind':'recruit','x':29.98,'y':60.05,'w':3.5,'h':3.5},
+ {'id':'recruit-casa-suroeste','label':'casa suroeste','kind':'recruit','x':18.18,'y':73.29,'w':3.5,'h':3.5},
+ {'id':'recruit-torre-extremo-oeste','label':'torre extremo oeste','kind':'recruit','x':11.56,'y':78.47,'w':3.5,'h':3.5},
 ];
 function verifiedSiteState(){
  if(!s.verifiedSites||typeof s.verifiedSites!=='object'||Array.isArray(s.verifiedSites))s.verifiedSites={};
@@ -1798,16 +1811,20 @@ function rivalCastleHeroBattle(site){
   selected:'soldiers',sx:0,sy:2,rx:0,ry:3,round:0};
  showBattle();return true
 }
+function siteAccessPoint(site){
+ const nearest=turquoiseRoadMask?nearestTurquoise(turquoiseCell(site.x,site.y),32):null;
+ return nearest?[(nearest[0]+.5)*.625,(nearest[1]+.5)*.625]:[site.x,site.y]
+}
 function interactVerifiedSite(site){
  if(s.done||battle||rivalBusy)return;
  if(walking)return message('El héroe está caminando. Espera a que termine el movimiento antes de seleccionar otro lugar.');
  if(s.moves<1)return message('No quedan puntos de movimiento. Termina el turno y vuelve a seleccionar '+site.label+'.');
- const [hx,hy]=heroVisualPosition();
- if(Math.hypot(hx-site.x,hy-site.y)>8){
+ const [hx,hy]=heroVisualPosition(),[accessX,accessY]=siteAccessPoint(site);
+ if(Math.hypot(hx-accessX,hy-accessY)>8){
   const candidates=[];
   for(let y=0;y<H;y++)for(let x=0;x<W;x++){
    const point=safeHeroPoint(x,y);
-   if(!point||Math.hypot(point[0]-site.x,point[1]-site.y)>7.5)continue;
+   if(!point||Math.hypot(point[0]-accessX,point[1]-accessY)>7.5)continue;
    const route=findRoute(x,y);
    if(route)candidates.push({x,y,route,score:route.reduce((n,[rx,ry])=>n+movementCost(rx,ry),0)});
   }
@@ -1843,6 +1860,14 @@ function interactVerifiedSite(site){
    showBattle();return
   }
   return castleGarrisonMenu(site)
+ }
+ if(site.kind==='recruit'){
+  if(!s.recruitmentVisits||typeof s.recruitmentVisits!=='object'||Array.isArray(s.recruitmentVisits))s.recruitmentVisits={};
+  const week=Math.floor((Math.max(1,s.turn)-1)/7);
+  if(s.recruitmentVisits[site.id]===week)return message('⚔️ Ya has reclutado aquí esta semana. Vuelve la próxima semana.');
+  s.recruitmentVisits[site.id]=week;
+  const amount=2;s.soldiers+=amount;
+  return message('⚔️ '+site.label+': '+amount+' soldados se incorporan al ejército. Próximo reclutamiento en la siguiente semana.')
  }
  if(site.kind==='relic'){
   if(!s.landmarkRewards||typeof s.landmarkRewards!=='object'||Array.isArray(s.landmarkRewards))s.landmarkRewards={};
