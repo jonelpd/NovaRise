@@ -2084,3 +2084,12 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [ ] Extraer y guardar las rutas vectoriales reales a partir de la imagen aportada, comparar coordenadas y dimensiones con el mapa original, resolver uniones y colisiones y comprobar los accesos.
 - [ ] Integrar el grafo verificado en el movimiento de héroes, comprobar guardados y ejecutar pruebas y CI antes de publicarlo.
 - [!] Esta confirmación documental no significa que las rutas estén ya integradas o que la navegación se haya activado.
+
+
+### Recepción de las dos imágenes definitivas de referencia — 2026-11-15
+- [x] Recibido el mapa limpio original `Mapa fantástico de reinos y biomas mágicos(1).png`, 1254×1254: **único fondo visual deseado del juego**, sin líneas azules.
+- [x] Confirmada la imagen previa `mapa-todas-lineas-negras-trazadas(2).png`, también 1254×1254: **referencia geométrica exclusiva** para extracción de caminos de héroes.
+- [x] Ambas imágenes están disponibles como archivos adjuntos de la conversación. La extracción debe comparar exactamente ambas, sin inferir caminos decorativos no marcados.
+- [ ] Verificar equivalencia de píxeles del fondo con `juego/mapa-grande.png` antes de sustituir el recurso existente; no sobrescribir el mapa del repositorio sin comprobarlo.
+- [ ] Convertir la diferencia de imágenes en rutas navegables, revisar uniones, despejes y accesos, probar ambas ediciones y compatibilidad de guardados.
+- [!] Esta actualización documenta la decisión y recepción; **no activa aún la navegación ni publica rutas sin verificar**.
