@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "source": "docs/mapa-rutas-marcadas-tramo-central.json",
+  "status": "review-required",
+  "reviewed_on": "2026-11-15",
+  "method": "strict line-segment intersection of normalized provisional coordinates, plus visual inspection of original user-marked PNG crop (680,390)-(900,590)",
+  "summary": {
+    "nodes": 57,
+    "edges": 54,
+    "verified_edges": 0,
+    "strict_unjoined_crossings": 1
+  },
+  "findings": [
+    {
+      "id": "central-watchtower-crossing-01",
+      "severity": "review",
+      "segments": [
+        [
+          "central-mill-06",
+          "central-mill-07"
+        ],
+        [
+          "central-ruins-01",
+          "central-ruins-02"
+        ]
+      ],
+      "pixels": {
+        "central-mill-06": [
+          771,
+          470
+        ],
+        "central-mill-07": [
+          802,
+          480
+        ],
+        "central-ruins-01": [
+          826,
+          477
+        ],
+        "central-ruins-02": [
+          801,
+          480
+        ]
+      },
+      "observation": "Near-coincident vertices at [802,480] and [801,480] create a strict geometric crossing in the draft. The original black-marked image shows a branching corridor around the lookout tower. Do not interpret the crossing as an approved junction until the route geometry and connection are checked.",
+      "next_action": "Review tower junction on full-resolution original image, correct the provisional point ordering and branch topology, and retest without adding shortcuts.",
+      "approved": false
+    }
+  ],
+  "release_ready": false
+}
