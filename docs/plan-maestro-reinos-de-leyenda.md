@@ -2365,3 +2365,10 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Ampliado `tests/p0-itchio-guest-build.test.cjs` para comprobar los hashes activos y la verificación de equivalencia del paquete generado.
 - [ ] Esperar resultado de GitHub Actions del commit `f12be172` y corregir cualquier fallo.
 - [ ] Aún no se ha realizado una prueba interactiva en navegador HTTPS/iframe de itch.io ni una publicación externa; no afirmar que está lista para distribución. Comprobar manualmente guardado, recuperación, conquista, producción y reclutamiento en ambas ediciones.
+
+
+### Ajustes de pruebas de paridad itch.io — 2026-11-15
+- [!] La primera ejecución de CI del nuevo verificador (commit `f12be172`) detectó dos errores en pruebas: expresiones regulares sobreescapadas y una maqueta del paquete que no incluía los nuevos activos exigidos.
+- [x] Corregidas las expresiones regulares en `tests/p0-itchio-guest-build.test.cjs` (commit `e8067f4e`).
+- [x] Actualizada la maqueta `tests/p0-shared-map-build-parity.test.cjs` para incluir mapa y rutas activos, manifiesto y HTML de ambas ediciones (commit `e0747461`).
+- [ ] Confirmar CI verde del commit `e0747461` antes de cerrar la paridad automatizada. Las pruebas en iframe/HTTPS de itch.io y los guardados reales siguen pendientes.
