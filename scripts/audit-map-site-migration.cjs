@@ -10,7 +10,7 @@ function inventoryLegacySites(html){
  const sites=[];
  const entries=section.match(/\{id:'[^']+'[^{}]*\}/g)||[];
  for(const entry of entries){
-  const get=k=>{const m=entry.match(new RegExp('(?:^|[,\\s])'+k+':(?:\\x27([^\\x27]*)\\x27|(-?\\d+(?:\\.\\d+)?))'));return m?(m[1]??Number(m[2])):null};
+  const get=k=>{const m=entry.match(new RegExp('(?:^|[,{\\s])'+k+':(?:\\x27([^\\x27]*)\\x27|(-?\\d+(?:\\.\\d+)?))'));return m?(m[1]??Number(m[2])):null};
   const site={id:get('id'),label:get('label'),kind:get('kind'),oldMapPercent:{x:get('x'),y:get('y')}};
   if(!site.id||!site.kind||!Number.isFinite(site.oldMapPercent.x)||!Number.isFinite(site.oldMapPercent.y))throw Error('Unparsed legacy site: '+entry);
   sites.push(site);
