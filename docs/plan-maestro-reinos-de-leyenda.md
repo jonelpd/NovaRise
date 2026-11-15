@@ -1711,3 +1711,10 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [ ] Trazar manualmente la red vial completa sobre las líneas negras, validar cruces y puentes, y enlazar accesos a castillos/minas/tesoros.
 - [ ] Integrar los puntos aprobados en movimiento de héroes jugador/IA, revisar colisiones y compatibilidad de guardados y ejecutar pruebas antes de reemplazar el mapa jugable.
 **Estado:** imagen recibida, registrada y validada por huella; rutas aún no integradas en el juego.
+
+
+### Confirmación de subida del mapa marcado — 2026-11-15
+- [x] Confirmada la existencia en GitHub de `juego/mapa-rutas-marcadas.png`, subida por el usuario, con blob SHA `9a3edad50f26846532280069b8b3ea52c6207c7f`.
+- [ ] Verificar los bytes de la imagen subida frente al SHA-256 del mapa recibido; el SHA del blob GitHub no es equivalente al SHA-256 del archivo.
+- [ ] Retrasar cualquier sustitución del fondo del juego hasta completar el trazado de los caminos negros y comprobar el comportamiento del jugador y de la IA.
+- [ ] Preparar red vial de puntos de control, accesos a lugares y pruebas de navegación; el mapa cargado en GitHub es ahora la referencia de trabajo.
