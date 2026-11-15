@@ -602,20 +602,25 @@ function decodeTracedPolyline(line){
  while(i<line.length){x+=next();y+=next();if(x<0||y<0||x>1254||y>1254)throw Error('Coordenada fuera del mapa');points.push([x/1254*80,y/1254*80])}
  return points;
 }
+const ROAD_RES=160;
+function roadIndex(x,y){return y*ROAD_RES+x}
+function roadFree(x,y){
+ return x>0&&y>0&&x<ROAD_RES-1&&y<ROAD_RES-1&&tracedRoadMask&&
+ tracedRoadMask[roadIndex(x,y)]&&navFree(Math.floor(x/2),Math.floor(y/2));
+}
 function buildTracedRoadMask(source){
- const mask=new Uint8Array(6400);
+ const mask=new Uint8Array(ROAD_RES*ROAD_RES);
  const fragments=source.split(/\r?\n/).filter(line=>line&&!line.startsWith('#'));
  if(fragments.length!==111)throw Error('El archivo de caminos no contiene los 111 tramos');
  let points=0;
  for(const line of fragments){
   const poly=decodeTracedPolyline(line);points+=poly.length;
   for(let j=1;j<poly.length;j++){
-   const a=poly[j-1],b=poly[j],steps=Math.max(1,Math.ceil(Math.hypot(b[0]-a[0],b[1]-a[1])*4));
+   const a=poly[j-1],b=poly[j],steps=Math.max(1,Math.ceil(Math.hypot(b[0]-a[0],b[1]-a[1])*8));
    for(let k=0;k<=steps;k++){
-    const t=k/steps,cx=Math.floor(a[0]+(b[0]-a[0])*t),cy=Math.floor(a[1]+(b[1]-a[1])*t);
-    // La anchura permite salvar discontinuidades de extracción de pocos píxeles.
+    const t=k/steps,cx=Math.floor((a[0]+(b[0]-a[0])*t)*2),cy=Math.floor((a[1]+(b[1]-a[1])*t)*2);
     for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){
-     const x=cx+dx,y=cy+dy;if(x>0&&y>0&&x<79&&y<79)mask[y*80+x]=1;
+     const x=cx+dx,y=cy+dy;if(x>0&&y>0&&x<ROAD_RES-1&&y<ROAD_RES-1)mask[roadIndex(x,y)]=1;
     }
    }
   }
@@ -627,13 +632,12 @@ fetch('../docs/mapa-caminos-actualizados.polyline',{cache:'no-store'})
  .then(r=>{if(!r.ok)throw Error('No se pudo cargar el mapa de rutas');return r.text()})
  .then(text=>{tracedRoadMask=buildTracedRoadMask(text);tracedRoadLoading=false;console.info('Rutas azules del mapa cargadas: 111 tramos, 606 puntos')})
  .catch(e=>{tracedRoadLoading=false;console.error('Rutas azules no disponibles:',e)});
-function nearestTracedRoad(cell,maxRadius=9){
+function nearestTracedRoad(cell,maxRadius=18){
  if(!tracedRoadMask||!cell)return null;
  const [cx,cy]=cell;
- for(let radius=0;radius<=maxRadius;radius++)for(let dy=-radius;dy<=radius;dy++)for(let dx=-radius;dx<=radius;dx++){
+ for(let radius=0;radius<=maxRadius;radius++)for(let dy=-radius;dy<=radius;dy++)for(let dx=-radius;dx<=radius++){
   if(Math.max(Math.abs(dx),Math.abs(dy))!==radius)continue;
-  const x=cx+dx,y=cy+dy;
-  if(x>0&&y>0&&x<79&&y<79&&tracedRoadMask[y*80+x]&&navFree(x,y))return [x,y];
+  const x=cx+dx,y=cy+dy;if(roadFree(x,y))return [x,y];
  }
  return null;
 }
@@ -641,28 +645,27 @@ function tracedRoadRoute(a,b){
  if(!tracedRoadMask||!navBlocked)return null;
  const start=nearestNav(...a,2),goal=nearestNav(...b,2);
  if(!start||!goal)return null;
- const entry=nearestTracedRoad(start),exit=nearestTracedRoad(goal);
+ const entry=nearestTracedRoad([start[0]*2+1,start[1]*2+1]),exit=nearestTracedRoad([goal[0]*2+1,goal[1]*2+1]);
  if(!entry||!exit)return null;
- const src=entry[1]*80+entry[0],dst=exit[1]*80+exit[0];
- const dist=new Float64Array(6400).fill(Infinity),prev=new Int32Array(6400).fill(-1),closed=new Uint8Array(6400),open=[src];
+ const src=roadIndex(...entry),dst=roadIndex(...exit);
+ const dist=new Float64Array(ROAD_RES*ROAD_RES).fill(Infinity),prev=new Int32Array(ROAD_RES*ROAD_RES).fill(-1),closed=new Uint8Array(ROAD_RES*ROAD_RES),open=[src];
  dist[src]=0;
  while(open.length){
   let best=0;
-  for(let i=1;i<open.length;i++)if(dist[open[i]]+Math.hypot(open[i]%80-exit[0],Math.floor(open[i]/80)-exit[1])<dist[open[best]]+Math.hypot(open[best]%80-exit[0],Math.floor(open[best]/80)-exit[1]))best=i;
+  for(let i=1;i<open.length;i++)if(dist[open[i]]+Math.hypot(open[i]%ROAD_RES-exit[0],Math.floor(open[i]/ROAD_RES)-exit[1])<dist[open[best]]+Math.hypot(open[best]%ROAD_RES-exit[0],Math.floor(open[best]/ROAD_RES)-exit[1]))best=i;
   const id=open.splice(best,1)[0];if(closed[id])continue;closed[id]=1;if(id===dst)break;
-  const x=id%80,y=Math.floor(id/80);
+  const x=id%ROAD_RES,y=Math.floor(id/ROAD_RES);
   for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]]){
-   const nx=x+dx,ny=y+dy,ni=ny*80+nx;
-   if(!navFree(nx,ny)||!tracedRoadMask[ni]||dx&&dy&&(!navFree(x+dx,y)||!navFree(x,y+dy)||!tracedRoadMask[y*80+x+dx]||!tracedRoadMask[(y+dy)*80+x]))continue;
-   const nd=dist[id]+Math.hypot(dx,dy);
+   const nx=x+dx,ny=y+dy;
+   if(!roadFree(nx,ny)||dx&&dy&&(!roadFree(x+dx,y)||!roadFree(x,y+dy)))continue;
+   const ni=roadIndex(nx,ny),nd=dist[id]+Math.hypot(dx,dy);
    if(nd<dist[ni]){dist[ni]=nd;prev[ni]=id;open.push(ni)}
   }
  }
  if(!Number.isFinite(dist[dst]))return null;
- const road=[];for(let id=dst;id!==src;id=prev[id]){if(id<0)return null;road.push([((id%80)+.5)*1.25,(Math.floor(id/80)+.5)*1.25])}
+ const road=[];for(let id=dst;id!==src;id=prev[id]){if(id<0)return null;road.push([((id%ROAD_RES)+.5)*.625,(Math.floor(id/ROAD_RES)+.5)*.625])}
  road.reverse();
- const entryPoint=[(entry[0]+.5)*1.25,(entry[1]+.5)*1.25],exitPoint=[(exit[0]+.5)*1.25,(exit[1]+.5)*1.25];
- // Accesos locales desde castillos, héroes guardados y lugares interactivos.
+ const entryPoint=[(entry[0]+.5)*.625,(entry[1]+.5)*.625],exitPoint=[(exit[0]+.5)*.625,(exit[1]+.5)*.625];
  const ingress=terrainFineRoute(a,entryPoint),egress=terrainFineRoute(exitPoint,b);
  if(!ingress||!egress)return null;
  return [...ingress,...road,...egress];
@@ -716,7 +719,7 @@ function terrainFineRoute(a,b,preferMarkedRoads=false){
    const ni=navCell(nx,ny);
    // Cuando faltan uniones entre trazos, penalizar fuertemente salirse
    // de los caminos dibujados. Los accesos locales siguen siendo posibles.
-   const outsideMarkedRoad=preferMarkedRoads&&tracedRoadMask&&!tracedRoadMask[ni];
+   const outsideMarkedRoad=preferMarkedRoads&&tracedRoadMask&&!tracedRoadMask[roadIndex(nx*2,ny*2)]&&!tracedRoadMask[roadIndex(nx*2+1,ny*2+1)];
    const cost=dist[id]+Math.hypot(dx,dy)*(outsideMarkedRoad?12:1);
    if(cost<dist[ni]){dist[ni]=cost;prev[ni]=id;open.push(ni)}
   }
