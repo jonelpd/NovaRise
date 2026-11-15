@@ -2147,3 +2147,12 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Recuperado el contenido actualizado de GitHub y decodificados **los 111 fragmentos y los 606 puntos** con cero errores de formato, truncamiento o coordenadas fuera de los límites 1254×1254.
 - [!] Esta comprobación fue realizada mediante decodificación independiente del archivo del repositorio; **no equivale a haber ejecutado la suite Node ni GitHub Actions**, ni aprueba caminos, obstáculos o accesos.
 - [ ] Ejecutar las pruebas Node, generar el grafo JSON, verificar cruces reales y conectividad, comprobar mapa limpio y guardados, activar navegación únicamente tras aprobar las rutas.
+
+
+### Grafo provisional completo publicado — 2026-11-15
+- [x] Decodificada la fuente comprimida corregida y publicado en GitHub el grafo **real** `docs/mapa-caminos-actualizados-grafo.json` con 606 nodos, 495 aristas internas, 111 fragmentos y todas las aristas `verified:false`.
+- [x] Inspeccionados los extremos de los fragmentos: **126 pares de fragmentos** presentan extremos a distancia euclidiana ≤4 píxeles; se consideran **candidatos a revisión**, no cruces autorizados.
+- [x] Actualizada la fuente compartida `docs/mapa-compartido-ediciones.json` para apuntar al grafo publicado.
+- [ ] Revisar en lote los 126 candidatos, además de las intersecciones en mitad de segmento; comprobar obstáculos, puentes y puertas antes de conectar y aprobar.
+- [ ] Verificar la identidad del fondo del repositorio y probar la navegación en las dos ediciones, incluida la recuperación de partidas; ejecutar Node y GitHub Actions.
+- [!] No se ha modificado el movimiento activo del héroe ni el esquema de guardados. Grafo `draft-unverified`, no publicable como navegación real.
