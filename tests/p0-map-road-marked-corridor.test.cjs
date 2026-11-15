@@ -21,3 +21,17 @@ test('provisional user-marked trace is rejected by the release gate',()=>{
  assert.equal(validateRoadRelease(data).ready,false);
  assert.equal(createRoadGraph(data.nodes,data.edges,{verifiedOnly:true}).route(data.nodes[0].id,data.nodes.at(-1).id),null);
 });
+
+test('pixel coordinates agree with normalized positions and provisional segments stay local',()=>{
+ const byId=new Map(data.nodes.map(n=>[n.id,n]));
+ for(const n of data.nodes){
+  assert.equal(n.pixel.length,2);
+  assert.ok(Math.abs(n.x-n.pixel[0]/1254)<.000001);
+  assert.ok(Math.abs(n.y-n.pixel[1]/1254)<.000001);
+ }
+ for(const e of data.edges){
+  const a=byId.get(e.from),b=byId.get(e.to);
+  assert.ok(Math.hypot(a.pixel[0]-b.pixel[0],a.pixel[1]-b.pixel[1])<55);
+  assert.equal(e.verified,false);
+ }
+});
