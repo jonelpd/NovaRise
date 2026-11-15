@@ -1,0 +1,43 @@
+name: Reinos map road integration checks
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/mapa-caminos-actualizados*'
+      - 'docs/mapa-compartido-ediciones.json'
+      - 'scripts/*road*.cjs'
+      - 'tests/p0-map-*.test.cjs'
+      - 'juego/mapa-grande.png'
+      - '.github/workflows/map-road-integration.yml'
+  pull_request:
+    paths:
+      - 'docs/mapa-caminos-actualizados*'
+      - 'docs/mapa-compartido-ediciones.json'
+      - 'scripts/*road*.cjs'
+      - 'tests/p0-map-*.test.cjs'
+      - 'juego/mapa-grande.png'
+      - '.github/workflows/map-road-integration.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  road-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify graph, shared editions and road safety
+        run: node --test tests/p0-map-*.test.cjs
+      - name: Rebuild and compare provisional road graph
+        run: |
+          node scripts/decode-bulk-road-polylines.cjs docs/mapa-caminos-actualizados.polyline /tmp/rebuilt-roads.json
+          node -e "const fs=require('fs');const a=JSON.parse(fs.readFileSync('/tmp/rebuilt-roads.json'));const b=JSON.parse(fs.readFileSync('docs/mapa-caminos-actualizados-grafo.json'));if(JSON.stringify(a.nodes)!==JSON.stringify(b.nodes)||JSON.stringify(a.edges)!==JSON.stringify(b.edges))process.exit(1)"
+      - name: Inspect original map identity and geometry
+        run: |
+          sha256sum juego/mapa-grande.png
+          file juego/mapa-grande.png
+      - name: Run entire gameplay regression suite
+        run: node --test tests/p0-*.test.cjs
