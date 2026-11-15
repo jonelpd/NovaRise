@@ -2024,3 +2024,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Ampliadas las pruebas para exigir dos candidatos diferentes, cero aristas nuevas y ausencia de aprobación.
 - [ ] Seguir el trazo negro sobre la imagen original, identificar con precisión cada bifurcación y decidir qué aristas del borrador corresponden realmente a cada ramal antes de modificar el grafo.
 - [!] Sin cambios en el juego activo ni en partidas guardadas. Comprobar el resultado de GitHub Actions del último cambio.
+
+
+### Comparación objetiva de los ramales orientales con el grafo — 2026-11-15
+- [x] Comparados los candidatos visibles del recorte original con el grafo real: se observan **dos candidatos de ruta** hacia granja y estanque, pero el borrador solo representa una continuidad oriental explícita desde `central-mill-09` a `central-mill-10` y siguientes; no hay asignación demostrada para cada candidato.
+- [x] Incorporado `scripts/audit-east-branches.cjs`, que expone los vecinos reales de la torre, el grado del nodo oriental y los candidatos sin correspondencia, **sin crear ni aprobar conexiones**.
+- [x] Añadida prueba de regresión `tests/p0-map-east-branches.test.cjs` e integrada en `road-navigation-tests.yml`.
+- [ ] Verificar el punto exacto de separación de ambos trazos negros y sus posiciones en la imagen original; solo entonces decidir si hace falta dividir, recolocar o crear nodos reales.
+- [!] Las observaciones son candidatos visuales, no rutas aprobadas. No se modifica el mapa jugable ni el guardado.
