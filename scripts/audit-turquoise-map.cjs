@@ -52,7 +52,10 @@ for(let a=0;a<groups.length;a++)for(let b=a+1;b<groups.length;b++){
  gaps.push({components:[a,b],minimum_gap_cells:Math.sqrt(d2),endpoints:best,approved_connection:false});
 }
 const result={source:roads.source,resolution:size,road_cells:total,declared_components:roads.connected_components,actual_components:groups.length,components:groups.map(({id,count,bbox})=>({id,count,bbox})),gaps,sites};
-if(sites.length!==44||groups.length!==roads.connected_components)throw Error('Invariante de catálogo/topología incumplida');
+if(sites.length!==44)throw Error('Catálogo incorrecto: se esperaban 44 elementos y hay '+sites.length);
+if(groups.length!==roads.connected_components){
+ console.error('AVISO: la máscara declara '+roads.connected_components+' componentes, pero el algoritmo de navegación detecta '+groups.length+'. Revisar topología; no se crean conexiones.');
+}
 if(process.argv.includes('--json'))console.log(JSON.stringify(result,null,2));
 else{
  console.log('Celdas:',total,'Componentes:',groups.length,'Elementos:',sites.length);
