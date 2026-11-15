@@ -1818,3 +1818,12 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Incorporado test estático `tests/p0-map-road-review-overlay.test.cjs` y añadido al workflow de navegación.
 - [!] La superposición revela solo las líneas rectas entre puntos; para que el héroe siga exactamente el negro hay que ajustar los puntos sobre las curvas y comprobar cada segmento antes de marcarlo como verificado.
 - [ ] Revisar el trazado con esta herramienta, corregir discrepancias, completar caminos meridionales y comprobar el resultado de CI. La navegación actual del juego permanece intacta.
+
+
+### Requisito obligatorio: mapa idéntico en NovaRise e itch.io — 2026-11-15
+- [x] Decisión del usuario: **todo el trabajo del nuevo mapa, los caminos negros, puentes, minas, castillos y navegación debe llegar a ambas ediciones**, NovaRise e itch.io. No mantener dos mapas independientes.
+- [x] Creado `docs/mapa-compartido-ediciones.json` como contrato de fuente única para imagen marcada, borrador de rutas, revisión visual y validador de aprobación.
+- [x] Creado `tests/p0-map-editions-parity.test.cjs` y añadido al workflow de navegación para comprobar referencias compartidas y que el borrador no se anuncie como publicado.
+- [ ] **Pendiente técnico:** localizar y adaptar el empaquetado/flujo de publicación de itch.io para copiar exactamente la imagen final y el JSON de rutas aprobadas desde la fuente común, y verificar SHA-256 iguales en ambos artefactos publicados.
+- [ ] Mantener únicamente diferencias de funciones de edición (NVRA para NovaRise; modo invitado sin NVRA para itch.io). Conservar partidas guardadas por edición y probar compatibilidad antes de publicar.
+- [!] Este contrato **no significa que el mapa nuevo ya esté integrado ni desplegado** en ambas versiones: las rutas siguen provisionales y falta verificar el proceso de construcción de itch.io.
