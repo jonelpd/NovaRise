@@ -55,11 +55,35 @@
     "existing_node_count": 57,
     "existing_edge_count": 54,
     "route_edits_made": false,
-    "save_changes_made": false
+    "save_changes_made": false,
+    "topology_only_forks": 2,
+    "pixel_route_approvals": 0
   },
   "next_actions": [
     "Inspect full-resolution ink and bridge clearances before changing graph topology",
     "Check watchtower passage does not route through structure",
     "Keep all road edges unverified until approved"
+  ],
+  "junction_specs": [
+    {
+      "id": "watchtower-junction",
+      "node_id": "central-mill-09",
+      "expected_neighbors": [
+        "central-mill-08",
+        "central-mill-10",
+        "central-south-01"
+      ],
+      "approval": "topology-only-unverified"
+    },
+    {
+      "id": "southern-ruins-fork",
+      "node_id": "central-south-03",
+      "expected_neighbors": [
+        "central-south-02",
+        "central-south-04",
+        "central-ruins-01"
+      ],
+      "approval": "topology-only-unverified"
+    }
   ]
 }
