@@ -250,6 +250,14 @@ body:has(#auth-screen:not([hidden])){min-height:100vh;background:linear-gradient
 #world-viewport .map .mounted-hero-marker .mounted-hero-rider svg{width:34px!important;height:43px!important;max-width:34px!important;max-height:43px!important}
 #world-viewport .map .mounted-hero-marker .mounted-hero-rider img{display:block!important;width:34px!important;height:43px!important;max-width:34px!important;max-height:43px!important;object-fit:contain;filter:drop-shadow(1px 3px 2px #000b)}
 #world-viewport .map .mounted-hero-marker.hero-facing-left .mounted-hero-rider img{transform:scaleX(-1);transform-origin:center}
+/* La montura conserva 34x43 px: fotograma quieto en reposo y galope al caminar. */
+#world-viewport .map .mounted-hero-rider{position:relative!important}
+#world-viewport .map .mounted-hero-rider .hero-idle-frame{position:absolute;inset:0;opacity:1}
+#world-viewport .map .mounted-hero-rider .hero-gallop-frames{position:absolute;inset:0;opacity:0}
+#world-viewport .map .mounted-hero-marker.hero-traveling .hero-idle-frame{opacity:0}
+#world-viewport .map .mounted-hero-marker.hero-traveling .hero-gallop-frames{opacity:1}
+@media(prefers-reduced-motion:reduce){#world-viewport .map .mounted-hero-marker .hero-idle-frame{opacity:1!important}#world-viewport .map .mounted-hero-marker .hero-gallop-frames{opacity:0!important}}
+
 #modal .combat-cell:disabled{cursor:not-allowed}
 #modal .combat-cell.unit-selected{box-shadow:inset 0 0 0 2px #f6d46e!important}
 </style><style>
@@ -641,6 +649,7 @@ function animateHeroHeading(marker,from,to){
  const dx=to[0]-from[0],dy=to[1]-from[1];
  if(Math.hypot(dx,dy)<0.05)return;
  marker.classList.toggle('hero-facing-left',dx<-.08);
+ marker.dataset.heading=Math.abs(dx)>Math.abs(dy)*1.5?(dx<0?'west':'east'):(dy<0?'north':'south');
  marker.classList.add('hero-traveling');
  marker.style.setProperty('--travel-tilt',(dy<-.08?'-3deg':dy>.08?'3deg':'0deg'));
  clearTimeout(marker._travelTimer);
@@ -1448,7 +1457,7 @@ function drawMountedHero(map){
  if(!persistentHero){
   persistentHero=document.createElement('div');persistentHero.className='mounted-hero-marker';
   persistentHero.setAttribute('role','img');persistentHero.setAttribute('aria-label','Tu héroe montado a caballo');
-  const rider=document.createElement('span');rider.className='mounted-hero-rider';rider.innerHTML='<img src="./heroe-caballo-realista-34x43.png" alt="" width="34" height="43" draggable="false">';
+  const rider=document.createElement('span');rider.className='mounted-hero-rider';rider.innerHTML='<img class="hero-idle-frame" src="./heroe-caballo-realista-34x43.png" alt="" width="34" height="43" draggable="false"><img class="hero-gallop-frames" src="./heroe-caballo-galope-34x43.webp" alt="" width="34" height="43" draggable="false">';
   const flag=document.createElement('span');flag.className='mounted-hero-flag';flag.textContent='TU HÉROE';
   persistentHero.replaceChildren(rider,flag)
  }
