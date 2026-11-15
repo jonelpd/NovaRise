@@ -2287,3 +2287,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Commit `c94bda08ae51ae3235b26e44972618c19b536297`: se amplía el margen de rasterización de los 111 fragmentos a 5×5 celdas (antes 3×3) para salvar pequeños huecos en la extracción y se aumenta de x12 a x30 la penalización de la ruta alternativa fuera de la máscara marcada.
 - [!] Es una mejora provisional; el ensanchamiento no equivale a aprobación de uniones ni garantiza seguimiento exacto. Se mantiene la máscara de obstáculos de navegación.
 - [ ] Confirmar CI del commit, probar trayectos reales y resolver conexiones de trazos sin generar atajos artificiales.
+
+
+### Reubicación inicial de entidades al mapa nuevo — 2026-11-15
+- [x] Detectada discrepancia estructural: `VERIFIED_MAP_SITES` y `HERO_LANDMARK_ANCHORS` todavía incluían posiciones del mapa anterior, pese al nuevo fondo.
+- [x] Commit `8244da9bdad9f1b2cbd8171b804a52073dafe700`: reubicadas **7 zonas de castillos** y **3 zonas de minas** según las construcciones visibles en el nuevo mapa limpio; actualizados anclajes estratégicos `1,1`, `8,3`, `4,7` y `0,9`.
+- [x] Preservados los IDs de las localizaciones y las claves de casillas estratégicas para minimizar impacto sobre guardados y conquistas.
+- [!] **Revisión visual inicial, no certificación de accesibilidad**: deben validarse entradas reales y obstáculos. El mapa nuevo conserva otras localizaciones antiguas (molinos y reliquias), además de las casillas de la cuadrícula 10×10; aún no se han migrado.
+- [ ] Catalogar y georreferenciar molinos, ruinas, refugios, cofres y otros elementos reales del mapa nuevo; actualizar zonas clicables, accesos y eventos; verificar en navegador que héroes llegan a los destinos siguiendo las rutas marcadas.
