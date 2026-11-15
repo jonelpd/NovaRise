@@ -1513,7 +1513,7 @@ function setupCastleScreen(){
  for(const id of ['soldier','archer','market','forge','barracks'])$('castle-'+id)?.addEventListener('click',()=>{const original=$(id);if(original&&!original.disabled){original.click();refreshCastleScreen()}});
  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('castle-screen')&&!$('castle-screen').hidden)$('castle-screen').hidden=true});
 }
-const HERO_LANDMARK_ANCHORS={'1,1':[11.8,12.1],'8,3':[78.4,28.1],'4,7':[46.3,77.3],'0,9':[7.5,93]};
+const HERO_LANDMARK_ANCHORS={'1,1':[25.8,16.4],'8,3':[91.4,31.8],'4,7':[55.3,88.3],'0,9':[88.6,52.1]};
 function heroVisualPosition(){
  return safeHeroPoint(s.x,s.y)||logicalHeroPoint(s.x,s.y)
 }
@@ -1586,16 +1586,16 @@ function selectWorldDestination(x,y){
 // Localizaciones verificadas en el mapa señalado por el usuario (porcentaje de imagen).
 // Las zonas son transparentes; las anotaciones de colores nunca se dibujan.
 const VERIFIED_MAP_SITES=[
- {id:'home',label:'Castillo del jugador',x:11.8,y:12.1,w:6,h:6,kind:'home',k:'1,1'},
- {id:'rival',label:'Castillo enemigo',x:7.5,y:93,w:8,h:8,kind:'rival',k:'0,9'},
- {id:'fort-west',label:'Castillo independiente occidental',x:32.2,y:37.7,w:5.5,h:6,kind:'fort'},
- {id:'fort-center',label:'Castillo independiente central',x:53.3,y:48.5,w:5.5,h:6,kind:'fort'},
- {id:'fort-east',label:'Castillo independiente oriental',x:87.7,y:55.3,w:6,h:7,kind:'fort'},
- {id:'fort-north',label:'Castillo independiente septentrional',x:79.3,y:8.2,w:6,h:6,kind:'fort'},
- {id:'fort-south',label:'Castillo independiente meridional',x:45.7,y:76.5,w:6,h:6,kind:'fort',k:'4,7'},
- {id:'mine-west',label:'Mina occidental',x:18.5,y:46.5,w:5,h:5,kind:'mine'},
- {id:'mine-center',label:'Mina central',x:45,y:36.3,w:5,h:5,kind:'mine'},
- {id:'mine-east',label:'Mina oriental',x:90.6,y:77.5,w:5,h:5,kind:'mine'},
+ {id:'home',label:'Castillo del jugador · costa occidental',x:22.8,y:11.1,w:6,h:6,kind:'home',k:'1,1'},
+ {id:'rival',label:'Castillo enemigo · tierras volcánicas',x:91.6,y:47.6,w:8,h:8,kind:'rival',k:'0,9'},
+ {id:'fort-west',label:'Castillo independiente occidental',x:12.6,y:57.9,w:5.5,h:6,kind:'fort'},
+ {id:'fort-center',label:'Castillo independiente central',x:50.8,y:25.2,w:5.5,h:6,kind:'fort'},
+ {id:'fort-east',label:'Castillo independiente oriental · desierto',x:91.2,y:80.4,w:6,h:7,kind:'fort'},
+ {id:'fort-north',label:'Castillo independiente septentrional · nieve',x:89.6,y:7.8,w:6,h:6,kind:'fort'},
+ {id:'fort-south',label:'Castillo independiente meridional · isla',x:54.4,y:84.7,w:6,h:6,kind:'fort',k:'4,7'},
+ {id:'mine-west',label:'Mina occidental · montaña',x:10.5,y:37.2,w:5,h:5,kind:'mine'},
+ {id:'mine-center',label:'Mina central · cueva',x:39.1,y:48.1,w:5,h:5,kind:'mine'},
+ {id:'mine-east',label:'Mina oriental · montaña nevada',x:93.3,y:19.6,w:5,h:5,kind:'mine'},
  {id:'mill-west',label:'Molino occidental',x:19.2,y:54.9,w:5,h:5,kind:'mill'},
  {id:'mill-lake-west',label:'Molino del lago occidental',x:25.1,y:66.2,w:5,h:5,kind:'mill'},
  {id:'mill-lake-south',label:'Molino del lago meridional',x:44.4,y:71.2,w:5,h:5,kind:'mill'},
