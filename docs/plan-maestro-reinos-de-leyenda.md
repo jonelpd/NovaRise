@@ -2356,3 +2356,12 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Ampliada `tests/p0-map-interaction-runtime.test.cjs` (commit `5f55a172`) con pruebas de las once torres de reclutamiento: una recompensa semanal, bloqueo de duplicados, persistencia de visitas tras serialización y renovación al empezar la semana siguiente.
 - [x] Añadida prueba de recompensa verde que verifica que un premio recogido no vuelve a entregarse tras serializar y restaurar la partida.
 - [ ] Confirmar ejecución completa de CI del commit `5f55a172`; comprobar en navegador guardado real y carga desde almacenamiento local/nube, además de edición itch.io.
+
+
+### Sincronización verificable de la edición itch.io — 2026-11-15
+- [x] Revisado `scripts/build-itchio-guest.cjs`: la edición invitado se genera desde `juego/index.html` y copia `juego/`, pero el manifiesto anterior solo verificaba archivos de un trazado antiguo marcado como borrador.
+- [x] Añadidos hashes SHA-256 de los activos **reales y activos** `juego/mapa-reinos-2048.jpg` y `juego/rutas-turquesa-160.json` al paquete itch.io, sin alterar la distinción con los trazos antiguos de borrador.
+- [x] Actualizado `scripts/verify-shared-map-editions.cjs` para exigir coincidencia de mapa, rutas y presencia de `turquoiseRoadRoute` y `VERIFIED_MAP_SITES` en ambas ediciones.
+- [x] Ampliado `tests/p0-itchio-guest-build.test.cjs` para comprobar los hashes activos y la verificación de equivalencia del paquete generado.
+- [ ] Esperar resultado de GitHub Actions del commit `f12be172` y corregir cualquier fallo.
+- [ ] Aún no se ha realizado una prueba interactiva en navegador HTTPS/iframe de itch.io ni una publicación externa; no afirmar que está lista para distribución. Comprobar manualmente guardado, recuperación, conquista, producción y reclutamiento en ambas ediciones.
