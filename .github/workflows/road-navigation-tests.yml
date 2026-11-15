@@ -8,6 +8,7 @@ on:
       - 'tests/p0-map-road-*.test.cjs'
       - 'tools/editor-caminos.html'
       - 'docs/mapa-original-rutas-trazado-preliminar.json'
+      - 'docs/mapa-rutas-marcadas-tramo-central.json'
       - '.github/workflows/road-navigation-tests.yml'
   pull_request:
     paths:
@@ -31,4 +32,4 @@ jobs:
         with:
           node-version: '22'
       - name: Validate road editor and navigation modules
-        run: node --test tests/p0-map-road-editor-safety.test.cjs tests/p0-map-road-topology.test.cjs tests/p0-map-road-walker.test.cjs
+        run: node --test tests/p0-map-road-editor-safety.test.cjs tests/p0-map-road-topology.test.cjs tests/p0-map-road-walker.test.cjs tests/p0-map-road-marked-corridor.test.cjs
