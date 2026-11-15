@@ -2111,3 +2111,12 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [!] El inspector no prueba que la geometría corresponda exactamente a los caminos, ni verifica obstáculos; los 94 fragmentos siguen sin aprobar.
 - [ ] Incorporar los archivos vectoriales efectivos al repositorio; contrastar hash del mapa jugable existente con el PNG limpio; unir los fragmentos con continuidad real; validar accesos y topología; ejecutar pruebas locales y GitHub Actions antes de activar movimiento.
 - [!] No se han alterado el mapa visual activo, el motor de navegación ni el esquema de guardado; no se afirma que CI esté verde.
+
+
+### Importador masivo conservador de caminos — 2026-11-15
+- [x] Añadido `scripts/import-bulk-road-trace.cjs`: transforma cada polilínea del JSON extraído en nodos y aristas de un grafo `draft-unverified`, preservando coordenadas normalizadas.
+- [x] El importador **no conecta fragmentos por proximidad**, incluso si sus extremos coinciden; todas las aristas conservan `verified:false` y `navigation_enabled:false`.
+- [x] Añadido `tests/p0-map-bulk-road-import.test.cjs` para comprobar recuentos, ausencia de uniones ficticias, rechazo de datos inválidos y bloqueo de publicación.
+- [ ] Incorporar físicamente `mapa-caminos-extraidos.json` al repositorio y ejecutar el importador con él; la salida esperada con los datos actuales es 523 nodos y 429 aristas internas (523 - 94), sin conexiones entre fragmentos.
+- [ ] Resolver visualmente extremos, bifurcaciones, accesos y obstáculos; comprobar identidad de `juego/mapa-grande.png` con el original del usuario antes de activar rutas.
+- [!] El código está guardado en GitHub, pero no se ha verificado una ejecución de la nueva suite ni se ha activado la navegación.
