@@ -14,6 +14,7 @@ test('current marked road draft remains non-releasable and contains no duplicate
  assert.equal(report.nodeCount,57);
  assert.equal(report.edgeCount,54);
  assert.deepEqual(report.duplicateEdges,[]);
+ assert.deepEqual(report.unjoinedCrossings,[]);
  assert.equal(report.allUnverified,true);
  assert.equal(report.releaseReady,false);
 });
