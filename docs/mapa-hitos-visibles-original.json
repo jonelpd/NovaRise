@@ -125,16 +125,6 @@
         419
       ],
       "description": "Molino de viento en pradera al este del centro"
-    },
-    {
-      "id": "original-windmill-west",
-      "kind": "mill",
-      "pixel": [
-        350,
-        412
-      ],
-      "description": "Molino o torre de piedra con aspas no visibles; clasificación por confirmar",
-      "classification_uncertain": true
     }
   ],
   "legacy_mapping": {
