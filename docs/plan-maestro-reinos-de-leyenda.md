@@ -2211,3 +2211,12 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Corregida la prueba en commit `792af6d6b28ec5ed55169df6e00bd5b87e7e3371`: ahora comprueba **ambos grafos** como `draft-unverified`, `navigation_enabled:false`, aristas no verificadas, rechazo por `validateRoadRelease`, ausencia de despliegue y estado de importación no verificado.
 - [!] Se mantiene el bloqueo de navegación: no se ha aprobado ninguna unión ni modificado el motor del juego.
 - [ ] Confirmar el nuevo resultado de GitHub Actions y corregir cualquier fallo adicional detectado en los pasos posteriores.
+
+
+### Auditoría de conectividad integral — 2026-11-15
+- [x] Calculadas las componentes conexas del grafo provisional: **111 componentes** para 606 nodos y 495 aristas, la mayor de **21 nodos**. Las 111 componentes corresponden a fragmentos sin conexiones entre sí.
+- [x] Publicado `scripts/audit-bulk-road-connectivity.cjs` para medir conectividad sin aprobar automáticamente ningún paso.
+- [x] Añadido `tests/p0-map-bulk-connectivity.test.cjs` para verificar la desconexión actual y el comportamiento con un grafo conectado.
+- [!] La red no es navegable entre fragmentos; siguen pendientes los 126 enlaces candidatos y la revisión de obstáculos. No se ha activado el movimiento nuevo.
+- [!] La consulta de estados GitHub del commit de corrección de paridad no ha proporcionado una confirmación de CI verde; pendiente verificar la ejecución real.
+- [ ] Revisar uniones y pasos reales, construir un grafo conectado únicamente con autorizaciones visuales y validar rutas y guardados de ambas ediciones.
