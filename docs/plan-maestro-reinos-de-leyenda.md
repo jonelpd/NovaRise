@@ -1929,3 +1929,12 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Reforzada `tests/p0-map-visible-landmarks.test.cjs`: el puente físico puede estar confirmado visualmente, pero **sus nodos de conexión siguen vacíos y la navegación continúa sin verificar**.
 - [ ] Precisar los dos extremos del puente en píxeles y conectar al grafo solo después de comprobar ambos tramos de camino negro; revisar de igual forma los demás ríos y pasos.
 - [!] No se ha activado el nuevo mapa, no se han modificado guardados y no se ha verificado aún un resultado verde de CI.
+
+
+### Revisión de precisión del puente central — 2026-11-15
+- [x] Ampliada la imagen original del castillo central con cuadrícula de coordenadas (x=600–830, y=320–510) y seguido visualmente el trazo negro del puente.
+- [x] Registrados extremos aproximados del puente: orilla del castillo `[690,380]` y orilla opuesta `[742,425]`, más siete puntos de referencia del camino negro; todo sigue siendo **provisional**.
+- [x] Detectada una desviación entre el camino negro real y varios nodos existentes `central-mill-01` a `central-mill-05`. Se documenta el problema y se impide tratar estos puntos como geometría aprobada.
+- [x] Añadidas comprobaciones al test `p0-map-visible-landmarks.test.cjs` para exigir revisión geométrica pendiente, extremos válidos y conexiones de grafo aún vacías.
+- [ ] Redibujar con precisión los nodos del corredor de entrada/salida y confirmar continuidad de la carretera sobre ambos extremos del puente; solo después autorizar aristas verificadas.
+- [!] El grafo de rutas existente no se ha modificado todavía para evitar introducir coordenadas inexactas; no se han alterado guardados ni el mapa activo. CI verde sin confirmar.
