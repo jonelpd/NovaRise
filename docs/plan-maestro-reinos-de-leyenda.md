@@ -2302,3 +2302,12 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Actualizado `server/nvra-authoritative-mines.cjs` con las mismas coordenadas nuevas que el juego, manteniendo los IDs estables (commit `8116ac45`).
 - [x] Adaptado el estado de prueba de captura de mina a la ubicación nueva (commit `8158036b`).
 - [ ] Confirmar CI de la sincronización completa antes de dar por válida la reubicación; catalogar otros objetos del nuevo mapa y sus accesos.
+
+
+### Clasificación aprobada por el usuario sobre el mapa marcado — 2026-11-15
+- [x] El usuario confirma explícitamente la leyenda cromática del mapa aportado `mapa-rutas-marcadas.png`: **rojo = castillos; amarillo = minas; azul = molinos; verde = recompensas de oro/experiencia/tesoros; morado = edificios de reclutamiento**.
+- [x] Los caminos negros dibujados son la referencia para los accesos y el movimiento del héroe.
+- [!] La imagen anotada fue aportada en la conversación; **no se ha subido al repositorio ni transformado todavía en coordenadas verificadas**. Las ubicaciones provisionales anteriores no deben considerarse definitivas.
+- [ ] Registrar todos los elementos reales marcados con identificador estable, categoría, posición exacta y entrada conectada al trazado negro.
+- [ ] Migrar `VERIFIED_MAP_SITES`, `HERO_LANDMARK_ANCHORS`, minas autoritativas del servidor, molinos, reclutamiento y recompensas a ese catálogo; conservar estados guardados y comprobar ambas ediciones.
+- [ ] Validar navegación real entre entradas, regresiones, y publicación antes de declarar la fase cerrada.
