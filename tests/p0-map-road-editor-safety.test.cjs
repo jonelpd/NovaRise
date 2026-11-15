@@ -28,3 +28,11 @@ test('manual tracing creates unverified chained segments and supports branch end
  assert.match(html,/id="finish-trace"/);
  assert.match(html,/traceLast=null;selected=null;note\('Sendero terminado/);
 });
+
+test('inspection previews geometric routes without approving any edge',()=>{
+ assert.match(html,/id="clear-preview"/);
+ assert.match(html,/previewPath\.length>1/);
+ assert.match(html,/Vista previa geométrica/);
+ assert.match(html,/NO acredita terreno transitable/);
+ assert.match(html,/distances=new Map/);
+});
