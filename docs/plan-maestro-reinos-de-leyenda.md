@@ -2402,3 +2402,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Eliminado ese límite y los conectores visuales rectos fuera del trazado: `turquoiseRoadRoute` proyecta los extremos lógicos sobre la máscara y devuelve únicamente puntos del camino oficial (commit `e9e7e111`).
 - [!] La corrección aún no está verificada por CI ni en navegador. Las cuatro componentes de la máscara siguen requiriendo una revisión topológica basada en el mapa original. No dar por cerrada la fase.
 - [ ] Revisar comportamiento del marcador al iniciar desde una posición antigua fuera de la ruta, las puertas de los 44 elementos y la paridad del paquete itch.io.
+
+
+### Auditoría de rutas — continuación 2026-11-16
+- [x] Inspeccionada la implementación real de `turquoiseRoadRoute`, `nearestTurquoise` y `fineRoute` en `juego/index.html`.
+- [x] Corregido `nearestTurquoise`: antes devolvía el primer píxel en un barrido cuadrado, no el más próximo en distancia euclídea. Ahora busca el píxel de carretera geométricamente más cercano. Eliminada también la duplicación del último punto del recorrido (commit `8e737018`).
+- [!] La máscara `rutas-turquesa-160.json` **no se ha modificado**: sigue declarando cuatro componentes desconectadas. No se pueden unir con seguridad sin verificar visualmente las conexiones en la imagen anotada.
+- [!] Sin ejecución de pruebas de navegador ni confirmación de CI para este cambio. No se considera resuelta la navegación ni los 44 accesos.
+- [ ] Siguiente bloque: comparar topología de los cuatro componentes con el mapa marcado, corregir cortes reales, fijar puertas de cada elemento y ejecutar pruebas automatizadas y manuales.
