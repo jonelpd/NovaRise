@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Revisión integral de caminos · Reinos de Leyenda</title>
+<style>body{margin:0;background:#101923;color:#f5f0dd;font:15px system-ui,sans-serif}main{max-width:1350px;margin:auto;padding:20px}h1{font-size:23px}p{line-height:1.5}.controls{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin:16px 0}.controls label{background:#26384a;border-radius:8px;padding:10px}button{background:#c7a65c;color:#172331;border:0;border-radius:7px;padding:10px;font-weight:bold;cursor:pointer}.viewport{position:relative;overflow:auto;border:2px solid #c7a65c;border-radius:8px;background:#27313d}.stack{position:relative;width:1254px;height:1254px;transform-origin:top left}.stack img{position:absolute;inset:0;width:1254px;height:1254px}.overlay{pointer-events:none}.info{background:#223243;padding:12px;border-radius:8px;margin-top:12px}code{word-break:break-all}</style></head>
+<body><main><h1>Revisión integral de caminos — Reinos de Leyenda</h1>
+<p>Vista de auditoría únicamente. El mapa limpio permanece intacto; los trazos cian y los círculos naranjas NO son elementos del juego ni autorizan movimiento. Verifica especialmente pasos sobre agua, puentes, murallas, entradas a castillos y minas.</p>
+<div class="controls"><label><input id="show" type="checkbox" checked> Mostrar rutas y candidatos</label><label>Opacidad <input id="alpha" type="range" min="0" max="100" value="85"></label><button id="fit">Ajustar a pantalla</button><button id="full">Tamaño original</button></div>
+<div class="viewport" id="viewport"><div class="stack" id="stack"><img alt="Mapa limpio del juego" src="../juego/mapa-grande.png"><img class="overlay" id="overlay" alt="Caminos y 126 conexiones candidatas sin aprobar" src="../docs/mapa-rutas-revision-uniones.svg"></div></div>
+<div class="info"><strong>Estado:</strong> 111 fragmentos · 606 nodos · 495 aristas · 126 candidatos · 0 aprobaciones. El archivo de rutas es provisional; esta página no edita archivos, no conecta caminos y no modifica partidas guardadas.</div>
+</main><script>
+const overlay=document.getElementById('overlay'),stack=document.getElementById('stack'),viewport=document.getElementById('viewport');
+document.getElementById('show').addEventListener('change',e=>overlay.hidden=!e.target.checked);
+document.getElementById('alpha').addEventListener('input',e=>overlay.style.opacity=e.target.value/100);
+function zoom(factor){stack.style.transform='scale('+factor+')';viewport.style.height=Math.ceil(1254*factor)+'px';viewport.style.maxHeight='80vh';stack.parentElement.style.minHeight='0'}
+document.getElementById('fit').addEventListener('click',()=>zoom(Math.min(1,(viewport.clientWidth-4)/1254)));
+document.getElementById('full').addEventListener('click',()=>zoom(1));
+overlay.style.opacity=.85;zoom(Math.min(1,(viewport.clientWidth-4)/1254));
+</script></body></html>
