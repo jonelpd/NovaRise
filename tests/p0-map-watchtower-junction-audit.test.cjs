@@ -85,3 +85,13 @@ test('two eastern black-road candidates remain distinct and unmapped until pixel
  assert.equal(review.new_edges_created,0);
  assert.equal(audit.visual_review.east.route_approval,false);
 });
+
+test('map asset aliases and alternate filenames cannot bypass fork clearance',()=>{
+ const unsafe={...draft,status:'approved',map_sha256:'a'.repeat(64),edges:draft.edges.map(e=>({...e,verified:true}))};
+ for(const asset of ['mapa-rutas-marcadas.png','juego/mapa-rutas-marcadas.png','./juego/mapa-rutas-marcadas.png','other-map.png']){
+  const result=validateRoadRelease({...unsafe,map_asset:asset});
+  assert.equal(result.ready,false,asset);
+  assert.ok(result.errors.some(e=>e.includes('central-mill-09')),asset);
+  assert.ok(result.errors.some(e=>e.includes('central-south-03')),asset);
+ }
+});
