@@ -9,7 +9,7 @@
     "reward": "verde",
     "recruit": "morado"
   },
-  "note": "Centros estimados visualmente a partir de círculos de colores. Antes de activar interacciones, comprobar cada entrada contra los caminos negros y el navmesh. No reemplazar datos de partidas guardadas sin migración.",
+  "note": "Las 44 zonas ya están integradas de forma aproximada en juego/index.html. El acceso se aproxima automáticamente al camino turquesa más próximo. Se requiere validación visual y funcional en navegador; el trazado turquesa tiene cuatro componentes desconectados.",
   "items": [
     {
       "id": "castillo-costero",
@@ -18,7 +18,11 @@
       "y": 124,
       "x_pct": 18.74,
       "y_pct": 9.89,
-      "status": "visually_identified_access_pending"
+      "status": "integrated_approximate_access_auto_snapped",
+      "game_id": "home",
+      "game_kind": "home",
+      "game_x_pct": 18.74,
+      "game_y_pct": 9.89
     },
     {
       "id": "castillo-central",
@@ -27,7 +31,11 @@
       "y": 303,
       "x_pct": 51.12,
       "y_pct": 24.16,
-      "status": "visually_identified_access_pending"
+      "status": "integrated_approximate_access_auto_snapped",
+      "game_id": "fort-center",
+      "game_kind": "fort",
+      "game_x_pct": 51.12,
+      "game_y_pct": 24.16
     },
     {
       "id": "castillo-nevado",
@@ -36,7 +44,11 @@
       "y": 86,
       "x_pct": 88.76,
       "y_pct": 6.86,
-      "status": "visually_identified_access_pending"
+      "status": "integrated_approximate_access_auto_snapped",
+      "game_id": "fort-north",
+      "game_kind": "fort",
+      "game_x_pct": 88.76,
+      "game_y_pct": 6.86
     },
     {
       "id": "castillo-suroeste",
@@ -45,7 +57,11 @@
       "y": 710,
       "x_pct": 13.72,
       "y_pct": 56.62,
-      "status": "visually_identified_access_pending"
+      "status": "integrated_approximate_access_auto_snapped",
+      "game_id": "fort-west",
+      "game_kind": "fort",
+      "game_x_pct": 13.72,
+      "game_y_pct": 56.62
     },
     {
       "id": "castillo-isla",
@@ -54,7 +70,11 @@
       "y": 1052,
       "x_pct": 54.63,
       "y_pct": 83.89,
-      "status": "visually_identified_access_pending"
+      "status": "integrated_approximate_access_auto_snapped",
+      "game_id": "fort-south",
+      "game_kind": "fort",
+      "game_x_pct": 54.63,
+      "game_y_pct": 83.89
     },
     {
       "id": "castillo-desierto",
@@ -63,7 +83,11 @@
       "y": 1010,
       "x_pct": 91.15,
       "y_pct": 80.54,
-      "status": "visually_identified_access_pending"
+      "status": "integrated_approximate_access_auto_snapped",
+      "game_id": "fort-east",
+      "game_kind": "fort",
+      "game_x_pct": 91.15,
+      "game_y_pct": 80.54
     },
     {
       "id": "castillo-volcan",
@@ -72,7 +96,11 @@
       "y": 618,
       "x_pct": 90.91,
       "y_pct": 49.28,
-      "status": "visually_identified_access_pending"
+      "status": "integrated_approximate_access_auto_snapped",
+      "game_id": "rival",
+      "game_kind": "rival",
+      "game_x_pct": 90.91,
+      "game_y_pct": 49.28
     },
     {
       "id": "mina-cueva-oeste",
@@ -81,7 +109,11 @@
       "y": 303,
       "x_pct": 9.65,
       "y_pct": 24.16,
-      "status": "visually_identified_access_pending"
+      "status": "integrated_approximate_access_auto_snapped",
+      "game_id": "mine-mina-cueva-oeste",
+      "game_kind": "mine",
+      "game_x_pct": 9.65,
+      "game_y_pct": 24.16
     },
     {
       "id": "mina-oeste",
@@ -90,7 +122,11 @@
       "y": 451,
       "x_pct": 9.65,
       "y_pct": 35.96,
-      "status": "visually_identified_access_pending"
+      "status": "integrated_approximate_access_auto_snapped",
+      "game_id": "mine-west",
+      "game_kind": "mine",
+      "game_x_pct": 9.65,
+      "game_y_pct": 35.96
     },
     {
       "id": "mina-cueva-central",
@@ -99,7 +135,11 @@
       "y": 573,
       "x_pct": 36.04,
       "y_pct": 45.69,
-      "status": "visually_identified_access_pending"
+      "status": "integrated_approximate_access_auto_snapped",
+      "game_id": "mine-center",
+      "game_kind": "mine",
+      "game_x_pct": 36.04,
+      "game_y_pct": 45.69
     },
     {
       "id": "mina-cueva-norte",
@@ -108,7 +148,11 @@
       "y": 72,
       "x_pct": 62.92,
       "y_pct": 5.74,
-      "status": "visually_identified_access_pending"
+      "status": "integrated_approximate_access_auto_snapped",
+      "game_id": "mine-mina-cueva-norte",
+      "game_kind": "mine",
+      "game_x_pct": 62.92,
+      "game_y_pct": 5.74
     },
     {
       "id": "mina-cueva-noreste",
@@ -117,7 +161,11 @@
       "y": 238,
       "x_pct": 71.69,
       "y_pct": 18.98,
-      "status": "visually_identified_access_pending"
+      "status": "integrated_approximate_access_auto_snapped",
+      "game_id": "mine-mina-cueva-noreste",
+      "game_kind": "mine",
+      "game_x_pct": 71.69,
+      "game_y_pct": 18.98
     },
     {
       "id": "mina-nieve-norte",
@@ -126,7 +174,11 @@
       "y": 227,
       "x_pct": 92.19,
       "y_pct": 18.1,
-      "status": "visually_identified_access_pending"
+      "status": "integrated_approximate_access_auto_snapped",
+      "game_id": "mine-east",
+      "game_kind": "mine",
+      "game_x_pct": 92.19,
+      "game_y_pct": 18.1
     },
     {
       "id": "mina-nieve-este",
@@ -135,7 +187,11 @@
       "y": 388,
       "x_pct": 92.11,
       "y_pct": 30.94,
-      "status": "visually_identified_access_pending"
+      "status": "integrated_approximate_access_auto_snapped",
+      "game_id": "mine-mina-nieve-este",
+      "game_kind": "mine",
+      "game_x_pct": 92.11,
+      "game_y_pct": 30.94
     },
     {
       "id": "mina-sur-este",
@@ -144,7 +200,11 @@
       "y": 827,
       "x_pct": 89.95,
       "y_pct": 65.95,
-      "status": "visually_identified_access_pending"
+      "status": "integrated_approximate_access_auto_snapped",
+      "game_id": "mine-mina-sur-este",
+      "game_kind": "mine",
+      "game_x_pct": 89.95,
+      "game_y_pct": 65.95
     },
     {
       "id": "mina-cueva-sur",
@@ -153,7 +213,11 @@
       "y": 910,
       "x_pct": 69.94,
       "y_pct": 72.57,
-      "status": "visually_identified_access_pending"
+      "status": "integrated_approximate_access_auto_snapped",
+      "game_id": "mine-mina-cueva-sur",
+      "game_kind": "mine",
+      "game_x_pct": 69.94,
+      "game_y_pct": 72.57
     },
     {
       "id": "mina-suroeste",
@@ -162,7 +226,11 @@
       "y": 1037,
       "x_pct": 5.34,
       "y_pct": 82.7,
-      "status": "visually_identified_access_pending"
+      "status": "integrated_approximate_access_auto_snapped",
+      "game_id": "mine-mina-suroeste",
+      "game_kind": "mine",
+      "game_x_pct": 5.34,
+      "game_y_pct": 82.7
     },
     {
       "id": "molino-oriental",
@@ -171,7 +239,11 @@
       "y": 405,
       "x_pct": 80.14,
       "y_pct": 32.3,
-      "status": "visually_identified_access_pending"
+      "status": "integrated_approximate_access_auto_snapped",
+      "game_id": "mill-west",
+      "game_kind": "mill",
+      "game_x_pct": 80.14,
+      "game_y_pct": 32.3
     },
     {
       "id": "templo-norte",
@@ -180,7 +252,11 @@
       "y": 48,
       "x_pct": 37.24,
       "y_pct": 3.83,
-      "status": "visually_identified_access_pending"
+      "status": "integrated_approximate_access_auto_snapped",
+      "game_id": "relic-desert-well",
+      "game_kind": "relic",
+      "game_x_pct": 37.24,
+      "game_y_pct": 3.83
     },
     {
       "id": "piedras-norte",
@@ -189,7 +265,11 @@
       "y": 112,
       "x_pct": 51.44,
       "y_pct": 8.93,
-      "status": "visually_identified_access_pending"
+      "status": "integrated_approximate_access_auto_snapped",
+      "game_id": "relic-north-cabin",
+      "game_kind": "relic",
+      "game_x_pct": 51.44,
+      "game_y_pct": 8.93
     },
     {
       "id": "casa-oeste",
@@ -198,7 +278,11 @@
       "y": 284,
       "x_pct": 23.68,
       "y_pct": 22.65,
-      "status": "visually_identified_access_pending"
+      "status": "integrated_approximate_access_auto_snapped",
+      "game_id": "relic-east-ruin",
+      "game_kind": "relic",
+      "game_x_pct": 23.68,
+      "game_y_pct": 22.65
     },
     {
       "id": "torre-oeste",
@@ -207,7 +291,11 @@
       "y": 410,
       "x_pct": 27.75,
       "y_pct": 32.7,
-      "status": "visually_identified_access_pending"
+      "status": "integrated_approximate_access_auto_snapped",
+      "game_id": "relic-desert-hut",
+      "game_kind": "relic",
+      "game_x_pct": 27.75,
+      "game_y_pct": 32.7
     },
     {
       "id": "ruinas-oeste",
@@ -216,7 +304,11 @@
       "y": 578,
       "x_pct": 19.78,
       "y_pct": 46.09,
-      "status": "visually_identified_access_pending"
+      "status": "integrated_approximate_access_auto_snapped",
+      "game_id": "relic-mountain-hut",
+      "game_kind": "relic",
+      "game_x_pct": 19.78,
+      "game_y_pct": 46.09
     },
     {
       "id": "templo-centro-este",
@@ -225,7 +317,11 @@
       "y": 527,
       "x_pct": 62.52,
       "y_pct": 42.03,
-      "status": "visually_identified_access_pending"
+      "status": "integrated_approximate_access_auto_snapped",
+      "game_id": "relic-north-mountain-dwelling",
+      "game_kind": "relic",
+      "game_x_pct": 62.52,
+      "game_y_pct": 42.03
     },
     {
       "id": "torre-isla",
@@ -234,7 +330,11 @@
       "y": 684,
       "x_pct": 43.54,
       "y_pct": 54.55,
-      "status": "visually_identified_access_pending"
+      "status": "integrated_approximate_access_auto_snapped",
+      "game_id": "relic-north-wooden-hall",
+      "game_kind": "relic",
+      "game_x_pct": 43.54,
+      "game_y_pct": 54.55
     },
     {
       "id": "ruinas-isla",
@@ -243,7 +343,11 @@
       "y": 715,
       "x_pct": 50.48,
       "y_pct": 57.02,
-      "status": "visually_identified_access_pending"
+      "status": "integrated_approximate_access_auto_snapped",
+      "game_id": "relic-east-mountain-shelter",
+      "game_kind": "relic",
+      "game_x_pct": 50.48,
+      "game_y_pct": 57.02
     },
     {
       "id": "estatua-centro",
@@ -252,7 +356,11 @@
       "y": 820,
       "x_pct": 47.85,
       "y_pct": 65.39,
-      "status": "visually_identified_access_pending"
+      "status": "integrated_approximate_access_auto_snapped",
+      "game_id": "relic-northeast-desert-cabin",
+      "game_kind": "relic",
+      "game_x_pct": 47.85,
+      "game_y_pct": 65.39
     },
     {
       "id": "templo-suroeste",
@@ -261,7 +369,11 @@
       "y": 903,
       "x_pct": 29.43,
       "y_pct": 72.01,
-      "status": "visually_identified_access_pending"
+      "status": "integrated_approximate_access_auto_snapped",
+      "game_id": "relic-central-stone-arch",
+      "game_kind": "relic",
+      "game_x_pct": 29.43,
+      "game_y_pct": 72.01
     },
     {
       "id": "cofre-suroeste",
@@ -270,7 +382,11 @@
       "y": 997,
       "x_pct": 19.46,
       "y_pct": 79.51,
-      "status": "visually_identified_access_pending"
+      "status": "integrated_approximate_access_auto_snapped",
+      "game_id": "relic-west-lake-shelter",
+      "game_kind": "relic",
+      "game_x_pct": 19.46,
+      "game_y_pct": 79.51
     },
     {
       "id": "piedras-sur",
@@ -279,7 +395,11 @@
       "y": 1136,
       "x_pct": 22.65,
       "y_pct": 90.59,
-      "status": "visually_identified_access_pending"
+      "status": "integrated_approximate_access_auto_snapped",
+      "game_id": "relic-south-lake-cottage",
+      "game_kind": "relic",
+      "game_x_pct": 22.65,
+      "game_y_pct": 90.59
     },
     {
       "id": "cofre-oriente",
@@ -288,7 +408,11 @@
       "y": 663,
       "x_pct": 72.73,
       "y_pct": 52.87,
-      "status": "visually_identified_access_pending"
+      "status": "integrated_approximate_access_auto_snapped",
+      "game_id": "relic-southwest-forest-hut",
+      "game_kind": "relic",
+      "game_x_pct": 72.73,
+      "game_y_pct": 52.87
     },
     {
       "id": "ruinas-desierto",
@@ -297,7 +421,11 @@
       "y": 1064,
       "x_pct": 77.35,
       "y_pct": 84.85,
-      "status": "visually_identified_access_pending"
+      "status": "integrated_approximate_access_auto_snapped",
+      "game_id": "relic-southeast-lava-site",
+      "game_kind": "relic",
+      "game_x_pct": 77.35,
+      "game_y_pct": 84.85
     },
     {
       "id": "casa-desierto",
@@ -306,7 +434,11 @@
       "y": 1150,
       "x_pct": 76.71,
       "y_pct": 91.71,
-      "status": "visually_identified_access_pending"
+      "status": "integrated_approximate_access_auto_snapped",
+      "game_id": "relic-far-southeast-house",
+      "game_kind": "relic",
+      "game_x_pct": 76.71,
+      "game_y_pct": 91.71
     },
     {
       "id": "torre-norte",
@@ -315,7 +447,11 @@
       "y": 199,
       "x_pct": 57.1,
       "y_pct": 15.87,
-      "status": "visually_identified_access_pending"
+      "status": "integrated_approximate_access_auto_snapped",
+      "game_id": "recruit-torre-norte",
+      "game_kind": "recruit",
+      "game_x_pct": 57.1,
+      "game_y_pct": 15.87
     },
     {
       "id": "torre-noreste",
@@ -324,7 +460,11 @@
       "y": 329,
       "x_pct": 75.36,
       "y_pct": 26.24,
-      "status": "visually_identified_access_pending"
+      "status": "integrated_approximate_access_auto_snapped",
+      "game_id": "recruit-torre-noreste",
+      "game_kind": "recruit",
+      "game_x_pct": 75.36,
+      "game_y_pct": 26.24
     },
     {
       "id": "casa-nieve",
@@ -333,7 +473,11 @@
       "y": 191,
       "x_pct": 82.46,
       "y_pct": 15.23,
-      "status": "visually_identified_access_pending"
+      "status": "integrated_approximate_access_auto_snapped",
+      "game_id": "recruit-casa-nieve",
+      "game_kind": "recruit",
+      "game_x_pct": 82.46,
+      "game_y_pct": 15.23
     },
     {
       "id": "torre-centro-este",
@@ -342,7 +486,11 @@
       "y": 422,
       "x_pct": 66.83,
       "y_pct": 33.65,
-      "status": "visually_identified_access_pending"
+      "status": "integrated_approximate_access_auto_snapped",
+      "game_id": "recruit-torre-centro-este",
+      "game_kind": "recruit",
+      "game_x_pct": 66.83,
+      "game_y_pct": 33.65
     },
     {
       "id": "torre-centro",
@@ -351,7 +499,11 @@
       "y": 426,
       "x_pct": 43.06,
       "y_pct": 33.97,
-      "status": "visually_identified_access_pending"
+      "status": "integrated_approximate_access_auto_snapped",
+      "game_id": "recruit-torre-centro",
+      "game_kind": "recruit",
+      "game_x_pct": 43.06,
+      "game_y_pct": 33.97
     },
     {
       "id": "torre-volcan",
@@ -360,7 +512,11 @@
       "y": 616,
       "x_pct": 80.22,
       "y_pct": 49.12,
-      "status": "visually_identified_access_pending"
+      "status": "integrated_approximate_access_auto_snapped",
+      "game_id": "recruit-torre-volcan",
+      "game_kind": "recruit",
+      "game_x_pct": 80.22,
+      "game_y_pct": 49.12
     },
     {
       "id": "torre-pantano",
@@ -369,7 +525,11 @@
       "y": 739,
       "x_pct": 73.76,
       "y_pct": 58.93,
-      "status": "visually_identified_access_pending"
+      "status": "integrated_approximate_access_auto_snapped",
+      "game_id": "recruit-torre-pantano",
+      "game_kind": "recruit",
+      "game_x_pct": 73.76,
+      "game_y_pct": 58.93
     },
     {
       "id": "torre-sur-centro",
@@ -378,7 +538,11 @@
       "y": 818,
       "x_pct": 62.28,
       "y_pct": 65.23,
-      "status": "visually_identified_access_pending"
+      "status": "integrated_approximate_access_auto_snapped",
+      "game_id": "recruit-torre-sur-centro",
+      "game_kind": "recruit",
+      "game_x_pct": 62.28,
+      "game_y_pct": 65.23
     },
     {
       "id": "torre-suroeste",
@@ -387,7 +551,11 @@
       "y": 753,
       "x_pct": 29.98,
       "y_pct": 60.05,
-      "status": "visually_identified_access_pending"
+      "status": "integrated_approximate_access_auto_snapped",
+      "game_id": "recruit-torre-suroeste",
+      "game_kind": "recruit",
+      "game_x_pct": 29.98,
+      "game_y_pct": 60.05
     },
     {
       "id": "casa-suroeste",
@@ -396,7 +564,11 @@
       "y": 919,
       "x_pct": 18.18,
       "y_pct": 73.29,
-      "status": "visually_identified_access_pending"
+      "status": "integrated_approximate_access_auto_snapped",
+      "game_id": "recruit-casa-suroeste",
+      "game_kind": "recruit",
+      "game_x_pct": 18.18,
+      "game_y_pct": 73.29
     },
     {
       "id": "torre-extremo-oeste",
@@ -405,7 +577,12 @@
       "y": 984,
       "x_pct": 11.56,
       "y_pct": 78.47,
-      "status": "visually_identified_access_pending"
+      "status": "integrated_approximate_access_auto_snapped",
+      "game_id": "recruit-torre-extremo-oeste",
+      "game_kind": "recruit",
+      "game_x_pct": 11.56,
+      "game_y_pct": 78.47
     }
-  ]
+  ],
+  "route_file": "juego/rutas-turquesa-160.json"
 }
