@@ -2173,3 +2173,10 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Cálculo independiente sobre el grafo actual de 495 aristas: **15 contactos geométricos entre fragmentos**, todos clasificados como contactos en extremos con la tolerancia numérica aplicada; **0 cruces estrictamente interiores**. Estos contactos pueden solaparse con los 126 candidatos por proximidad y no deben sumarse como rutas nuevas.
 - [!] Cruces colineales, proximidad de extremo a segmento, obstáculos, puertas y puentes requieren todavía revisión. Ninguna unión se ha aprobado.
 - [ ] Ejecutar suite Node y CI, comparar fondo del repositorio con el mapa original y verificar conectividad real y partidas antes de habilitar movimiento.
+
+
+### Vista visual conjunta de recorridos y uniones — 2026-11-15
+- [x] Publicado `docs/mapa-rutas-revision-uniones.svg` con **495 segmentos del grafo de 606 nodos** y **126 marcas de uniones candidatas** sobre las coordenadas originales 1254×1254.
+- [x] El SVG es una **capa de auditoría independiente**: no modifica `juego/mapa-grande.png`, el motor de movimiento ni los guardados; ninguna conexión candidata se considera aprobada.
+- [ ] Superponer la capa sobre la imagen original y verificar físicamente puentes, agua, rocas, murallas, puertas, bifurcaciones y accesos.
+- [ ] Ejecutar pruebas automáticas, verificar hash de fondo y conectividad, y aprobar solo rutas transitables antes de activar la navegación compartida de NovaRise e itch.io.
