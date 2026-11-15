@@ -2389,3 +2389,9 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Primera corrección de navegación: `fineRoute` en `juego/index.html` deja de usar rutas alternativas por terreno fuera de los trazos cuando ya se cargó la máscara turquesa (commit `ee8ada16`).
 - [!] **Limitación conocida:** cuatro componentes turquesas siguen separadas; al eliminar el fallback, algunos destinos quedarán bloqueados hasta reconstruir sus conexiones aprobadas. No inventar pasos por agua, roca o murallas. Pendiente de pruebas de navegador y CI.
 - [ ] Contrastar cada unión de los cuatro componentes con la imagen original y corregir la máscara; luego validar las 44 entradas, interacciones y las dos ediciones.
+
+
+### Corrección adicional de rutas estrictas — 2026-11-15
+- [x] En el juego principal se ha sustituido el enlace de entrada/salida de la máscara turquesa que antes llamaba a `terrainFineRoute` (podía cruzar terreno ajeno al trazado) por una conexión local corta de máximo 4 unidades porcentuales: commit `00b44293`.
+- [!] **Pendiente de pruebas**: la nueva restricción puede bloquear destinos alejados de las rutas, lo que es preferible a atravesar agua o montañas, pero requiere definir puertas exactas y reparar las cuatro componentes de la máscara. No se afirma que la navegación esté completada.
+- [ ] Revisar la máscara sobre la imagen original marcada, registrar entradas verificadas para los 44 sitios, probar desplazamientos completos y actualizar la edición itch.io cuando corresponda.
