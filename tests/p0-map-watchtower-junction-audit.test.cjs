@@ -36,3 +36,12 @@ test('fork audit rejects invented shortcuts or missing branch edges',()=>{
  const edited={...draft,edges:draft.edges.filter(e=>!(e.from==='central-mill-09'&&e.to==='central-south-01'))};
  assert.equal(inspectJunctions(edited,audit.junction_specs)[0].topologyMatches,false);
 });
+
+test('tower footprint overlap blocks premature approval of the visible junction',()=>{
+ assert.equal(audit.visual_review.tower.clearance_confirmed,false);
+ assert.equal(audit.visual_review.tower.route_approval,false);
+ assert.equal(audit.visual_review.ruins.route_approval,false);
+ assert.equal(audit.visual_review.east.route_approval,false);
+ assert.ok(audit.visual_review.tower.required_fix.includes('watchtower'));
+ assert.equal(draft.edges.every(e=>e.verified===false),true);
+});
