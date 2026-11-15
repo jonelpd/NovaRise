@@ -6,6 +6,7 @@ on:
       - 'scripts/validate-map-road-release.cjs'
       - 'scripts/audit-map-road-topology.cjs'
       - 'tests/p0-map-road-*.test.cjs'
+      - 'tests/p0-map-editions-parity.test.cjs'
       - 'tools/editor-caminos.html'
       - 'tools/revisar-rutas-marcadas.html'
       - 'docs/mapa-original-rutas-trazado-preliminar.json'
@@ -19,6 +20,9 @@ on:
       - 'scripts/audit-map-road-topology.cjs'
       - 'tests/p0-map-road-*.test.cjs'
       - 'tools/editor-caminos.html'
+      - 'tools/revisar-rutas-marcadas.html'
+      - 'docs/mapa-rutas-marcadas-tramo-central.json'
+      - 'docs/mapa-compartido-ediciones.json'
       - 'docs/mapa-original-rutas-trazado-preliminar.json'
       - '.github/workflows/road-navigation-tests.yml'
   workflow_dispatch:
