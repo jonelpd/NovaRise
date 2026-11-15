@@ -2101,3 +2101,13 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Resultado de esta **nueva** extracción: **94 fragmentos, 523 puntos vectoriales simplificados**, sin ninguna ruta aprobada. No confundir con los 115 fragmentos reportados en un procesamiento anterior de parámetros diferentes.
 - [!] Los archivos resultantes están disponibles como descargas de la conversación; **no se han subido al repositorio** ni se han activado rutas en el juego. El mapa original y los guardados permanecen intactos.
 - [ ] Comparar la cobertura con todos los trazos visibles, resolver discontinuidades, cruces y colisiones con obstáculos, verificar identidad del mapa original en GitHub, importar el grafo definitivo y ejecutar pruebas en ambas ediciones.
+
+
+### Preparación técnica de integración segura de la extracción azul — 2026-11-15
+- [x] Inspeccionados los archivos adjuntos reales: ambas imágenes son de **1254×1254**; diferencia cromática superior a 30 por canal máximo en **30 850 píxeles (1,96 %)**.
+- [x] Hash SHA-256 del PNG limpio adjunto: `92c431c17c013b3a30432d2587640017b0d58df64e8d5d7160937f4a52a1f9ee`.
+- [x] Hash SHA-256 del PNG anotado adjunto: `7c6d5752a51399cde31be10be5910757a2153f9cb0279e358a81a512bf67c95e`.
+- [x] Añadidos `scripts/inspect-bulk-road-trace.cjs` y `tests/p0-map-bulk-road-trace.test.cjs` para comprobar estructura, coordenadas, recuentos y prohibición de activar rutas extraídas sin aprobación.
+- [!] El inspector no prueba que la geometría corresponda exactamente a los caminos, ni verifica obstáculos; los 94 fragmentos siguen sin aprobar.
+- [ ] Incorporar los archivos vectoriales efectivos al repositorio; contrastar hash del mapa jugable existente con el PNG limpio; unir los fragmentos con continuidad real; validar accesos y topología; ejecutar pruebas locales y GitHub Actions antes de activar movimiento.
+- [!] No se han alterado el mapa visual activo, el motor de navegación ni el esquema de guardado; no se afirma que CI esté verde.
