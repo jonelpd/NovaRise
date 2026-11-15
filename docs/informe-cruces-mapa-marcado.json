@@ -1,14 +1,15 @@
 {
   "schema_version": 1,
   "source": "docs/mapa-rutas-marcadas-tramo-central.json",
-  "status": "geometry-corrected-pending-pixel-verification",
+  "status": "geometry-rechecked-after-bridge-retrace-pending-pixel-verification",
   "reviewed_on": "2026-11-15",
-  "method": "strict line-segment intersection of normalized provisional coordinates, plus visual inspection of original user-marked PNG crop (680,390)-(900,590)",
+  "method": "Strict segment intersections of current normalized draft graph; visually guided but still unverified bridge corridor coordinates",
   "summary": {
     "nodes": 57,
     "edges": 54,
     "verified_edges": 0,
-    "strict_unjoined_crossings": 0
+    "strict_unjoined_crossings": 0,
+    "max_edge_length_px": 45.1774
   },
   "findings": [
     {
@@ -26,23 +27,23 @@
       ],
       "pixels": {
         "central-mill-06": [
-          771,
-          470
+          772,
+          465
         ],
         "central-mill-07": [
-          802,
-          480
+          800,
+          484
         ],
         "central-ruins-01": [
-          826,
-          477
+          869,
+          543
         ],
         "central-ruins-02": [
-          801,
-          480
+          849,
+          556
         ]
       },
-      "observation": "Near-coincident vertices at [802,480] and [801,480] create a strict geometric crossing in the draft. The original black-marked image shows a branching corridor around the lookout tower. Do not interpret the crossing as an approved junction until the route geometry and connection are checked.",
+      "observation": "Historical crossing before corrections. Current geometry has zero strict unjoined crossings; bridge corridor was subsequently retraced but no pixel-level route approval exists.",
       "next_action": "Review tower junction on full-resolution original image, correct the provisional point ordering and branch topology, and retest without adding shortcuts.",
       "approved": false,
       "resolution": {
@@ -50,7 +51,7 @@
         "change": "Repositioned central-ruins-01..06 along southern bend, moved branch junction from central-mill-08 to central-south-03 and adjusted central-south-03 to [879,535].",
         "geometric_crossings_after": 0,
         "route_nodes_from_central_mill_01_to_ruins_06": 18,
-        "remaining": "Pixel-by-pixel route approval, bridge review and automated CI run"
+        "remaining": "Verify black ink continuity at bridge and onward to windmill; run Node CI and check build"
       }
     }
   ],
