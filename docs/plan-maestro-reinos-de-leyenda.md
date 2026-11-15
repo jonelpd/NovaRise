@@ -1793,3 +1793,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Extendidas pruebas de conectividad de tres ramales y consistencia entre coordenadas de píxel y normalizadas; comprobación de longitud máxima de cada segmento.
 - [!] El trazado sigue siendo aproximado, sin aprobación visual píxel a píxel, y no representa todavía el mapa completo. El motor de juego no se ha modificado.
 - [ ] Continuar los corredores occidental, septentrional y meridional; verificar puentes, obstáculos, destinos y ejecución de CI antes de habilitar el movimiento real.
+
+
+### Corredor occidental del castillo azul a la mina — 2026-11-15
+- [x] Examinado el PNG de rutas negras y digitalizado un nuevo corredor occidental independiente entre el castillo azul del noroeste y la mina de oro del oeste: 17 nodos y 16 conexiones provisionales.
+- [x] Ampliado `docs/mapa-rutas-marcadas-tramo-central.json` a **43 nodos y 41 conexiones** distribuidos en dos componentes; el occidental permanece separado de la red central hasta comprobar el cruce real sobre el mapa.
+- [x] Actualizada `tests/p0-map-road-marked-corridor.test.cjs` para verificar la continuidad del corredor occidental y evitar conexiones inventadas con la red central.
+- [!] Los puntos occidentales son una digitalización manual aproximada, todos `verified:false`. No están autorizados para movimiento real, y las pruebas aún requieren ejecución confirmada.
+- [ ] Revisar visualmente con zoom cada segmento y completar cruces, minas y castillos restantes antes de activar el sistema de rutas.
