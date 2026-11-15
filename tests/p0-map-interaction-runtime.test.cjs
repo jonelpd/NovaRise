@@ -68,15 +68,15 @@ test('distant landmark selects a reachable tile and queues interaction',()=>{
  const {ctx}=setup();
  ctx.heroVisualPosition=()=>[10,10];
  ctx.W=10;ctx.H=10;ctx.safeHeroPoint=(x,y)=>[x*10+5,y*10+5];
- ctx.findRoute=(x,y)=>x===9&&y===9?[[2,2],[9,9]]:null;
+ ctx.findRoute=(x,y)=>x===7&&y===9?[[2,2],[7,9]]:null;
  ctx.movementCost=()=>1;
  ctx.walkTo=(x,y)=>{ctx.walkDestination=[x,y]};
  ctx.s.x=1;ctx.s.y=1;
  ctx.interactVerifiedSite(site);
  assert.equal(ctx.pendingSiteInteraction.id,site.id);
- assert.equal(ctx.pendingSiteInteraction.x,9);
+ assert.equal(ctx.pendingSiteInteraction.x,7);
  assert.equal(ctx.pendingSiteInteraction.y,9);
- assert.equal(ctx.walkDestination[0],9);
+ assert.equal(ctx.walkDestination[0],7);
  assert.equal(ctx.walkDestination[1],9);
  assert.equal(ctx.s.landmarkRewards[site.id],undefined,'do not award before arriving');
 });
