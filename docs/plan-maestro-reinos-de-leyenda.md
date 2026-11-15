@@ -1691,3 +1691,12 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [!] La inspección de la superposición anterior indica que el trazado coloreado es parcial. Los caminos añadidos posteriormente requieren una superposición nueva sobre el arte para revisar si coinciden con senderos reales. El inventario es de elementos visuales, **no de entidades jugables ya implementadas**.
 - [ ] Dibujar una nueva superposición de los ocho recorridos, corregir cruces por terreno y definir un nodo de acceso por cada destino verificado.
 - [ ] Sustituir el mapa protegido por arte original definitivo solamente después de superar auditoría de derechos, rutas y compatibilidad de guardados.
+
+
+### Auditoría visual de ocho recorridos — 2026-11-15
+- [x] Superpuestos los ocho trazados preliminares sobre la imagen original de concepto (1254 × 1254) y revisados visualmente; imagen de trabajo disponible como `mapa-ocho-rutas-auditoria.png` en el entorno de trabajo, **todavía no incorporada al repositorio**.
+- [x] Registrados los hallazgos por recorrido en `docs/mapa-original-auditoria-visual.json`: **cinco recorridos bloqueados** por problemas aparentes de paso (edificios, zonas inundadas, vegetación o desviaciones) y **tres pendientes de inspección detallada**.
+- [x] Añadida prueba `tests/p0-map-road-visual-audit.test.cjs` que exige cobertura de los ocho recorridos y cero rutas aprobadas.
+- [!] No se ha completado el trazado definitivo ni se ha aprobado ningún recorrido; esta revisión es visual preliminar, no una prueba automática de colisiones.
+- [ ] Corregir manualmente los segmentos problemáticos sobre el mapa a escala, añadir pasos de puentes y puertas, volver a revisar y asignar accesos a destinos visibles.
+- [ ] Subir el arte final propio y el overlay a GitHub cuando se disponga de una vía de subida de imágenes; no activar la sustitución de mapa ni rutas hasta superar revisión y CI.
