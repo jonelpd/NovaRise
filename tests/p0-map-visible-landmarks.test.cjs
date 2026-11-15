@@ -16,9 +16,9 @@ test('original artwork landmarks remain provisional and do not silently migrate 
  assert.equal(data.crossings[0].structureVisuallyConfirmed,true);
  assert.equal(data.crossings[0].verified,false);
  assert.deepEqual(data.crossings[0].connectedRoadNodes,[]);
- assert.equal(data.crossings[0].geometryStatus,'manual-pixel-review-needed');
+ assert.equal(data.crossings[0].geometryStatus,'bridge-corridor-retraced-provisional');
  assert.equal(data.crossings[0].blackRoadTraceApproxPixel.length,7);
- assert.ok(data.crossings[0].existingDraftNodeWarning.length>0);
+ assert.deepEqual(data.crossings[0].existingDraftNodeWarning,[]);
  assert.ok(Object.values(data.crossings[0].entrances).every(p=>p.length===2&&p.every(v=>Number.isInteger(v)&&v>=0&&v<1254)));
  for(const landmark of data.landmarks){
   assert.ok(['castle','mine','mill'].includes(landmark.kind));
