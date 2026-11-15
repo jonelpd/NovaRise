@@ -22,3 +22,9 @@ test('review overlay flags both unapproved forks and provides a focused inspecti
  assert.match(html,/audit\.junction_specs/);
  assert.doesNotMatch(html,/fetch\([^)]*,\s*\{\s*method:\s*['"]POST/);
 });
+
+test('all draft edges incident to an unresolved fork are highlighted, never silently approved',()=>{
+ assert.match(html,/pending\.has\(e\.from\)\|\|pending\.has\(e\.to\)/);
+ assert.match(html,/stroke:danger\?'#ff3030'/);
+ assert.match(html,/audit\?\.junction_specs/);
+});
