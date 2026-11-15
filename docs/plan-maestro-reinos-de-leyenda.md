@@ -2372,3 +2372,12 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Corregidas las expresiones regulares en `tests/p0-itchio-guest-build.test.cjs` (commit `e8067f4e`).
 - [x] Actualizada la maqueta `tests/p0-shared-map-build-parity.test.cjs` para incluir mapa y rutas activos, manifiesto y HTML de ambas ediciones (commit `e0747461`).
 - [ ] Confirmar CI verde del commit `e0747461` antes de cerrar la paridad automatizada. Las pruebas en iframe/HTTPS de itch.io y los guardados reales siguen pendientes.
+
+
+### Auditoría estructural del mapa turquesa y los 44 elementos — 2026-11-15
+- [x] Releído el plan maestro, el catálogo de 44 elementos, la máscara turquesa y las funciones de navegación/interacción del juego.
+- [x] Publicada auditoría técnica con 8 hallazgos y matriz de aceptación en `docs/auditoria-mapa-turquesa-elementos-2026-11-15.md` (commit `2619b220`).
+- [x] Corregida la selección de casilla de llegada a edificios: ahora prioriza cercanía a la entrada estimada y desempata por coste, en lugar de elegir solo el trayecto más barato (commit `76d39b97`). **Corrección de código pendiente de CI y prueba en navegador**.
+- [!] Los 44 centros son aproximados y las puertas no están verificadas; la máscara tiene cuatro componentes y el fallback todavía permite trayectos fuera de los trazos turquesa.
+- [ ] Revisar sobre el mapa marcado original las 44 puertas, las cuatro componentes y los puentes/cruces; integrar accesos explícitos, corregir rutas sin inventar uniones, probar todas las funciones y persistencia en NovaRise e itch.io.
+- [!] No se declara completada la auditoría ni aprobada la jugabilidad. Mantener congeladas las mejoras estéticas del caballo hasta estabilizar navegación y elementos.
