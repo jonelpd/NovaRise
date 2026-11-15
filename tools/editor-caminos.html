@@ -9,14 +9,14 @@ body{margin:0;background:#101b20;color:#f1e6cb;font:15px system-ui}header,aside{
 <label>Red de rutas JSON<input id="json" type="file" accept=".json,application/json"></label>
 <label>Herramienta<select id="mode"><option value="trace">Trazar sendero por clics</option><option value="node">Añadir punto</option><option value="edge">Conectar dos puntos</option><option value="inspect">Inspeccionar</option></select></label>
 <p class="warn">Las conexiones nuevas siempre se guardan como pendientes. La aprobación requiere revisión independiente.</p>
-<button id="finish-trace">Terminar sendero</button><button id="undo">Deshacer último cambio</button><button id="export">Exportar JSON</button>
+<button id="finish-trace">Terminar sendero</button><button id="clear-preview">Borrar ruta de prueba</button><button id="undo">Deshacer último cambio</button><button id="export">Exportar JSON</button>
 <p class="warn">Verifica que cada tramo sigue el sendero visible y que cruza el agua únicamente por puentes. Un segmento recto no puede atravesar árboles, edificios ni montañas.</p>
-<p>Los puntos son coordenadas normalizadas. Usa «Trazar sendero por clics» para seguir cada curva negra. Pulsa «Terminar sendero» antes de empezar otra rama. Selecciona dos puntos en modo «Conectar» para unirlos.</p>
+<p>Los puntos son coordenadas normalizadas. Usa «Trazar sendero por clics» para seguir cada curva negra. Pulsa «Terminar sendero» antes de empezar otra rama. Selecciona dos puntos en modo «Conectar» para unirlos. En «Inspeccionar», selecciona origen y destino para visualizar la ruta geométrica más corta, sin aprobarla.</p>
 <small id="count"></small></aside></main>
 <script>
 'use strict';
 const canvas=document.getElementById('map'),ctx=canvas.getContext('2d'),status=document.getElementById('status'),count=document.getElementById('count');
-let art=null,selected=null,traceLast=null,history=[],data={schema_version:2,status:'draft-unverified',coordinate_system:'normalized',map_asset:null,nodes:[],edges:[]};
+let art=null,selected=null,traceLast=null,previewStart=null,previewPath=[],history=[],data={schema_version:2,status:'draft-unverified',coordinate_system:'normalized',map_asset:null,nodes:[],edges:[]};
 function snapshot(){history.push(JSON.stringify(data));if(history.length>100)history.shift()}
 function note(t){status.textContent=t}
 function render(){
@@ -26,6 +26,7 @@ function render(){
  const byId=new Map(data.nodes.map(n=>[n.id,n]));
  ctx.lineWidth=4;
  for(const edge of data.edges){const a=byId.get(edge.from),b=byId.get(edge.to);if(!a||!b)continue;ctx.strokeStyle=edge.verified?'#62e68b':'#ffbd4a';ctx.beginPath();ctx.moveTo(a.x*canvas.width,a.y*canvas.height);ctx.lineTo(b.x*canvas.width,b.y*canvas.height);ctx.stroke()}
+ if(previewPath.length>1){ctx.strokeStyle='#f9f6ff';ctx.lineWidth=7;ctx.setLineDash([9,5]);ctx.beginPath();previewPath.forEach((n,i)=>{if(i)ctx.lineTo(n.x*canvas.width,n.y*canvas.height);else ctx.moveTo(n.x*canvas.width,n.y*canvas.height)});ctx.stroke();ctx.setLineDash([])}
  for(const n of data.nodes){ctx.fillStyle=n.id===selected?'#fff':'#49d5ff';ctx.strokeStyle='#132a35';ctx.lineWidth=2;ctx.beginPath();ctx.arc(n.x*canvas.width,n.y*canvas.height,6,0,Math.PI*2);ctx.fill();ctx.stroke()}
  count.textContent=data.nodes.length+' puntos · '+data.edges.length+' conexiones · '+data.edges.filter(e=>e.verified).length+' revisadas';
 }
@@ -42,13 +43,24 @@ canvas.addEventListener('click',ev=>{
  }
  else if(mode==='node'){if(hit){note('Punto existente: '+hit.id);return}snapshot();let serial=1;while(data.nodes.some(n=>n.id==='road-'+String(serial).padStart(3,'0')))serial++;const id='road-'+String(serial).padStart(3,'0');data.nodes.push({id,x:+x.toFixed(5),y:+y.toFixed(5)});note('Punto añadido: '+id)}
  else if(mode==='edge'){if(!hit){note('Selecciona un punto existente.');return}if(!selected){selected=hit.id;note('Selecciona el segundo punto');render();return}if(selected!==hit.id&&!data.edges.some(e=>(e.from===selected&&e.to===hit.id)||(e.to===selected&&e.from===hit.id))){snapshot();data.edges.push({from:selected,to:hit.id,verified:false,review:'Pending independent visual inspection against final map'});note('Conexión creada. Comprueba que sigue exactamente el sendero.')}selected=null}
- else note(hit?'Punto: '+hit.id:'No hay punto cercano');
+ else if(mode==='inspect'&&hit){
+  if(!previewStart){previewStart=hit.id;previewPath=[];note('Origen de prueba: '+hit.id+'. Selecciona un destino')}
+  else{
+   const start=previewStart;previewStart=null;
+   const byId=new Map(data.nodes.map(n=>[n.id,n])),adj=new Map(data.nodes.map(n=>[n.id,[]]));
+   for(const e of data.edges){const a=byId.get(e.from),b=byId.get(e.to);if(!a||!b)continue;const cost=Math.hypot(a.x-b.x,a.y-b.y);adj.get(a.id).push({id:b.id,cost});adj.get(b.id).push({id:a.id,cost})}
+   const distances=new Map([[start,0]]),prev=new Map(),remaining=new Set(byId.keys());
+   while(remaining.size){let u=null,best=Infinity;for(const id of remaining){const dist=distances.get(id)??Infinity;if(dist<best){u=id;best=dist}}if(!u)break;remaining.delete(u);if(u===hit.id)break;for(const e of adj.get(u)){const nd=best+e.cost;if(nd<(distances.get(e.id)??Infinity)){distances.set(e.id,nd);prev.set(e.id,u)}}}
+   previewPath=[];if(distances.has(hit.id)){for(let id=hit.id;id!==undefined;id=prev.get(id))previewPath.unshift(byId.get(id));note('Vista previa geométrica: '+previewPath.length+' puntos. NO acredita terreno transitable')}else note('No hay conexión entre esos puntos')
+  }
+ }else note(hit?'Punto: '+hit.id:'No hay punto cercano');
  render();
 });
 document.getElementById('image').addEventListener('change',ev=>{const file=ev.target.files[0];if(!file)return;const url=URL.createObjectURL(file),img=new Image();img.onload=()=>{art=img;canvas.width=img.naturalWidth;canvas.height=img.naturalHeight;if(data.map_asset&&data.map_asset!==file.name){data.edges=data.edges.map(e=>({...e,verified:false,review:'Map image changed; revalidation required'}));note('Imagen cambiada: rutas desmarcadas para revisión')}data.map_asset=file.name;URL.revokeObjectURL(url);note('Mapa cargado: '+file.name+' ('+canvas.width+' × '+canvas.height+')');render()};img.onerror=()=>{URL.revokeObjectURL(url);note('No se pudo abrir la imagen')};img.src=url});
 document.getElementById('json').addEventListener('change',async ev=>{const file=ev.target.files[0];if(!file)return;try{const v=JSON.parse(await file.text());if(!Array.isArray(v.nodes)||!Array.isArray(v.edges)||v.coordinate_system!=='normalized'||v.schema_version!==2)throw Error('Formato inválido');if(art&&v.map_asset&&v.map_asset!==data.map_asset)throw Error('El JSON pertenece a otro mapa: comprueba el nombre de imagen antes de importar');if(v.nodes.some(n=>typeof n.id!=='string'||!Number.isFinite(n.x)||!Number.isFinite(n.y)||n.x<0||n.x>1||n.y<0||n.y>1))throw Error('Coordenadas inválidas');const ids=new Set(v.nodes.map(n=>n.id));if(ids.size!==v.nodes.length||v.edges.some(e=>!ids.has(e.from)||!ids.has(e.to)||typeof e.verified!=='boolean'||e.from===e.to))throw Error('Conexiones inválidas');snapshot();traceLast=null;data={...v,edges:v.edges.map(e=>({...e,verified:false,review:'Revalidation required after import'}))};selected=null;note('Red importada: todas las rutas requieren nueva revisión visual');render()}catch(e){note('Error: '+e.message)}});
+document.getElementById('clear-preview').onclick=()=>{previewStart=null;previewPath=[];note('Vista previa borrada');render()};
 document.getElementById('finish-trace').onclick=()=>{traceLast=null;selected=null;note('Sendero terminado. Inicia otro en el siguiente tramo; ninguna conexión queda aprobada.');render()};
-document.getElementById('mode').onchange=()=>{traceLast=null;selected=null;render()};
+document.getElementById('mode').onchange=()=>{traceLast=null;selected=null;previewStart=null;previewPath=[];render()};
 document.getElementById('undo').onclick=()=>{if(!history.length)return;data=JSON.parse(history.pop());selected=null;traceLast=null;render();note('Último cambio deshecho')};
 document.getElementById('export').onclick=()=>{if(!art){note('Carga el mapa antes de exportar');return}const blob=new Blob([JSON.stringify(data,null,2)+'\n'],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='mapa-original-rutas-revisadas.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)};
 async function loadOfficial(){const src='../juego/mapa-rutas-marcadas.png';const img=new Image();img.onload=()=>{art=img;canvas.width=img.naturalWidth;canvas.height=img.naturalHeight;data.map_asset='mapa-rutas-marcadas.png';data.edges=data.edges.map(e=>({...e,verified:false,review:'Review against marked user map'}));note('Mapa oficial marcado cargado; las rutas requieren revisión');render()};img.onerror=()=>note('No se pudo cargar el mapa. Abre el editor desde GitHub Pages o usa el selector de archivo local.');img.src=src}
