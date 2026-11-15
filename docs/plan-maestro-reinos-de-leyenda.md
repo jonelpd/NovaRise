@@ -1920,3 +1920,12 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Añadido `tests/p0-map-visible-landmarks.test.cjs` y registrado en el workflow de navegación para impedir que se confundan candidatos con ubicaciones aprobadas o IDs de guardados antiguos.
 - [!] No existe todavía correspondencia entre los IDs del mapa anterior y estos hitos; los 13 puntos son una guía para revisión manual, no lugares activos ni destinos navegables aprobados.
 - [ ] Validar centros y accesos de cada hito contra las rutas negras; identificar puentes de acceso reales; decidir equivalencias de castillos y minas conservando todas las propiedades de las partidas existentes.
+
+
+### Auditoría visual de cruce de río del castillo central — 2026-11-15
+- [x] Abierta y examinada la imagen original del usuario, ampliando específicamente la salida oriental del castillo central (recorte original aproximado x=610–795, y=320–465).
+- [x] Confirmado visualmente **un puente de piedra de varios arcos** sobre el río, con el camino negro dibujado sobre el puente. Registrado como `bridge-central-castle-east` en `docs/mapa-hitos-visibles-original.json`.
+- [x] Retirada del inventario una posible conexión del suroeste cerca de una cascada: no hay evidencia suficiente de un puente transitable allí. No se inventa ningún cruce.
+- [x] Reforzada `tests/p0-map-visible-landmarks.test.cjs`: el puente físico puede estar confirmado visualmente, pero **sus nodos de conexión siguen vacíos y la navegación continúa sin verificar**.
+- [ ] Precisar los dos extremos del puente en píxeles y conectar al grafo solo después de comprobar ambos tramos de camino negro; revisar de igual forma los demás ríos y pasos.
+- [!] No se ha activado el nuevo mapa, no se han modificado guardados y no se ha verificado aún un resultado verde de CI.
