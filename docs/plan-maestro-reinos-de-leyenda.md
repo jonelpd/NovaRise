@@ -1645,3 +1645,13 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [ ] Vincular el validador al pipeline cuando exista un mapa final propio, su huella digital y un inventario definitivo de accesos a castillos, minas y tesoros.
 - [ ] Verificar visualmente los caminos: la validación de grafo **no comprueba por sí sola** que un tramo coincida con senderos y puentes visibles.
 - [ ] Ejecutar y revisar los tests en CI; aún no se ha integrado el nuevo mapa ni se ha modificado el movimiento del juego publicado.
+
+
+### Integridad del mapa definitivo y sus puntos interactivos — 2026-11-15
+- [x] Creado `scripts/check-original-map-bundle.cjs`, un validador independiente para el futuro paquete de mapa propio. Recibe archivo de rutas, imagen definitiva y manifiesto JSON de accesos interactivos.
+- [x] Comprueba el SHA-256 real de la imagen frente al registrado en el grafo, su nombre y que el manifiesto tenga destinos únicos y de tipo conocido (castillo, mina, tesoro, puente, pueblo, ruina u otro).
+- [x] Comprueba que cada acceso declarado apunta a un nodo de la red aprobada y alcanzable, utilizando el validador de rutas existente.
+- [x] Añadida prueba `tests/p0-map-bundle-integrity.test.cjs` con imagen sintética, modificación de imagen, destino inexistente y manifiesto vacío.
+- [ ] Crear la imagen final propia y un inventario exhaustivo de lugares visibles; ejecutar el validador con **archivos reales**, no solo los datos sintéticos de prueba.
+- [ ] Trazar y verificar visualmente todos los senderos y puentes, integrar en jugador e IA y probar guardados y movimientos antes de activar el nuevo mapa.
+**Estado:** controles de integridad implementados; no se ha ejecutado CI en esta sesión y el mapa publicado sigue sin cambios.
