@@ -1,9 +1,9 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "status": "draft-unverified",
   "map_asset": "original-map-concept-2026-11-15.png",
   "coordinate_system": "normalized",
-  "note": "Waypoints are approximate visual tracing of the original concept image; not authorized for gameplay until reviewed against final map and obstacles.",
+  "note": "Preliminary approximate coordinates. Every segment is blocked for production until visually traced along the final artwork, including bends and bridge crossings.",
   "nodes": [
     {
       "id": "central-castle-gate",
@@ -79,49 +79,71 @@
     }
   ],
   "edges": [
-    [
-      "central-castle-gate",
-      "central-bridge"
-    ],
-    [
-      "central-bridge",
-      "east-forest-junction"
-    ],
-    [
-      "east-forest-junction",
-      "windmill-west"
-    ],
-    [
-      "windmill-west",
-      "windmill-gate"
-    ],
-    [
-      "central-castle-gate",
-      "north-crossroads"
-    ],
-    [
-      "north-crossroads",
-      "northwest-trail"
-    ],
-    [
-      "northwest-trail",
-      "western-falls"
-    ],
-    [
-      "western-falls",
-      "west-tower"
-    ],
-    [
-      "central-bridge",
-      "southern-forest"
-    ],
-    [
-      "southern-forest",
-      "marsh-approach"
-    ],
-    [
-      "windmill-gate",
-      "east-mine-approach"
-    ]
+    {
+      "from": "central-castle-gate",
+      "to": "central-bridge",
+      "verified": false,
+      "review": "needs tracing; may cross water, buildings or vegetation"
+    },
+    {
+      "from": "central-bridge",
+      "to": "east-forest-junction",
+      "verified": false,
+      "review": "needs tracing; may cross water, buildings or vegetation"
+    },
+    {
+      "from": "east-forest-junction",
+      "to": "windmill-west",
+      "verified": false,
+      "review": "needs tracing; may cross water, buildings or vegetation"
+    },
+    {
+      "from": "windmill-west",
+      "to": "windmill-gate",
+      "verified": false,
+      "review": "needs tracing; may cross water, buildings or vegetation"
+    },
+    {
+      "from": "central-castle-gate",
+      "to": "north-crossroads",
+      "verified": false,
+      "review": "needs tracing; may cross water, buildings or vegetation"
+    },
+    {
+      "from": "north-crossroads",
+      "to": "northwest-trail",
+      "verified": false,
+      "review": "needs tracing; may cross water, buildings or vegetation"
+    },
+    {
+      "from": "northwest-trail",
+      "to": "western-falls",
+      "verified": false,
+      "review": "needs tracing; may cross water, buildings or vegetation"
+    },
+    {
+      "from": "western-falls",
+      "to": "west-tower",
+      "verified": false,
+      "review": "needs tracing; may cross water, buildings or vegetation"
+    },
+    {
+      "from": "central-bridge",
+      "to": "southern-forest",
+      "verified": false,
+      "review": "needs tracing; may cross water, buildings or vegetation"
+    },
+    {
+      "from": "southern-forest",
+      "to": "marsh-approach",
+      "verified": false,
+      "review": "needs tracing; may cross water, buildings or vegetation"
+    },
+    {
+      "from": "windmill-gate",
+      "to": "east-mine-approach",
+      "verified": false,
+      "review": "needs tracing; may cross water, buildings or vegetation"
+    }
   ]
 }
