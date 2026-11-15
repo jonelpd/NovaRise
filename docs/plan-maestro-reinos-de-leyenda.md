@@ -2204,3 +2204,10 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Creado `.github/workflows/map-road-integration.yml` con pruebas de rutas, reconstrucción y comparación de grafo, diagnóstico de imagen y regresión general de jugabilidad.
 - [!] La consulta de estados combinados del último commit no devolvió estados; **no se ha verificado que GitHub Actions haya finalizado en verde**.
 - [ ] Confirmar ejecución de CI y corregir cualquier fallo; contrastar SHA-256 del PNG original subido; revisar y aprobar obstáculos y uniones; integrar el grafo aprobado en el movimiento y comprobar partidas guardadas en ambas ediciones.
+
+
+### Corrección de CI: prueba 22 de paridad de ediciones — 2026-11-15
+- [x] Identificado en el log aportado por el usuario el fallo de `tests/p0-map-editions-parity.test.cjs`: la prueba exigía que `current_state` empezara por `draft-unverified`, pese a que el estado informativo cambió al importar el grafo de 606 nodos.
+- [x] Corregida la prueba en commit `792af6d6b28ec5ed55169df6e00bd5b87e7e3371`: ahora comprueba **ambos grafos** como `draft-unverified`, `navigation_enabled:false`, aristas no verificadas, rechazo por `validateRoadRelease`, ausencia de despliegue y estado de importación no verificado.
+- [!] Se mantiene el bloqueo de navegación: no se ha aprobado ninguna unión ni modificado el motor del juego.
+- [ ] Confirmar el nuevo resultado de GitHub Actions y corregir cualquier fallo adicional detectado en los pasos posteriores.
