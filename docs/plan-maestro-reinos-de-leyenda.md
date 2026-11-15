@@ -2311,3 +2311,12 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [ ] Registrar todos los elementos reales marcados con identificador estable, categoría, posición exacta y entrada conectada al trazado negro.
 - [ ] Migrar `VERIFIED_MAP_SITES`, `HERO_LANDMARK_ANCHORS`, minas autoritativas del servidor, molinos, reclutamiento y recompensas a ese catálogo; conservar estados guardados y comprobar ambas ediciones.
 - [ ] Validar navegación real entre entradas, regresiones, y publicación antes de declarar la fase cerrada.
+
+
+### Catálogo de elementos marcados por el usuario — 2026-11-15
+- [x] Creado `docs/catalogo-elementos-mapa-nuevo.json` (commit `9f3ba7649277301e3e8064ff4029b1e0c3b97924`) con **44 centros visualmente estimados** sobre el mapa anotado de 1254×1254: 7 castillos rojos, 10 minas amarillas, 1 molino azul, 15 lugares verdes de recompensas y 11 edificios morados de reclutamiento.
+- [x] Cada entrada tiene ID, tipo, coordenadas en píxeles, porcentajes y estado `visually_identified_access_pending`.
+- [!] Recuento y coordenadas sujetos a validación visual fina: los círculos no son coordenadas de entrada; no se ha cambiado aún la lógica de juego, el catálogo autoritativo de minas NVRA ni el guardado.
+- [ ] Identificar punto de entrada de cada uno de los 44 lugares y conectarlo a los trazos negros; revisar los cruces y posibles conexiones falsas.
+- [ ] Migrar `VERIFIED_MAP_SITES`, acciones de captura, recompensas y reclutamiento usando el catálogo validado, preservando compatibilidad de partidas y ambas ediciones.
+- [ ] Validar con pruebas automáticas y recorrido real por el mapa.
