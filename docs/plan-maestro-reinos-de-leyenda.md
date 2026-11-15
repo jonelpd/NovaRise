@@ -1735,3 +1735,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Extendidas las pruebas estáticas en `tests/p0-map-road-editor-safety.test.cjs`.
 - [ ] Trazar exhaustivamente sobre la imagen marcada, exportar el JSON definitivo, verificar puentes y puertas y validar el conjunto antes de activar el movimiento en el juego.
 - [!] El editor permite digitalizar los senderos, pero no se ha creado todavía el grafo final ni modificado el motor de movimiento.
+
+
+### Vista previa de navegación sobre caminos trazados — 2026-11-15
+- [x] Incorporado en `tools/editor-caminos.html` un modo de inspección de rutas: elegir dos nodos muestra el recorrido geométrico más corto a través de las conexiones existentes, resaltado sobre el mapa.
+- [x] Añadido botón para borrar la vista previa. La inspección no cambia el estado `verified` ni integra el resultado en el juego.
+- [x] Extendidas pruebas estáticas en `tests/p0-map-road-editor-safety.test.cjs`.
+- [!] Esta vista previa puede recorrer tramos aún no verificados y **no equivale a una comprobación de colisiones**. Se usa exclusivamente para revisar la topología mientras se digitalizan los senderos negros.
+- [ ] Digitalizar y revisar el conjunto completo de caminos negros, ejecutar las pruebas en CI y probar movimiento de héroes/IA y partidas guardadas antes de activar navegación real.
