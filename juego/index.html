@@ -593,6 +593,80 @@ function blockForests(){
   }
  }
 }
+// Recorridos del mapa marcados por el usuario. Capa invisible: nunca se dibuja.
+let tracedRoadMask=null;
+let tracedRoadLoading=true;
+function decodeTracedPolyline(line){
+ let i=0,x=0,y=0,points=[];
+ function next(){let v=0,shift=0,b;do{if(i>=line.length)throw Error('Tramo incompleto');b=line.charCodeAt(i++)-63;if(b<0||b>63)throw Error('Tramo inválido');v|=(b&31)<<shift;shift+=5;if(shift>30)throw Error('Desbordamiento')}while(b>=32);return v&1?~(v>>1):v>>1}
+ while(i<line.length){x+=next();y+=next();if(x<0||y<0||x>1254||y>1254)throw Error('Coordenada fuera del mapa');points.push([x/1254*80,y/1254*80])}
+ return points;
+}
+function buildTracedRoadMask(source){
+ const mask=new Uint8Array(6400);
+ const fragments=source.split(/\r?\n/).filter(line=>line&&!line.startsWith('#'));
+ if(fragments.length!==111)throw Error('El archivo de caminos no contiene los 111 tramos');
+ let points=0;
+ for(const line of fragments){
+  const poly=decodeTracedPolyline(line);points+=poly.length;
+  for(let j=1;j<poly.length;j++){
+   const a=poly[j-1],b=poly[j],steps=Math.max(1,Math.ceil(Math.hypot(b[0]-a[0],b[1]-a[1])*4));
+   for(let k=0;k<=steps;k++){
+    const t=k/steps,cx=Math.floor(a[0]+(b[0]-a[0])*t),cy=Math.floor(a[1]+(b[1]-a[1])*t);
+    // La anchura permite salvar discontinuidades de extracción de pocos píxeles.
+    for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){
+     const x=cx+dx,y=cy+dy;if(x>0&&y>0&&x<79&&y<79)mask[y*80+x]=1;
+    }
+   }
+  }
+ }
+ if(points!==606)throw Error('El archivo de caminos no contiene los 606 puntos');
+ return mask;
+}
+fetch('../docs/mapa-caminos-actualizados.polyline',{cache:'no-store'})
+ .then(r=>{if(!r.ok)throw Error('No se pudo cargar el mapa de rutas');return r.text()})
+ .then(text=>{tracedRoadMask=buildTracedRoadMask(text);tracedRoadLoading=false;console.info('Rutas azules del mapa cargadas: 111 tramos, 606 puntos')})
+ .catch(e=>{tracedRoadLoading=false;console.error('Rutas azules no disponibles:',e)});
+function nearestTracedRoad(cell,maxRadius=9){
+ if(!tracedRoadMask||!cell)return null;
+ const [cx,cy]=cell;
+ for(let radius=0;radius<=maxRadius;radius++)for(let dy=-radius;dy<=radius;dy++)for(let dx=-radius;dx<=radius;dx++){
+  if(Math.max(Math.abs(dx),Math.abs(dy))!==radius)continue;
+  const x=cx+dx,y=cy+dy;
+  if(x>0&&y>0&&x<79&&y<79&&tracedRoadMask[y*80+x]&&navFree(x,y))return [x,y];
+ }
+ return null;
+}
+function tracedRoadRoute(a,b){
+ if(!tracedRoadMask||!navBlocked)return null;
+ const start=nearestNav(...a,2),goal=nearestNav(...b,2);
+ if(!start||!goal)return null;
+ const entry=nearestTracedRoad(start),exit=nearestTracedRoad(goal);
+ if(!entry||!exit)return null;
+ const src=entry[1]*80+entry[0],dst=exit[1]*80+exit[0];
+ const dist=new Float64Array(6400).fill(Infinity),prev=new Int32Array(6400).fill(-1),closed=new Uint8Array(6400),open=[src];
+ dist[src]=0;
+ while(open.length){
+  let best=0;
+  for(let i=1;i<open.length;i++)if(dist[open[i]]+Math.hypot(open[i]%80-exit[0],Math.floor(open[i]/80)-exit[1])<dist[open[best]]+Math.hypot(open[best]%80-exit[0],Math.floor(open[best]/80)-exit[1]))best=i;
+  const id=open.splice(best,1)[0];if(closed[id])continue;closed[id]=1;if(id===dst)break;
+  const x=id%80,y=Math.floor(id/80);
+  for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]]){
+   const nx=x+dx,ny=y+dy,ni=ny*80+nx;
+   if(!navFree(nx,ny)||!tracedRoadMask[ni]||dx&&dy&&(!navFree(x+dx,y)||!navFree(x,y+dy)||!tracedRoadMask[y*80+x+dx]||!tracedRoadMask[(y+dy)*80+x]))continue;
+   const nd=dist[id]+Math.hypot(dx,dy);
+   if(nd<dist[ni]){dist[ni]=nd;prev[ni]=id;open.push(ni)}
+  }
+ }
+ if(!Number.isFinite(dist[dst]))return null;
+ const road=[];for(let id=dst;id!==src;id=prev[id]){if(id<0)return null;road.push([((id%80)+.5)*1.25,(Math.floor(id/80)+.5)*1.25])}
+ road.reverse();
+ const entryPoint=[(entry[0]+.5)*1.25,(entry[1]+.5)*1.25],exitPoint=[(exit[0]+.5)*1.25,(exit[1]+.5)*1.25];
+ // Accesos locales desde castillos, héroes guardados y lugares interactivos.
+ const ingress=terrainFineRoute(a,entryPoint),egress=terrainFineRoute(exitPoint,b);
+ if(!ingress||!egress)return null;
+ return [...ingress,...road,...egress];
+}
 const NAV=80;
 function navCell(x,y){return y*NAV+x}
 function navFree(x,y){return x>=1&&y>=1&&x<NAV-1&&y<NAV-1&&navBlocked&&!navBlocked[navCell(x,y)]}
@@ -615,6 +689,10 @@ function navSegmentClear(a,b){
  return true
 }
 function fineRoute(a,b){
+ if(tracedRoadLoading||!tracedRoadMask)return null;
+ return tracedRoadRoute(a,b);
+}
+function terrainFineRoute(a,b){
  if(!navBlocked)return null;
  if(!a||!b)return null;
  const start=nearestNav(...a,2),goal=nearestNav(...b,2);if(!start||!goal)return null;
@@ -726,7 +804,8 @@ function walkTo(tx,ty){
  if(rivalBusy||walking||battle||s.done||!$('adventure-discovery').hidden||!$('castle-screen').hidden)return;
  if(tx===s.x&&ty===s.y)return visitKnownLocation(tx,ty);
  if(s.moves<=0)return message('No quedan movimientos. Termina el turno.');
- if(!navBlocked)return message('Preparando los caminos del mapa. Inténtalo en unos segundos.');
+ if(!navBlocked||tracedRoadLoading)return message('Preparando los caminos del mapa. Inténtalo en unos segundos.');
+ if(!tracedRoadMask)return message('No se han podido cargar las rutas del mapa. Recarga el juego.');
  const route=findRoute(tx,ty);if(!route)return message('No existe una ruta hasta ese lugar.');
  clearAdventureRoute();const epoch=++walkEpoch;
  walking=true;let index=0;
