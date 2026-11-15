@@ -1743,3 +1743,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Extendidas pruebas estáticas en `tests/p0-map-road-editor-safety.test.cjs`.
 - [!] Esta vista previa puede recorrer tramos aún no verificados y **no equivale a una comprobación de colisiones**. Se usa exclusivamente para revisar la topología mientras se digitalizan los senderos negros.
 - [ ] Digitalizar y revisar el conjunto completo de caminos negros, ejecutar las pruebas en CI y probar movimiento de héroes/IA y partidas guardadas antes de activar navegación real.
+
+
+### Motor independiente de movimiento por rutas aprobadas — 2026-11-15
+- [x] Creado `scripts/map-road-walker.cjs`: calcula desplazamiento progresivo por segmentos con velocidad normalizada y tiempo transcurrido, respetando los giros de los waypoints y deteniéndose al llegar al destino.
+- [x] Exige validación de mapa aprobado y grafo de conexiones verificadas; rechaza rutas desconectadas, velocidad inválida y tiempos inválidos.
+- [x] Añadidas pruebas `tests/p0-map-road-walker.test.cjs` para movimientos parciales, giros, finalización y bloqueo de caminos no aprobados.
+- [!] El módulo es **independiente** y todavía no está conectado al movimiento del jugador o de la IA en `juego/index.html`; los caminos negros del usuario aún requieren digitalización y revisión completas.
+- [ ] Ejecutar pruebas en CI, convertir rutas negras en waypoints aprobados, conectar motor de movimiento con las coordenadas reales del mapa y validar guardados y navegación enemiga.
