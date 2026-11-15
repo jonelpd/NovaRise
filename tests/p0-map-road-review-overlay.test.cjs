@@ -13,3 +13,12 @@ test('review page never approves routes or changes gameplay',()=>{
  assert.doesNotMatch(html,/localStorage\.setItem/);
  assert.doesNotMatch(html,/verified\s*=\s*true/);
 });
+
+test('review overlay flags both unapproved forks and provides a focused inspection view',()=>{
+ assert.match(html,/auditoria-bifurcaciones-torre-central\.json/);
+ assert.match(html,/id="hazards"/);
+ assert.match(html,/id="focusTower"/);
+ assert.match(html,/SIN PASO CONFIRMADO/);
+ assert.match(html,/audit\.junction_specs/);
+ assert.doesNotMatch(html,/fetch\([^)]*,\s*\{\s*method:\s*['"]POST/);
+});
