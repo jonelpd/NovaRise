@@ -4,6 +4,7 @@ on:
     paths:
       - 'scripts/map-road-*.cjs'
       - 'scripts/inspect-marked-road-geometry.cjs'
+      - 'scripts/inspect-marked-road-junctions.cjs'
       - 'scripts/check-map-save-transition.cjs'
       - 'scripts/audit-map-site-migration.cjs'
       - 'scripts/validate-map-road-release.cjs'
@@ -28,6 +29,7 @@ on:
     paths:
       - 'scripts/map-road-*.cjs'
       - 'scripts/inspect-marked-road-geometry.cjs'
+      - 'scripts/inspect-marked-road-junctions.cjs'
       - 'scripts/check-map-save-transition.cjs'
       - 'scripts/audit-map-site-migration.cjs'
       - 'scripts/validate-map-road-release.cjs'
