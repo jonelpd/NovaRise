@@ -2039,3 +2039,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] La herramienta `tools/revisar-rutas-marcadas.html` permite superponer ambas muestras con colores distintos sobre el mapa y compararlas con el trazado provisional del grafo; ambas están rotuladas «aproximado» y no alteran nodos ni aristas.
 - [x] Añadida prueba automática de la visualización comparativa.
 - [ ] Ajustar sobre la imagen original el punto exacto de separación, las curvas y el despeje de la torre; después decidir cambios concretos en el grafo. **No hay nuevas rutas verificadas.**
+
+
+### Corrección crítica del bloqueo de cruces — 2026-11-15
+- [x] Revisada la condición de `scripts/validate-map-road-release.cjs`: anteriormente la comprobación de obstáculos de las bifurcaciones dependía de que `map_asset` fuese exactamente `mapa-rutas-marcadas.png`, lo que permitía omitirla cambiando la ruta del archivo.
+- [x] Eliminada esa excepción: **todos los grafos** con bifurcaciones de grado tres o superior exigen despeje, aprobación visual y evidencia antes de poder publicarse, independientemente del nombre del mapa.
+- [x] Añadida regresión para `mapa-rutas-marcadas.png`, `juego/mapa-rutas-marcadas.png`, `./juego/mapa-rutas-marcadas.png` y `other-map.png`.
+- [ ] Confirmar el resultado del workflow para la regresión añadida. La revisión visual de la torre y los dos ramales orientales sigue pendiente.
+- [!] No se ha cambiado ningún tramo ni aprobado ningún paso; el juego activo y las partidas guardadas no se han modificado.
