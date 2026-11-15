@@ -1983,3 +1983,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Añadida prueba en `tests/p0-map-watchtower-junction-audit.test.cjs` que exige `clearance_confirmed:false` y `route_approval:false` para la torre, y mantiene sin aprobar los otros ramales.
 - [ ] Revisar con precisión el contorno de la torre y definir un paso real transitable; si el dibujo no demuestra paso libre, dejar la bifurcación bloqueada en vez de inventar desvíos.
 - [!] No se han modificado aristas ni movimiento del juego. No se pudo ejecutar la suite Node desde un checkout local porque la conexión de la máquina de trabajo a GitHub falla por DNS; estado de CI sin confirmar.
+
+
+### Bloqueo preventivo de cruces sin despeje visual — 2026-11-15
+- [x] Endurecido `scripts/validate-map-road-release.cjs`: cuando se apruebe el mapa marcado original `mapa-rutas-marcadas.png`, **cada nodo con tres o más conexiones** requerirá `junction_clearances[id]` con `clearance_confirmed:true`, `visual_approved:true`, lista exacta de vecinos y una referencia textual de evidencia no vacía.
+- [x] El control no permite aprobar el cruce de la torre solo por cambiar `verified:false` a `true`. También protege otras bifurcaciones, incluida la de las ruinas.
+- [x] Ampliadas las pruebas `tests/p0-map-watchtower-junction-audit.test.cjs`: simulación de mapa indebidamente aprobado, aprobación incompleta, vecinos incorrectos y caso sintético aprobado con evidencia.
+- [!] Las pruebas están escritas y subidas a GitHub, pero **no se ha confirmado aún una ejecución verde de GitHub Actions**. La validación visual de la torre sigue bloqueada y no se han creado desvíos imaginarios.
+- [ ] Confirmar CI; resolver el trazado transitable con evidencia real y añadir autorizaciones solo cuando se haya comprobado cada bifurcación.
