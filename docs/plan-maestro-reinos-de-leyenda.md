@@ -1784,3 +1784,12 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Ampliada la prueba del tramo para comprobar que la rama comparte un cruce real con el camino del molino y que existe un recorrido conectado.
 - [!] Las coordenadas siguen siendo aproximaciones visuales; ningún tramo se ha aprobado ni activado en el juego. Los accesos exactos y los cruces con obstáculos requieren verificación fina.
 - [ ] Completar red global, revisar todos los tramos sobre el PNG y validar ejecución de pruebas en CI antes de cambiar la navegación del juego.
+
+
+### Corrección de bifurcación y tercer ramal — 2026-11-15
+- [x] Reabierta y examinada la imagen original marcada de 1254×1254. Corregidos los puntos del acceso hacia las ruinas del sur: el ramal sale del corredor oriental antes del cruce principal, en `central-mill-08`, no desde `central-mill-09`.
+- [x] Añadido un ramal independiente desde `central-mill-09` hacia el cruce al sureste próximo a la región volcánica, con siete puntos adicionales.
+- [x] El archivo `docs/mapa-rutas-marcadas-tramo-central.json` contiene ahora **26 nodos y 25 conexiones provisionales**, todos `verified:false`.
+- [x] Extendidas pruebas de conectividad de tres ramales y consistencia entre coordenadas de píxel y normalizadas; comprobación de longitud máxima de cada segmento.
+- [!] El trazado sigue siendo aproximado, sin aprobación visual píxel a píxel, y no representa todavía el mapa completo. El motor de juego no se ha modificado.
+- [ ] Continuar los corredores occidental, septentrional y meridional; verificar puentes, obstáculos, destinos y ejecución de CI antes de habilitar el movimiento real.
