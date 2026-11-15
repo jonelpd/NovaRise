@@ -1,0 +1,49 @@
+{
+  "week": "2026-11-16/2026-11-22",
+  "status": "DRAFT_NOT_SCHEDULED",
+  "notes": "Requires seven new, distinct, verified publicly reachable images. Do not merge into posts.json until each image is checked.",
+  "posts": [
+    {
+      "date": "2026-11-16",
+      "text": "🔎 NovaRise Analítica continúa desarrollando herramientas digitales y su ecosistema de proyectos. Consulta los avances públicos y las funciones disponibles en nuestra web.\n\n🇬🇧 NovaRise Analytics continues developing digital tools and its project ecosystem. Explore public updates and available features on our website.\n\n🌐 https://jonelpd.github.io/NovaRise/\n#NovaRise #Web3",
+      "image": null,
+      "status": "pending_unique_verified_image"
+    },
+    {
+      "date": "2026-11-17",
+      "text": "🏰 En Reinos de Leyenda, explorar el mapa y planificar los movimientos de los héroes forman parte de la estrategia. Seguimos perfeccionando la experiencia del juego.\n\n🇬🇧 In Reinos de Leyenda, map exploration and planning hero movements are part of the strategy. We continue refining the game experience.\n\n🎮 https://jonelpd.github.io/NovaRise/juego/\n#ReinosDeLeyenda #NovaRise",
+      "image": null,
+      "status": "pending_unique_verified_image"
+    },
+    {
+      "date": "2026-11-18",
+      "text": "🔗 NVRA sigue siendo un proyecto de token futuro para el ecosistema NovaRise. La red prevista es Base y el suministro planificado es de 1.000.000 de unidades. No anunciamos un lanzamiento.\n\n🇬🇧 NVRA remains a planned future token for the NovaRise ecosystem. Base is the intended network, with a proposed supply of 1,000,000 tokens. No launch is being announced.\n\n🌐 https://jonelpd.github.io/NovaRise/\n#NVRA #Base",
+      "image": null,
+      "status": "pending_unique_verified_image"
+    },
+    {
+      "date": "2026-11-19",
+      "text": "⚔️ Reinos de Leyenda se inspira en la estrategia clásica por turnos: exploración, ejércitos y decisiones tácticas. Es un proyecto independiente, no oficial ni afiliado a Heroes of Might and Magic III.\n\n🇬🇧 Reinos de Leyenda draws on classic turn-based strategy: exploration, armies and tactical choices. It is independent and not officially affiliated with Heroes of Might and Magic III.\n\n🎮 https://jonelpd.github.io/NovaRise/juego/\n#StrategyGame #NovaRise",
+      "image": null,
+      "status": "pending_unique_verified_image"
+    },
+    {
+      "date": "2026-11-20",
+      "text": "⛏️ Estudiamos cómo podrían integrarse en el futuro recompensas y mecánicas relacionadas con NVRA en Reinos de Leyenda. Son ideas en desarrollo, no minería activa ni recompensas disponibles.\n\n🇬🇧 We are exploring possible future NVRA-linked rewards and mechanics in Reinos de Leyenda. These are development plans, not active mining or available rewards.\n\n🌐 https://jonelpd.github.io/NovaRise/\n#NVRA #ReinosDeLeyenda",
+      "image": null,
+      "status": "pending_unique_verified_image"
+    },
+    {
+      "date": "2026-11-21",
+      "text": "💬 Comunidad NovaRise: ¿qué valoras más en un juego de estrategia por turnos: explorar el mapa, reclutar criaturas o planificar combates? Queremos conocer tu opinión.\n\n🇬🇧 NovaRise community: what matters most to you in a turn-based strategy game—map exploration, recruiting creatures or planning battles? Share your thoughts.\n\n🎮 https://jonelpd.github.io/NovaRise/juego/\n#NovaRise #Gaming",
+      "image": null,
+      "status": "pending_unique_verified_image"
+    },
+    {
+      "date": "2026-11-22",
+      "text": "📜 NovaRise reúne desarrollo de videojuegos, análisis digital y planificación de futuras utilidades blockchain. Seguiremos comunicando avances comprobados y diferenciando las ideas de las funciones disponibles.\n\n🇬🇧 NovaRise brings together game development, digital analytics and plans for future blockchain utilities. We'll keep sharing verified progress and distinguishing plans from available features.\n\n🌐 https://jonelpd.github.io/NovaRise/\n#NovaRise #NVRA",
+      "image": null,
+      "status": "pending_unique_verified_image"
+    }
+  ]
+}
