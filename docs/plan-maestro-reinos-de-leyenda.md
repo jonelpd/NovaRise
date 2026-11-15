@@ -1616,3 +1616,12 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [ ] Obtener e integrar el mapa final original en el repositorio y trazar las curvas y puentes con puntos de control; verificar visualmente cada segmento antes de cambiarlo a `verified:true`.
 - [ ] Conectar navegación segura con los héroes y las ubicaciones de interacción solo después de aprobar rutas y validar el nuevo mapa.
 **Estado:** guardas técnicas añadidas; no se ha integrado ni probado en ejecución el nuevo mapa ni se ha modificado la edición publicada.
+
+
+### Editor visual de trazado de caminos — 2026-11-15
+- [x] Creado `tools/editor-caminos.html`, herramienta HTML local independiente que permite cargar el mapa original definitivo, dibujar nodos, conectar senderos, inspeccionar y exportar rutas en JSON normalizado.
+- [x] Añadida visualización diferenciada de aristas pendientes (ámbar) y revisadas (verde), importación de borrador, deshacer y validación básica de formato.
+- [ ] Abrir el editor con la imagen final del mapa y trazar todos los caminos con puntos intermedios suficientes para reproducir sus curvas; no marcar un segmento como verificado si cruza un obstáculo.
+- [ ] Revisar cada conexión visualmente y en el juego, incluidas las rutas de héroes rivales; la casilla de verificación del editor es una declaración manual, **no una comprobación automática de obstáculos**.
+- [ ] Integrar los datos aprobados en el motor del juego tras validar escala, accesos y migración de guardados.
+**Estado:** herramienta de edición creada en GitHub, aún no se ha realizado el trazado exhaustivo ni se ha alterado la versión jugable.
