@@ -29,8 +29,8 @@ test('guest edition build excludes remote auth without changing NovaRise source'
    assert.equal(hash(source),hash(path.join(tmp,target)));
    assert.equal(shared.active_files[source],hash(source));
   }
-  assert.match(built,/function turquoiseRoadRoute\\(a,b\\)/);
-  assert.match(built,/const VERIFIED_MAP_SITES=\\[/);
+  assert.match(built,/function turquoiseRoadRoute\(a,b\)/);
+  assert.match(built,/const VERIFIED_MAP_SITES=\[/);
   const {verify}=require('../scripts/verify-shared-map-editions.cjs');
   assert.equal(verify('.',tmp).ok,true,'both editions must share live map and roads');
 
