@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "status": "review-only",
+  "source_graph": "docs/mapa-caminos-actualizados-grafo.json",
+  "threshold_px": 4,
+  "source": "scripts/audit-bulk-road-endpoint-segments.cjs",
+  "candidate_count": 2,
+  "approved_count": 0,
+  "navigation_enabled": false,
+  "candidates": [
+    {
+      "endpoint": "ink-0108-p0002",
+      "fragment_a": "ink-0108",
+      "edge_index": 488,
+      "fragment_b": "ink-0109",
+      "distance_px": 0.989,
+      "projection": 0.990005,
+      "status": "needs-visual-review",
+      "approved": false
+    },
+    {
+      "endpoint": "ink-0033-p0005",
+      "fragment_a": "ink-0033",
+      "edge_index": 145,
+      "fragment_b": "ink-0035",
+      "distance_px": 0.996,
+      "projection": 0.993112,
+      "status": "needs-visual-review",
+      "approved": false
+    }
+  ]
+}
