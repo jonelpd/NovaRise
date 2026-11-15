@@ -90,3 +90,40 @@ test('inaccessible landmark never grants rewards or teleports the hero',()=>{
  assert.equal(s.landmarkRewards[site.id],undefined);
  assert.equal(ctx.pendingSiteInteraction,undefined);
 });
+
+test('all eleven recruitment sites grant once per week and persist after reload',()=>{
+ const towers=catalog.filter(site=>site.kind==='recruit');
+ assert.equal(towers.length,11);
+ for(const site of towers){
+  const {ctx,s,notice}=setup();
+  ctx.heroVisualPosition=()=>[site.x,site.y];
+  ctx.interactVerifiedSite(site);
+  assert.equal(s.soldiers,6,site.id+' first recruitment');
+  assert.equal(s.recruitmentVisits[site.id],0,site.id+' visit recorded');
+  ctx.interactVerifiedSite(site);
+  assert.equal(s.soldiers,6,site.id+' same-week duplicate');
+  assert.match(notice(),/esta semana/);
+  const saved=JSON.parse(JSON.stringify(s));
+  const restored=setup();
+  Object.assign(restored.s,saved);
+  restored.ctx.heroVisualPosition=()=>[site.x,site.y];
+  restored.ctx.interactVerifiedSite(site);
+  assert.equal(restored.s.soldiers,6,site.id+' duplicate after reload');
+  restored.s.turn=8;
+  restored.ctx.interactVerifiedSite(site);
+  assert.equal(restored.s.soldiers,8,site.id+' next-week recruitment');
+  assert.equal(restored.s.recruitmentVisits[site.id],1);
+ }
+});
+test('reward claims survive serialization and cannot be collected again',()=>{
+ const relic=catalog.find(site=>site.kind==='relic'&&site.reward==='gold');
+ assert.ok(relic);
+ const first=setup();first.ctx.heroVisualPosition=()=>[relic.x,relic.y];
+ first.ctx.interactVerifiedSite(relic);
+ const snapshot=JSON.parse(JSON.stringify(first.s));
+ const restored=setup();Object.assign(restored.s,snapshot);
+ restored.ctx.heroVisualPosition=()=>[relic.x,relic.y];
+ restored.ctx.interactVerifiedSite(relic);
+ assert.equal(restored.s.gold,snapshot.gold);
+ assert.match(restored.notice(),/Ya has explorado/);
+});
