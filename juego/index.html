@@ -739,14 +739,22 @@ function nearestNav(px,py,maxRadius=2){
  return null
 }
 function navSegmentClear(a,b){
- const ax=Math.floor(a[0]*.8),ay=Math.floor(a[1]*.8),bx=Math.floor(b[0]*.8),by=Math.floor(b[1]*.8);
- const steps=Math.max(Math.abs(bx-ax),Math.abs(by-ay))*3;
- for(let i=0;i<=steps;i++){
-  const t=steps?i/steps:0,x=Math.floor(ax+(bx-ax)*t),y=Math.floor(ay+(by-ay)*t);
-  if(!navFree(x,y)){
-   const point=[(ax+(bx-ax)*t)*1.25,(ay+(by-ay)*t)*1.25];
-   if(!turquoisePoint(point))return false;
+ // Las rutas turquesa son la referencia nueva: no bloquearlas por el
+ // antiguo mapa de obstáculos, que corresponde a otra ilustración.
+ if(turquoiseRoadMask&&turquoisePoint(a)&&turquoisePoint(b)){
+  const steps=Math.max(1,Math.ceil(Math.hypot(b[0]-a[0],b[1]-a[1])*4));
+  let onMarkedRoad=true;
+  for(let i=0;i<=steps;i++){
+   const t=i/steps;
+   if(!turquoisePoint([a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t])){onMarkedRoad=false;break}
   }
+  if(onMarkedRoad)return true;
+ }
+ const ax=Math.floor(a[0]*.8),ay=Math.floor(a[1]*.8),bx=Math.floor(b[0]*.8),by=Math.floor(b[1]*.8);
+ const steps=Math.max(1,Math.max(Math.abs(bx-ax),Math.abs(by-ay))*3);
+ for(let i=0;i<=steps;i++){
+  const t=i/steps,x=Math.floor(ax+(bx-ax)*t),y=Math.floor(ay+(by-ay)*t);
+  if(!navFree(x,y))return false;
  }
  return true
 }
