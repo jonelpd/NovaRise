@@ -1801,3 +1801,12 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Actualizada `tests/p0-map-road-marked-corridor.test.cjs` para verificar la continuidad del corredor occidental y evitar conexiones inventadas con la red central.
 - [!] Los puntos occidentales son una digitalización manual aproximada, todos `verified:false`. No están autorizados para movimiento real, y las pruebas aún requieren ejecución confirmada.
 - [ ] Revisar visualmente con zoom cada segmento y completar cruces, minas y castillos restantes antes de activar el sistema de rutas.
+
+
+### Ruta septentrional a la cueva de montaña — 2026-11-15
+- [x] Reinspeccionada visualmente la imagen del usuario con los trazos negros. Registrado corredor provisional por la torre de vigilancia septentrional hasta la cueva de la montaña: 14 nodos, 13 conexiones.
+- [x] El borrador `docs/mapa-rutas-marcadas-tramo-central.json` alcanza **57 nodos y 54 aristas**, en **3 componentes separados** (central-oriental, occidental y septentrional); no se han inventado enlaces entre ellos.
+- [x] Ampliada `tests/p0-map-road-marked-corridor.test.cjs` para cubrir continuidad de la ruta septentrional y separación de las otras dos redes.
+- [!] El trazado es aproximado, no validado píxel a píxel. Todos los segmentos siguen sin verificar; no se ha modificado la jugabilidad ni los guardados.
+- [!] No se ha podido ejecutar localmente la suite desde GitHub porque el entorno de ejecución no resuelve `raw.githubusercontent.com`. Comprobar GitHub Actions antes de declarar las pruebas satisfactorias.
+- [ ] Revisar con superposición visual los nodos, validar puentes y accesos reales, completar ramales del sur y enlazar únicamente intersecciones comprobadas.
