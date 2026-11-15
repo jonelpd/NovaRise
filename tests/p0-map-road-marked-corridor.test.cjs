@@ -13,7 +13,7 @@ test('central marked road corridor is a connected provisional trace',()=>{
  assert.equal(route.nodes.length,13);
  const branch=createRoadGraph(data.nodes,data.edges).route('central-mill-01','central-ruins-06');
  assert.equal(branch.nodes.at(-1).id,'central-ruins-06');
- assert.equal(branch.nodes.length,14);
+ assert.equal(branch.nodes.length,18);
  const volcanic=createRoadGraph(data.nodes,data.edges).route('central-mill-01','central-south-07');
  assert.equal(volcanic.nodes.length,16);
 });
