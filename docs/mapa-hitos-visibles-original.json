@@ -143,8 +143,56 @@
       "description": "Puente de piedra de varios arcos, inequívocamente visible en la salida oriental del castillo central, sobre el río; el camino negro pasa por el puente",
       "verified": false,
       "connectedRoadNodes": [],
-      "note": "La existencia física del puente está confirmada visualmente en ampliación; sus conexiones con nodos del grafo aún no están verificadas",
-      "structureVisuallyConfirmed": true
+      "note": "Bridge structure and black line visually evident. Approximate entrances and trace are review candidates, not validated road edges. Existing central-mill nodes near bridge are not consistently aligned with black road; re-trace before verifying.",
+      "structureVisuallyConfirmed": true,
+      "entrances": {
+        "castleSideApproxPixel": [
+          690,
+          380
+        ],
+        "farBankApproxPixel": [
+          742,
+          425
+        ]
+      },
+      "blackRoadTraceApproxPixel": [
+        [
+          680,
+          373
+        ],
+        [
+          691,
+          380
+        ],
+        [
+          704,
+          390
+        ],
+        [
+          716,
+          401
+        ],
+        [
+          728,
+          413
+        ],
+        [
+          739,
+          425
+        ],
+        [
+          748,
+          438
+        ]
+      ],
+      "geometryStatus": "manual-pixel-review-needed",
+      "existingDraftNodeWarning": [
+        "central-mill-01",
+        "central-mill-02",
+        "central-mill-03",
+        "central-mill-04",
+        "central-mill-05"
+      ]
     }
   ],
   "crossing_policy": "A river crossing must be visually confirmed as a bridge with road continuity on both banks; no graph edge is created by this inventory."
