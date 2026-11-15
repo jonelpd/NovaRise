@@ -3,7 +3,7 @@ const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const path=require('node:path');
 const {MINES,captureMine}=require('../server/nvra-authoritative-mines.cjs');
-const state={status:'active',revision:3,hero_x:18.5,hero_y:46.5,moves:4,owned_mines:[]};
+const state={status:'active',revision:3,hero_x:10.5,hero_y:37.2,moves:4,owned_mines:[]};
 test('server transition captures known mine and never awards points or tokens',()=>{
  const r=captureMine(state,{type:'capture_mine',site_id:'mine-west'});
  assert.equal(r.ok,true);assert.equal(r.next.revision,4);assert.equal(r.next.moves,3);
