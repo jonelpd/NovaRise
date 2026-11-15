@@ -1845,3 +1845,12 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [!] La máquina local no puede resolver `raw.githubusercontent.com`; no se han ejecutado las pruebas de integración ni confirmado resultado de Actions. No declarar paquete validado ni reemplazar el ZIP del borrador de itch.io.
 - [ ] Ejecutar manualmente el workflow itch.io, verificar que el ZIP incluye `mapa-rutas-marcadas.png`, `mapa-rutas-marcadas-tramo-central.json` y `shared-map-hashes.json` con hashes coincidentes; revisar resultado de Actions.
 - [ ] Completar revisión visual de las 54 conexiones sobre el negro, después aprobar solo las que correspondan a senderos reales; sincronizar activación del mapa en NovaRise e itch.io con migración de partidas.
+
+
+### Bloqueo de empaquetado si NovaRise e itch.io difieren — 2026-11-15
+- [x] Comprobada la existencia en GitHub de `juego/mapa-rutas-marcadas.png` y revisado el empaquetador real de itch.io.
+- [x] Creado `scripts/verify-shared-map-editions.cjs`: compara SHA-256 de imagen marcada y borrador de rutas entre fuentes NovaRise y paquete itch.io, además de cotejar `shared-map-hashes.json` y su estado `draft-not-active`.
+- [x] Integrado el verificador en `.github/workflows/itchio-candidate.yml` **después de generar la edición invitado y antes de crear el ZIP**: cualquier diferencia o archivo ausente detiene la construcción.
+- [x] Creado `tests/p0-shared-map-build-parity.test.cjs` con casos de copia idéntica, modificación y archivo faltante; el workflow manual ejecuta el patrón `tests/p0-*.test.cjs`.
+- [!] Aún no se ha ejecutado ni confirmado el workflow actualizado; los archivos son preparatorios y no activan el mapa negro en ninguna edición.
+- [ ] Confirmar CI y ZIP real; corregir segmentos visualmente, aprobar rutas y preparar migración de partidas antes de activar mapa original en NovaRise e itch.io.
