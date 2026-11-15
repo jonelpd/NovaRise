@@ -44,16 +44,16 @@ test('captured visible mines and mills have capped turn bonuses',()=>{
  const sites=vm.runInContext('VERIFIED_MAP_SITES',c);
  const mines=sites.filter(v=>v.kind==='mine');
  const mills=sites.filter(v=>v.kind==='mill');
- assert.equal(mines.length,3);assert.equal(mills.length,5);
+ assert.equal(mines.length,10);assert.equal(mills.length,1);
  for(const v of [...mines,...mills])c.owners[v.id]='player';
  c.applyVerifiedSiteTurn();
- assert.equal(c.s.crystals,30,'three captured visible mines: 10 crystals each');
- assert.equal(c.s.moves,6,'mill movement bonus capped at two');
- assert.equal(c.s.mapFood,3,'unused mill provisions stored');
+ assert.equal(c.s.crystals,100,'ten captured marked mines: 10 crystals each');
+ assert.equal(c.s.moves,5,'one marked mill grants one movement point');
+ assert.equal(c.s.mapFood,0,'single mill provision consumed for movement');
  c.applyVerifiedSiteTurn();
- assert.equal(c.s.crystals,60);
- assert.equal(c.s.moves,7,'movement never exceeds seven');
- assert.equal(c.s.mapFood,6,'food reserve increases when mills exceed consumption');
+ assert.equal(c.s.crystals,200);
+ assert.equal(c.s.moves,6,'movement increases by one per turn');
+ assert.equal(c.s.mapFood,0,'food reserve does not accumulate with one mill');
 });
 test('unclaimed locations provide no passive economy',()=>{
  const c=model();
