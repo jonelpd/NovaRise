@@ -2093,3 +2093,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [ ] Verificar equivalencia de píxeles del fondo con `juego/mapa-grande.png` antes de sustituir el recurso existente; no sobrescribir el mapa del repositorio sin comprobarlo.
 - [ ] Convertir la diferencia de imágenes en rutas navegables, revisar uniones, despejes y accesos, probar ambas ediciones y compatibilidad de guardados.
 - [!] Esta actualización documenta la decisión y recepción; **no activa aún la navegación ni publica rutas sin verificar**.
+
+
+### Extracción automatizada de la imagen azul aportada — 2026-11-15
+- [x] Procesadas en entorno de trabajo las dos imágenes adjuntas de 1254×1254: mapa limpio y mapa con rutas azules.
+- [x] Generados archivos locales `mapa-caminos-extraidos.json` y `mapa-caminos-extraidos.svg` mediante máscara cromática diferencial, esqueletización y simplificación de polilíneas.
+- [x] Resultado de esta **nueva** extracción: **94 fragmentos, 523 puntos vectoriales simplificados**, sin ninguna ruta aprobada. No confundir con los 115 fragmentos reportados en un procesamiento anterior de parámetros diferentes.
+- [!] Los archivos resultantes están disponibles como descargas de la conversación; **no se han subido al repositorio** ni se han activado rutas en el juego. El mapa original y los guardados permanecen intactos.
+- [ ] Comparar la cobertura con todos los trazos visibles, resolver discontinuidades, cruces y colisiones con obstáculos, verificar identidad del mapa original en GitHub, importar el grafo definitivo y ejecutar pruebas en ambas ediciones.
