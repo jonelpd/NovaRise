@@ -1,0 +1,28 @@
+name: Audit turquoise map
+on:
+  push:
+    paths:
+      - 'scripts/audit-turquoise-map.cjs'
+      - 'juego/rutas-turquesa-160.json'
+      - 'docs/catalogo-elementos-mapa-nuevo.json'
+      - '.github/workflows/audit-turquoise-map.yml'
+  workflow_dispatch:
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Audit topology and 44 access candidates
+        run: |
+          node scripts/audit-turquoise-map.cjs --json > turquoise-audit-report.json
+          node -e "const r=require('./turquoise-audit-report.json'); if(r.sites.length!==44 || r.actual_components!==r.declared_components) process.exit(1); console.log('Road cells:',r.road_cells,'Components:',r.actual_components,'Sites:',r.sites.length); console.table(r.components); console.table(r.gaps.map(g=>({pair:g.components.join('-'),gap:g.minimum_gap_cells.toFixed(2)})))"
+      - name: Upload diagnostic report
+        uses: actions/upload-artifact@v4
+        with:
+          name: turquoise-map-audit
+          path: turquoise-audit-report.json
