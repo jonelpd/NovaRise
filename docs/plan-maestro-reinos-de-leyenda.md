@@ -1879,3 +1879,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Comprobación geométrica sobre los datos actualizados: **0 cruces estrictos entre aristas sin nodo común**, frente a 1 anterior; longitud máxima de arista ~45,18 px, dentro del umbral de 55 px. Actualizados tests de recorrido y regresión geométrica e informe `docs/informe-cruces-mapa-marcado.json`.
 - [!] Es una corrección visual y geométrica **provisional**, no una aprobación píxel a píxel del camino ni una ejecución confirmada de GitHub Actions. La navegación activa y los guardados de NovaRise e itch.io siguen sin modificaciones.
 - [ ] Ejecutar pruebas automatizadas y revisar visualmente con la superposición todo el nuevo ramal, puentes y corredores restantes; después preparar activación compartida y migración segura de partidas.
+
+
+### Corrección de cobertura real en GitHub Actions — 2026-11-15
+- [x] Auditoría del YAML actual `.github/workflows/road-navigation-tests.yml`: se detectó que la prueba `tests/p0-map-road-geometry-inspection.test.cjs` **no figuraba en el comando `node --test`** y que un filtro `push.paths` contenía dos nombres de prueba concatenados en una sola cadena.
+- [x] Corregidos ambos problemas y añadido el archivo de prueba a los disparadores `push` y `pull_request`. También se incluye el inspector geométrico en los filtros de ambos eventos.
+- [x] Reforzado el test para impedir la reaparición del atajo erróneo `central-mill-08 → central-ruins-01` y exigir el ramal provisional corregido `central-south-03 → central-ruins-01`, además de cero cruces estrictos sin nodo compartido.
+- [!] Cambios confirmados en GitHub; **sin verificación de ejecución verde** del workflow actualizado. El nuevo mapa no está activo en ninguna edición.
+- [ ] Revisar GitHub Actions, ejecutar generación manual itch.io y confirmar integridad del ZIP; continuar validación visual del mapa antes de autorizar movimiento de héroes sobre rutas nuevas.
