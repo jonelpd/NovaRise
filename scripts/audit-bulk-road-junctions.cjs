@@ -15,7 +15,7 @@ function auditJunctionCandidates(data,{thresholdPx=4,mapSize=1254}={}){
    const d=Math.hypot(a.x-b.x,a.y-b.y)*mapSize;
    if(best===null||d<best.distance_px)best={a:a.id,b:b.id,distance_px:d};
   }
-  if(best.distance_px<=thresholdPx+1e-8)candidates.push({fragment_a:ends[i].fragment,fragment_b:ends[j].fragment,node_a:best.a,node_b:best.b,distance_px:+best.distance_px.toFixed(3),status:'needs-visual-review',approved:false});
+  if(best.distance_px<=thresholdPx+0.002)candidates.push({fragment_a:ends[i].fragment,fragment_b:ends[j].fragment,node_a:best.a,node_b:best.b,distance_px:+best.distance_px.toFixed(3),status:'needs-visual-review',approved:false});
  }
  candidates.sort((a,b)=>a.distance_px-b.distance_px||a.fragment_a.localeCompare(b.fragment_a)||a.fragment_b.localeCompare(b.fragment_b));
  return {schema_version:1,status:'review-only',threshold_px:thresholdPx,candidate_count:candidates.length,approved_count:0,candidates};
