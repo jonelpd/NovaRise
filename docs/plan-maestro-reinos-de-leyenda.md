@@ -2266,3 +2266,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Commit `6e65091c0b33820143b3e72c3014021e72610e7e`: el fallback llama a `terrainFineRoute(a,b,true)` y penaliza x12 los pasos fuera de `tracedRoadMask`; los accesos locales de `tracedRoadRoute` conservan coste original.
 - [!] Esto **prioriza** los trazados, pero todavía no los impone estrictamente: siguen faltando conexiones reales y la malla de 80×80 reduce precisión. No afirmar que la navegación es exclusiva ni que la ruta se ajusta exactamente al trazo.
 - [ ] Validar desplazamientos visuales, resolver conexiones de fragmentos y sustituir por trazado de mayor resolución para seguir curvas sin salir del camino.
+
+
+### Navegación más precisa y previsualización fiel — 2026-11-15
+- [x] Commit `0c19b3e171d40d08712f4f44ffed2d3fae42fff2`: la vista previa dibuja la ruta fina calculada, no una línea recta ficticia entre casillas estratégicas.
+- [x] Commit `db5092ff411b04e6483b0b0aebbc08e95320c257`: rasterización y búsqueda sobre rutas marcadas ampliadas de **80×80 a 160×160** (paso de 1,25% a 0,625% de mapa); se conserva la máscara de obstáculos 80×80 para verificar cada celda.
+- [x] Adaptada la penalización del fallback para consultar la máscara 160×160.
+- [!] La navegación alternativa todavía permite salir de rutas dibujadas cuando los fragmentos no están conectados; no afirmar fidelidad total hasta cerrar uniones y comprobar movimientos reales.
+- [ ] Esperar CI y probar movimiento, vista previa, castillos, guardados y ediciones en navegador.
