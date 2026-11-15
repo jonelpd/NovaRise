@@ -2348,3 +2348,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Añadida validación opcional de `recruitmentVisits` (IDs de las 11 torres/refugios morados y número de semana); los guardados antiguos sin esta propiedad siguen siendo válidos.
 - [ ] Confirmar pruebas automáticas y comprobar en navegador una partida que haya recogido una recompensa verde y reclutado unidades, guardarla, recargar y verificar que no se duplican premios.
 - [ ] Revisar economía y equilibrio de los 44 elementos, sincronizar la edición itch.io y comprobar todas las conquistas.
+
+
+### Pruebas de economía y persistencia — 2026-11-15
+- [x] Corrección de compatibilidad de guardados validada en commit `5af5c787`: `Game regression tests`, `NovaRise - pruebas estáticas` y despliegue Pages finalizaron en verde.
+- [x] La prueba de economía `tests/p0-economy-audit.test.cjs` comprueba producción por turno de las diez minas marcadas (10 cristales por mina controlada), beneficio del molino y ausencia de producción sin conquista.
+- [x] Ampliada `tests/p0-map-interaction-runtime.test.cjs` (commit `5f55a172`) con pruebas de las once torres de reclutamiento: una recompensa semanal, bloqueo de duplicados, persistencia de visitas tras serialización y renovación al empezar la semana siguiente.
+- [x] Añadida prueba de recompensa verde que verifica que un premio recogido no vuelve a entregarse tras serializar y restaurar la partida.
+- [ ] Confirmar ejecución completa de CI del commit `5f55a172`; comprobar en navegador guardado real y carga desde almacenamiento local/nube, además de edición itch.io.
