@@ -24,6 +24,28 @@ function validateRoadRelease(data,requiredAccessIds=[]){
   if(edge.verified!==true)errors.push('Unverified road connection');
  }
  if(!data.edges.length)errors.push('No road connections');
+ if(data.map_asset==='mapa-rutas-marcadas.png'){
+  // Never approve the original marked map merely by flipping edge flags.
+  // Every graph fork must have explicit obstacle-clearance and visual approval.
+  const degree=new Map([...ids].map(id=>[id,new Set()]));
+  for(const edge of data.edges){
+   if(edge&&degree.has(edge.from)&&degree.has(edge.to)&&edge.from!==edge.to){
+    degree.get(edge.from).add(edge.to);degree.get(edge.to).add(edge.from);
+   }
+  }
+  const approvals=data.junction_clearances||{};
+  for(const [id,neighbors] of degree){
+   if(neighbors.size<3)continue;
+   const entry=approvals[id];
+   if(!entry||entry.clearance_confirmed!==true||entry.visual_approved!==true||
+      !Array.isArray(entry.neighbors)||
+      JSON.stringify([...entry.neighbors].sort())!==JSON.stringify([...neighbors].sort())||
+      typeof entry.evidence!=='string'||!entry.evidence.trim()){
+    errors.push('Unapproved or obstructed road junction: '+id);
+   }
+  }
+ }
+
  if(!errors.length){
   const graph=createRoadGraph(data.nodes,data.edges,{verifiedOnly:true});
   for(const id of requiredAccessIds){
