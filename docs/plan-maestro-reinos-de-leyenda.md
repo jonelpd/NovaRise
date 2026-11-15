@@ -1726,3 +1726,12 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Añadida prueba de regresión al editor que comprueba los enlaces relativos y que el borrador nunca se importa como ruta aprobada.
 - [!] Este avance conecta **el editor de trabajo** con el mapa marcado; **no integra todavía la navegación en `juego/index.html`**. El mapa con caminos negros todavía debe digitalizarse como grafo transitable completo.
 - [ ] Abrir el editor en GitHub Pages, trazar los senderos negros y sus cruces reales, exportar rutas revisadas, validar accesos y ejecutar pruebas de movimiento antes de cambiar el juego.
+
+
+### Digitalización manual de curvas negras — 2026-11-15
+- [x] Añadido al editor `tools/editor-caminos.html` el modo **«Trazar sendero por clics»**, que permite crear sucesivamente nodos y conexiones a lo largo de las curvas negras de la imagen marcada por el usuario.
+- [x] Añadido botón **«Terminar sendero»** para separar ramales sin inventar enlaces entre ellos; el modo admite engancharse a un nodo ya existente para crear cruces reales.
+- [x] Cada tramo trazado queda `verified:false` hasta su revisión. Deshacer o cambiar de herramienta cancela el trazado en curso.
+- [x] Extendidas las pruebas estáticas en `tests/p0-map-road-editor-safety.test.cjs`.
+- [ ] Trazar exhaustivamente sobre la imagen marcada, exportar el JSON definitivo, verificar puentes y puertas y validar el conjunto antes de activar el movimiento en el juego.
+- [!] El editor permite digitalizar los senderos, pero no se ha creado todavía el grafo final ni modificado el motor de movimiento.
