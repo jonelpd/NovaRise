@@ -45,3 +45,22 @@ test('tower footprint overlap blocks premature approval of the visible junction'
  assert.ok(audit.visual_review.tower.required_fix.includes('watchtower'));
  assert.equal(draft.edges.every(e=>e.verified===false),true);
 });
+
+const {validateRoadRelease}=require('../scripts/validate-map-road-release.cjs');
+test('release gate rejects the tower and ruins forks even if all road edges are marked verified',()=>{
+ const unsafe={...draft,status:'approved',map_sha256:'a'.repeat(64),edges:draft.edges.map(e=>({...e,verified:true}))};
+ const result=validateRoadRelease(unsafe);
+ assert.equal(result.ready,false);
+ assert.ok(result.errors.some(e=>e.includes('central-mill-09')));
+ assert.ok(result.errors.some(e=>e.includes('central-south-03')));
+});
+test('release gate requires evidence, exact neighbors and clearance for every original-map fork',()=>{
+ const nodes=[{id:'a',x:.1,y:.1},{id:'b',x:.2,y:.1},{id:'c',x:.1,y:.2},{id:'d',x:.2,y:.2}];
+ const edges=['b','c','d'].map(to=>({from:'a',to,verified:true}));
+ const base={schema_version:2,coordinate_system:'normalized',status:'approved',map_asset:'mapa-rutas-marcadas.png',map_sha256:'a'.repeat(64),nodes,edges};
+ assert.equal(validateRoadRelease(base).ready,false);
+ const bad={...base,junction_clearances:{a:{clearance_confirmed:true,visual_approved:true,neighbors:['b','c'],evidence:'Reviewed map'}}};
+ assert.equal(validateRoadRelease(bad).ready,false);
+ const approved={...base,junction_clearances:{a:{clearance_confirmed:true,visual_approved:true,neighbors:['b','c','d'],evidence:'Reviewed marked original and confirmed obstacle-free three-way junction'}}};
+ assert.equal(validateRoadRelease(approved).ready,true);
+});
