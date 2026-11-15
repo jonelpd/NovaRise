@@ -248,6 +248,8 @@ body:has(#auth-screen:not([hidden])){min-height:100vh;background:linear-gradient
 @media(prefers-reduced-motion:reduce){#modal .novarise-arrow{animation:none;display:none}}
 </style><style id="novarise-audit-fixes-v61">
 #world-viewport .map .mounted-hero-marker .mounted-hero-rider svg{width:34px!important;height:43px!important;max-width:34px!important;max-height:43px!important}
+#world-viewport .map .mounted-hero-marker .mounted-hero-rider img{display:block!important;width:34px!important;height:43px!important;max-width:34px!important;max-height:43px!important;object-fit:contain;filter:drop-shadow(1px 3px 2px #000b)}
+#world-viewport .map .mounted-hero-marker.hero-facing-left .mounted-hero-rider img{transform:scaleX(-1);transform-origin:center}
 #modal .combat-cell:disabled{cursor:not-allowed}
 #modal .combat-cell.unit-selected{box-shadow:inset 0 0 0 2px #f6d46e!important}
 </style><style>
@@ -1446,7 +1448,7 @@ function drawMountedHero(map){
  if(!persistentHero){
   persistentHero=document.createElement('div');persistentHero.className='mounted-hero-marker';
   persistentHero.setAttribute('role','img');persistentHero.setAttribute('aria-label','Tu héroe montado a caballo');
-  const rider=document.createElement('span');rider.className='mounted-hero-rider';rider.innerHTML="<svg viewBox=\"0 0 56 68\" width=\"56\" height=\"68\" xmlns=\"http://www.w3.org/2000/svg\" aria-hidden=\"true\" style=\"display:block;overflow:visible;image-rendering:pixelated\">\n<ellipse cx=\"27\" cy=\"63\" rx=\"21\" ry=\"4\" fill=\"#080d0a\" opacity=\".55\"/>\n<path d=\"M11 43L6 51 12 55 16 47M33 47L37 59 44 58 41 43\" fill=\"#483322\" stroke=\"#171b1a\" stroke-width=\"2\"/>\n<path d=\"M9 34L4 25 9 21 16 27 20 34 37 31 43 37 44 48 35 52 22 50 15 44 10 45Z\" fill=\"#807665\" stroke=\"#22231d\" stroke-width=\"2\"/>\n<path d=\"M5 25L3 20 7 16 12 19 14 26 10 31Z\" fill=\"#b8afa0\" stroke=\"#292b25\" stroke-width=\"2\"/>\n<path d=\"M3 18L0 14 4 14 8 17Z\" fill=\"#8b8171\"/>\n<path d=\"M12 38L7 36 5 42 10 45M39 36L45 33 50 38 45 44\" fill=\"#45382a\" stroke=\"#29251d\" stroke-width=\"2\"/>\n<path d=\"M21 26L16 17 20 9 29 9 34 18 31 30 36 35 30 39 21 34Z\" fill=\"#224d85\" stroke=\"#0d2136\" stroke-width=\"2\"/>\n<path d=\"M18 15L12 22 15 28 20 25M31 15L38 21 34 28 29 24\" fill=\"#b0b8bd\" stroke=\"#343c47\" stroke-width=\"2\"/>\n<path d=\"M21 11L21 6 26 2 31 7 31 13Z\" fill=\"#b9c4ca\" stroke=\"#293747\" stroke-width=\"2\"/>\n<path d=\"M22 11H31L30 15H23Z\" fill=\"#d4b68a\" stroke=\"#493a31\" stroke-width=\"1.5\"/>\n<path d=\"M26 7L26 3\" stroke=\"#edcf71\" stroke-width=\"2\"/>\n<path d=\"M35 3V35\" stroke=\"#3b2b1b\" stroke-width=\"2\"/>\n<path d=\"M36 4L51 7 45 15 36 13Z\" fill=\"#245dba\" stroke=\"#f3d27d\" stroke-width=\"1.5\"/>\n<path d=\"M41 7L43 11\" stroke=\"#f5da8a\" stroke-width=\"2\"/>\n</svg>";
+  const rider=document.createElement('span');rider.className='mounted-hero-rider';rider.innerHTML='<img src="./heroe-caballo-realista-34x43.png" alt="" width="34" height="43" draggable="false">';
   const flag=document.createElement('span');flag.className='mounted-hero-flag';flag.textContent='TU HÉROE';
   persistentHero.replaceChildren(rider,flag)
  }
