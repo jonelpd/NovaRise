@@ -1895,3 +1895,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Confirmado que el test existente `tests/p0-itchio-guest-build.test.cjs` analiza el manifiesto con `JSON.parse`, por lo que cubre esta regresión en la próxima ejecución.
 - [x] Comprobadas sobre el JSON de rutas las longitudes topológicas de los cinco recorridos usados en pruebas: molino 13 nodos, ruinas 18, volcán 16, mina oeste 17 y cueva norte 14. La comprobación ha sido independiente, no equivale a ejecución de Node ni a CI verde.
 - [!] No se ha comprobado una ejecución exitosa de Actions; la consulta de estados de commit no devolvió estados asociados. Mantener bloqueada la activación del mapa hasta verificar la construcción y la geometría real.
+
+
+### Protección previa de partidas al sustituir el mapa — 2026-11-15
+- [x] Auditado el código real de `juego/index.html`: el juego activo sigue usando `mapa-grande.png`, coordenadas de héroe en cuadrícula 10×10 (`x,y` entre 0 y 9) y guardado local con copia `-backup`; existen carga y recuperación de datos dañados. No se han alterado estas funciones.
+- [x] Añadido `scripts/check-map-save-transition.cjs`, un control **preventivo y sin efectos secundarios** que exige rutas aprobadas, plan explícito de migración, copia de seguridad verificada, correspondencia de posiciones y lugares y rollback probado antes de cambiar de mapa.
+- [x] Añadido `tests/p0-map-save-transition.test.cjs` para comprobar rechazo del borrador actual y de migraciones sin garantías, y permitir únicamente un escenario de prevalidación completa. Integrado en GitHub Actions de navegación.
+- [!] Este módulo aún **no está conectado al cambio de mapa del juego**; es una condición técnica y prueba preparatoria, no una migración ejecutada ni una prueba de que las partidas actuales ya sean compatibles con el mapa nuevo.
+- [ ] Diseñar y comprobar la migración efectiva de coordenadas, castillos, minas, objetos y estados de campaña; guardar instantánea inmutable y validar rollback en ambas ediciones antes de activar `mapa-rutas-marcadas.png`.
