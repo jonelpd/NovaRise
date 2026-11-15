@@ -150,6 +150,86 @@
       }
     ],
     "draft_mapping": "unresolved",
-    "new_edges_created": 0
+    "new_edges_created": 0,
+    "visual_trace_samples": {
+      "status": "approximate-overlay-only",
+      "coordinate_basis": "1254x1254 original; enlarged crop 770,390 to 1000,600 displayed at 4x",
+      "confidence": "approximate-manual",
+      "traces": [
+        {
+          "id": "tower-to-northeast-farm",
+          "pixels": [
+            [
+              867,
+              458
+            ],
+            [
+              887,
+              449
+            ],
+            [
+              907,
+              438
+            ],
+            [
+              926,
+              425
+            ],
+            [
+              945,
+              411
+            ],
+            [
+              961,
+              402
+            ],
+            [
+              979,
+              394
+            ]
+          ],
+          "verified": false
+        },
+        {
+          "id": "pond-southern-bank-to-east-building",
+          "pixels": [
+            [
+              862,
+              466
+            ],
+            [
+              878,
+              484
+            ],
+            [
+              887,
+              498
+            ],
+            [
+              899,
+              505
+            ],
+            [
+              919,
+              500
+            ],
+            [
+              944,
+              500
+            ],
+            [
+              969,
+              501
+            ],
+            [
+              992,
+              502
+            ]
+          ],
+          "verified": false
+        }
+      ],
+      "warning": "These sampled positions are visual review aids, not graph vertices or approved paths. Exact branching location and obstacle clearance remain unresolved."
+    }
   }
 }
