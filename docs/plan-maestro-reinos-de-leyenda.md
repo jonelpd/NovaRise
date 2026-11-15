@@ -1946,3 +1946,13 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Sincronizado `docs/mapa-hitos-visibles-original.json` y reforzada prueba de coincidencia exacta entre siete puntos del puente y siete nodos del grafo, manteniendo todas las aristas en `verified:false`.
 - [x] Reconsultados los JSON en GitHub: **57 nodos, 54 aristas**, puntos de puente idénticos al inventario, todas las aristas sin verificar.
 - [ ] Comprobar píxel a píxel los segmentos y la continuidad fuera del puente; ejecutar la suite Node completa y confirmar CI verde. El mapa nuevo y las partidas siguen sin cambios.
+
+
+### Auditoría geométrica tras el reajuste del puente — 2026-11-15
+- [x] Reabierto el JSON real del grafo y recalculadas mediante intersección estricta de segmentos todas las parejas de aristas sin nodo común: **0 cruces geométricos no unidos**.
+- [x] Confirmados **57 nodos, 54 aristas, 54 aristas sin verificar** y longitud máxima de arista de aproximadamente **45,18 píxeles**, inferior al límite provisional de 55 píxeles del test.
+- [x] Actualizado `docs/informe-cruces-mapa-marcado.json` para eliminar coordenadas históricas ya obsoletas y reflejar la geometría actual.
+- [x] Ampliado `tests/p0-map-road-geometry-inspection.test.cjs` con comprobaciones de sincronización entre el informe publicado y el grafo real, incluyendo las coordenadas de los nodos del corredor.
+- [!] **Cero cruces matemáticos no implica que el camino siga el trazo negro**, que los puentes sean transitables ni que exista una bifurcación correcta. Sigue pendiente revisión visual y pruebas Node completas.
+- [!] No fue posible consultar la lista de ejecuciones de GitHub Actions mediante el conector disponible; por tanto no se afirma que CI esté verde.
+- [ ] Revisar visualmente el tramo posterior al puente hasta la bifurcación `central-mill-09` → `central-south-01` y la continuidad hacia el molino; solo entonces aprobar los segmentos con evidencia.
