@@ -131,5 +131,32 @@
     "status": "not-assigned",
     "reason": "The old map uses different artwork; no old IDs may be mapped without site-by-site review"
   },
-  "all_verified": false
+  "all_verified": false,
+  "crossings": [
+    {
+      "id": "bridge-central-castle-east",
+      "kind": "bridge",
+      "pixel": [
+        716,
+        385
+      ],
+      "description": "Puente visible al este del castillo central, sobre el río",
+      "verified": false,
+      "connectedRoadNodes": [],
+      "note": "No inferir continuidad de caminos sin comprobar extremos"
+    },
+    {
+      "id": "bridge-southwest-castle-river",
+      "kind": "bridge-candidate",
+      "pixel": [
+        215,
+        818
+      ],
+      "description": "Paso junto a cascada al este del castillo suroeste; estructura y transitabilidad por confirmar",
+      "verified": false,
+      "connectedRoadNodes": [],
+      "note": "No habilitar cruce hasta confirmar que sea puente y no sendero ribereño"
+    }
+  ],
+  "crossing_policy": "A river crossing must be visually confirmed as a bridge with road continuity on both banks; no graph edge is created by this inventory."
 }
