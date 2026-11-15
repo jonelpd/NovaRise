@@ -2280,3 +2280,10 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [!] La primera ampliación de resolución a 160×160 (`db5092ff`) falló la prueba de sintaxis JavaScript del navegador en GitHub Actions `43755456312`. **No se considera desplegable ni completada**.
 - [x] Revertido el archivo `juego/index.html` al estado comprobado del commit `0c19b3e1`, manteniendo la nueva previsualización del trayecto fino y el mapa limpio (commit de corrección `3997919fffbf7a080c6c5a3141a491dfe0c76c74`).
 - [ ] Confirmar CI verde de la reversión y reimplementar aumento de precisión solo tras comprobar sintaxis y comportamiento; sigue vigente resolución 80×80.
+
+
+### Ajuste de continuidad y preferencia de trazados — 2026-11-15
+- [x] Verificadas las pruebas de regresión y seguridad en verde tras revertir el intento fallido de 160×160 (commit `3997919f`).
+- [x] Commit `c94bda08ae51ae3235b26e44972618c19b536297`: se amplía el margen de rasterización de los 111 fragmentos a 5×5 celdas (antes 3×3) para salvar pequeños huecos en la extracción y se aumenta de x12 a x30 la penalización de la ruta alternativa fuera de la máscara marcada.
+- [!] Es una mejora provisional; el ensanchamiento no equivale a aprobación de uniones ni garantiza seguimiento exacto. Se mantiene la máscara de obstáculos de navegación.
+- [ ] Confirmar CI del commit, probar trayectos reales y resolver conexiones de trazos sin generar atajos artificiales.
