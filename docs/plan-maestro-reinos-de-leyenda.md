@@ -1599,3 +1599,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [ ] Implementar interpolación visual suave entre nodos y mantener cámara, velocidad pausada, movimiento por turnos, obstáculos, combate y guardados.
 - [ ] Verificar que los caminos y todos los puntos interactivos del mapa coinciden exactamente con lo visible, y realizar pruebas de regresión.
 **Estado:** arquitectura de navegación iniciada y aislada; no se ha cambiado el movimiento del juego publicado.
+
+
+### Borrador de nodos para el mapa nuevo — 2026-11-15
+- [x] Añadido `docs/mapa-original-rutas-borrador.json` con 12 puntos normalizados y 11 conexiones de referencia, etiquetados expresamente `draft-unverified`.
+- [x] Añadida prueba `tests/p0-map-road-draft.test.cjs` que verifica estructura y conectividad del prototipo.
+- [!] La superposición visual preliminar evidencia que **varios segmentos rectos del borrador atraviesan agua, árboles o estructuras**: estos segmentos **no son caminos transitables válidos** y no deben activarse en el juego. El prototipo es únicamente una estructura de datos y requiere redibujar las rutas con numerosos puntos de curva, alineados al arte final.
+- [ ] Redibujar la red vial punto a punto, comprobar cada arista sobre senderos/puentes visibles, y añadir validador de obstáculos antes de integrar.
+- [ ] Mantener mapa y navegación actuales intactos hasta aprobación visual y funcional.
