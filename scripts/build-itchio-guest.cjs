@@ -53,7 +53,23 @@ const sharedFiles=[
  ['juego/mapa-rutas-marcadas.png','mapa-rutas-marcadas.png'],
  ['docs/mapa-rutas-marcadas-tramo-central.json','mapa-rutas-marcadas-tramo-central.json']
 ];
+// The live map, turquoise navigation mask and site catalogue must ship
+// together. The itch.io build copies juego/ recursively, then verifies them.
+const activeFiles=[
+ ['juego/mapa-reinos-2048.jpg','mapa-reinos-2048.jpg'],
+ ['juego/rutas-turquesa-160.json','rutas-turquesa-160.json']
+];
+for(const [relative,destination] of activeFiles){
+ const source=path.join(sharedRoot,relative),target=path.join(out,destination);
+ if(!fs.existsSync(source)||!fs.existsSync(target))throw Error('Missing active game asset: '+relative);
+ const digest=file=>crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex');
+ if(digest(source)!==digest(target))throw Error('Active game asset mismatch: '+relative);
+}
 const sharedHashes={};
+const activeHashes={};
+for(const [relative,destination] of activeFiles){
+ activeHashes[relative]=crypto.createHash('sha256').update(fs.readFileSync(path.join(out,destination))).digest('hex');
+}
 for(const [relative,destination] of sharedFiles){
  const source=path.join(sharedRoot,relative),target=path.join(out,destination);
  if(!fs.existsSync(source))throw Error('Shared map source missing: '+relative);
@@ -62,5 +78,5 @@ for(const [relative,destination] of sharedFiles){
  if(hash(source)!==hash(target))throw Error('Shared map copy mismatch: '+relative);
  sharedHashes[relative]=hash(target);
 }
-fs.writeFileSync(path.join(out,'shared-map-hashes.json'),JSON.stringify({schema_version:1,status:'draft-not-active',files:sharedHashes},null,2)+'\n');
+fs.writeFileSync(path.join(out,'shared-map-hashes.json'),JSON.stringify({schema_version:1,status:'draft-not-active',files:sharedHashes,active_status:'turquoise-map-active',active_files:activeHashes},null,2)+'\n');
 console.log('itch.io guest edition generated; source untouched');
