@@ -35,3 +35,11 @@ test('east pond inspection does not conflate unverified visual branches with app
  assert.match(html,/correspondencia con grafo sin resolver/);
  assert.match(html,/ninguna aprobada/);
 });
+
+test('two approximate eastern trace overlays remain separate from active graph',()=>{
+ assert.match(html,/id="eastTraces"/);
+ assert.match(html,/visual_trace_samples\?\.traces/);
+ assert.match(html,/trace\.verified!==false/);
+ assert.match(html,/Granja · aproximado/);
+ assert.match(html,/Estanque · aproximado/);
+});
