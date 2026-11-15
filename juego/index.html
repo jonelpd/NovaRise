@@ -1894,9 +1894,11 @@ function interactVerifiedSite(site){
    const point=safeHeroPoint(x,y);
    if(!point||Math.hypot(point[0]-accessX,point[1]-accessY)>7.5)continue;
    const route=findRoute(x,y);
-   if(route)candidates.push({x,y,route,score:route.reduce((n,[rx,ry])=>n+movementCost(rx,ry),0)});
+   if(route)candidates.push({x,y,route,accessDistance:Math.hypot(point[0]-accessX,point[1]-accessY),score:route.reduce((n,[rx,ry])=>n+movementCost(rx,ry),0)});
   }
-  candidates.sort((a,b)=>a.score-b.score);
+  // Priorizar llegar a la entrada del edificio, no detenerse en la casilla
+  // más barata pero lejana. Solo desempatar por coste de movimiento.
+  candidates.sort((a,b)=>a.accessDistance-b.accessDistance||a.score-b.score);
   if(!candidates.length)return message('No hay un camino transitable hasta '+site.label.toLowerCase()+'. Comprueba los obstáculos alrededor del castillo.');
   const destination=candidates[0];
   pendingSiteInteraction={id:site.id,x:destination.x,y:destination.y};
