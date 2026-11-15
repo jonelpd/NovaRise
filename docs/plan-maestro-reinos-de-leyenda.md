@@ -1767,3 +1767,12 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Creado workflow `.github/workflows/road-navigation-tests.yml` para ejecutar pruebas del editor, topología y guardado/restauración del módulo de rutas en push, PR y manualmente.
 - [!] **No se ha verificado aún el resultado de GitHub Actions** ni conectado el nuevo módulo al juego; el workflow se ha creado pero la ejecución debe comprobarse.
 - [ ] Completar trazado de las rutas negras reales, contrastar sus accesos con las posiciones del juego, validar CI y diseñar adaptación de las rutas aprobadas a la malla fina existente sin alterar guardados.
+
+
+### Primer tramo digitalizado sobre el mapa marcado — 2026-11-15
+- [x] Inspeccionada directamente la imagen de 1254×1254 aportada por el usuario con los caminos negros.
+- [x] Creado `docs/mapa-rutas-marcadas-tramo-central.json` con 13 puntos y 12 conexiones provisionales, correspondientes al corredor visual desde la puerta del castillo central de tejados rojos hacia el molino del este, incluyendo el puente y sus curvas principales.
+- [x] Coordenadas almacenadas normalizadas y también como píxeles para facilitar revisión y corrección en el editor.
+- [x] Creado `tests/p0-map-road-marked-corridor.test.cjs` que comprueba continuidad geométrica provisional y rechazo por el filtro de rutas verificadas; añadido al workflow de navegación.
+- [!] El tramo es un **muestreo manual preliminar** y necesita cotejo fino con la línea negra antes de marcarlo como aprobado. No representa la red completa ni autoriza a cambiar el movimiento del juego.
+- [ ] Completar ramales y cruces del resto del mapa, verificar tramo por tramo, ejecutar CI y conectar rutas aprobadas con la navegación del juego.
