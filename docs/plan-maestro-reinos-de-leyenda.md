@@ -2410,3 +2410,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [!] La máscara `rutas-turquesa-160.json` **no se ha modificado**: sigue declarando cuatro componentes desconectadas. No se pueden unir con seguridad sin verificar visualmente las conexiones en la imagen anotada.
 - [!] Sin ejecución de pruebas de navegador ni confirmación de CI para este cambio. No se considera resuelta la navegación ni los 44 accesos.
 - [ ] Siguiente bloque: comparar topología de los cuatro componentes con el mapa marcado, corregir cortes reales, fijar puertas de cada elemento y ejecutar pruebas automatizadas y manuales.
+
+
+### Diagnóstico reproducible de conectividad — 2026-11-16
+- [x] Incorporado `scripts/audit-turquoise-map.cjs` (commit `56ae60de`) para descomprimir y verificar la máscara oficial de 160×160, contar componentes con la misma regla de diagonales que el navegador, medir separaciones entre componentes y asignar el píxel de camino más próximo a cada uno de los 44 elementos.
+- [x] El analizador **no modifica rutas ni accesos** y distingue explícitamente proximidad matemática de entrada visual aprobada.
+- [ ] Ejecutar `node scripts/audit-turquoise-map.cjs --json` en el repositorio, revisar su salida contra el mapa marcado original y validar los posibles cortes de extracción.
+- [ ] Corregir únicamente cortes confirmados visualmente, fijar entradas de los 44 elementos y verificar las mecánicas de interacción.
+- [!] Script publicado, ejecución y pruebas de navegador aún no verificadas; no se declara reparada la topología.
