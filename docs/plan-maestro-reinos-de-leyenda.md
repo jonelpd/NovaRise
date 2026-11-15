@@ -2065,3 +2065,13 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [ ] **Pendiente de incorporar estos archivos al repositorio**: la imagen base sin trazos utilizada para extraer la diferencia está disponible en la sesión, pero aún no consta como recurso de entrada en GitHub. No afirmar que el trazado completo está ya integrado en el juego.
 - [ ] Revisar los posibles huecos y bifurcaciones generados por el procesamiento, conectar extremos solo cuando la tinta real lo permita, impedir atravesar obstáculos y exportar un grafo navegable completo.
 - [!] Los 115 segmentos son fragmentos vectoriales de tinta, **no** 115 rutas independientes aprobadas. El juego activo y los guardados permanecen sin cambios.
+
+
+### Preparación de importación masiva de tinta negra para ambas ediciones — 2026-11-15
+- [x] Revisado el repositorio real: existen `juego/mapa-grande.png`, `juego/mapa-rutas-marcadas.png`, el grafo provisional `docs/mapa-rutas-marcadas-tramo-central.json` y la política de dos ediciones `docs/mapa-compartido-ediciones.json`.
+- [x] Registrada en `docs/mapa-compartido-ediciones.json` la interfaz documental para importar el JSON vectorial, SVG y PNG de la extracción completa, con origen y comprobaciones exigidas.
+- [!] **Los tres artefactos de la extracción (115 fragmentos y 1230 puntos, según la sesión anterior) aún no están presentes en GitHub**. No confundir esta preparación con su integración material ni afirmar que se han recuperado los archivos.
+- [!] Las 57 posiciones y 54 aristas del borrador manual continúan `draft-unverified`; no se convierten en rutas jugables por asociación con los fragmentos automáticos.
+- [x] La fuente compartida exige la misma navegación para NovaRise e itch.io; las particularidades NVRA permanecen separadas.
+- [ ] Importar artefactos vectoriales efectivos tras disponer de sus bytes, cotejar contra el PNG marcado, unir extremos solo si son un trazo real, comprobar despejes, puertas, puentes y topología; aplicar el validador de publicación y ejecutar CI y pruebas de guardado antes de activar la navegación.
+- [!] Sin cambios de movimiento, mapas activos o estructura de guardados en esta actualización.
