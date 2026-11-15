@@ -2244,3 +2244,10 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Si falla la carga de rutas, se bloquea el desplazamiento con un mensaje en vez de permitir navegar libremente.
 - [!] **Integración de código, pendiente de validación funcional**: todavía no se ha comprobado la experiencia en navegador ni los movimientos y accesos reales del mapa; las acciones de regresión estaban en cola al consultar. No debe presentarse como versión completamente probada.
 - [ ] Comprobar CI, probar desplazamiento real entre lugares y guardados en navegador; ajustar accesos y conexiones en caso de bloqueos y verificar paridad de edición itch.io.
+
+
+### Sustitución del mapa visual limpio — 2026-11-15
+- [x] Confirmado en `juego/` el archivo subido por el usuario `mapa-reinos-2048.jpg` (1.616.838 bytes).
+- [x] Sustituidas las tres referencias a `./mapa-grande.png` en `juego/index.html` por `./mapa-reinos-2048.jpg` (fondo principal, minimapa y restauración del paisaje), commit `ea35d1f449ed79c4d96dbeafe1ecae86a871e943`.
+- [x] Mantenidas las rutas invisibles integradas previamente, sin dibujar marcas sobre el paisaje.
+- [ ] Confirmar despliegue de GitHub Pages y prueba visual en navegador, además de verificar accesos de héroes y ambas ediciones.
