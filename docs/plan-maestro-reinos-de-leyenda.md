@@ -2188,3 +2188,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [!] La superposición utiliza el mapa del repositorio, pero **todavía no se ha demostrado mediante hash que sea idéntico a la imagen limpia subida**. Tampoco se ha efectuado una aprobación visual de los 126 candidatos.
 - [ ] Abrir el visor en un servidor estático o GitHub Pages para inspección; confirmar identidad de mapa, obstáculos y conexiones; ejecutar suite y activar únicamente grafo aprobado.
 - [!] No se han alterado rutas activas, guardados ni archivos de imagen del juego.
+
+
+### Inspección real sobre el mapa original aportado — 2026-11-15
+- [x] Generada localmente una composición **1254×1254** sobre la imagen limpia proporcionada por el usuario, dibujando los 111 fragmentos de rutas extraídos y los 126 candidatos de unión. Archivo de revisión descargable en la conversación: `revision-rutas-sobre-mapa-original.png`.
+- [x] Inspeccionada visualmente la composición completa: las rutas atraviesan el puente ante el castillo central, pasos próximos a cascadas, accesos a minas, castillos septentrionales y castillo del desierto. Estas zonas se señalan como **prioritarias para validar**, sin dar por transitables obstáculos ni uniones.
+- [!] La composición local utiliza el mapa limpio subido por el usuario. No se ha podido verificar aún que `juego/mapa-grande.png` sea idéntico mediante hash; tampoco se ha ejecutado CI.
+- [ ] Revisar continuidad real y accesos, autorizar bifurcaciones verificadas, confirmar identidad del mapa del repositorio y conectar al motor solo un grafo aprobado.
+- [!] No se han alterado el mapa visible, las partidas ni la navegación en producción.
