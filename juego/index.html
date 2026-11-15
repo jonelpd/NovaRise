@@ -614,7 +614,7 @@ function buildTracedRoadMask(source){
    for(let k=0;k<=steps;k++){
     const t=k/steps,cx=Math.floor(a[0]+(b[0]-a[0])*t),cy=Math.floor(a[1]+(b[1]-a[1])*t);
     // La anchura permite salvar discontinuidades de extracción de pocos píxeles.
-    for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){
+    for(let dy=-2;dy<=2;dy++)for(let dx=-2;dx<=2;dx++){
      const x=cx+dx,y=cy+dy;if(x>0&&y>0&&x<79&&y<79)mask[y*80+x]=1;
     }
    }
@@ -717,7 +717,7 @@ function terrainFineRoute(a,b,preferMarkedRoads=false){
    // Cuando faltan uniones entre trazos, penalizar fuertemente salirse
    // de los caminos dibujados. Los accesos locales siguen siendo posibles.
    const outsideMarkedRoad=preferMarkedRoads&&tracedRoadMask&&!tracedRoadMask[ni];
-   const cost=dist[id]+Math.hypot(dx,dy)*(outsideMarkedRoad?12:1);
+   const cost=dist[id]+Math.hypot(dx,dy)*(outsideMarkedRoad?30:1);
    if(cost<dist[ni]){dist[ni]=cost;prev[ni]=id;open.push(ni)}
   }
  }
