@@ -704,13 +704,11 @@ function turquoiseRoadRoute(a,b){
  // No permitir que el sistema heredado trace atajos por terreno ajeno
  // al camino dibujado. El enlace local al trazo debe ser corto; los
  // destinos remotos requieren un acceso explícito en la red oficial.
- const localLimit=4;
- const ingressDistance=Math.hypot(a[0]-entryPoint[0],a[1]-entryPoint[1]);
- const egressDistance=Math.hypot(b[0]-exitPoint[0],b[1]-exitPoint[1]);
- if(ingressDistance>localLimit||egressDistance>localLimit)return null;
- const ingress=ingressDistance>.05?[entryPoint]:[];
- const egress=egressDistance>.05?[b]:[];
- return [...ingress,...road,...egress]
+ // La cuadrícula estratégica 10x10 utiliza centros separados por 10%;
+ // sus puntos lógicos pueden estar alejados del camino real. No trazar
+ // líneas desde esos centros: proyectar exclusivamente sobre la red.
+ // La posición visual del héroe se actualiza en la propia ruta turquesa.
+ return [entryPoint,...road,exitPoint]
 }
 function nearestTracedRoad(cell,maxRadius=9){
  if(!tracedRoadMask||!cell)return null;
