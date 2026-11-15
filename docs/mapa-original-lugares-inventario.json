@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "status": "draft-unverified",
+  "map_asset": "original-map-concept-2026-11-15.png",
+  "note": "Visual inventory from concept image, approximate pixel locations / 1254. Locations are NOT collision-checked, do not imply road accessibility.",
+  "places": [
+    {
+      "id": "castle-northwest",
+      "kind": "castle",
+      "x": 0.215,
+      "y": 0.105,
+      "road_node_id": null
+    },
+    {
+      "id": "castle-central",
+      "kind": "castle",
+      "x": 0.507,
+      "y": 0.262,
+      "road_node_id": null
+    },
+    {
+      "id": "castle-northeast-snow",
+      "kind": "castle",
+      "x": 0.888,
+      "y": 0.071,
+      "road_node_id": null
+    },
+    {
+      "id": "castle-southwest",
+      "kind": "castle",
+      "x": 0.11,
+      "y": 0.573,
+      "road_node_id": null
+    },
+    {
+      "id": "castle-south-river",
+      "kind": "castle",
+      "x": 0.545,
+      "y": 0.848,
+      "road_node_id": null
+    },
+    {
+      "id": "castle-southeast-desert",
+      "kind": "castle",
+      "x": 0.926,
+      "y": 0.799,
+      "road_node_id": null
+    },
+    {
+      "id": "castle-east-volcano",
+      "kind": "castle",
+      "x": 0.938,
+      "y": 0.491,
+      "road_node_id": null
+    },
+    {
+      "id": "windmill-east",
+      "kind": "other",
+      "x": 0.792,
+      "y": 0.327,
+      "road_node_id": null
+    },
+    {
+      "id": "mine-west",
+      "kind": "mine",
+      "x": 0.107,
+      "y": 0.383,
+      "road_node_id": null
+    },
+    {
+      "id": "mine-north-snow",
+      "kind": "mine",
+      "x": 0.941,
+      "y": 0.194,
+      "road_node_id": null
+    },
+    {
+      "id": "mine-east",
+      "kind": "mine",
+      "x": 0.931,
+      "y": 0.305,
+      "road_node_id": null
+    },
+    {
+      "id": "mine-marsh",
+      "kind": "mine",
+      "x": 0.94,
+      "y": 0.678,
+      "road_node_id": null
+    },
+    {
+      "id": "mine-southwest",
+      "kind": "mine",
+      "x": 0.061,
+      "y": 0.82,
+      "road_node_id": null
+    },
+    {
+      "id": "bridge-central",
+      "kind": "bridge",
+      "x": 0.563,
+      "y": 0.319,
+      "road_node_id": null
+    },
+    {
+      "id": "treasure-southwest",
+      "kind": "treasure",
+      "x": 0.2,
+      "y": 0.783,
+      "road_node_id": null
+    },
+    {
+      "id": "treasure-east",
+      "kind": "treasure",
+      "x": 0.739,
+      "y": 0.533,
+      "road_node_id": null
+    }
+  ]
+}
