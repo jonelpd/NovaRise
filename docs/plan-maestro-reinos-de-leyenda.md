@@ -1682,3 +1682,12 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [ ] Revisar visualmente en el mapa original cada propuesta de conexión; no inferir transitabilidad de la proximidad de dos extremos.
 - [ ] Conectar únicamente caminos comprobados sobre terreno visible, completar inventario de accesos y comprobar rutas reales antes de integrar la navegación.
 **Estado:** auditoría estructural añadida al repositorio; no se ha ejecutado CI ni se ha modificado la versión jugable.
+
+
+### Inspección visual del concepto: inventario de destinos — 2026-11-15
+- [x] Inspeccionada la imagen del concepto del mapa y creado `docs/mapa-original-lugares-inventario.json` con **16 ubicaciones visuales provisionales** (castillos, minas, tesoros, molino y puente), con coordenadas normalizadas aproximadas.
+- [x] No se han inventado accesos: todos los `road_node_id` permanecen `null` hasta comprobar un punto de entrada real y transitable.
+- [x] Añadida prueba `tests/p0-map-visible-places-inventory.test.cjs` para comprobar identificadores únicos, coordenadas válidas, coincidencia de imagen y ausencia de accesos falsamente aprobados.
+- [!] La inspección de la superposición anterior indica que el trazado coloreado es parcial. Los caminos añadidos posteriormente requieren una superposición nueva sobre el arte para revisar si coinciden con senderos reales. El inventario es de elementos visuales, **no de entidades jugables ya implementadas**.
+- [ ] Dibujar una nueva superposición de los ocho recorridos, corregir cruces por terreno y definir un nodo de acceso por cada destino verificado.
+- [ ] Sustituir el mapa protegido por arte original definitivo solamente después de superar auditoría de derechos, rutas y compatibilidad de guardados.
