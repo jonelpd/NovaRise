@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "status": "received-awaiting-trace",
+  "source": "user-provided map with black road markings",
+  "map_asset": "Mapa fantástico de reinos y biomas mágicos con las rutas.png",
+  "map_width": 1254,
+  "map_height": 1254,
+  "map_sha256": "6f199ca4ce9f20620b19c444e6763bb8d5037f18bfcfa8d323318c297592df9a",
+  "interpretation": "Black hand-drawn lines indicate intended walkable roads; they are not automatically safe navigation pixels. Requires manual tracing at zoom, crossings, bridge and gate validation.",
+  "road_data": "docs/mapa-original-rutas-trazado-preliminar.json",
+  "road_data_status": "obsolete-for-final-routing; must retrace using supplied marked image",
+  "integration_status": "not-integrated",
+  "review_required": [
+    "separate black road strokes from naturally dark terrain and structures",
+    "trace bends and junctions with waypoints",
+    "identify bridge crossings and castle entrances",
+    "link real access nodes and validate route continuity",
+    "test hero and enemy movement and saved games"
+  ]
+}
