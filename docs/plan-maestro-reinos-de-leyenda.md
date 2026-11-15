@@ -2196,3 +2196,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [!] La composición local utiliza el mapa limpio subido por el usuario. No se ha podido verificar aún que `juego/mapa-grande.png` sea idéntico mediante hash; tampoco se ha ejecutado CI.
 - [ ] Revisar continuidad real y accesos, autorizar bifurcaciones verificadas, confirmar identidad del mapa del repositorio y conectar al motor solo un grafo aprobado.
 - [!] No se han alterado el mapa visible, las partidas ni la navegación en producción.
+
+
+### Integridad del grafo y CI dedicado — 2026-11-15
+- [x] Creada `tests/p0-map-shared-road-integrity.test.cjs`: comprueba que el grafo JSON publicado reproduce exactamente los nodos y aristas decodificados de la última fuente, mantiene `draft-unverified`, no activa navegación y conserva una sola fuente para NovaRise e itch.io.
+- [x] Añadida comprobación de presencia, firma PNG y cálculo SHA-256 de `juego/mapa-grande.png` durante la ejecución de las pruebas; **no se ha demostrado todavía que coincida con el mapa limpio subido por el usuario**.
+- [x] Creado `.github/workflows/map-road-integration.yml` con pruebas de rutas, reconstrucción y comparación de grafo, diagnóstico de imagen y regresión general de jugabilidad.
+- [!] La consulta de estados combinados del último commit no devolvió estados; **no se ha verificado que GitHub Actions haya finalizado en verde**.
+- [ ] Confirmar ejecución de CI y corregir cualquier fallo; contrastar SHA-256 del PNG original subido; revisar y aprobar obstáculos y uniones; integrar el grafo aprobado en el movimiento y comprobar partidas guardadas en ambas ediciones.
