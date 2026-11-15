@@ -1956,3 +1956,12 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [!] **Cero cruces matemáticos no implica que el camino siga el trazo negro**, que los puentes sean transitables ni que exista una bifurcación correcta. Sigue pendiente revisión visual y pruebas Node completas.
 - [!] No fue posible consultar la lista de ejecuciones de GitHub Actions mediante el conector disponible; por tanto no se afirma que CI esté verde.
 - [ ] Revisar visualmente el tramo posterior al puente hasta la bifurcación `central-mill-09` → `central-south-01` y la continuidad hacia el molino; solo entonces aprobar los segmentos con evidencia.
+
+
+### Revisión visual de bifurcaciones después del puente — 2026-11-15
+- [x] Abierto el PNG original del usuario y ampliada la región de la torre de vigilancia y las ruinas (x=770–1000, y=390–600), donde se observan trazos negros de varios recorridos.
+- [x] Identificados para inspección dos puntos aproximados: confluencia de la torre `[850,480]` y bifurcación sur hacia las ruinas `[879,535]`.
+- [x] Creado `docs/auditoria-bifurcaciones-torre-central.json` con los nodos próximos, la evidencia visible y las dudas pendientes, **sin crear atajos ni nuevas conexiones**.
+- [x] Creado `tests/p0-map-watchtower-junction-audit.test.cjs` y añadido a GitHub Actions para conservar las conexiones existentes como provisionales y exigir revisión antes de aprobarlas.
+- [ ] Verificar si el paso dibujado junto a la torre evita la construcción y si las tres direcciones están conectadas físicamente; verificar el ramal sur y continuidad hasta las ruinas.
+- [!] No se han ejecutado pruebas Node completas ni confirmado el resultado de GitHub Actions; el mapa activo y las partidas siguen intactos.
