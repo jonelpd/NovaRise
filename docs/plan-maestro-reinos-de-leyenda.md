@@ -1718,3 +1718,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [ ] Verificar los bytes de la imagen subida frente al SHA-256 del mapa recibido; el SHA del blob GitHub no es equivalente al SHA-256 del archivo.
 - [ ] Retrasar cualquier sustitución del fondo del juego hasta completar el trazado de los caminos negros y comprobar el comportamiento del jugador y de la IA.
 - [ ] Preparar red vial de puntos de control, accesos a lugares y pruebas de navegación; el mapa cargado en GitHub es ahora la referencia de trabajo.
+
+
+### Editor vinculado al mapa marcado en GitHub — 2026-11-15
+- [x] Actualizado `tools/editor-caminos.html` con botón para cargar directamente `../juego/mapa-rutas-marcadas.png` desde el mismo sitio (sin subir manualmente el PNG cada vez).
+- [x] Añadido botón para visualizar el antiguo trazado provisional como referencia, con todas las conexiones explícitamente desmarcadas para nueva revisión sobre las líneas negras del usuario.
+- [x] Añadida prueba de regresión al editor que comprueba los enlaces relativos y que el borrador nunca se importa como ruta aprobada.
+- [!] Este avance conecta **el editor de trabajo** con el mapa marcado; **no integra todavía la navegación en `juego/index.html`**. El mapa con caminos negros todavía debe digitalizarse como grafo transitable completo.
+- [ ] Abrir el editor en GitHub Pages, trazar los senderos negros y sus cruces reales, exportar rutas revisadas, validar accesos y ejecutar pruebas de movimiento antes de cambiar el juego.
