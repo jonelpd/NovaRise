@@ -2236,3 +2236,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Confirmada ejecución verde de GitHub Actions `43752423665` para commit `592ef394`, que incluye las pruebas del detector de uniones en T.
 - [!] Estas dos conexiones siguen pendientes de revisión visual y podrían coincidir con otros candidatos geométricos. No deben sumarse automáticamente a los 126 pares de extremos como conexiones distintas.
 - [ ] Revisar candidatos sobre el mapa limpio, obstáculos y accesos; autorizar únicamente conexiones demostradas y después validar navegación y guardados de ambas ediciones.
+
+
+### Primera integración ejecutable de las rutas azules en el juego — 2026-11-15
+- [x] Modificado **`juego/index.html`** (commit `963e09ce7df3a1e523626a98fdbe639cf9e7e377`) para cargar directamente `../docs/mapa-caminos-actualizados.polyline`, comprobar 111 fragmentos/606 puntos y rasterizar una malla de corredores invisibles 80×80.
+- [x] La función `fineRoute` usa ahora `tracedRoadRoute`: búsqueda de caminos sobre las líneas dibujadas, con controles `navFree` y acceso local desde héroes, castillos y destinos mediante `terrainFineRoute`. La imagen de fondo y el sistema de guardados no se han modificado.
+- [x] Si falla la carga de rutas, se bloquea el desplazamiento con un mensaje en vez de permitir navegar libremente.
+- [!] **Integración de código, pendiente de validación funcional**: todavía no se ha comprobado la experiencia en navegador ni los movimientos y accesos reales del mapa; las acciones de regresión estaban en cola al consultar. No debe presentarse como versión completamente probada.
+- [ ] Comprobar CI, probar desplazamiento real entre lugares y guardados en navegador; ajustar accesos y conexiones en caso de bloqueos y verificar paridad de edición itch.io.
