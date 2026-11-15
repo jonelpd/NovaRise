@@ -6,8 +6,8 @@ const data=JSON.parse(fs.readFileSync('docs/mapa-rutas-marcadas-tramo-central.js
 test('central marked road corridor is a connected provisional trace',()=>{
  assert.equal(data.status,'draft-unverified');
  assert.equal(data.map_asset,'mapa-rutas-marcadas.png');
- assert.equal(data.nodes.length,43);
- assert.equal(data.edges.length,41);
+ assert.equal(data.nodes.length,57);
+ assert.equal(data.edges.length,54);
  assert.ok(data.nodes.every(n=>n.x>=0&&n.x<=1&&n.y>=0&&n.y<=1));
  const route=createRoadGraph(data.nodes,data.edges).route(data.nodes[0].id,'central-mill-13');
  assert.equal(route.nodes.length,13);
@@ -41,4 +41,12 @@ test('western mine route is separate until real crossroads are inspected',()=>{
  const west=graph.route('west-castle-mine-01','west-castle-mine-17');
  assert.equal(west.nodes.length,17);
  assert.equal(graph.route('west-castle-mine-01','central-mill-01'),null);
+});
+
+test('northern watchtower-to-cave route stays isolated until a real junction is validated',()=>{
+ const graph=createRoadGraph(data.nodes,data.edges);
+ const north=graph.route('north-watchtower-cave-01','north-watchtower-cave-14');
+ assert.equal(north.nodes.length,14);
+ assert.equal(graph.route('north-watchtower-cave-01','central-mill-01'),null);
+ assert.equal(graph.route('north-watchtower-cave-01','west-castle-mine-01'),null);
 });
