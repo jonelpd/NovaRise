@@ -64,3 +64,13 @@ test('release gate requires evidence, exact neighbors and clearance for every or
  const approved={...base,junction_clearances:{a:{clearance_confirmed:true,visual_approved:true,neighbors:['b','c','d'],evidence:'Reviewed marked original and confirmed obstacle-free three-way junction'}}};
  assert.equal(validateRoadRelease(approved).ready,true);
 });
+
+test('all six hazard edge warnings match real draft edges and remain unverified',()=>{
+ const keys=new Set(draft.edges.map(e=>[e.from,e.to].sort().join('|')));
+ assert.equal(audit.hazard_edges.reduce((sum,h)=>sum+h.neighbors.length,0),6);
+ assert.equal(audit.checks.incident_edge_warnings,6);
+ for(const h of audit.hazard_edges){
+  assert.equal(h.status,'review-required');
+  for(const n of h.neighbors)assert.ok(keys.has([h.junction,n].sort().join('|')));
+ }
+});
