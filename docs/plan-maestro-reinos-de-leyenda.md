@@ -1556,3 +1556,14 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [ ] Ejecutar workflow actualizado y comprobar reporte `itchio-external-audit.json`, pruebas y ZIP; comprobar navegador/consola/red y permisos.
 - [ ] Preparar portada y capturas del juego real y configurar donaciones solo después de superar controles de publicación.
 **Estado:** auditoría reforzada en código, **no se ha ejecutado todavía el workflow tras este cambio**. No se autoriza publicación pública ni donaciones. Solo se mantienen NovaRise e itch.io.
+
+
+### Inventario reproducible de recursos y licencias — 2026-11-15
+- [x] Creado `scripts/inventory-itchio-assets.cjs` para recorrer el paquete final itch.io y listar imágenes, audio, vídeo y tipografías con ruta, tipo, tamaño y SHA-256.
+- [x] El informe `dist/itchio-assets-inventory.json` se incorpora como artefacto del workflow `.github/workflows/itchio-candidate.yml`, junto al ZIP y la auditoría externa.
+- [x] Ningún recurso se marca como autorizado por defecto: `author`, `origin_url`, `license` y `license_evidence` se mantienen pendientes y `redistribution_approved=false`.
+- [x] Añadido `tests/p0-itchio-asset-inventory.test.cjs` para comprobar el inventario y su inclusión en el workflow.
+- [ ] Ejecutar workflow actualizado y revisar el inventario real de recursos del ZIP.
+- [ ] Documentar derechos de cada recurso antes de habilitar publicación pública o monetización mediante donaciones. Un inventario no constituye prueba de licencia.
+- [ ] Revisar también materiales que no sean archivos multimedia convencionales (CSS, imágenes incrustadas, recursos remotos y derivados), y derechos de elementos inspirados en juegos de terceros.
+**Estado:** automatización del inventario implementada, no se ha confirmado ejecución de GitHub Actions ni autorización legal de los recursos.
