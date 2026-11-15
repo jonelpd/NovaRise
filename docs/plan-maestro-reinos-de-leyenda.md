@@ -1887,3 +1887,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Reforzado el test para impedir la reaparición del atajo erróneo `central-mill-08 → central-ruins-01` y exigir el ramal provisional corregido `central-south-03 → central-ruins-01`, además de cero cruces estrictos sin nodo compartido.
 - [!] Cambios confirmados en GitHub; **sin verificación de ejecución verde** del workflow actualizado. El nuevo mapa no está activo en ninguna edición.
 - [ ] Revisar GitHub Actions, ejecutar generación manual itch.io y confirmar integridad del ZIP; continuar validación visual del mapa antes de autorizar movimiento de héroes sobre rutas nuevas.
+
+
+### Auditoría del paquete itch.io: error de JSON corregido — 2026-11-15
+- [x] Reabierto y auditado el código real `scripts/build-itchio-guest.cjs` y su verificador `scripts/verify-shared-map-editions.cjs`.
+- [x] **Corregido un defecto real**: el generador escribía los caracteres literales `\\n` al final de `shared-map-hashes.json`, fuera del objeto JSON, haciendo fallar `JSON.parse` y la comprobación de paridad. Ahora escribe un salto de línea real válido.
+- [x] Confirmado que el test existente `tests/p0-itchio-guest-build.test.cjs` analiza el manifiesto con `JSON.parse`, por lo que cubre esta regresión en la próxima ejecución.
+- [x] Comprobadas sobre el JSON de rutas las longitudes topológicas de los cinco recorridos usados en pruebas: molino 13 nodos, ruinas 18, volcán 16, mina oeste 17 y cueva norte 14. La comprobación ha sido independiente, no equivale a ejecución de Node ni a CI verde.
+- [!] No se ha comprobado una ejecución exitosa de Actions; la consulta de estados de commit no devolvió estados asociados. Mantener bloqueada la activación del mapa hasta verificar la construcción y la geometría real.
