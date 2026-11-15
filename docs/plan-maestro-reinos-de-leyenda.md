@@ -1655,3 +1655,13 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [ ] Crear la imagen final propia y un inventario exhaustivo de lugares visibles; ejecutar el validador con **archivos reales**, no solo los datos sintéticos de prueba.
 - [ ] Trazar y verificar visualmente todos los senderos y puentes, integrar en jugador e IA y probar guardados y movimientos antes de activar el nuevo mapa.
 **Estado:** controles de integridad implementados; no se ha ejecutado CI en esta sesión y el mapa publicado sigue sin cambios.
+
+
+### Primer trazado visual sobre el concepto de mapa propio — 2026-11-15
+- [x] Preparado `docs/mapa-original-rutas-trazado-preliminar.json` con 40 nodos normalizados y 36 conexiones repartidos en cuatro tramos: castillo central–molino, acceso oriental del molino, sendero norte y mina occidental.
+- [x] Los tramos se han trazado como polilíneas con puntos intermedios sobre el concepto visual, en lugar de unir destinos mediante grandes segmentos rectos.
+- [x] Todas las conexiones permanecen `verified:false`; los cuatro trazados son preliminares y están deliberadamente desconectados hasta comprobar enlaces y obstáculos.
+- [x] Añadida prueba `tests/p0-map-road-visual-trace.test.cjs` que impide que estos caminos preliminares se usen en modo de navegación aprobada.
+- [ ] Revisar a escala los 36 segmentos y completar los senderos de los otros biomas; corregir cualquier paso por objetos o terreno no transitable.
+- [ ] Incorporar la imagen definitiva original al repositorio, comprobar su SHA-256 y validar visualmente cada acceso antes de integrarlo en el motor del juego.
+**Estado:** trazado parcial real disponible para inspección, no se ha sustituido el mapa del juego ni verificado CI.
