@@ -1827,3 +1827,12 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [ ] **Pendiente técnico:** localizar y adaptar el empaquetado/flujo de publicación de itch.io para copiar exactamente la imagen final y el JSON de rutas aprobadas desde la fuente común, y verificar SHA-256 iguales en ambos artefactos publicados.
 - [ ] Mantener únicamente diferencias de funciones de edición (NVRA para NovaRise; modo invitado sin NVRA para itch.io). Conservar partidas guardadas por edición y probar compatibilidad antes de publicar.
 - [!] Este contrato **no significa que el mapa nuevo ya esté integrado ni desplegado** en ambas versiones: las rutas siguen provisionales y falta verificar el proceso de construcción de itch.io.
+
+
+### Sincronización real de recursos del mapa en el generador itch.io — 2026-11-15
+- [x] Revisados los archivos reales `scripts/build-itchio-guest.cjs`, `tests/p0-itchio-guest-build.test.cjs` y `.github/workflows/itchio-candidate.yml`. Confirmado que el workflow manual utiliza el generador.
+- [x] Modificado el generador de itch.io para copiar desde la fuente común `juego/mapa-rutas-marcadas.png` y `docs/mapa-rutas-marcadas-tramo-central.json` a la raíz del paquete HTML5, con nombres `mapa-rutas-marcadas.png` y `mapa-rutas-marcadas-tramo-central.json`.
+- [x] Comprobación SHA-256 de origen y destino; si falta un recurso o difieren sus bytes, falla el empaquetado. Se emite `shared-map-hashes.json` dentro del paquete con estado explícito `draft-not-active`.
+- [x] Ampliado `tests/p0-itchio-guest-build.test.cjs` para comprobar la paridad binaria y los hashes del mapa y las rutas, además del aislamiento de la edición invitado.
+- [!] **Alcance:** sincronización de recursos en el próximo ZIP candidato, no activación del mapa en el juego ni publicación automática en itch.io. El mapa negro sigue siendo borrador no verificado. No se ha confirmado aún una ejecución verde del workflow actualizado.
+- [ ] Ejecutar `Build itch.io HTML5 candidate (manual)`, verificar ZIP y SHA-256; completar/verificar rutas, implementar migración de guardados y habilitar el mismo mapa aprobado en ambas ediciones en una actualización coordinada.
