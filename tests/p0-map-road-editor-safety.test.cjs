@@ -20,3 +20,11 @@ test('editor can load user-marked map but never approves old routes',()=>{
  assert.match(html,/Old preliminary trace: retrace against user-marked black paths/);
  assert.match(html,/verified:false,review:'Review against marked user map'/);
 });
+
+test('manual tracing creates unverified chained segments and supports branch endings',()=>{
+ assert.match(html,/value="trace"/);
+ assert.match(html,/traceLast=n\.id/);
+ assert.match(html,/verified:false,review:'Manual trace on marked black road/);
+ assert.match(html,/id="finish-trace"/);
+ assert.match(html,/traceLast=null;selected=null;note\('Sendero terminado/);
+});
