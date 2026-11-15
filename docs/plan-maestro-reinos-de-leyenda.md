@@ -1974,3 +1974,12 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Ampliado `tests/p0-map-watchtower-junction-audit.test.cjs` para exigir grado 3, vecinos exactos, ausencia de aprobación visual y rechazo de un enlace eliminado; el nuevo inspector también está incluido en disparadores de CI.
 - [ ] Revisar paso real junto a la torre y continuidad exacta sobre la tinta negra en el PNG antes de aprobar ambas bifurcaciones.
 - [!] Cambios guardados en GitHub, pero la ejecución de la suite completa y su estado en GitHub Actions siguen pendientes de confirmación. No se alteraron el mapa activo, el movimiento ni los guardados.
+
+
+### Bloqueo de aprobación del cruce bajo la torre — 2026-11-15
+- [x] Inspeccionado directamente el recorte de la imagen original `(770,390)-(1000,600)` a escala 4×. La línea negra **se superpone o pasa por debajo de la base de la torre de vigilancia**, por lo que la transitabilidad del cruce no se puede dar por demostrada.
+- [x] Revisados los trazos negros hacia las ruinas y al este del estanque; queda pendiente establecer qué ramal corresponde a cada arista provisional.
+- [x] Documentada la observación y la necesidad de despeje de obstáculos en `docs/auditoria-bifurcaciones-torre-central.json`.
+- [x] Añadida prueba en `tests/p0-map-watchtower-junction-audit.test.cjs` que exige `clearance_confirmed:false` y `route_approval:false` para la torre, y mantiene sin aprobar los otros ramales.
+- [ ] Revisar con precisión el contorno de la torre y definir un paso real transitable; si el dibujo no demuestra paso libre, dejar la bifurcación bloqueada en vez de inventar desvíos.
+- [!] No se han modificado aristas ni movimiento del juego. No se pudo ejecutar la suite Node desde un checkout local porque la conexión de la máquina de trabajo a GitHub falla por DNS; estado de CI sin confirmar.
