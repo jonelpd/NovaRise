@@ -1776,3 +1776,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Creado `tests/p0-map-road-marked-corridor.test.cjs` que comprueba continuidad geométrica provisional y rechazo por el filtro de rutas verificadas; añadido al workflow de navegación.
 - [!] El tramo es un **muestreo manual preliminar** y necesita cotejo fino con la línea negra antes de marcarlo como aprobado. No representa la red completa ni autoriza a cambiar el movimiento del juego.
 - [ ] Completar ramales y cruces del resto del mapa, verificar tramo por tramo, ejecutar CI y conectar rutas aprobadas con la navegación del juego.
+
+
+### Ampliación del trazado negro — 2026-11-15
+- [x] Revisado visualmente el primer tramo del castillo central al molino mediante una superposición local de sus puntos sobre la imagen aportada.
+- [x] Añadido al JSON `docs/mapa-rutas-marcadas-tramo-central.json` el ramal hacia el sur desde el cruce oriental hasta las ruinas clásicas: 6 nodos y 6 conexiones adicionales; total actual **19 nodos y 18 conexiones provisionales**.
+- [x] Ampliada la prueba del tramo para comprobar que la rama comparte un cruce real con el camino del molino y que existe un recorrido conectado.
+- [!] Las coordenadas siguen siendo aproximaciones visuales; ningún tramo se ha aprobado ni activado en el juego. Los accesos exactos y los cruces con obstáculos requieren verificación fina.
+- [ ] Completar red global, revisar todos los tramos sobre el PNG y validar ejecución de pruebas en CI antes de cambiar la navegación del juego.
