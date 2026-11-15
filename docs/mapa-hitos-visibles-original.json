@@ -1,0 +1,145 @@
+{
+  "schema_version": 1,
+  "status": "visual-candidates-unverified",
+  "map_asset": "mapa-rutas-marcadas.png",
+  "image_dimensions": [
+    1254,
+    1254
+  ],
+  "coordinate_system": "pixel",
+  "policy": "Only visually identifiable structures in the user-provided original map; positions approximate; no automatic legacy save mapping or road approval",
+  "landmarks": [
+    {
+      "id": "original-castle-northwest",
+      "kind": "castle",
+      "pixel": [
+        272,
+        116
+      ],
+      "description": "Castillo de tejados azules junto al litoral noroeste"
+    },
+    {
+      "id": "original-castle-central",
+      "kind": "castle",
+      "pixel": [
+        644,
+        309
+      ],
+      "description": "Castillo de tejados rojos en la isla central"
+    },
+    {
+      "id": "original-castle-northeast",
+      "kind": "castle",
+      "pixel": [
+        1122,
+        83
+      ],
+      "description": "Castillo de tejados azules en zona nevada"
+    },
+    {
+      "id": "original-castle-southwest",
+      "kind": "castle",
+      "pixel": [
+        137,
+        733
+      ],
+      "description": "Castillo de torres violetas al suroeste"
+    },
+    {
+      "id": "original-castle-south-center",
+      "kind": "castle",
+      "pixel": [
+        684,
+        1063
+      ],
+      "description": "Castillo de tejados azules en costa sur central"
+    },
+    {
+      "id": "original-castle-southeast",
+      "kind": "castle",
+      "pixel": [
+        1166,
+        1000
+      ],
+      "description": "Castillo con cúpula dorada en desierto sureste"
+    },
+    {
+      "id": "original-castle-volcanic",
+      "kind": "castle",
+      "pixel": [
+        1174,
+        632
+      ],
+      "description": "Fortaleza oscura junto a lava oriental"
+    },
+    {
+      "id": "original-mine-west-central",
+      "kind": "mine",
+      "pixel": [
+        98,
+        475
+      ],
+      "description": "Entrada de mina iluminada en montaña oeste central"
+    },
+    {
+      "id": "original-mine-northeast",
+      "kind": "mine",
+      "pixel": [
+        1172,
+        242
+      ],
+      "description": "Entrada de mina en montaña noreste"
+    },
+    {
+      "id": "original-mine-east-central",
+      "kind": "mine",
+      "pixel": [
+        1177,
+        408
+      ],
+      "description": "Entrada de mina iluminada en montaña oriental"
+    },
+    {
+      "id": "original-mine-east-south",
+      "kind": "mine",
+      "pixel": [
+        1110,
+        837
+      ],
+      "description": "Entrada de mina en montaña oriental meridional"
+    },
+    {
+      "id": "original-mine-southwest",
+      "kind": "mine",
+      "pixel": [
+        70,
+        1057
+      ],
+      "description": "Entrada de mina iluminada en extremo suroeste"
+    },
+    {
+      "id": "original-windmill-east",
+      "kind": "mill",
+      "pixel": [
+        997,
+        419
+      ],
+      "description": "Molino de viento en pradera al este del centro"
+    },
+    {
+      "id": "original-windmill-west",
+      "kind": "mill",
+      "pixel": [
+        350,
+        412
+      ],
+      "description": "Molino o torre de piedra con aspas no visibles; clasificación por confirmar",
+      "classification_uncertain": true
+    }
+  ],
+  "legacy_mapping": {
+    "status": "not-assigned",
+    "reason": "The old map uses different artwork; no old IDs may be mapped without site-by-site review"
+  },
+  "all_verified": false
+}
