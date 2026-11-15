@@ -23,3 +23,17 @@ test('audit never invents mapping even if candidate labels change',()=>{
  assert.equal(JSON.stringify(roads),before);
  assert.equal(result.separately_mapped_eastern_candidates,0);
 });
+
+test('visual comparison records northeast overlap but detects absent pond branch',()=>{
+ const result=auditEastBranches(roads,review);
+ assert.equal(result.farm_candidate_overlaps_existing_chain,true);
+ assert.equal(result.pond_branch_missing_from_draft,true);
+ assert.equal(result.tower_fork_clearance_confirmed,false);
+ assert.equal(result.comparison_consistent,true);
+ assert.equal(result.release_ready,false);
+});
+test('inconsistent branch comparison cannot be treated as valid evidence',()=>{
+ const modified=structuredClone(review);
+ modified.east_branch_review.draft_comparison.pond.draft_nodes=['central-mill-10'];
+ assert.equal(auditEastBranches(roads,modified).comparison_consistent,false);
+});
