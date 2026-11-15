@@ -2395,3 +2395,10 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] En el juego principal se ha sustituido el enlace de entrada/salida de la máscara turquesa que antes llamaba a `terrainFineRoute` (podía cruzar terreno ajeno al trazado) por una conexión local corta de máximo 4 unidades porcentuales: commit `00b44293`.
 - [!] **Pendiente de pruebas**: la nueva restricción puede bloquear destinos alejados de las rutas, lo que es preferible a atravesar agua o montañas, pero requiere definir puertas exactas y reparar las cuatro componentes de la máscara. No se afirma que la navegación esté completada.
 - [ ] Revisar la máscara sobre la imagen original marcada, registrar entradas verificadas para los 44 sitios, probar desplazamientos completos y actualizar la edición itch.io cuando corresponda.
+
+
+### Revisión de regresión de la navegación estratégica — 2026-11-16
+- [x] Detectada una incompatibilidad grave introducida por la restricción anterior de 4 puntos porcentuales: las casillas estratégicas de 10×10 están separadas por 10 puntos, por lo que `fineStepBetween` podía bloquear desplazamientos válidos aunque existiera un camino turquesa cercano.
+- [x] Eliminado ese límite y los conectores visuales rectos fuera del trazado: `turquoiseRoadRoute` proyecta los extremos lógicos sobre la máscara y devuelve únicamente puntos del camino oficial (commit `e9e7e111`).
+- [!] La corrección aún no está verificada por CI ni en navegador. Las cuatro componentes de la máscara siguen requiriendo una revisión topológica basada en el mapa original. No dar por cerrada la fase.
+- [ ] Revisar comportamiento del marcador al iniciar desde una posición antigua fuera de la ruta, las puertas de los 44 elementos y la paridad del paquete itch.io.
