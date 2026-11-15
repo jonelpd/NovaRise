@@ -10,8 +10,8 @@
     "road_draft": "docs/mapa-rutas-marcadas-tramo-central.json",
     "review_tool": "tools/revisar-rutas-marcadas.html",
     "release_gate": "scripts/validate-map-road-release.cjs",
-    "bulk_trace": "docs/mapa-todas-lineas-negras-trazadas.json",
-    "bulk_trace_overlay": "docs/mapa-todas-lineas-negras-trazadas.svg",
+    "bulk_trace": "docs/mapa-caminos-extraidos.json",
+    "bulk_trace_overlay": "docs/mapa-caminos-extraidos.svg",
     "bulk_trace_preview": "juego/mapa-todas-lineas-negras-trazadas.png"
   },
   "release_requirements": {
@@ -27,10 +27,10 @@
   },
   "current_state": "draft-unverified; bulk extraction outputs referenced but not yet available in repository; neither edition deployed",
   "bulk_trace_import": {
-    "status": "awaiting-source-files",
+    "status": "local-extraction-awaiting-repository-upload",
     "expected_source": "1254x1254 comparison of original and user-marked maps",
-    "expected_fragments_reported": 115,
-    "expected_simplified_points_reported": 1230,
+    "expected_fragments_reported": 94,
+    "expected_simplified_points_reported": 523,
     "source_files_present_in_repository": false,
     "acceptance": "informational-only; never route from raw extraction",
     "required_checks": [
