@@ -1567,3 +1567,13 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [ ] Documentar derechos de cada recurso antes de habilitar publicación pública o monetización mediante donaciones. Un inventario no constituye prueba de licencia.
 - [ ] Revisar también materiales que no sean archivos multimedia convencionales (CSS, imágenes incrustadas, recursos remotos y derivados), y derechos de elementos inspirados en juegos de terceros.
 **Estado:** automatización del inventario implementada, no se ha confirmado ejecución de GitHub Actions ni autorización legal de los recursos.
+
+
+### Riesgo de derechos de autor confirmado: mapa original de Heroes III — 2026-11-15
+- [!] El usuario confirma expresamente que el mapa actualmente utilizado en Reinos de Leyenda es un mapa original extraído de Heroes of Might and Magic III, no un mapa propio.
+- [ ] **Bloqueo de lanzamiento público y donaciones:** no redistribuir el mapa original sin autorización/licencia verificable del titular. La disponibilidad gratuita no constituye permiso.
+- [ ] Diseñar e incorporar un mapa nuevo, original e independiente, sin copiar la geografía ni elementos gráficos protegidos; conservar la jugabilidad propia y revisar por separado sprites, castillos, criaturas, audio y otros recursos.
+- [ ] Inventariar referencias técnicas al mapa actual (dimensiones, coordenadas de héroes, castillos, minas, caminos, zonas transitables y puntos de interacción) antes de sustituirlo.
+- [ ] Preparar migración versionada de partidas guardadas para evitar colocar héroes o estructuras en ubicaciones inválidas del mapa nuevo; validar tanto NovaRise como itch.io.
+- [ ] Ejecutar pruebas y auditoría visual antes de volver a generar y publicar candidatos.
+**Decisión:** mantener itch.io en Draft; no sustituir el mapa por un simple retoque de la imagen original. La sustitución debe ser un recurso visual genuinamente nuevo.
