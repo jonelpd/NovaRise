@@ -14,6 +14,27 @@ function verify(root='.',packageDir='dist/itchio'){
  try{manifest=JSON.parse(fs.readFileSync(path.join(out,'shared-map-hashes.json'),'utf8'))}
  catch(e){errors.push('Missing or invalid shared-map-hashes.json');return {ok:false,errors}}
  if(manifest.status!=='draft-not-active')errors.push('Unexpected shared map activation status');
+ if(manifest.active_status!=='turquoise-map-active')errors.push('Missing active turquoise map status');
+ const activeFiles=[
+  ['juego/mapa-reinos-2048.jpg','mapa-reinos-2048.jpg'],
+  ['juego/rutas-turquesa-160.json','rutas-turquesa-160.json']
+ ];
+ for(const [relative,target] of activeFiles){
+  const original=path.join(source,relative),copied=path.join(out,target);
+  if(!fs.existsSync(original)||!fs.existsSync(copied)){errors.push('Missing active game asset: '+relative);continue}
+  const hash=sha(original);
+  if(hash!==sha(copied))errors.push('Active NovaRise / itch.io mismatch: '+relative);
+  if(manifest.active_files?.[relative]!==hash)errors.push('Active map manifest SHA mismatch: '+relative);
+ }
+ const game=path.join(source,'juego/index.html'),itch=path.join(out,'index.html');
+ if(!fs.existsSync(game)||!fs.existsSync(itch))errors.push('Missing game entrypoint');
+ else{
+  const expected=fs.readFileSync(game,'utf8'),actual=fs.readFileSync(itch,'utf8');
+  for(const required of ["fetch('./rutas-turquesa-160.json'","function turquoiseRoadRoute(a,b)","const VERIFIED_MAP_SITES=["]){
+   if(!expected.includes(required)||!actual.includes(required))errors.push('Active map gameplay missing from edition: '+required);
+  }
+ }
+
  for(const [relative,target] of files){
   const a=path.join(source,relative),b=path.join(out,target);
   if(!fs.existsSync(a)||!fs.existsSync(b)){errors.push('Missing shared map asset: '+relative);continue}
