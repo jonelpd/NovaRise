@@ -2228,3 +2228,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Añadido `tests/p0-map-bulk-endpoint-segments.test.cjs` con pruebas de unión en T y carreteras paralelas separadas.
 - [!] Los resultados de esta nueva auditoría son candidatos a revisión; **no se conectan automáticamente** ni se altera el motor del juego.
 - [ ] Confirmar el CI del nuevo commit, ejecutar auditoría de uniones en T sobre los 606 nodos, revisar los candidatos contra el mapa limpio y aprobar solo pasos reales.
+
+
+### Resultado de auditoría integral de uniones en T — 2026-11-15
+- [x] Ejecutado el algoritmo `audit-bulk-road-endpoint-segments.cjs` sobre los 606 nodos y 495 aristas del grafo publicado. Resultado: **2 candidatos en T**, cada uno en un par distinto de fragmentos y a menos de 1 píxel de un segmento interior.
+- [x] Guardado el informe en `docs/mapa-caminos-uniones-t-candidatas.json`: `ink-0108-p0002` próximo a arista 488 de `ink-0109` (0,989 px) y `ink-0033-p0005` próximo a arista 145 de `ink-0035` (0,996 px).
+- [x] Confirmada ejecución verde de GitHub Actions `43752423665` para commit `592ef394`, que incluye las pruebas del detector de uniones en T.
+- [!] Estas dos conexiones siguen pendientes de revisión visual y podrían coincidir con otros candidatos geométricos. No deben sumarse automáticamente a los 126 pares de extremos como conexiones distintas.
+- [ ] Revisar candidatos sobre el mapa limpio, obstáculos y accesos; autorizar únicamente conexiones demostradas y después validar navegación y guardados de ambas ediciones.
