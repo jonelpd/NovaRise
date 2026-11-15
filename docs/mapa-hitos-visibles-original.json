@@ -143,56 +143,50 @@
       "description": "Puente de piedra de varios arcos, inequívocamente visible en la salida oriental del castillo central, sobre el río; el camino negro pasa por el puente",
       "verified": false,
       "connectedRoadNodes": [],
-      "note": "Bridge structure and black line visually evident. Approximate entrances and trace are review candidates, not validated road edges. Existing central-mill nodes near bridge are not consistently aligned with black road; re-trace before verifying.",
+      "note": "Seven existing central-mill nodes have been realigned to the visible black ink on the enlarged original map. Route graph remains provisional; physical bridge is visible but endpoints, crossings and continuous traversal still need independent confirmation.",
       "structureVisuallyConfirmed": true,
       "entrances": {
         "castleSideApproxPixel": [
-          690,
-          380
+          680,
+          372
         ],
         "farBankApproxPixel": [
-          742,
-          425
+          752,
+          443
         ]
       },
       "blackRoadTraceApproxPixel": [
         [
           680,
-          373
+          372
         ],
         [
-          691,
-          380
+          700,
+          386
         ],
         [
-          704,
-          390
-        ],
-        [
-          716,
+          719,
           401
         ],
         [
-          728,
-          413
+          738,
+          420
         ],
         [
-          739,
-          425
+          752,
+          443
         ],
         [
-          748,
-          438
+          772,
+          465
+        ],
+        [
+          800,
+          484
         ]
       ],
-      "geometryStatus": "manual-pixel-review-needed",
-      "existingDraftNodeWarning": [
-        "central-mill-01",
-        "central-mill-02",
-        "central-mill-03",
-        "central-mill-04",
-        "central-mill-05"
-      ]
+      "geometryStatus": "bridge-corridor-retraced-provisional",
+      "existingDraftNodeWarning": []
     }
   ],
   "crossing_policy": "A river crossing must be visually confirmed as a bridge with road continuity on both banks; no graph edge is created by this inventory."
