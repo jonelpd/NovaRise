@@ -62,5 +62,5 @@ for(const [relative,destination] of sharedFiles){
  if(hash(source)!==hash(target))throw Error('Shared map copy mismatch: '+relative);
  sharedHashes[relative]=hash(target);
 }
-fs.writeFileSync(path.join(out,'shared-map-hashes.json'),JSON.stringify({schema_version:1,status:'draft-not-active',files:sharedHashes},null,2)+'\\n');
+fs.writeFileSync(path.join(out,'shared-map-hashes.json'),JSON.stringify({schema_version:1,status:'draft-not-active',files:sharedHashes},null,2)+'\n');
 console.log('itch.io guest edition generated; source untouched');
