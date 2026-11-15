@@ -2008,3 +2008,10 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Ampliada prueba `tests/p0-map-road-review-overlay.test.cjs` para comprobar que la herramienta señala cruces sin habilitar rutas ni modificar el juego.
 - [ ] Revisar manualmente el trazo negro y los obstáculos en la herramienta antes de aprobar el recorrido; el molino y la continuidad oriental permanecen sin validar.
 - [!] Los anillos son avisos de revisión, **no prueba de transitabilidad**. No se han alterado los datos de caminos, el juego activo ni las partidas guardadas.
+
+
+### Señalización de segmentos pendientes en bifurcaciones — 2026-11-15
+- [x] Ampliada la vista de auditoría del mapa original: no solo marca los nodos de torre y ruinas, también dibuja en rojo discontinuo los **seis segmentos incidentes** (tres por bifurcación) mientras el aviso esté activo.
+- [x] Enumerados los seis tramos provisionales en `docs/auditoria-bifurcaciones-torre-central.json` y añadidas pruebas de correspondencia con las aristas reales del grafo y de señalización visual.
+- [ ] Comprobar manualmente el despeje de la torre, la continuidad de la tinta negra en el cruce sur y los tramos hacia el molino; no se ha aprobado ningún segmento.
+- [!] Sin cambios en rutas activas ni partidas guardadas. La ejecución del nuevo commit en GitHub Actions requiere comprobación.
