@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "map_asset": "original-map-concept-2026-11-15.png",
+  "status": "review-blocked",
+  "review_date": "2026-11-15",
+  "method": "Visual overlay of 8 draft polylines on 1254x1254 concept image; not pixel-level collision detection.",
+  "route_reviews": [
+    {
+      "route": "castillo-central-a-molino",
+      "status": "needs-detail-review",
+      "finding": "Route roughly follows bridge and east road; first node at castle entrance and the bridge/forest turn require closer inspection."
+    },
+    {
+      "route": "molino-a-camino-volcan",
+      "status": "blocked",
+      "finding": "Line crosses windmill and field geometry rather than a confirmed continuous walkable path."
+    },
+    {
+      "route": "sendero-norte-castillo",
+      "status": "blocked",
+      "finding": "Final segment crosses central castle roofs/walls instead of entering through gate."
+    },
+    {
+      "route": "camino-oeste-mina",
+      "status": "needs-detail-review",
+      "finding": "Route appears near a visible road but tower and mine access need closer inspection."
+    },
+    {
+      "route": "oeste-castillo-sur",
+      "status": "blocked",
+      "finding": "Polyline cuts across dense vegetation and landscape details; several bends do not match painted road."
+    },
+    {
+      "route": "pantano-acceso",
+      "status": "blocked",
+      "finding": "Route enters flooded marsh areas without a visible bridge or confirmed solid ground."
+    },
+    {
+      "route": "desierto-acceso",
+      "status": "blocked",
+      "finding": "Several segments cross structures and dunes instead of tracing visible sand road."
+    },
+    {
+      "route": "minas-suroeste",
+      "status": "needs-detail-review",
+      "finding": "Route approximately follows a trail but forest turns and entrance need verification."
+    }
+  ],
+  "approved_route_count": 0,
+  "next_actions": [
+    "Correct blocked segments against map at high zoom",
+    "Add bridge and gate waypoints only where visible",
+    "Create access node per confirmed location",
+    "Retest image identity and graph connectivity before gameplay integration"
+  ]
+}
