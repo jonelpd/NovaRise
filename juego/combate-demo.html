@@ -256,6 +256,12 @@ body:has(#auth-screen:not([hidden])){min-height:100vh;background:linear-gradient
 #world-viewport .map .mounted-hero-rider .hero-gallop-frames{position:absolute;inset:0;opacity:0}
 #world-viewport .map .mounted-hero-marker.hero-traveling .hero-idle-frame{opacity:0}
 #world-viewport .map .mounted-hero-marker.hero-traveling .hero-gallop-frames{opacity:1}
+#world-viewport .map .mounted-hero-rider .hero-gallop-frames{opacity:0!important;visibility:hidden!important}
+#world-viewport .map .mounted-hero-rider .hero-gallop-cutout{display:block;position:absolute;inset:0;width:34px;height:43px;opacity:0;pointer-events:none}
+#world-viewport .map .mounted-hero-marker.hero-traveling .hero-gallop-cutout{opacity:1}
+#world-viewport .map .mounted-hero-marker.hero-facing-left .hero-gallop-cutout{transform:scaleX(-1)}
+@media(prefers-reduced-motion:reduce){#world-viewport .map .mounted-hero-marker .hero-gallop-cutout{opacity:0!important}}
+
 /* El fotograma animado contiene blanco incrustado: fundirlo con el terreno en lugar de dibujar un rectángulo opaco. */
 #world-viewport .map .mounted-hero-marker .hero-gallop-frames{mix-blend-mode:multiply!important;background:transparent!important}
 #world-viewport .map .mounted-hero-marker .mounted-hero-rider{background:transparent!important}
@@ -1461,6 +1467,51 @@ function drawMountedHero(map){
   persistentHero=document.createElement('div');persistentHero.className='mounted-hero-marker';
   persistentHero.setAttribute('role','img');persistentHero.setAttribute('aria-label','Tu héroe montado a caballo');
   const rider=document.createElement('span');rider.className='mounted-hero-rider';rider.innerHTML='<img class="hero-idle-frame" src="./heroe-caballo-realista-34x43.png" alt="" width="34" height="43" draggable="false"><img class="hero-gallop-frames" src="./heroe-caballo-galope-34x43.webp" alt="" width="34" height="43" draggable="false">';
+// El WebP original contiene un fondo blanco/negro opaco. Recortarlo por
+// conectividad desde el borde de CADA fotograma, no con mezcla CSS.
+  const gallopSource=rider.querySelector('.hero-gallop-frames');
+  const gallopCanvas=document.createElement('canvas');
+  gallopCanvas.className='hero-gallop-cutout';
+  gallopCanvas.width=34;gallopCanvas.height=43;
+  gallopCanvas.setAttribute('aria-hidden','true');
+  rider.appendChild(gallopCanvas);
+  const gallopCtx=gallopCanvas.getContext('2d',{willReadFrequently:true});
+  const sample=document.createElement('canvas');sample.width=34;sample.height=43;
+  const sampleCtx=sample.getContext('2d',{willReadFrequently:true});
+  let gallopLast=0;
+  function renderTransparentGallop(time){
+    if(!gallopCanvas.isConnected)return;
+    if(gallopSource.complete&&gallopSource.naturalWidth&&time-gallopLast>=90){
+      gallopLast=time;
+      try{
+        sampleCtx.clearRect(0,0,34,43);
+        sampleCtx.drawImage(gallopSource,0,0,34,43);
+        const frame=sampleCtx.getImageData(0,0,34,43),pixels=frame.data;
+        const w=34,h=43,n=w*h,background=new Uint8Array(n),seen=new Uint8Array(n),queue=new Int32Array(n);
+        for(let p=0;p<n;p++){
+          const j=p*4,r=pixels[j],g=pixels[j+1],b=pixels[j+2];
+          const bright=Math.min(r,g,b)>185&&Math.max(r,g,b)-Math.min(r,g,b)<48;
+          const dark=Math.max(r,g,b)<75;
+          background[p]=bright||dark?1:0;
+        }
+        let head=0,tail=0;
+        function seed(p){if(background[p]&&!seen[p]){seen[p]=1;queue[tail++]=p}}
+        for(let x=0;x<w;x++){seed(x);seed((h-1)*w+x)}
+        for(let y=0;y<h;y++){seed(y*w);seed(y*w+w-1)}
+        while(head<tail){
+          const p=queue[head++],x=p%w,y=(p/w)|0;
+          if(x>0)seed(p-1);if(x<w-1)seed(p+1);
+          if(y>0)seed(p-w);if(y<h-1)seed(p+w);
+        }
+        for(let p=0;p<n;p++)if(seen[p])pixels[p*4+3]=0;
+        gallopCtx.clearRect(0,0,w,h);
+        gallopCtx.putImageData(frame,0,0);
+      }catch(err){gallopCanvas.style.display='none'}
+    }
+    requestAnimationFrame(renderTransparentGallop);
+  }
+  requestAnimationFrame(renderTransparentGallop);
+
   const flag=document.createElement('span');flag.className='mounted-hero-flag';flag.textContent='TU HÉROE';
   persistentHero.replaceChildren(rider,flag)
  }
