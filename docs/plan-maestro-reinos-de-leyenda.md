@@ -1836,3 +1836,12 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Ampliado `tests/p0-itchio-guest-build.test.cjs` para comprobar la paridad binaria y los hashes del mapa y las rutas, además del aislamiento de la edición invitado.
 - [!] **Alcance:** sincronización de recursos en el próximo ZIP candidato, no activación del mapa en el juego ni publicación automática en itch.io. El mapa negro sigue siendo borrador no verificado. No se ha confirmado aún una ejecución verde del workflow actualizado.
 - [ ] Ejecutar `Build itch.io HTML5 candidate (manual)`, verificar ZIP y SHA-256; completar/verificar rutas, implementar migración de guardados y habilitar el mismo mapa aprobado en ambas ediciones en una actualización coordinada.
+
+
+### Verificación de disparadores CI y paridad de ediciones — 2026-11-15
+- [x] Inspeccionados los flujos reales `.github/workflows/road-navigation-tests.yml` y `.github/workflows/itchio-candidate.yml`, el generador invitado y su prueba de regresión.
+- [x] Corregidos los filtros de rutas del workflow de navegación: ahora **push y pull_request** incluyen los cambios de `tools/revisar-rutas-marcadas.html`, `docs/mapa-rutas-marcadas-tramo-central.json`, `docs/mapa-compartido-ediciones.json` y `tests/p0-map-editions-parity.test.cjs`.
+- [x] Comprobado por inspección que el workflow manual itch.io ejecuta `node --test tests/p0-*.test.cjs` antes de llamar a `scripts/build-itchio-guest.cjs`, por lo que incluirá las pruebas nuevas de igualdad de imagen y JSON.
+- [!] La máquina local no puede resolver `raw.githubusercontent.com`; no se han ejecutado las pruebas de integración ni confirmado resultado de Actions. No declarar paquete validado ni reemplazar el ZIP del borrador de itch.io.
+- [ ] Ejecutar manualmente el workflow itch.io, verificar que el ZIP incluye `mapa-rutas-marcadas.png`, `mapa-rutas-marcadas-tramo-central.json` y `shared-map-hashes.json` con hashes coincidentes; revisar resultado de Actions.
+- [ ] Completar revisión visual de las 54 conexiones sobre el negro, después aprobar solo las que correspondan a senderos reales; sincronizar activación del mapa en NovaRise e itch.io con migración de partidas.
