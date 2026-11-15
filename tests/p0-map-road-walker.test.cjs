@@ -17,3 +17,18 @@ test('unapproved or disconnected roads cannot move heroes',()=>{
  assert.throws(()=>createRoadWalker(base,'a','c',{speed:0}),/speed/);
  assert.throws(()=>createRoadWalker(base,'a','c').step(-1),/elapsed/);
 });
+
+test('movement resumes exactly after save/load at a bend',()=>{
+ const first=createRoadWalker(base,'a','c',{speed:.1});first.step(4);
+ const saved=JSON.parse(JSON.stringify(first.save()));
+ const resumed=createRoadWalker(base,'a','c',{speed:.1,savedState:saved});
+ assert.deepEqual(resumed.position(),first.position());
+ assert.deepEqual(resumed.step(3),first.step(3));
+});
+test('rejects tampered save state and mismatched route',()=>{
+ const w=createRoadWalker(base,'a','c',{speed:.1});w.step(2);
+ const s=w.save();
+ assert.throws(()=>createRoadWalker(base,'a','c',{speed:.1,savedState:{...s,x:.9}}),/off the approved road/);
+ assert.throws(()=>createRoadWalker(base,'a','c',{speed:.1,savedState:{...s,to:'b'}}),/Invalid saved/);
+ assert.throws(()=>createRoadWalker(base,'a','c',{speed:.1,savedState:{...s,segment:99}}),/Invalid saved/);
+});
