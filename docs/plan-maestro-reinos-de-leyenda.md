@@ -1636,3 +1636,12 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [ ] Verificar el editor en navegador y trazar rutas contra una imagen definitiva y aprobada del mapa original; la verificación visual y de obstáculos todavía está pendiente.
 - [ ] No activar el movimiento por caminos en el juego hasta completar el mapa de navegación.
 **Estado:** cambios en repositorio realizados; pruebas de GitHub Actions no verificadas en esta sesión y juego publicado sin cambios.
+
+
+### Puerta de validación para navegación del mapa original — 2026-11-15
+- [x] Creado `scripts/validate-map-road-release.cjs`, que exige esquema 2, coordenadas normalizadas, estado `approved`, nombre de mapa y SHA-256 del arte final.
+- [x] Bloquea conexiones no verificadas, duplicadas, inválidas o inexistentes; comprueba que cada punto de acceso requerido esté presente y conectado al grafo aprobado.
+- [x] Añadidas pruebas `tests/p0-map-road-release.test.cjs` para impedir publicar el borrador y detectar accesos desconectados.
+- [ ] Vincular el validador al pipeline cuando exista un mapa final propio, su huella digital y un inventario definitivo de accesos a castillos, minas y tesoros.
+- [ ] Verificar visualmente los caminos: la validación de grafo **no comprueba por sí sola** que un tramo coincida con senderos y puentes visibles.
+- [ ] Ejecutar y revisar los tests en CI; aún no se ha integrado el nuevo mapa ni se ha modificado el movimiento del juego publicado.
