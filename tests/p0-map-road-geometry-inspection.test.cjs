@@ -20,3 +20,16 @@ test('current marked road draft remains non-releasable and contains no duplicate
  assert.equal(report.allUnverified,true);
  assert.equal(report.releaseReady,false);
 });
+
+test('published crossing report matches the current road graph and bridge node positions',()=>{
+ const draft=JSON.parse(fs.readFileSync('docs/mapa-rutas-marcadas-tramo-central.json','utf8'));
+ const stored=JSON.parse(fs.readFileSync('docs/informe-cruces-mapa-marcado.json','utf8'));
+ const actual=inspectRoadGeometry(draft);
+ assert.equal(stored.summary.nodes,actual.nodeCount);
+ assert.equal(stored.summary.edges,actual.edgeCount);
+ assert.equal(stored.summary.strict_unjoined_crossings,actual.unjoinedCrossings.length);
+ assert.equal(stored.summary.verified_edges,draft.edges.filter(e=>e.verified===true).length);
+ const nodes=new Map(draft.nodes.map(n=>[n.id,n]));
+ for(const [id,pixel] of Object.entries(stored.findings[0].pixels))assert.deepEqual(pixel,nodes.get(id).pixel);
+ assert.equal(stored.release_ready,false);
+});
