@@ -2056,3 +2056,12 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Ampliado `scripts/audit-east-branches.cjs` y sus pruebas para distinguir coincidencia provisional del ramal noreste, ausencia del ramal del estanque y obstáculo de la torre.
 - [ ] Medir un recorrido accesible y visible alrededor de la torre; si no existe, mantener el paso bloqueado. Solo después incorporar el ramal del estanque a un grafo provisional, comprobar intersecciones y mantener todas las aristas nuevas `verified:false`.
 - [!] No se han creado aristas ni aprobado caminos; no se ha alterado la navegación activa ni el guardado de partidas.
+
+
+### Cambio de estrategia: extracción masiva de TODAS las líneas negras — 2026-11-15
+- [x] Abandonada la revisión manual tramo a tramo como método principal: comparadas pixel a pixel las dos imágenes originales de 1254×1254 disponibles en la sesión (mapa con trazos negros y su versión sin trazos).
+- [x] Segmentada la tinta añadida mediante diferencia cromática, eliminados componentes menores de 30 píxeles, aplicada esqueletización y simplificación de polilíneas.
+- [x] Generados en el espacio de trabajo los archivos `mapa-todas-lineas-negras-trazadas.png` (revisión visual), `mapa-todas-lineas-negras-trazadas.json` (115 polilíneas, 1230 puntos simplificados) y `mapa-todas-lineas-negras-trazadas.svg` (superposición).
+- [ ] **Pendiente de incorporar estos archivos al repositorio**: la imagen base sin trazos utilizada para extraer la diferencia está disponible en la sesión, pero aún no consta como recurso de entrada en GitHub. No afirmar que el trazado completo está ya integrado en el juego.
+- [ ] Revisar los posibles huecos y bifurcaciones generados por el procesamiento, conectar extremos solo cuando la tinta real lo permita, impedir atravesar obstáculos y exportar un grafo navegable completo.
+- [!] Los 115 segmentos son fragmentos vectoriales de tinta, **no** 115 rutas independientes aprobadas. El juego activo y los guardados permanecen sin cambios.
