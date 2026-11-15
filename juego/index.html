@@ -1819,7 +1819,7 @@ function interactVerifiedSite(site){
  if(s.done||battle||rivalBusy)return;
  if(walking)return message('El héroe está caminando. Espera a que termine el movimiento antes de seleccionar otro lugar.');
  if(s.moves<1)return message('No quedan puntos de movimiento. Termina el turno y vuelve a seleccionar '+site.label+'.');
- const [hx,hy]=heroVisualPosition(),[accessX,accessY]=siteAccessPoint(site);
+ const [hx,hy]=heroVisualPosition(),[accessX,accessY]=typeof turquoiseRoadMask!=='undefined'&&turquoiseRoadMask?siteAccessPoint(site):[site.x,site.y];
  if(Math.hypot(hx-accessX,hy-accessY)>8){
   const candidates=[];
   for(let y=0;y<H;y++)for(let x=0;x<W;x++){
