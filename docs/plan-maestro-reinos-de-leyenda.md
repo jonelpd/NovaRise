@@ -2220,3 +2220,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [!] La red no es navegable entre fragmentos; siguen pendientes los 126 enlaces candidatos y la revisión de obstáculos. No se ha activado el movimiento nuevo.
 - [!] La consulta de estados GitHub del commit de corrección de paridad no ha proporcionado una confirmación de CI verde; pendiente verificar la ejecución real.
 - [ ] Revisar uniones y pasos reales, construir un grafo conectado únicamente con autorizaciones visuales y validar rutas y guardados de ambas ediciones.
+
+
+### CI verde y búsqueda masiva de uniones en T — 2026-11-15
+- [x] Confirmado mediante consulta de GitHub Actions que la corrección de la prueba de paridad funcionó: ejecuciones `43752126994`, `43752215688` y `43752224100` finalizaron con `success`.
+- [x] Añadido `scripts/audit-bulk-road-endpoint-segments.cjs` para detectar **extremos de un fragmento cercanos al interior de segmentos de otros fragmentos** (uniones en T omitidas por el análisis anterior).
+- [x] Añadido `tests/p0-map-bulk-endpoint-segments.test.cjs` con pruebas de unión en T y carreteras paralelas separadas.
+- [!] Los resultados de esta nueva auditoría son candidatos a revisión; **no se conectan automáticamente** ni se altera el motor del juego.
+- [ ] Confirmar el CI del nuevo commit, ejecutar auditoría de uniones en T sobre los 606 nodos, revisar los candidatos contra el mapa limpio y aprobar solo pasos reales.
