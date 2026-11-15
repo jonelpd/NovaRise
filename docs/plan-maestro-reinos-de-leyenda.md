@@ -2320,3 +2320,14 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [ ] Identificar punto de entrada de cada uno de los 44 lugares y conectarlo a los trazos negros; revisar los cruces y posibles conexiones falsas.
 - [ ] Migrar `VERIFIED_MAP_SITES`, acciones de captura, recompensas y reclutamiento usando el catálogo validado, preservando compatibilidad de partidas y ambas ediciones.
 - [ ] Validar con pruebas automáticas y recorrido real por el mapa.
+
+
+### Integración del mapa corregido con caminos turquesa — 2026-11-15
+- [x] El usuario entregó `mapa-rutas-marcadas(1).png` de 1254×1254, conservando las cinco categorías de círculos y sustituyendo el trazado de desplazamiento por líneas turquesa.
+- [x] Se compararon píxel a píxel el mapa anterior y el nuevo para aislar únicamente los trazos turquesa (aprox. 40 287 píxeles de diferencia identificados como ruta), sin confundirlos con el agua ni los círculos.
+- [x] Generada máscara binaria **160×160** con **2404 celdas de ruta**, almacenada en `juego/rutas-turquesa-160.json` (zlib+base64); detectados **4 componentes**, dos principales y dos pequeños. No se han inventado uniones entre ellos.
+- [x] `juego/index.html` carga la nueva máscara y prioriza búsqueda sobre las líneas turquesa; la validación de los pasos turquesa evita el bloqueo por la máscara de obstáculos del mapa anterior. Se mantiene navegación de respaldo cuando el trazado no permite conectar destinos.
+- [x] Reubicados los **44 elementos** del catálogo marcado: 7 castillos, 10 minas, 1 molino, 15 recompensas y 11 edificios de reclutamiento. Los accesos se aproximan al punto turquesa más cercano y se incorporó reclutamiento semanal de soldados.
+- [x] Actualizado `server/nvra-authoritative-mines.cjs` para las 10 minas y adaptadas pruebas de captura y economía. Conservados IDs de los 3 recursos existentes cuando fue posible.
+- [!] **No cerrar fase hasta CI verde y comprobación visual y de movimiento real**. Las coordenadas se han estimado a partir de los centros de círculos, no de una comprobación interactiva. El sistema de casillas estratégicas 10×10 sigue siendo heredado y el respaldo puede permitir desplazamientos fuera del trazado turquesa.
+- [ ] Verificar accesos de los 44 lugares, conectividad de los cuatro componentes, interacciones de castillos, minas, molino, recompensas y reclutamiento; validar partidas guardadas y sincronía con la versión itch.io.
