@@ -7,7 +7,7 @@
 <div class="layout"><div class="stage" id="stage"><div class="map" id="map"><img src="../juego/mapa-rutas-marcadas.png" alt="Mapa original con caminos negros dibujados por el usuario"><svg viewBox="0 0 1254 1254" id="overlay" aria-label="Superposición de rutas provisionales"></svg></div></div>
 <aside><strong>Inspección de rutas</strong><label>Recorrido <select id="route"><option value="all">Todos los tramos</option><option value="central">Central y oriental</option><option value="west">Occidental</option><option value="north">Septentrional</option></select></label>
 <label><input id="lines" type="checkbox" checked> Mostrar conexiones propuestas</label><label><input id="nodes" type="checkbox" checked> Mostrar puntos</label><label><input id="labels" type="checkbox"> Mostrar identificadores</label>
-<label><input id="hazards" type="checkbox" checked> Señalar cruces sin paso confirmado</label><button id="focusTower" type="button">Examinar torre y ruinas</button> <button id="focusEast" type="button">Examinar estanque y caminos orientales</button> <button id="reset">Mostrar todo</button><output id="report" aria-live="polite">Cargando trazados...</output><p class="warning">No se permite aprobar caminos desde esta vista. Cada segmento requiere revisión contra el trazo negro.</p><p><a href="../docs/mapa-rutas-marcadas-tramo-central.json">Abrir datos originales</a></p></aside></div>
+<label><input id="hazards" type="checkbox" checked> Señalar cruces sin paso confirmado</label><label><input id="eastTraces" type="checkbox" checked> Comparar dos trazos orientales aproximados</label><button id="focusTower" type="button">Examinar torre y ruinas</button> <button id="focusEast" type="button">Examinar estanque y caminos orientales</button> <button id="reset">Mostrar todo</button><output id="report" aria-live="polite">Cargando trazados...</output><p class="warning">No se permite aprobar caminos desde esta vista. Cada segmento requiere revisión contra el trazo negro.</p><p><a href="../docs/mapa-rutas-marcadas-tramo-central.json">Abrir datos originales</a></p></aside></div>
 <script>
 'use strict';
 const svg=document.getElementById('overlay'),report=document.getElementById('report'),NS='http://www.w3.org/2000/svg';
@@ -39,6 +39,14 @@ function draw(){
    const title=el('title',{});title.textContent=spec.id+': '+(blocked?'SIN PASO CONFIRMADO':'aprobado');svg.lastChild.appendChild(title);
   }
  }
+ if(audit&&document.getElementById('eastTraces').checked&&selected!=='west'&&selected!=='north'){
+  for(const [i,trace] of (audit.east_branch_review?.visual_trace_samples?.traces||[]).entries()){
+   if(trace.verified!==false)continue;
+   svg.appendChild(el('polyline',{points:trace.pixels.map(p=>p.join(',')).join(' '),fill:'none',stroke:i===0?'#00e5ff':'#ffb347','stroke-width':3,'stroke-dasharray':'2 7',opacity:.9}));
+   const end=trace.pixels.at(-1),label=el('text',{x:end[0]+5,y:end[1]+(i===0?-10:16),fill:i===0?'#00e5ff':'#ffb347','font-size':12,stroke:'#000','stroke-width':3,'paint-order':'stroke'});
+   label.textContent=i===0?'Granja · aproximado':'Estanque · aproximado';svg.appendChild(label);
+  }
+ }
  const count=data.nodes.filter(n=>show(n.id)).length;
  report.textContent=count+' puntos; '+data.edges.filter(e=>show(e.from)).length+' conexiones propuestas.\n'+
  'Estado: '+data.status+'.\n'+
@@ -58,6 +66,6 @@ document.getElementById('focusTower').addEventListener('click',()=>{
  document.getElementById('route').value='central';draw();
  const stage=document.getElementById('stage');stage.scrollLeft=Math.max(0,820-stage.clientWidth/2);stage.scrollTop=Math.max(0,500-stage.clientHeight/2);
 });
-for(const id of ['route','lines','nodes','labels','hazards'])document.getElementById(id).addEventListener('change',draw);
+for(const id of ['route','lines','nodes','labels','hazards','eastTraces'])document.getElementById(id).addEventListener('change',draw);
 document.getElementById('reset').addEventListener('click',()=>{document.getElementById('route').value='all';document.getElementById('lines').checked=true;document.getElementById('nodes').checked=true;document.getElementById('labels').checked=false;draw()});
 </script></body></html>
