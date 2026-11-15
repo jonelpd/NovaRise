@@ -5,33 +5,39 @@ on:
       - 'scripts/map-road-*.cjs'
       - 'scripts/inspect-marked-road-geometry.cjs'
       - 'scripts/check-map-save-transition.cjs'
+      - 'scripts/audit-map-site-migration.cjs'
       - 'scripts/validate-map-road-release.cjs'
       - 'scripts/audit-map-road-topology.cjs'
       - 'tests/p0-map-road-*.test.cjs'
       - 'tests/p0-map-editions-parity.test.cjs'
       - 'tests/p0-map-road-geometry-inspection.test.cjs'
       - 'tests/p0-map-save-transition.test.cjs'
+      - 'tests/p0-map-site-migration-audit.test.cjs'
       - 'tools/editor-caminos.html'
       - 'tools/revisar-rutas-marcadas.html'
       - 'docs/mapa-original-rutas-trazado-preliminar.json'
       - 'docs/mapa-rutas-marcadas-tramo-central.json'
       - 'docs/mapa-compartido-ediciones.json'
+      - 'juego/index.html'
       - '.github/workflows/road-navigation-tests.yml'
   pull_request:
     paths:
       - 'scripts/map-road-*.cjs'
       - 'scripts/inspect-marked-road-geometry.cjs'
       - 'scripts/check-map-save-transition.cjs'
+      - 'scripts/audit-map-site-migration.cjs'
       - 'scripts/validate-map-road-release.cjs'
       - 'scripts/audit-map-road-topology.cjs'
       - 'tests/p0-map-road-*.test.cjs'
       - 'tests/p0-map-editions-parity.test.cjs'
       - 'tests/p0-map-road-geometry-inspection.test.cjs'
       - 'tests/p0-map-save-transition.test.cjs'
+      - 'tests/p0-map-site-migration-audit.test.cjs'
       - 'tools/editor-caminos.html'
       - 'tools/revisar-rutas-marcadas.html'
       - 'docs/mapa-rutas-marcadas-tramo-central.json'
       - 'docs/mapa-compartido-ediciones.json'
+      - 'juego/index.html'
       - 'docs/mapa-original-rutas-trazado-preliminar.json'
       - '.github/workflows/road-navigation-tests.yml'
   workflow_dispatch:
@@ -47,4 +53,4 @@ jobs:
         with:
           node-version: '22'
       - name: Validate road editor and navigation modules
-        run: node --test tests/p0-map-road-editor-safety.test.cjs tests/p0-map-road-topology.test.cjs tests/p0-map-road-walker.test.cjs tests/p0-map-road-marked-corridor.test.cjs tests/p0-map-road-review-overlay.test.cjs tests/p0-map-editions-parity.test.cjs tests/p0-map-road-geometry-inspection.test.cjs tests/p0-map-save-transition.test.cjs
+        run: node --test tests/p0-map-road-editor-safety.test.cjs tests/p0-map-road-topology.test.cjs tests/p0-map-road-walker.test.cjs tests/p0-map-road-marked-corridor.test.cjs tests/p0-map-road-review-overlay.test.cjs tests/p0-map-editions-parity.test.cjs tests/p0-map-road-geometry-inspection.test.cjs tests/p0-map-save-transition.test.cjs tests/p0-map-site-migration-audit.test.cjs
