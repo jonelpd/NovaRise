@@ -4,7 +4,7 @@
   "coordinate_system": "normalized",
   "map_asset": "mapa-rutas-marcadas.png",
   "source": "User-marked black paths, manually sampled on 1254x1254 image",
-  "coverage": "Three preliminary branches: central castle to windmill, eastern watchtower to southern ruins, and south-east approach to volcanic junction. All pending verification.",
+  "coverage": "Central and eastern branches plus separate provisional western blue-castle-to-gold-mine corridor; no verified link between components.",
   "nodes": [
     {
       "id": "central-mill-01",
@@ -239,6 +239,159 @@
         939,
         627
       ]
+    },
+    {
+      "id": "west-castle-mine-01",
+      "x": 0.255981,
+      "y": 0.151515,
+      "pixel": [
+        321,
+        190
+      ]
+    },
+    {
+      "id": "west-castle-mine-02",
+      "x": 0.278309,
+      "y": 0.178628,
+      "pixel": [
+        349,
+        224
+      ]
+    },
+    {
+      "id": "west-castle-mine-03",
+      "x": 0.260766,
+      "y": 0.195375,
+      "pixel": [
+        327,
+        245
+      ]
+    },
+    {
+      "id": "west-castle-mine-04",
+      "x": 0.239234,
+      "y": 0.211324,
+      "pixel": [
+        300,
+        265
+      ]
+    },
+    {
+      "id": "west-castle-mine-05",
+      "x": 0.215311,
+      "y": 0.235247,
+      "pixel": [
+        270,
+        295
+      ]
+    },
+    {
+      "id": "west-castle-mine-06",
+      "x": 0.189793,
+      "y": 0.255183,
+      "pixel": [
+        238,
+        320
+      ]
+    },
+    {
+      "id": "west-castle-mine-07",
+      "x": 0.163477,
+      "y": 0.279107,
+      "pixel": [
+        205,
+        350
+      ]
+    },
+    {
+      "id": "west-castle-mine-08",
+      "x": 0.137959,
+      "y": 0.294258,
+      "pixel": [
+        173,
+        369
+      ]
+    },
+    {
+      "id": "west-castle-mine-09",
+      "x": 0.114035,
+      "y": 0.302233,
+      "pixel": [
+        143,
+        379
+      ]
+    },
+    {
+      "id": "west-castle-mine-10",
+      "x": 0.128389,
+      "y": 0.322967,
+      "pixel": [
+        161,
+        405
+      ]
+    },
+    {
+      "id": "west-castle-mine-11",
+      "x": 0.151515,
+      "y": 0.341308,
+      "pixel": [
+        190,
+        428
+      ]
+    },
+    {
+      "id": "west-castle-mine-12",
+      "x": 0.173844,
+      "y": 0.360447,
+      "pixel": [
+        218,
+        452
+      ]
+    },
+    {
+      "id": "west-castle-mine-13",
+      "x": 0.194577,
+      "y": 0.385965,
+      "pixel": [
+        244,
+        484
+      ]
+    },
+    {
+      "id": "west-castle-mine-14",
+      "x": 0.169856,
+      "y": 0.406699,
+      "pixel": [
+        213,
+        510
+      ]
+    },
+    {
+      "id": "west-castle-mine-15",
+      "x": 0.141946,
+      "y": 0.403509,
+      "pixel": [
+        178,
+        506
+      ]
+    },
+    {
+      "id": "west-castle-mine-16",
+      "x": 0.117225,
+      "y": 0.388357,
+      "pixel": [
+        147,
+        487
+      ]
+    },
+    {
+      "id": "west-castle-mine-17",
+      "x": 0.102871,
+      "y": 0.370813,
+      "pixel": [
+        129,
+        465
+      ]
     }
   ],
   "edges": [
@@ -391,6 +544,102 @@
       "to": "central-south-07",
       "verified": false,
       "review": "Provisional south-east path toward volcanic junction; not collision-verified"
+    },
+    {
+      "from": "west-castle-mine-01",
+      "to": "west-castle-mine-02",
+      "verified": false,
+      "review": "Western blue castle to western gold mine provisional hand trace; independently inspect against black line"
+    },
+    {
+      "from": "west-castle-mine-02",
+      "to": "west-castle-mine-03",
+      "verified": false,
+      "review": "Western blue castle to western gold mine provisional hand trace; independently inspect against black line"
+    },
+    {
+      "from": "west-castle-mine-03",
+      "to": "west-castle-mine-04",
+      "verified": false,
+      "review": "Western blue castle to western gold mine provisional hand trace; independently inspect against black line"
+    },
+    {
+      "from": "west-castle-mine-04",
+      "to": "west-castle-mine-05",
+      "verified": false,
+      "review": "Western blue castle to western gold mine provisional hand trace; independently inspect against black line"
+    },
+    {
+      "from": "west-castle-mine-05",
+      "to": "west-castle-mine-06",
+      "verified": false,
+      "review": "Western blue castle to western gold mine provisional hand trace; independently inspect against black line"
+    },
+    {
+      "from": "west-castle-mine-06",
+      "to": "west-castle-mine-07",
+      "verified": false,
+      "review": "Western blue castle to western gold mine provisional hand trace; independently inspect against black line"
+    },
+    {
+      "from": "west-castle-mine-07",
+      "to": "west-castle-mine-08",
+      "verified": false,
+      "review": "Western blue castle to western gold mine provisional hand trace; independently inspect against black line"
+    },
+    {
+      "from": "west-castle-mine-08",
+      "to": "west-castle-mine-09",
+      "verified": false,
+      "review": "Western blue castle to western gold mine provisional hand trace; independently inspect against black line"
+    },
+    {
+      "from": "west-castle-mine-09",
+      "to": "west-castle-mine-10",
+      "verified": false,
+      "review": "Western blue castle to western gold mine provisional hand trace; independently inspect against black line"
+    },
+    {
+      "from": "west-castle-mine-10",
+      "to": "west-castle-mine-11",
+      "verified": false,
+      "review": "Western blue castle to western gold mine provisional hand trace; independently inspect against black line"
+    },
+    {
+      "from": "west-castle-mine-11",
+      "to": "west-castle-mine-12",
+      "verified": false,
+      "review": "Western blue castle to western gold mine provisional hand trace; independently inspect against black line"
+    },
+    {
+      "from": "west-castle-mine-12",
+      "to": "west-castle-mine-13",
+      "verified": false,
+      "review": "Western blue castle to western gold mine provisional hand trace; independently inspect against black line"
+    },
+    {
+      "from": "west-castle-mine-13",
+      "to": "west-castle-mine-14",
+      "verified": false,
+      "review": "Western blue castle to western gold mine provisional hand trace; independently inspect against black line"
+    },
+    {
+      "from": "west-castle-mine-14",
+      "to": "west-castle-mine-15",
+      "verified": false,
+      "review": "Western blue castle to western gold mine provisional hand trace; independently inspect against black line"
+    },
+    {
+      "from": "west-castle-mine-15",
+      "to": "west-castle-mine-16",
+      "verified": false,
+      "review": "Western blue castle to western gold mine provisional hand trace; independently inspect against black line"
+    },
+    {
+      "from": "west-castle-mine-16",
+      "to": "west-castle-mine-17",
+      "verified": false,
+      "review": "Western blue castle to western gold mine provisional hand trace; independently inspect against black line"
     }
   ]
 }
