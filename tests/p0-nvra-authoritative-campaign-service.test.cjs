@@ -1,11 +1,11 @@
 const test=require('node:test');
 const assert=require('node:assert/strict');
 const {applyMineCapture}=require('../server/nvra-authoritative-campaign-service.cjs');
-const initial=()=>({status:'active',revision:1,hero_x:18.5,hero_y:46.5,moves:3,owned_mines:[]});
+const initial=()=>({status:'active',revision:1,hero_x:10.5,hero_y:37.2,moves:3,owned_mines:[]});
 test('only persisted server state is read, and successful capture uses CAS',async()=>{
  let stored=initial(),writes=0;
  const repository={load:async()=>structuredClone(stored),compareAndSwap:async({expectedRevision,next})=>{if(stored.revision!==expectedRevision)return false;stored=next;writes++;return true}};
- const args={userId:'user1',campaignId:'campaign1',action:{type:'capture_mine',site_id:'mine-west',hero_x:18.5,hero_y:46.5},repository};
+ const args={userId:'user1',campaignId:'campaign1',action:{type:'capture_mine',site_id:'mine-west',hero_x:10.5,hero_y:37.2},repository};
  const result=await applyMineCapture(args);
  assert.deepEqual(result,{ok:true,revision:2,site_id:'mine-west',points:0,verified:false});
  assert.equal(writes,1);
