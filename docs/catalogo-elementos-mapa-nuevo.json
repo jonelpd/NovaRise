@@ -1,0 +1,411 @@
+{
+  "schema_version": 1,
+  "source": "Mapa marcado por el usuario en conversación 2026-11-15, imagen 1254x1254",
+  "coordinate_system": "1254px source image, origin top-left",
+  "legend": {
+    "castle": "rojo",
+    "mine": "amarillo",
+    "mill": "azul",
+    "reward": "verde",
+    "recruit": "morado"
+  },
+  "note": "Centros estimados visualmente a partir de círculos de colores. Antes de activar interacciones, comprobar cada entrada contra los caminos negros y el navmesh. No reemplazar datos de partidas guardadas sin migración.",
+  "items": [
+    {
+      "id": "castillo-costero",
+      "kind": "castle",
+      "x": 235,
+      "y": 124,
+      "x_pct": 18.74,
+      "y_pct": 9.89,
+      "status": "visually_identified_access_pending"
+    },
+    {
+      "id": "castillo-central",
+      "kind": "castle",
+      "x": 641,
+      "y": 303,
+      "x_pct": 51.12,
+      "y_pct": 24.16,
+      "status": "visually_identified_access_pending"
+    },
+    {
+      "id": "castillo-nevado",
+      "kind": "castle",
+      "x": 1113,
+      "y": 86,
+      "x_pct": 88.76,
+      "y_pct": 6.86,
+      "status": "visually_identified_access_pending"
+    },
+    {
+      "id": "castillo-suroeste",
+      "kind": "castle",
+      "x": 172,
+      "y": 710,
+      "x_pct": 13.72,
+      "y_pct": 56.62,
+      "status": "visually_identified_access_pending"
+    },
+    {
+      "id": "castillo-isla",
+      "kind": "castle",
+      "x": 685,
+      "y": 1052,
+      "x_pct": 54.63,
+      "y_pct": 83.89,
+      "status": "visually_identified_access_pending"
+    },
+    {
+      "id": "castillo-desierto",
+      "kind": "castle",
+      "x": 1143,
+      "y": 1010,
+      "x_pct": 91.15,
+      "y_pct": 80.54,
+      "status": "visually_identified_access_pending"
+    },
+    {
+      "id": "castillo-volcan",
+      "kind": "castle",
+      "x": 1140,
+      "y": 618,
+      "x_pct": 90.91,
+      "y_pct": 49.28,
+      "status": "visually_identified_access_pending"
+    },
+    {
+      "id": "mina-cueva-oeste",
+      "kind": "mine",
+      "x": 121,
+      "y": 303,
+      "x_pct": 9.65,
+      "y_pct": 24.16,
+      "status": "visually_identified_access_pending"
+    },
+    {
+      "id": "mina-oeste",
+      "kind": "mine",
+      "x": 121,
+      "y": 451,
+      "x_pct": 9.65,
+      "y_pct": 35.96,
+      "status": "visually_identified_access_pending"
+    },
+    {
+      "id": "mina-cueva-central",
+      "kind": "mine",
+      "x": 452,
+      "y": 573,
+      "x_pct": 36.04,
+      "y_pct": 45.69,
+      "status": "visually_identified_access_pending"
+    },
+    {
+      "id": "mina-cueva-norte",
+      "kind": "mine",
+      "x": 789,
+      "y": 72,
+      "x_pct": 62.92,
+      "y_pct": 5.74,
+      "status": "visually_identified_access_pending"
+    },
+    {
+      "id": "mina-cueva-noreste",
+      "kind": "mine",
+      "x": 899,
+      "y": 238,
+      "x_pct": 71.69,
+      "y_pct": 18.98,
+      "status": "visually_identified_access_pending"
+    },
+    {
+      "id": "mina-nieve-norte",
+      "kind": "mine",
+      "x": 1156,
+      "y": 227,
+      "x_pct": 92.19,
+      "y_pct": 18.1,
+      "status": "visually_identified_access_pending"
+    },
+    {
+      "id": "mina-nieve-este",
+      "kind": "mine",
+      "x": 1155,
+      "y": 388,
+      "x_pct": 92.11,
+      "y_pct": 30.94,
+      "status": "visually_identified_access_pending"
+    },
+    {
+      "id": "mina-sur-este",
+      "kind": "mine",
+      "x": 1128,
+      "y": 827,
+      "x_pct": 89.95,
+      "y_pct": 65.95,
+      "status": "visually_identified_access_pending"
+    },
+    {
+      "id": "mina-cueva-sur",
+      "kind": "mine",
+      "x": 877,
+      "y": 910,
+      "x_pct": 69.94,
+      "y_pct": 72.57,
+      "status": "visually_identified_access_pending"
+    },
+    {
+      "id": "mina-suroeste",
+      "kind": "mine",
+      "x": 67,
+      "y": 1037,
+      "x_pct": 5.34,
+      "y_pct": 82.7,
+      "status": "visually_identified_access_pending"
+    },
+    {
+      "id": "molino-oriental",
+      "kind": "mill",
+      "x": 1005,
+      "y": 405,
+      "x_pct": 80.14,
+      "y_pct": 32.3,
+      "status": "visually_identified_access_pending"
+    },
+    {
+      "id": "templo-norte",
+      "kind": "reward",
+      "x": 467,
+      "y": 48,
+      "x_pct": 37.24,
+      "y_pct": 3.83,
+      "status": "visually_identified_access_pending"
+    },
+    {
+      "id": "piedras-norte",
+      "kind": "reward",
+      "x": 645,
+      "y": 112,
+      "x_pct": 51.44,
+      "y_pct": 8.93,
+      "status": "visually_identified_access_pending"
+    },
+    {
+      "id": "casa-oeste",
+      "kind": "reward",
+      "x": 297,
+      "y": 284,
+      "x_pct": 23.68,
+      "y_pct": 22.65,
+      "status": "visually_identified_access_pending"
+    },
+    {
+      "id": "torre-oeste",
+      "kind": "reward",
+      "x": 348,
+      "y": 410,
+      "x_pct": 27.75,
+      "y_pct": 32.7,
+      "status": "visually_identified_access_pending"
+    },
+    {
+      "id": "ruinas-oeste",
+      "kind": "reward",
+      "x": 248,
+      "y": 578,
+      "x_pct": 19.78,
+      "y_pct": 46.09,
+      "status": "visually_identified_access_pending"
+    },
+    {
+      "id": "templo-centro-este",
+      "kind": "reward",
+      "x": 784,
+      "y": 527,
+      "x_pct": 62.52,
+      "y_pct": 42.03,
+      "status": "visually_identified_access_pending"
+    },
+    {
+      "id": "torre-isla",
+      "kind": "reward",
+      "x": 546,
+      "y": 684,
+      "x_pct": 43.54,
+      "y_pct": 54.55,
+      "status": "visually_identified_access_pending"
+    },
+    {
+      "id": "ruinas-isla",
+      "kind": "reward",
+      "x": 633,
+      "y": 715,
+      "x_pct": 50.48,
+      "y_pct": 57.02,
+      "status": "visually_identified_access_pending"
+    },
+    {
+      "id": "estatua-centro",
+      "kind": "reward",
+      "x": 600,
+      "y": 820,
+      "x_pct": 47.85,
+      "y_pct": 65.39,
+      "status": "visually_identified_access_pending"
+    },
+    {
+      "id": "templo-suroeste",
+      "kind": "reward",
+      "x": 369,
+      "y": 903,
+      "x_pct": 29.43,
+      "y_pct": 72.01,
+      "status": "visually_identified_access_pending"
+    },
+    {
+      "id": "cofre-suroeste",
+      "kind": "reward",
+      "x": 244,
+      "y": 997,
+      "x_pct": 19.46,
+      "y_pct": 79.51,
+      "status": "visually_identified_access_pending"
+    },
+    {
+      "id": "piedras-sur",
+      "kind": "reward",
+      "x": 284,
+      "y": 1136,
+      "x_pct": 22.65,
+      "y_pct": 90.59,
+      "status": "visually_identified_access_pending"
+    },
+    {
+      "id": "cofre-oriente",
+      "kind": "reward",
+      "x": 912,
+      "y": 663,
+      "x_pct": 72.73,
+      "y_pct": 52.87,
+      "status": "visually_identified_access_pending"
+    },
+    {
+      "id": "ruinas-desierto",
+      "kind": "reward",
+      "x": 970,
+      "y": 1064,
+      "x_pct": 77.35,
+      "y_pct": 84.85,
+      "status": "visually_identified_access_pending"
+    },
+    {
+      "id": "casa-desierto",
+      "kind": "reward",
+      "x": 962,
+      "y": 1150,
+      "x_pct": 76.71,
+      "y_pct": 91.71,
+      "status": "visually_identified_access_pending"
+    },
+    {
+      "id": "torre-norte",
+      "kind": "recruit",
+      "x": 716,
+      "y": 199,
+      "x_pct": 57.1,
+      "y_pct": 15.87,
+      "status": "visually_identified_access_pending"
+    },
+    {
+      "id": "torre-noreste",
+      "kind": "recruit",
+      "x": 945,
+      "y": 329,
+      "x_pct": 75.36,
+      "y_pct": 26.24,
+      "status": "visually_identified_access_pending"
+    },
+    {
+      "id": "casa-nieve",
+      "kind": "recruit",
+      "x": 1034,
+      "y": 191,
+      "x_pct": 82.46,
+      "y_pct": 15.23,
+      "status": "visually_identified_access_pending"
+    },
+    {
+      "id": "torre-centro-este",
+      "kind": "recruit",
+      "x": 838,
+      "y": 422,
+      "x_pct": 66.83,
+      "y_pct": 33.65,
+      "status": "visually_identified_access_pending"
+    },
+    {
+      "id": "torre-centro",
+      "kind": "recruit",
+      "x": 540,
+      "y": 426,
+      "x_pct": 43.06,
+      "y_pct": 33.97,
+      "status": "visually_identified_access_pending"
+    },
+    {
+      "id": "torre-volcan",
+      "kind": "recruit",
+      "x": 1006,
+      "y": 616,
+      "x_pct": 80.22,
+      "y_pct": 49.12,
+      "status": "visually_identified_access_pending"
+    },
+    {
+      "id": "torre-pantano",
+      "kind": "recruit",
+      "x": 925,
+      "y": 739,
+      "x_pct": 73.76,
+      "y_pct": 58.93,
+      "status": "visually_identified_access_pending"
+    },
+    {
+      "id": "torre-sur-centro",
+      "kind": "recruit",
+      "x": 781,
+      "y": 818,
+      "x_pct": 62.28,
+      "y_pct": 65.23,
+      "status": "visually_identified_access_pending"
+    },
+    {
+      "id": "torre-suroeste",
+      "kind": "recruit",
+      "x": 376,
+      "y": 753,
+      "x_pct": 29.98,
+      "y_pct": 60.05,
+      "status": "visually_identified_access_pending"
+    },
+    {
+      "id": "casa-suroeste",
+      "kind": "recruit",
+      "x": 228,
+      "y": 919,
+      "x_pct": 18.18,
+      "y_pct": 73.29,
+      "status": "visually_identified_access_pending"
+    },
+    {
+      "id": "torre-extremo-oeste",
+      "kind": "recruit",
+      "x": 145,
+      "y": 984,
+      "x_pct": 11.56,
+      "y_pct": 78.47,
+      "status": "visually_identified_access_pending"
+    }
+  ]
+}
