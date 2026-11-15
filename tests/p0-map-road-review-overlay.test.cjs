@@ -28,3 +28,10 @@ test('all draft edges incident to an unresolved fork are highlighted, never sile
  assert.match(html,/stroke:danger\?'#ff3030'/);
  assert.match(html,/audit\?\.junction_specs/);
 });
+
+test('east pond inspection does not conflate unverified visual branches with approved graph edges',()=>{
+ assert.match(html,/id="focusEast"/);
+ assert.match(html,/audit\.east_branch_review\.visible_candidates\.length/);
+ assert.match(html,/correspondencia con grafo sin resolver/);
+ assert.match(html,/ninguna aprobada/);
+});
