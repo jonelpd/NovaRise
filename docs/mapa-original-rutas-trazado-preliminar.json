@@ -3,7 +3,7 @@
   "status": "draft-unverified",
   "map_asset": "original-map-concept-2026-11-15.png",
   "coordinate_system": "normalized",
-  "note": "Four provisional visual traces; disjoint paths intentionally left disconnected. NOT approved for gameplay.",
+  "note": "Eight provisional separate route traces; no gameplay activation. Each segment must be reviewed against final map image.",
   "nodes": [
     {
       "id": "castillo-central-a-molino-00",
@@ -204,6 +204,296 @@
       "id": "camino-oeste-mina-08",
       "x": 0.110845,
       "y": 0.389952
+    },
+    {
+      "id": "oeste-castillo-sur-00",
+      "x": 0.123604,
+      "y": 0.629984
+    },
+    {
+      "id": "oeste-castillo-sur-01",
+      "x": 0.145136,
+      "y": 0.650718
+    },
+    {
+      "id": "oeste-castillo-sur-02",
+      "x": 0.175439,
+      "y": 0.665869
+    },
+    {
+      "id": "oeste-castillo-sur-03",
+      "x": 0.200957,
+      "y": 0.677831
+    },
+    {
+      "id": "oeste-castillo-sur-04",
+      "x": 0.222488,
+      "y": 0.686603
+    },
+    {
+      "id": "oeste-castillo-sur-05",
+      "x": 0.248804,
+      "y": 0.692982
+    },
+    {
+      "id": "oeste-castillo-sur-06",
+      "x": 0.272727,
+      "y": 0.704944
+    },
+    {
+      "id": "oeste-castillo-sur-07",
+      "x": 0.300638,
+      "y": 0.716108
+    },
+    {
+      "id": "oeste-castillo-sur-08",
+      "x": 0.323764,
+      "y": 0.721691
+    },
+    {
+      "id": "oeste-castillo-sur-09",
+      "x": 0.35327,
+      "y": 0.714514
+    },
+    {
+      "id": "oeste-castillo-sur-10",
+      "x": 0.380383,
+      "y": 0.704147
+    },
+    {
+      "id": "oeste-castillo-sur-11",
+      "x": 0.404306,
+      "y": 0.69059
+    },
+    {
+      "id": "oeste-castillo-sur-12",
+      "x": 0.431419,
+      "y": 0.69059
+    },
+    {
+      "id": "oeste-castillo-sur-13",
+      "x": 0.458533,
+      "y": 0.704147
+    },
+    {
+      "id": "oeste-castillo-sur-14",
+      "x": 0.480064,
+      "y": 0.716906
+    },
+    {
+      "id": "oeste-castillo-sur-15",
+      "x": 0.503987,
+      "y": 0.722488
+    },
+    {
+      "id": "oeste-castillo-sur-16",
+      "x": 0.526316,
+      "y": 0.717703
+    },
+    {
+      "id": "oeste-castillo-sur-17",
+      "x": 0.547847,
+      "y": 0.704147
+    },
+    {
+      "id": "oeste-castillo-sur-18",
+      "x": 0.556619,
+      "y": 0.685805
+    },
+    {
+      "id": "oeste-castillo-sur-19",
+      "x": 0.549442,
+      "y": 0.667464
+    },
+    {
+      "id": "oeste-castillo-sur-20",
+      "x": 0.541467,
+      "y": 0.64673
+    },
+    {
+      "id": "oeste-castillo-sur-21",
+      "x": 0.539872,
+      "y": 0.623604
+    },
+    {
+      "id": "oeste-castillo-sur-22",
+      "x": 0.548644,
+      "y": 0.602871
+    },
+    {
+      "id": "oeste-castillo-sur-23",
+      "x": 0.561404,
+      "y": 0.590112
+    },
+    {
+      "id": "pantano-acceso-00",
+      "x": 0.559809,
+      "y": 0.588517
+    },
+    {
+      "id": "pantano-acceso-01",
+      "x": 0.573365,
+      "y": 0.57496
+    },
+    {
+      "id": "pantano-acceso-02",
+      "x": 0.592504,
+      "y": 0.566986
+    },
+    {
+      "id": "pantano-acceso-03",
+      "x": 0.613238,
+      "y": 0.565391
+    },
+    {
+      "id": "pantano-acceso-04",
+      "x": 0.633971,
+      "y": 0.572568
+    },
+    {
+      "id": "pantano-acceso-05",
+      "x": 0.65311,
+      "y": 0.586124
+    },
+    {
+      "id": "pantano-acceso-06",
+      "x": 0.673046,
+      "y": 0.597289
+    },
+    {
+      "id": "pantano-acceso-07",
+      "x": 0.688995,
+      "y": 0.606061
+    },
+    {
+      "id": "pantano-acceso-08",
+      "x": 0.708134,
+      "y": 0.604466
+    },
+    {
+      "id": "pantano-acceso-09",
+      "x": 0.723285,
+      "y": 0.591707
+    },
+    {
+      "id": "desierto-acceso-00",
+      "x": 0.633971,
+      "y": 0.896332
+    },
+    {
+      "id": "desierto-acceso-01",
+      "x": 0.6563,
+      "y": 0.894737
+    },
+    {
+      "id": "desierto-acceso-02",
+      "x": 0.679426,
+      "y": 0.882775
+    },
+    {
+      "id": "desierto-acceso-03",
+      "x": 0.700957,
+      "y": 0.866029
+    },
+    {
+      "id": "desierto-acceso-04",
+      "x": 0.724083,
+      "y": 0.854864
+    },
+    {
+      "id": "desierto-acceso-05",
+      "x": 0.744817,
+      "y": 0.8437
+    },
+    {
+      "id": "desierto-acceso-06",
+      "x": 0.767145,
+      "y": 0.828549
+    },
+    {
+      "id": "desierto-acceso-07",
+      "x": 0.785486,
+      "y": 0.811005
+    },
+    {
+      "id": "desierto-acceso-08",
+      "x": 0.807018,
+      "y": 0.800638
+    },
+    {
+      "id": "desierto-acceso-09",
+      "x": 0.830941,
+      "y": 0.795853
+    },
+    {
+      "id": "desierto-acceso-10",
+      "x": 0.854067,
+      "y": 0.802233
+    },
+    {
+      "id": "desierto-acceso-11",
+      "x": 0.874801,
+      "y": 0.814992
+    },
+    {
+      "id": "minas-suroeste-00",
+      "x": 0.116427,
+      "y": 0.84689
+    },
+    {
+      "id": "minas-suroeste-01",
+      "x": 0.133174,
+      "y": 0.859649
+    },
+    {
+      "id": "minas-suroeste-02",
+      "x": 0.155502,
+      "y": 0.865231
+    },
+    {
+      "id": "minas-suroeste-03",
+      "x": 0.176236,
+      "y": 0.866029
+    },
+    {
+      "id": "minas-suroeste-04",
+      "x": 0.197767,
+      "y": 0.861244
+    },
+    {
+      "id": "minas-suroeste-05",
+      "x": 0.217703,
+      "y": 0.850877
+    },
+    {
+      "id": "minas-suroeste-06",
+      "x": 0.235247,
+      "y": 0.834131
+    },
+    {
+      "id": "minas-suroeste-07",
+      "x": 0.253589,
+      "y": 0.822169
+    },
+    {
+      "id": "minas-suroeste-08",
+      "x": 0.276715,
+      "y": 0.813397
+    },
+    {
+      "id": "minas-suroeste-09",
+      "x": 0.301435,
+      "y": 0.802233
+    },
+    {
+      "id": "minas-suroeste-10",
+      "x": 0.324561,
+      "y": 0.787081
+    },
+    {
+      "id": "minas-suroeste-11",
+      "x": 0.342903,
+      "y": 0.766348
     }
   ],
   "edges": [
@@ -422,6 +712,330 @@
       "to": "camino-oeste-mina-08",
       "verified": false,
       "review": "Provisional visual trace; requires obstacle review"
+    },
+    {
+      "from": "oeste-castillo-sur-00",
+      "to": "oeste-castillo-sur-01",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "oeste-castillo-sur-01",
+      "to": "oeste-castillo-sur-02",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "oeste-castillo-sur-02",
+      "to": "oeste-castillo-sur-03",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "oeste-castillo-sur-03",
+      "to": "oeste-castillo-sur-04",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "oeste-castillo-sur-04",
+      "to": "oeste-castillo-sur-05",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "oeste-castillo-sur-05",
+      "to": "oeste-castillo-sur-06",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "oeste-castillo-sur-06",
+      "to": "oeste-castillo-sur-07",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "oeste-castillo-sur-07",
+      "to": "oeste-castillo-sur-08",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "oeste-castillo-sur-08",
+      "to": "oeste-castillo-sur-09",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "oeste-castillo-sur-09",
+      "to": "oeste-castillo-sur-10",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "oeste-castillo-sur-10",
+      "to": "oeste-castillo-sur-11",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "oeste-castillo-sur-11",
+      "to": "oeste-castillo-sur-12",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "oeste-castillo-sur-12",
+      "to": "oeste-castillo-sur-13",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "oeste-castillo-sur-13",
+      "to": "oeste-castillo-sur-14",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "oeste-castillo-sur-14",
+      "to": "oeste-castillo-sur-15",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "oeste-castillo-sur-15",
+      "to": "oeste-castillo-sur-16",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "oeste-castillo-sur-16",
+      "to": "oeste-castillo-sur-17",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "oeste-castillo-sur-17",
+      "to": "oeste-castillo-sur-18",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "oeste-castillo-sur-18",
+      "to": "oeste-castillo-sur-19",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "oeste-castillo-sur-19",
+      "to": "oeste-castillo-sur-20",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "oeste-castillo-sur-20",
+      "to": "oeste-castillo-sur-21",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "oeste-castillo-sur-21",
+      "to": "oeste-castillo-sur-22",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "oeste-castillo-sur-22",
+      "to": "oeste-castillo-sur-23",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "pantano-acceso-00",
+      "to": "pantano-acceso-01",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "pantano-acceso-01",
+      "to": "pantano-acceso-02",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "pantano-acceso-02",
+      "to": "pantano-acceso-03",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "pantano-acceso-03",
+      "to": "pantano-acceso-04",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "pantano-acceso-04",
+      "to": "pantano-acceso-05",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "pantano-acceso-05",
+      "to": "pantano-acceso-06",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "pantano-acceso-06",
+      "to": "pantano-acceso-07",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "pantano-acceso-07",
+      "to": "pantano-acceso-08",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "pantano-acceso-08",
+      "to": "pantano-acceso-09",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "desierto-acceso-00",
+      "to": "desierto-acceso-01",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "desierto-acceso-01",
+      "to": "desierto-acceso-02",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "desierto-acceso-02",
+      "to": "desierto-acceso-03",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "desierto-acceso-03",
+      "to": "desierto-acceso-04",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "desierto-acceso-04",
+      "to": "desierto-acceso-05",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "desierto-acceso-05",
+      "to": "desierto-acceso-06",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "desierto-acceso-06",
+      "to": "desierto-acceso-07",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "desierto-acceso-07",
+      "to": "desierto-acceso-08",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "desierto-acceso-08",
+      "to": "desierto-acceso-09",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "desierto-acceso-09",
+      "to": "desierto-acceso-10",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "desierto-acceso-10",
+      "to": "desierto-acceso-11",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "minas-suroeste-00",
+      "to": "minas-suroeste-01",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "minas-suroeste-01",
+      "to": "minas-suroeste-02",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "minas-suroeste-02",
+      "to": "minas-suroeste-03",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "minas-suroeste-03",
+      "to": "minas-suroeste-04",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "minas-suroeste-04",
+      "to": "minas-suroeste-05",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "minas-suroeste-05",
+      "to": "minas-suroeste-06",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "minas-suroeste-06",
+      "to": "minas-suroeste-07",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "minas-suroeste-07",
+      "to": "minas-suroeste-08",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "minas-suroeste-08",
+      "to": "minas-suroeste-09",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "minas-suroeste-09",
+      "to": "minas-suroeste-10",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
+    },
+    {
+      "from": "minas-suroeste-10",
+      "to": "minas-suroeste-11",
+      "verified": false,
+      "review": "Unverified visual draft; inspect against terrain and access points"
     }
   ]
 }
