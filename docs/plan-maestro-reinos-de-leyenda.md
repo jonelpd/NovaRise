@@ -2075,3 +2075,12 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] La fuente compartida exige la misma navegación para NovaRise e itch.io; las particularidades NVRA permanecen separadas.
 - [ ] Importar artefactos vectoriales efectivos tras disponer de sus bytes, cotejar contra el PNG marcado, unir extremos solo si son un trazo real, comprobar despejes, puertas, puentes y topología; aplicar el validador de publicación y ejecutar CI y pruebas de guardado antes de activar la navegación.
 - [!] Sin cambios de movimiento, mapas activos o estructura de guardados en esta actualización.
+
+
+### Confirmación de la fuente visual de navegación — 2026-11-15
+- [x] El usuario ha proporcionado la imagen `mapa-todas-lineas-negras-trazadas(2).png` (1254×1254), con líneas azules que identifican los recorridos deseados de los héroes.
+- [x] Decisión de producto: `juego/mapa-grande.png` sin superposiciones será el fondo visible; la imagen anotada se empleará **solo como referencia para extraer geometría**, sin mostrar líneas azules al jugador.
+- [x] La navegación resultante deberá compartirse entre las ediciones NovaRise e itch.io, sin introducir diferencias en rutas.
+- [ ] Extraer y guardar las rutas vectoriales reales a partir de la imagen aportada, comparar coordenadas y dimensiones con el mapa original, resolver uniones y colisiones y comprobar los accesos.
+- [ ] Integrar el grafo verificado en el movimiento de héroes, comprobar guardados y ejecutar pruebas y CI antes de publicarlo.
+- [!] Esta confirmación documental no significa que las rutas estén ya integradas o que la navegación se haya activado.
