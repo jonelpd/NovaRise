@@ -18,6 +18,11 @@ test('original artwork landmarks remain provisional and do not silently migrate 
  assert.deepEqual(data.crossings[0].connectedRoadNodes,[]);
  assert.equal(data.crossings[0].geometryStatus,'bridge-corridor-retraced-provisional');
  assert.equal(data.crossings[0].blackRoadTraceApproxPixel.length,7);
+ const road=JSON.parse(fs.readFileSync('docs/mapa-rutas-marcadas-tramo-central.json','utf8'));
+ const nodes=road.nodes.filter(n=>/^central-mill-0[1-7]$/.test(n.id)).sort((a,b)=>a.id.localeCompare(b.id));
+ assert.deepEqual(nodes.map(n=>n.pixel),data.crossings[0].blackRoadTraceApproxPixel);
+ assert.ok(nodes.every(n=>Math.abs(n.x-n.pixel[0]/1254)<0.000001&&Math.abs(n.y-n.pixel[1]/1254)<0.000001));
+ assert.ok(road.edges.filter(e=>nodes.some(n=>n.id===e.from||n.id===e.to)).every(e=>e.verified===false));
  assert.deepEqual(data.crossings[0].existingDraftNodeWarning,[]);
  assert.ok(Object.values(data.crossings[0].entrances).every(p=>p.length===2&&p.every(v=>Number.isInteger(v)&&v>=0&&v<1254)));
  for(const landmark of data.landmarks){
