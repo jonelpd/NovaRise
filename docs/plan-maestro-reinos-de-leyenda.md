@@ -2251,3 +2251,10 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Sustituidas las tres referencias a `./mapa-grande.png` en `juego/index.html` por `./mapa-reinos-2048.jpg` (fondo principal, minimapa y restauración del paisaje), commit `ea35d1f449ed79c4d96dbeafe1ecae86a871e943`.
 - [x] Mantenidas las rutas invisibles integradas previamente, sin dibujar marcas sobre el paisaje.
 - [ ] Confirmar despliegue de GitHub Pages y prueba visual en navegador, además de verificar accesos de héroes y ambas ediciones.
+
+
+### Corrección de inmovilización del héroe — 2026-11-15
+- [x] Usuario confirmó visualmente que aparece el mapa limpio nuevo, pero el héroe no se mueve.
+- [x] Corregido `fineRoute` en `juego/index.html`, commit `1e3edbec9e14217e3e0ce8fb992e9a07bb42772e`: primero intenta `tracedRoadRoute`, y si el grafo extraído está desconectado utiliza temporalmente `terrainFineRoute` con la máscara de obstáculos existente.
+- [!] **Solución provisional de jugabilidad**, no integración estricta final de las rutas del usuario: la alternativa puede transitar terreno permitido fuera de las líneas dibujadas. Debe reemplazarse por conexiones correctas entre fragmentos.
+- [ ] Confirmar movimiento en navegador y CI; conectar fragmentos reales para retirar la alternativa y mantener el movimiento exclusivamente por las rutas trazadas.
