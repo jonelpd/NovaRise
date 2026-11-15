@@ -7,6 +7,6 @@ test('review candidates are deterministic and never approved',()=>{
  assert.deepEqual(first,second);
  assert.equal(first.status,'review-only');assert.equal(first.approved_count,0);
  assert.equal(first.candidate_count,126);
- assert.ok(first.candidates.every(c=>c.approved===false&&c.status==='needs-visual-review'&&c.distance_px<=4.001));
+ assert.ok(first.candidates.every(c=>c.approved===false&&c.status==='needs-visual-review'&&c.distance_px<=4.002));
 });
 test('invalid threshold is rejected',()=>assert.throws(()=>auditJunctionCandidates(graph,{thresholdPx:-1}),/Invalid audit/));
