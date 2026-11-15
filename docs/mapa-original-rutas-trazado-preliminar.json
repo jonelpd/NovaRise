@@ -1,0 +1,427 @@
+{
+  "schema_version": 2,
+  "status": "draft-unverified",
+  "map_asset": "original-map-concept-2026-11-15.png",
+  "coordinate_system": "normalized",
+  "note": "Four provisional visual traces; disjoint paths intentionally left disconnected. NOT approved for gameplay.",
+  "nodes": [
+    {
+      "id": "castillo-central-a-molino-00",
+      "x": 0.546252,
+      "y": 0.283892
+    },
+    {
+      "id": "castillo-central-a-molino-01",
+      "x": 0.559809,
+      "y": 0.297448
+    },
+    {
+      "id": "castillo-central-a-molino-02",
+      "x": 0.576555,
+      "y": 0.315789
+    },
+    {
+      "id": "castillo-central-a-molino-03",
+      "x": 0.589314,
+      "y": 0.333333
+    },
+    {
+      "id": "castillo-central-a-molino-04",
+      "x": 0.588517,
+      "y": 0.35008
+    },
+    {
+      "id": "castillo-central-a-molino-05",
+      "x": 0.601276,
+      "y": 0.366826
+    },
+    {
+      "id": "castillo-central-a-molino-06",
+      "x": 0.625199,
+      "y": 0.373206
+    },
+    {
+      "id": "castillo-central-a-molino-07",
+      "x": 0.64992,
+      "y": 0.377193
+    },
+    {
+      "id": "castillo-central-a-molino-08",
+      "x": 0.671451,
+      "y": 0.365231
+    },
+    {
+      "id": "castillo-central-a-molino-09",
+      "x": 0.692982,
+      "y": 0.357257
+    },
+    {
+      "id": "castillo-central-a-molino-10",
+      "x": 0.715311,
+      "y": 0.349282
+    },
+    {
+      "id": "castillo-central-a-molino-11",
+      "x": 0.73764,
+      "y": 0.342903
+    },
+    {
+      "id": "castillo-central-a-molino-12",
+      "x": 0.758373,
+      "y": 0.334928
+    },
+    {
+      "id": "castillo-central-a-molino-13",
+      "x": 0.774322,
+      "y": 0.322967
+    },
+    {
+      "id": "molino-a-camino-volcan-00",
+      "x": 0.774322,
+      "y": 0.322967
+    },
+    {
+      "id": "molino-a-camino-volcan-01",
+      "x": 0.793461,
+      "y": 0.342903
+    },
+    {
+      "id": "molino-a-camino-volcan-02",
+      "x": 0.811802,
+      "y": 0.361244
+    },
+    {
+      "id": "sendero-norte-castillo-00",
+      "x": 0.546252,
+      "y": 0.280702
+    },
+    {
+      "id": "sendero-norte-castillo-01",
+      "x": 0.541467,
+      "y": 0.260766
+    },
+    {
+      "id": "sendero-norte-castillo-02",
+      "x": 0.535885,
+      "y": 0.242424
+    },
+    {
+      "id": "sendero-norte-castillo-03",
+      "x": 0.5311,
+      "y": 0.221691
+    },
+    {
+      "id": "sendero-norte-castillo-04",
+      "x": 0.528708,
+      "y": 0.200957
+    },
+    {
+      "id": "sendero-norte-castillo-05",
+      "x": 0.530303,
+      "y": 0.179426
+    },
+    {
+      "id": "sendero-norte-castillo-06",
+      "x": 0.54067,
+      "y": 0.160287
+    },
+    {
+      "id": "sendero-norte-castillo-07",
+      "x": 0.546252,
+      "y": 0.142743
+    },
+    {
+      "id": "sendero-norte-castillo-08",
+      "x": 0.541467,
+      "y": 0.126794
+    },
+    {
+      "id": "sendero-norte-castillo-09",
+      "x": 0.5311,
+      "y": 0.114035
+    },
+    {
+      "id": "sendero-norte-castillo-10",
+      "x": 0.509569,
+      "y": 0.106061
+    },
+    {
+      "id": "sendero-norte-castillo-11",
+      "x": 0.484051,
+      "y": 0.100478
+    },
+    {
+      "id": "sendero-norte-castillo-12",
+      "x": 0.45933,
+      "y": 0.092504
+    },
+    {
+      "id": "sendero-norte-castillo-13",
+      "x": 0.439394,
+      "y": 0.082137
+    },
+    {
+      "id": "camino-oeste-mina-00",
+      "x": 0.271132,
+      "y": 0.341308
+    },
+    {
+      "id": "camino-oeste-mina-01",
+      "x": 0.255981,
+      "y": 0.358852
+    },
+    {
+      "id": "camino-oeste-mina-02",
+      "x": 0.239234,
+      "y": 0.375598
+    },
+    {
+      "id": "camino-oeste-mina-03",
+      "x": 0.218501,
+      "y": 0.389155
+    },
+    {
+      "id": "camino-oeste-mina-04",
+      "x": 0.197767,
+      "y": 0.396332
+    },
+    {
+      "id": "camino-oeste-mina-05",
+      "x": 0.177033,
+      "y": 0.403509
+    },
+    {
+      "id": "camino-oeste-mina-06",
+      "x": 0.153907,
+      "y": 0.404306
+    },
+    {
+      "id": "camino-oeste-mina-07",
+      "x": 0.130781,
+      "y": 0.398724
+    },
+    {
+      "id": "camino-oeste-mina-08",
+      "x": 0.110845,
+      "y": 0.389952
+    }
+  ],
+  "edges": [
+    {
+      "from": "castillo-central-a-molino-00",
+      "to": "castillo-central-a-molino-01",
+      "verified": false,
+      "review": "Provisional visual trace; requires obstacle review"
+    },
+    {
+      "from": "castillo-central-a-molino-01",
+      "to": "castillo-central-a-molino-02",
+      "verified": false,
+      "review": "Provisional visual trace; requires obstacle review"
+    },
+    {
+      "from": "castillo-central-a-molino-02",
+      "to": "castillo-central-a-molino-03",
+      "verified": false,
+      "review": "Provisional visual trace; requires obstacle review"
+    },
+    {
+      "from": "castillo-central-a-molino-03",
+      "to": "castillo-central-a-molino-04",
+      "verified": false,
+      "review": "Provisional visual trace; requires obstacle review"
+    },
+    {
+      "from": "castillo-central-a-molino-04",
+      "to": "castillo-central-a-molino-05",
+      "verified": false,
+      "review": "Provisional visual trace; requires obstacle review"
+    },
+    {
+      "from": "castillo-central-a-molino-05",
+      "to": "castillo-central-a-molino-06",
+      "verified": false,
+      "review": "Provisional visual trace; requires obstacle review"
+    },
+    {
+      "from": "castillo-central-a-molino-06",
+      "to": "castillo-central-a-molino-07",
+      "verified": false,
+      "review": "Provisional visual trace; requires obstacle review"
+    },
+    {
+      "from": "castillo-central-a-molino-07",
+      "to": "castillo-central-a-molino-08",
+      "verified": false,
+      "review": "Provisional visual trace; requires obstacle review"
+    },
+    {
+      "from": "castillo-central-a-molino-08",
+      "to": "castillo-central-a-molino-09",
+      "verified": false,
+      "review": "Provisional visual trace; requires obstacle review"
+    },
+    {
+      "from": "castillo-central-a-molino-09",
+      "to": "castillo-central-a-molino-10",
+      "verified": false,
+      "review": "Provisional visual trace; requires obstacle review"
+    },
+    {
+      "from": "castillo-central-a-molino-10",
+      "to": "castillo-central-a-molino-11",
+      "verified": false,
+      "review": "Provisional visual trace; requires obstacle review"
+    },
+    {
+      "from": "castillo-central-a-molino-11",
+      "to": "castillo-central-a-molino-12",
+      "verified": false,
+      "review": "Provisional visual trace; requires obstacle review"
+    },
+    {
+      "from": "castillo-central-a-molino-12",
+      "to": "castillo-central-a-molino-13",
+      "verified": false,
+      "review": "Provisional visual trace; requires obstacle review"
+    },
+    {
+      "from": "molino-a-camino-volcan-00",
+      "to": "molino-a-camino-volcan-01",
+      "verified": false,
+      "review": "Provisional visual trace; requires obstacle review"
+    },
+    {
+      "from": "molino-a-camino-volcan-01",
+      "to": "molino-a-camino-volcan-02",
+      "verified": false,
+      "review": "Provisional visual trace; requires obstacle review"
+    },
+    {
+      "from": "sendero-norte-castillo-00",
+      "to": "sendero-norte-castillo-01",
+      "verified": false,
+      "review": "Provisional visual trace; requires obstacle review"
+    },
+    {
+      "from": "sendero-norte-castillo-01",
+      "to": "sendero-norte-castillo-02",
+      "verified": false,
+      "review": "Provisional visual trace; requires obstacle review"
+    },
+    {
+      "from": "sendero-norte-castillo-02",
+      "to": "sendero-norte-castillo-03",
+      "verified": false,
+      "review": "Provisional visual trace; requires obstacle review"
+    },
+    {
+      "from": "sendero-norte-castillo-03",
+      "to": "sendero-norte-castillo-04",
+      "verified": false,
+      "review": "Provisional visual trace; requires obstacle review"
+    },
+    {
+      "from": "sendero-norte-castillo-04",
+      "to": "sendero-norte-castillo-05",
+      "verified": false,
+      "review": "Provisional visual trace; requires obstacle review"
+    },
+    {
+      "from": "sendero-norte-castillo-05",
+      "to": "sendero-norte-castillo-06",
+      "verified": false,
+      "review": "Provisional visual trace; requires obstacle review"
+    },
+    {
+      "from": "sendero-norte-castillo-06",
+      "to": "sendero-norte-castillo-07",
+      "verified": false,
+      "review": "Provisional visual trace; requires obstacle review"
+    },
+    {
+      "from": "sendero-norte-castillo-07",
+      "to": "sendero-norte-castillo-08",
+      "verified": false,
+      "review": "Provisional visual trace; requires obstacle review"
+    },
+    {
+      "from": "sendero-norte-castillo-08",
+      "to": "sendero-norte-castillo-09",
+      "verified": false,
+      "review": "Provisional visual trace; requires obstacle review"
+    },
+    {
+      "from": "sendero-norte-castillo-09",
+      "to": "sendero-norte-castillo-10",
+      "verified": false,
+      "review": "Provisional visual trace; requires obstacle review"
+    },
+    {
+      "from": "sendero-norte-castillo-10",
+      "to": "sendero-norte-castillo-11",
+      "verified": false,
+      "review": "Provisional visual trace; requires obstacle review"
+    },
+    {
+      "from": "sendero-norte-castillo-11",
+      "to": "sendero-norte-castillo-12",
+      "verified": false,
+      "review": "Provisional visual trace; requires obstacle review"
+    },
+    {
+      "from": "sendero-norte-castillo-12",
+      "to": "sendero-norte-castillo-13",
+      "verified": false,
+      "review": "Provisional visual trace; requires obstacle review"
+    },
+    {
+      "from": "camino-oeste-mina-00",
+      "to": "camino-oeste-mina-01",
+      "verified": false,
+      "review": "Provisional visual trace; requires obstacle review"
+    },
+    {
+      "from": "camino-oeste-mina-01",
+      "to": "camino-oeste-mina-02",
+      "verified": false,
+      "review": "Provisional visual trace; requires obstacle review"
+    },
+    {
+      "from": "camino-oeste-mina-02",
+      "to": "camino-oeste-mina-03",
+      "verified": false,
+      "review": "Provisional visual trace; requires obstacle review"
+    },
+    {
+      "from": "camino-oeste-mina-03",
+      "to": "camino-oeste-mina-04",
+      "verified": false,
+      "review": "Provisional visual trace; requires obstacle review"
+    },
+    {
+      "from": "camino-oeste-mina-04",
+      "to": "camino-oeste-mina-05",
+      "verified": false,
+      "review": "Provisional visual trace; requires obstacle review"
+    },
+    {
+      "from": "camino-oeste-mina-05",
+      "to": "camino-oeste-mina-06",
+      "verified": false,
+      "review": "Provisional visual trace; requires obstacle review"
+    },
+    {
+      "from": "camino-oeste-mina-06",
+      "to": "camino-oeste-mina-07",
+      "verified": false,
+      "review": "Provisional visual trace; requires obstacle review"
+    },
+    {
+      "from": "camino-oeste-mina-07",
+      "to": "camino-oeste-mina-08",
+      "verified": false,
+      "review": "Provisional visual trace; requires obstacle review"
+    }
+  ]
+}
