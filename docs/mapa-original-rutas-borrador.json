@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "status": "draft-unverified",
+  "map_asset": "original-map-concept-2026-11-15.png",
+  "coordinate_system": "normalized",
+  "note": "Waypoints are approximate visual tracing of the original concept image; not authorized for gameplay until reviewed against final map and obstacles.",
+  "nodes": [
+    {
+      "id": "central-castle-gate",
+      "x": 0.51,
+      "y": 0.22,
+      "label": "Puerta castillo central"
+    },
+    {
+      "id": "central-bridge",
+      "x": 0.535,
+      "y": 0.255,
+      "label": "Puente castillo central"
+    },
+    {
+      "id": "east-forest-junction",
+      "x": 0.615,
+      "y": 0.29,
+      "label": "Bifurcación bosque oriental"
+    },
+    {
+      "id": "windmill-west",
+      "x": 0.69,
+      "y": 0.36,
+      "label": "Acceso molino"
+    },
+    {
+      "id": "windmill-gate",
+      "x": 0.745,
+      "y": 0.35,
+      "label": "Molino"
+    },
+    {
+      "id": "north-crossroads",
+      "x": 0.54,
+      "y": 0.145,
+      "label": "Cruce norte"
+    },
+    {
+      "id": "northwest-trail",
+      "x": 0.425,
+      "y": 0.13,
+      "label": "Sendero bosque norte"
+    },
+    {
+      "id": "western-falls",
+      "x": 0.405,
+      "y": 0.27,
+      "label": "Sendero cascadas"
+    },
+    {
+      "id": "west-tower",
+      "x": 0.33,
+      "y": 0.31,
+      "label": "Torre occidental"
+    },
+    {
+      "id": "southern-forest",
+      "x": 0.575,
+      "y": 0.44,
+      "label": "Camino bosque sur"
+    },
+    {
+      "id": "marsh-approach",
+      "x": 0.665,
+      "y": 0.5,
+      "label": "Acceso pantano"
+    },
+    {
+      "id": "east-mine-approach",
+      "x": 0.83,
+      "y": 0.35,
+      "label": "Acceso mina oriental"
+    }
+  ],
+  "edges": [
+    [
+      "central-castle-gate",
+      "central-bridge"
+    ],
+    [
+      "central-bridge",
+      "east-forest-junction"
+    ],
+    [
+      "east-forest-junction",
+      "windmill-west"
+    ],
+    [
+      "windmill-west",
+      "windmill-gate"
+    ],
+    [
+      "central-castle-gate",
+      "north-crossroads"
+    ],
+    [
+      "north-crossroads",
+      "northwest-trail"
+    ],
+    [
+      "northwest-trail",
+      "western-falls"
+    ],
+    [
+      "western-falls",
+      "west-tower"
+    ],
+    [
+      "central-bridge",
+      "southern-forest"
+    ],
+    [
+      "southern-forest",
+      "marsh-approach"
+    ],
+    [
+      "windmill-gate",
+      "east-mine-approach"
+    ]
+  ]
+}
