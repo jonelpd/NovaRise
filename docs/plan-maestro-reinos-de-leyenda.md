@@ -2180,3 +2180,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] El SVG es una **capa de auditoría independiente**: no modifica `juego/mapa-grande.png`, el motor de movimiento ni los guardados; ninguna conexión candidata se considera aprobada.
 - [ ] Superponer la capa sobre la imagen original y verificar físicamente puentes, agua, rocas, murallas, puertas, bifurcaciones y accesos.
 - [ ] Ejecutar pruebas automáticas, verificar hash de fondo y conectividad, y aprobar solo rutas transitables antes de activar la navegación compartida de NovaRise e itch.io.
+
+
+### Visor de revisión sobre el mapa limpio — 2026-11-15
+- [x] Creado `tools/revisar-mapa-caminos-completo.html` para superponer la capa de rutas y candidatos sobre `juego/mapa-grande.png`, con opción de ocultarla, cambiar opacidad y ajustar tamaño.
+- [x] Inspeccionada visualmente la imagen marcada más reciente `mapa-todas-lineas-negras-trazadas(3).png`: el trazado atraviesa biomas con ríos, puentes, castillos, minas y pasos montañosos, por lo que es imprescindible comprobar individualmente los accesos sensibles antes de aprobar.
+- [!] La superposición utiliza el mapa del repositorio, pero **todavía no se ha demostrado mediante hash que sea idéntico a la imagen limpia subida**. Tampoco se ha efectuado una aprobación visual de los 126 candidatos.
+- [ ] Abrir el visor en un servidor estático o GitHub Pages para inspección; confirmar identidad de mapa, obstáculos y conexiones; ejecutar suite y activar únicamente grafo aprobado.
+- [!] No se han alterado rutas activas, guardados ni archivos de imagen del juego.
