@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - 'scripts/map-road-*.cjs'
+      - 'scripts/audit-east-branches.cjs'
       - 'scripts/inspect-marked-road-geometry.cjs'
       - 'scripts/inspect-marked-road-junctions.cjs'
       - 'scripts/check-map-save-transition.cjs'
@@ -10,6 +11,7 @@ on:
       - 'scripts/validate-map-road-release.cjs'
       - 'scripts/audit-map-road-topology.cjs'
       - 'tests/p0-map-road-*.test.cjs'
+      - 'tests/p0-map-east-branches.test.cjs'
       - 'tests/p0-map-editions-parity.test.cjs'
       - 'tests/p0-map-road-geometry-inspection.test.cjs'
       - 'tests/p0-map-save-transition.test.cjs'
@@ -28,6 +30,7 @@ on:
   pull_request:
     paths:
       - 'scripts/map-road-*.cjs'
+      - 'scripts/audit-east-branches.cjs'
       - 'scripts/inspect-marked-road-geometry.cjs'
       - 'scripts/inspect-marked-road-junctions.cjs'
       - 'scripts/check-map-save-transition.cjs'
@@ -35,6 +38,7 @@ on:
       - 'scripts/validate-map-road-release.cjs'
       - 'scripts/audit-map-road-topology.cjs'
       - 'tests/p0-map-road-*.test.cjs'
+      - 'tests/p0-map-east-branches.test.cjs'
       - 'tests/p0-map-editions-parity.test.cjs'
       - 'tests/p0-map-road-geometry-inspection.test.cjs'
       - 'tests/p0-map-save-transition.test.cjs'
@@ -63,4 +67,4 @@ jobs:
         with:
           node-version: '22'
       - name: Validate road editor and navigation modules
-        run: node --test tests/p0-map-road-editor-safety.test.cjs tests/p0-map-road-topology.test.cjs tests/p0-map-road-walker.test.cjs tests/p0-map-road-marked-corridor.test.cjs tests/p0-map-road-review-overlay.test.cjs tests/p0-map-editions-parity.test.cjs tests/p0-map-road-geometry-inspection.test.cjs tests/p0-map-save-transition.test.cjs tests/p0-map-site-migration-audit.test.cjs tests/p0-map-visible-landmarks.test.cjs tests/p0-map-watchtower-junction-audit.test.cjs
+        run: node --test tests/p0-map-road-editor-safety.test.cjs tests/p0-map-road-topology.test.cjs tests/p0-map-road-walker.test.cjs tests/p0-map-road-marked-corridor.test.cjs tests/p0-map-road-review-overlay.test.cjs tests/p0-map-editions-parity.test.cjs tests/p0-map-road-geometry-inspection.test.cjs tests/p0-map-save-transition.test.cjs tests/p0-map-site-migration-audit.test.cjs tests/p0-map-visible-landmarks.test.cjs tests/p0-map-watchtower-junction-audit.test.cjs tests/p0-map-east-branches.test.cjs
