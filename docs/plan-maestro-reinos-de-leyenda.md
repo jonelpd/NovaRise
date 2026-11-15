@@ -1911,3 +1911,12 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Añadido `tests/p0-map-site-migration-audit.test.cjs` para exigir inventario único, lugares iniciales y enemigos presentes y **cero asignaciones ficticias**. Integrado en el workflow de navegación, con disparadores para cambios en el juego.
 - [!] Este inventario es la primera etapa de migración, no un traslado de elementos. Deben localizarse visualmente los castillos, minas, molinos y demás lugares sobre el PNG original; los que no existan deberán recibir una decisión de diseño explícita antes de migrar partidas.
 - [ ] Ejecutar las pruebas y generar el inventario completo; elaborar tabla de correspondencias verificadas y política para lugares desaparecidos, conservar partidas originales y probar rollback en ambas ediciones.
+
+
+### Primer inventario visual del mapa original — 2026-11-15
+- [x] Inspeccionado directamente el PNG original aportado por el usuario (1254×1254), no una representación inventada.
+- [x] Creado `docs/mapa-hitos-visibles-original.json` con **13 candidatos visuales**: siete castillos (noroeste, central, noreste, suroeste, sur central, sureste y volcánico), cinco entradas de minas (oeste central, noreste, este central, este sur y suroeste) y un molino de viento oriental. Las posiciones en píxeles son aproximadas, **sin verificar**.
+- [x] Excluida una torre de piedra occidental inicialmente ambigua: no se puede clasificar como molino sin pruebas visuales.
+- [x] Añadido `tests/p0-map-visible-landmarks.test.cjs` y registrado en el workflow de navegación para impedir que se confundan candidatos con ubicaciones aprobadas o IDs de guardados antiguos.
+- [!] No existe todavía correspondencia entre los IDs del mapa anterior y estos hitos; los 13 puntos son una guía para revisión manual, no lugares activos ni destinos navegables aprobados.
+- [ ] Validar centros y accesos de cada hito contra las rutas negras; identificar puentes de acceso reales; decidir equivalencias de castillos y minas conservando todas las propiedades de las partidas existentes.
