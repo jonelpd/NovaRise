@@ -697,9 +697,9 @@ function fineRoute(a,b){
   const traced=tracedRoadRoute(a,b);
   if(traced)return traced;
  }
- return terrainFineRoute(a,b);
+ return terrainFineRoute(a,b,true);
 }
-function terrainFineRoute(a,b){
+function terrainFineRoute(a,b,preferMarkedRoads=false){
  if(!navBlocked)return null;
  if(!a||!b)return null;
  const start=nearestNav(...a,2),goal=nearestNav(...b,2);if(!start||!goal)return null;
@@ -713,7 +713,11 @@ function terrainFineRoute(a,b){
   const x=id%80,y=Math.floor(id/80);
   for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]]){
    const nx=x+dx,ny=y+dy;if(!navFree(nx,ny)||dx&&dy&&(!navFree(x+dx,y)||!navFree(x,y+dy)))continue;
-   const ni=navCell(nx,ny),cost=dist[id]+Math.hypot(dx,dy);
+   const ni=navCell(nx,ny);
+   // Cuando faltan uniones entre trazos, penalizar fuertemente salirse
+   // de los caminos dibujados. Los accesos locales siguen siendo posibles.
+   const outsideMarkedRoad=preferMarkedRoads&&tracedRoadMask&&!tracedRoadMask[ni];
+   const cost=dist[id]+Math.hypot(dx,dy)*(outsideMarkedRoad?12:1);
    if(cost<dist[ni]){dist[ni]=cost;prev[ni]=id;open.push(ni)}
   }
  }
