@@ -13,7 +13,8 @@
     "bulk_trace": "docs/mapa-caminos-actualizados.polyline",
     "bulk_trace_overlay": "docs/mapa-caminos-extraidos.svg",
     "bulk_trace_preview": "juego/mapa-todas-lineas-negras-trazadas.png",
-    "bulk_trace_decoder": "scripts/decode-bulk-road-polylines.cjs"
+    "bulk_trace_decoder": "scripts/decode-bulk-road-polylines.cjs",
+    "bulk_trace_graph": "docs/mapa-caminos-actualizados-grafo.json"
   },
   "release_requirements": {
     "road_status": "approved",
@@ -26,9 +27,9 @@
     "novarise": "NVRA integration may be enabled independently of map",
     "itch_io": "Guest mode without NVRA; same map and navigation"
   },
-  "current_state": "latest cyan vector source imported; navigation remains draft-unverified and not deployed in either edition",
+  "current_state": "complete provisional 606-node graph committed; route junctions and obstacles not approved; navigation not deployed",
   "bulk_trace_import": {
-    "status": "source-imported-unverified",
+    "status": "graph-imported-unverified",
     "expected_source": "1254x1254 comparison of original and user-marked maps",
     "expected_fragments_reported": 111,
     "expected_simplified_points_reported": 606,
@@ -40,6 +41,9 @@
       "verify towers bridges walls water and castle access",
       "verify route graph topology and editions parity",
       "preserve existing saves and prove navigation regressions"
-    ]
+    ],
+    "graph_nodes": 606,
+    "graph_internal_edges": 495,
+    "endpoint_proximity_pairs_within_4px": 126
   }
 }
