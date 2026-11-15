@@ -2129,3 +2129,13 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [ ] Regenerar la extracción completa sobre esta última imagen y comprobar la cobertura de las nuevas líneas, continuidad, bifurcaciones y obstáculos.
 - [ ] Incorporar el JSON actualizado al repositorio, crear el grafo seguro y verificar pruebas y guardados antes de activar la navegación.
 - [!] Esta revisión de imagen no equivale a navegación desplegada; no se han aprobado ni activado aristas.
+
+
+### Importación efectiva de la última imagen azul — 2026-11-15
+- [x] Regenerada la extracción desde la última imagen `mapa-todas-lineas-negras-trazadas(3).png` comparada con el fondo limpio de 1254×1254.
+- [x] Resultado con el nuevo método de esqueletización y simplificación: **111 fragmentos, 606 puntos** (y 495 aristas internas esperadas). El recuento depende de parámetros y no representa caminos transitables confirmados.
+- [x] **Subidos los datos reales a GitHub** en `docs/mapa-caminos-actualizados.polyline` con coordenadas de píxel comprimidas sin perder los puntos simplificados.
+- [x] Añadido `scripts/decode-bulk-road-polylines.cjs` que reconstruye los fragmentos y produce un grafo provisional usando el importador existente; añadida prueba `tests/p0-map-updated-blue-trace.test.cjs`.
+- [x] Actualizada la configuración compartida de NovaRise e itch.io para referirse a esta fuente nueva.
+- [ ] Ejecutar el decodificador y suite Node/CI, comprobar el mapa original del repositorio, unir bifurcaciones por continuidad real, revisar obstáculos y accesos, integrar el grafo aprobado en el motor de movimiento y verificar guardados.
+- [!] **La fuente vectorial está ya en GitHub, pero las rutas aún no están aprobadas ni activas.** No se ha cambiado el escenario visible ni los guardados.
