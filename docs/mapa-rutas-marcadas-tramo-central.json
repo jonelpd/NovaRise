@@ -4,7 +4,7 @@
   "coordinate_system": "normalized",
   "map_asset": "mapa-rutas-marcadas.png",
   "source": "User-marked black paths, manually sampled on 1254x1254 image",
-  "coverage": "Central castle to windmill plus eastern junction southward to classical ruins; incomplete and not gameplay-ready",
+  "coverage": "Three preliminary branches: central castle to windmill, eastern watchtower to southern ruins, and south-east approach to volcanic junction. All pending verification.",
   "nodes": [
     {
       "id": "central-mill-01",
@@ -125,56 +125,119 @@
     },
     {
       "id": "central-ruins-01",
-      "x": 0.681818,
-      "y": 0.383573,
+      "x": 0.658692,
+      "y": 0.380383,
       "pixel": [
-        855,
-        481
+        826,
+        477
       ]
     },
     {
       "id": "central-ruins-02",
-      "x": 0.689793,
-      "y": 0.401116,
+      "x": 0.638756,
+      "y": 0.382775,
       "pixel": [
-        865,
-        503
+        801,
+        480
       ]
     },
     {
       "id": "central-ruins-03",
-      "x": 0.698565,
-      "y": 0.417863,
+      "x": 0.625997,
+      "y": 0.392344,
       "pixel": [
-        876,
-        524
+        785,
+        492
       ]
     },
     {
       "id": "central-ruins-04",
-      "x": 0.683413,
-      "y": 0.42504,
+      "x": 0.627592,
+      "y": 0.413078,
       "pixel": [
-        857,
-        533
+        787,
+        518
       ]
     },
     {
       "id": "central-ruins-05",
-      "x": 0.661085,
-      "y": 0.431419,
+      "x": 0.642743,
+      "y": 0.433812,
       "pixel": [
-        829,
-        541
+        806,
+        544
       ]
     },
     {
       "id": "central-ruins-06",
-      "x": 0.643541,
-      "y": 0.431419,
+      "x": 0.6563,
+      "y": 0.440989,
       "pixel": [
-        807,
-        541
+        823,
+        553
+      ]
+    },
+    {
+      "id": "central-south-01",
+      "x": 0.684211,
+      "y": 0.382775,
+      "pixel": [
+        858,
+        480
+      ]
+    },
+    {
+      "id": "central-south-02",
+      "x": 0.694577,
+      "y": 0.406699,
+      "pixel": [
+        871,
+        510
+      ]
+    },
+    {
+      "id": "central-south-03",
+      "x": 0.709729,
+      "y": 0.426635,
+      "pixel": [
+        890,
+        535
+      ]
+    },
+    {
+      "id": "central-south-04",
+      "x": 0.732855,
+      "y": 0.443381,
+      "pixel": [
+        919,
+        556
+      ]
+    },
+    {
+      "id": "central-south-05",
+      "x": 0.752791,
+      "y": 0.4689,
+      "pixel": [
+        944,
+        588
+      ]
+    },
+    {
+      "id": "central-south-06",
+      "x": 0.754386,
+      "y": 0.486443,
+      "pixel": [
+        946,
+        610
+      ]
+    },
+    {
+      "id": "central-south-07",
+      "x": 0.748804,
+      "y": 0.5,
+      "pixel": [
+        939,
+        627
       ]
     }
   ],
@@ -252,12 +315,6 @@
       "review": "Manually sampled against user-marked central castle-to-windmill road; needs pixel-level visual validation"
     },
     {
-      "from": "central-mill-09",
-      "to": "central-ruins-01",
-      "verified": false,
-      "review": "South branch from eastern junction toward classical ruins; visual inspection required"
-    },
-    {
       "from": "central-ruins-01",
       "to": "central-ruins-02",
       "verified": false,
@@ -286,6 +343,54 @@
       "to": "central-ruins-06",
       "verified": false,
       "review": "South branch from eastern junction toward classical ruins; visual inspection required"
+    },
+    {
+      "from": "central-mill-08",
+      "to": "central-ruins-01",
+      "verified": false,
+      "review": "Shared approach to eastern watchtower and southern ruins; needs visual verification"
+    },
+    {
+      "from": "central-mill-09",
+      "to": "central-south-01",
+      "verified": false,
+      "review": "Provisional south-east path toward volcanic junction; not collision-verified"
+    },
+    {
+      "from": "central-south-01",
+      "to": "central-south-02",
+      "verified": false,
+      "review": "Provisional south-east path toward volcanic junction; not collision-verified"
+    },
+    {
+      "from": "central-south-02",
+      "to": "central-south-03",
+      "verified": false,
+      "review": "Provisional south-east path toward volcanic junction; not collision-verified"
+    },
+    {
+      "from": "central-south-03",
+      "to": "central-south-04",
+      "verified": false,
+      "review": "Provisional south-east path toward volcanic junction; not collision-verified"
+    },
+    {
+      "from": "central-south-04",
+      "to": "central-south-05",
+      "verified": false,
+      "review": "Provisional south-east path toward volcanic junction; not collision-verified"
+    },
+    {
+      "from": "central-south-05",
+      "to": "central-south-06",
+      "verified": false,
+      "review": "Provisional south-east path toward volcanic junction; not collision-verified"
+    },
+    {
+      "from": "central-south-06",
+      "to": "central-south-07",
+      "verified": false,
+      "review": "Provisional south-east path toward volcanic junction; not collision-verified"
     }
   ]
 }
