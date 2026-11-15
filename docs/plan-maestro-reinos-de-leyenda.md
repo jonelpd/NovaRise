@@ -1587,3 +1587,15 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [ ] Revisar derechos de cada recurso adicional y los mapas antiguos que pudieran permanecer empaquetados; eliminar de las distribuciones finales los originales de Heroes III.
 - [ ] Integrar el mapa nuevo en una rama o candidato separado, migrar guardados si cambia la topología, probar IA, caminos, castillos y combates, y validar con el usuario antes de sustituir la versión publicada.
 **Estado:** concepto inicial creado y dependencias gráficas identificadas; no se ha modificado el mapa activo del juego ni la edición publicada.
+
+
+### Navegación física por caminos visibles del mapa original — 2026-11-15
+**Requisito aprobado por el usuario:** el héroe del jugador y los rivales deben caminar exclusivamente por senderos, puentes y accesos visibles; nunca atravesar bosques densos, montañas, agua ni construcciones. Conservar el movimiento pausado.
+- [x] Inspeccionada la función actual `move(x,y)` en `juego/index.html`: movimiento por casillas contiguas con `fineStepBetween` y comprobación de agua; no es todavía una red de caminos calcada de la imagen.
+- [x] Creado prototipo aislado `scripts/map-road-graph.cjs` con nodos normalizados y búsqueda de ruta por conexiones; una ruta inexistente devuelve `null`.
+- [x] Añadidas pruebas `tests/p0-map-road-graph.test.cjs` para rutas conectadas, tramos desconectados y conexiones inválidas.
+- [ ] Trazar manualmente los senderos reales del **arte final** y registrar puntos de curva, bifurcación, puentes, accesos a minas/castillos/tesoros y bloqueos físicos. El concepto visual generado todavía no cuenta con trazado validado.
+- [ ] Integrar el grafo en navegación del jugador, héroes rivales y comandantes secundarios; no activar el prototipo hasta tener nodos y coordenadas contrastados con el mapa final.
+- [ ] Implementar interpolación visual suave entre nodos y mantener cámara, velocidad pausada, movimiento por turnos, obstáculos, combate y guardados.
+- [ ] Verificar que los caminos y todos los puntos interactivos del mapa coinciden exactamente con lo visible, y realizar pruebas de regresión.
+**Estado:** arquitectura de navegación iniciada y aislada; no se ha cambiado el movimiento del juego publicado.
