@@ -1903,3 +1903,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Añadido `tests/p0-map-save-transition.test.cjs` para comprobar rechazo del borrador actual y de migraciones sin garantías, y permitir únicamente un escenario de prevalidación completa. Integrado en GitHub Actions de navegación.
 - [!] Este módulo aún **no está conectado al cambio de mapa del juego**; es una condición técnica y prueba preparatoria, no una migración ejecutada ni una prueba de que las partidas actuales ya sean compatibles con el mapa nuevo.
 - [ ] Diseñar y comprobar la migración efectiva de coordenadas, castillos, minas, objetos y estados de campaña; guardar instantánea inmutable y validar rollback en ambas ediciones antes de activar `mapa-rutas-marcadas.png`.
+
+
+### Inventario de lugares del mapa antiguo antes de migrar — 2026-11-15
+- [x] Reabierto el código fuente `juego/index.html` y examinada la lista real `VERIFIED_MAP_SITES` de castillos, minas, molinos y reliquias, con sus posiciones porcentuales en el mapa actual `mapa-grande.png`.
+- [x] Creado `scripts/audit-map-site-migration.cjs`: extrae el inventario existente y genera un informe de **lugares sin correspondencia confirmada** para el nuevo mapa. No reutiliza coordenadas de un dibujo distinto, no asigna automáticamente el nodo más cercano y no inventa elementos.
+- [x] Añadido `tests/p0-map-site-migration-audit.test.cjs` para exigir inventario único, lugares iniciales y enemigos presentes y **cero asignaciones ficticias**. Integrado en el workflow de navegación, con disparadores para cambios en el juego.
+- [!] Este inventario es la primera etapa de migración, no un traslado de elementos. Deben localizarse visualmente los castillos, minas, molinos y demás lugares sobre el PNG original; los que no existan deberán recibir una decisión de diseño explícita antes de migrar partidas.
+- [ ] Ejecutar las pruebas y generar el inventario completo; elaborar tabla de correspondencias verificadas y política para lugares desaparecidos, conservar partidas originales y probar rollback en ambas ediciones.
