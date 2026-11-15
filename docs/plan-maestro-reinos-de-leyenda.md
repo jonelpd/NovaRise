@@ -1870,3 +1870,12 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Registrado el hallazgo y la acción correctiva en `docs/informe-cruces-mapa-marcado.json`. **No se ha inventado un cruce ni aprobado el paso**; la topología requiere revisión precisa de los caminos negros.
 - [!] El informe procede de inspección geométrica y visual localizada, no de una validación completa del mapa. Los 54 segmentos continúan `verified:false` y no se ha confirmado CI.
 - [ ] Corregir orden y unión de nodos del entorno de la torre solo tras verificar exactamente el ramal; después ejecutar tests de geometría y navegación, revisar puentes y continuar la auditoría del resto de corredores.
+
+
+### Corrección del falso cruce en la torre y acceso a ruinas — 2026-11-15
+- [x] Ampliada la imagen original marcada por el usuario en el sector central-oriental (torre de vigilancia, camino sureste y ruinas). Detectado que el ramal provisional a las ruinas retrocedía sobre el camino de la torre y generaba un cruce geométrico falso.
+- [x] Corregido `docs/mapa-rutas-marcadas-tramo-central.json`: ramal a las ruinas conectado provisionalmente desde `central-south-03`, no desde `central-mill-08`; recolocados `central-ruins-01..06` para seguir la curva meridional visible y ajustado el punto de bifurcación `central-south-03`.
+- [x] Conservados **57 nodos, 54 conexiones y tres componentes**, sin alterar ninguna conexión verificada (todas continúan `verified:false`). La ruta provisional desde `central-mill-01` hasta `central-ruins-06` ahora consta de **18 nodos**.
+- [x] Comprobación geométrica sobre los datos actualizados: **0 cruces estrictos entre aristas sin nodo común**, frente a 1 anterior; longitud máxima de arista ~45,18 px, dentro del umbral de 55 px. Actualizados tests de recorrido y regresión geométrica e informe `docs/informe-cruces-mapa-marcado.json`.
+- [!] Es una corrección visual y geométrica **provisional**, no una aprobación píxel a píxel del camino ni una ejecución confirmada de GitHub Actions. La navegación activa y los guardados de NovaRise e itch.io siguen sin modificaciones.
+- [ ] Ejecutar pruebas automatizadas y revisar visualmente con la superposición todo el nuevo ramal, puentes y corredores restantes; después preparar activación compartida y migración segura de partidas.
