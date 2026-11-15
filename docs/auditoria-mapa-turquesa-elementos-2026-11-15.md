@@ -41,3 +41,34 @@ No conectar automáticamente componentes por cercanía geométrica; no cambiar I
 
 ## Estado de cierre
 **PENDIENTE**: contraste visual directo con el mapa marcado original, puertas de 44 sitios, rutas entre componentes, ejecución de pruebas completas y validación en navegadores de NovaRise/itch.io. Esta auditoría documental no acredita todavía corrección funcional.
+
+
+## Contraste visual con imagen original marcada (recibida 2026-11-15)
+Se ha recibido y abierto `mapa-rutas-marcadas(2).png` (1254×1254, RGBA). Esta es la referencia visual primaria de esta auditoría; no se deben inferir puertas a partir de centros de círculos. La leyenda se confirma directamente: rutas turquesas, castillos rojos, minas amarillas, molino azul, recompensas verdes, reclutamiento morado.
+
+### Zonas de riesgo observables que requieren pruebas por trayecto
+1. **Castillo costero noroeste**: entrada al sur/sureste del recinto; comprobar continuidad del camino turquesa y que el héroe no cruce murallas.
+2. **Castillo central y puente oriental**: el acceso está vinculado al puente sobre agua; verificar que la ruta usa el puente y no el río ni el cuerpo del castillo.
+3. **Castillo nevado noreste**: verificar el acceso a través del corredor de montaña y no por el lago helado o la ladera.
+4. **Castillo suroeste**: acceso junto a agua/cascada; revisar puente, puerta y conectividad con la ruta principal.
+5. **Castillo isla sur**: camino por puente estrecho desde tierra; comprobar no permitir cruzar agua.
+6. **Castillo volcánico oriental**: la ruta pasa entre lava, riscos y fortaleza; evitar accesos por la ladera o sobre lava.
+7. **Castillo del desierto sureste**: comprobar la entrada por el camino turquesa del oasis, no por las murallas ni las dunas.
+8. **Molino oriental**: hay una ruta que rodea el molino y pasa por edificaciones; comprobar que la zona clicable corresponda al molino azul y no a la casa/torre adyacente.
+9. **Minas amarillas en cuevas y montañas**: comprobar que cada acceso termine en la boca de la mina, no en el centro de la montaña; atención a la mina al noroeste, la central y las del noreste.
+10. **Recompensas verdes y reclutamiento morado próximos a rutas**: algunas torres/casas están pegadas a bifurcaciones; verificar que los clics no activen edificios vecinos y que cada entrada esté conectada al tramo correcto.
+
+### Comprobación cruzada con el catálogo actual
+- El catálogo contiene exactamente **7 castillos, 10 minas, 1 molino, 15 recompensas y 11 reclutamientos**, coherente con el inventario de trabajo previo.
+- Se preservan sus 44 IDs de juego para no invalidar guardados.
+- Se observan identificadores heredados semánticamente discordantes: `molino-oriental` usa `game_id:mill-west`; `templo-norte` usa `game_id:relic-desert-well`; `casa-oeste` usa `game_id:relic-east-ruin`. **No renombrar directamente**: primero separar nombre visual de ID persistente y verificar qué recompensa corresponde a cada objeto.
+- La imagen no demuestra por sí sola que cada centro o puerta sea exacto. Mantener `access_pending` hasta pruebas.
+
+### Orden de corrección aprobado
+1. Capturar y revisar explícitamente las **44 puertas** contra esta imagen, registrando coordenada de entrada, segmento turquesa y componente.
+2. Auditar los cuatro componentes de máscara para identificar cortes de extracción versus discontinuidades reales, **sin unir automáticamente por proximidad**.
+3. Corregir las rutas estrictas y la interacción de entrada, con pruebas de navegación, obstáculos y guardado.
+4. Validar efectos de cada elemento (asedios, minas, molino, recompensas y reclutamiento) y paridad NovaRise/itch.io.
+5. Mantener congelada la animación del caballo mientras se estabiliza esta fase.
+
+**Estado:** revisión visual preliminar efectuada; accesos aún no aprobados individualmente. Ningún resultado de navegador o CI nuevo se da por comprobado en este apartado.
