@@ -2425,3 +2425,10 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [!] La ejecución local de `scripts/audit-turquoise-map.cjs` no se ha podido completar en este entorno: el repositorio remoto no está montado y la descarga de GitHub desde la terminal falló por resolución DNS. El analizador permanece publicado, pero sus resultados **no** se declaran comprobados.
 - [ ] Ejecutar el analizador en GitHub Actions o entorno con acceso al repositorio y contrastar sus seis pares de componentes con la imagen original.
 - [ ] Validar el estado de error si la máscara no carga, las 44 entradas y la equivalencia de las versiones del juego.
+
+
+### Automatización de la auditoría topológica — 2026-11-16
+- [x] Creado el workflow `.github/workflows/audit-turquoise-map.yml` (commit `688ef25e`), activado por cambios en máscara, catálogo, analizador o workflow, además de ejecución manual.
+- [x] El workflow ejecuta `node scripts/audit-turquoise-map.cjs --json`, verifica 44 elementos y consistencia del número de componentes, y publica `turquoise-audit-report.json` como artefacto.
+- [!] La ejecución de GitHub Actions y sus resultados todavía no están confirmados; no se afirma que el workflow esté verde.
+- [ ] Revisar el informe generado, contrastar los posibles cortes con el mapa dibujado y aprobar solo conexiones visibles antes de modificar la máscara.
