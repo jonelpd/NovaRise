@@ -2331,3 +2331,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Actualizado `server/nvra-authoritative-mines.cjs` para las 10 minas y adaptadas pruebas de captura y economía. Conservados IDs de los 3 recursos existentes cuando fue posible.
 - [!] **No cerrar fase hasta CI verde y comprobación visual y de movimiento real**. Las coordenadas se han estimado a partir de los centros de círculos, no de una comprobación interactiva. El sistema de casillas estratégicas 10×10 sigue siendo heredado y el respaldo puede permitir desplazamientos fuera del trazado turquesa.
 - [ ] Verificar accesos de los 44 lugares, conectividad de los cuatro componentes, interacciones de castillos, minas, molino, recompensas y reclutamiento; validar partidas guardadas y sincronía con la versión itch.io.
+
+
+### Validación de la integración turquesa — 2026-11-15
+- [x] `Game regression tests` y `NovaRise - pruebas estáticas` finalizadas correctamente para commit `6ecb8823` (GitHub Actions `43761647080` y `43761647091`).
+- [x] Publicación `Publicar NovaRise en GitHub Pages` completada con éxito (`43761646982`); despliegue Pages secundario todavía en curso al comprobar.
+- [x] Añadida `tests/p0-turquoise-roads.test.cjs` para validar 2404 celdas turquesas, los 44 lugares, IDs únicos y la carga de la máscara oficial.
+- [!] La validación automatizada no sustituye una prueba de desplazamiento real: siguen pendientes los 4 componentes desconectados, accesos de los edificios y posibles desviaciones causadas por la cuadrícula estratégica 10×10 y la ruta de respaldo.
+- [ ] Comprobar equivalencia de los elementos y las rutas en la versión itch.io antes de declararla sincronizada.
