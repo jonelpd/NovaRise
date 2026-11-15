@@ -689,8 +689,15 @@ function navSegmentClear(a,b){
  return true
 }
 function fineRoute(a,b){
- if(tracedRoadLoading||!tracedRoadMask)return null;
- return tracedRoadRoute(a,b);
+ if(!navBlocked)return null;
+ // Preferir siempre las rutas marcadas. La extracción todavía tiene
+ // fragmentos desconectados: permitir el paso seguro de la malla original
+ // evita inmovilizar al héroe en las casillas existentes/partidas guardadas.
+ if(tracedRoadMask){
+  const traced=tracedRoadRoute(a,b);
+  if(traced)return traced;
+ }
+ return terrainFineRoute(a,b);
 }
 function terrainFineRoute(a,b){
  if(!navBlocked)return null;
