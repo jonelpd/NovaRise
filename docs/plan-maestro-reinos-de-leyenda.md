@@ -2032,3 +2032,10 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Añadida prueba de regresión `tests/p0-map-east-branches.test.cjs` e integrada en `road-navigation-tests.yml`.
 - [ ] Verificar el punto exacto de separación de ambos trazos negros y sus posiciones en la imagen original; solo entonces decidir si hace falta dividir, recolocar o crear nodos reales.
 - [!] Las observaciones son candidatos visuales, no rutas aprobadas. No se modifica el mapa jugable ni el guardado.
+
+
+### Comparador de tinta oriental (muestras aproximadas) — 2026-11-15
+- [x] Revisado de nuevo el recorte original de la torre, estanque y granja. Se han anotado dos series **aproximadas** de puntos de referencia en `docs/auditoria-bifurcaciones-torre-central.json`, una hacia la granja y otra por la ribera sur del estanque.
+- [x] La herramienta `tools/revisar-rutas-marcadas.html` permite superponer ambas muestras con colores distintos sobre el mapa y compararlas con el trazado provisional del grafo; ambas están rotuladas «aproximado» y no alteran nodos ni aristas.
+- [x] Añadida prueba automática de la visualización comparativa.
+- [ ] Ajustar sobre la imagen original el punto exacto de separación, las curvas y el despeje de la torre; después decidir cambios concretos en el grafo. **No hay nuevas rutas verificadas.**
