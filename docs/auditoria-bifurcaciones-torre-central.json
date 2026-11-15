@@ -91,21 +91,23 @@
     "source": "Full-resolution user-supplied marked PNG, manually inspected enlarged tower/ruins crop",
     "reviewed_on": "2026-11-15",
     "tower": {
-      "observed": "Black ink passes directly across or beneath the watchtower base in the marked image; the apparent three-way junction cannot be treated as obstacle-cleared.",
+      "observed": "En la ampliación original la tinta negra cruza el área de la base de madera de la torre, y convergen varios trazos próximos. La imagen por sí sola no demuestra despeje físico ni el punto exacto de paso.",
       "clearance_confirmed": false,
       "route_approval": false,
       "required_fix": "Establish an accessible road trace around the watchtower using visible terrain only; do not extrapolate hidden segments or add a shortcut."
     },
     "ruins": {
-      "observed": "A separate black line bends west along the lower road toward the ruined stone columns and joins the southward road.",
+      "observed": "En la ampliación original se aprecia una línea negra que sale hacia el suroeste, bordea las ruinas de columnas y se dirige al cruce sur; la geometría exacta del tramo continúa pendiente de validación.",
       "clearance_confirmed": false,
       "route_approval": false,
       "required_fix": "Validate the southern fork against pixel positions and obstacle clearance before approving."
     },
     "east": {
-      "observed": "Black road visibly continues northeast from watchtower toward cultivated buildings, and a second line east past the pond.",
+      "observed": "En la ampliación del mapa original se ven dos trazos negros diferenciados: uno sale al noreste de la torre hacia la granja y otro bordea el estanque por su lado sur hasta el edificio oriental; no se ha confirmado que el borrador represente ambos correctamente.",
       "route_approval": false,
-      "required_fix": "Check which of these drawn branches corresponds to central-mill-10 and whether any visible branch is absent from draft."
+      "required_fix": "Comparar las dos ramas visibles con el grafo, sin asumir que son una sola ruta ni crear nuevas aristas antes de medirlas.",
+      "branch_count_visible_candidate": 2,
+      "clearance_confirmed": false
     }
   },
   "hazard_edges": [
@@ -129,5 +131,25 @@
       "reason": "Southern ruins fork requires exact ink and obstacle check",
       "status": "review-required"
     }
-  ]
+  ],
+  "east_branch_review": {
+    "status": "visual-candidates-unverified",
+    "reference_crop": "(770,390)-(1000,600) from original 1254x1254 marked map",
+    "visible_candidates": [
+      {
+        "id": "tower-to-northeast-farm",
+        "direction": "northeast",
+        "landmark": "farm and fields",
+        "approved": false
+      },
+      {
+        "id": "pond-southern-bank-to-east-building",
+        "direction": "east",
+        "landmark": "southern shore of pond and stone building",
+        "approved": false
+      }
+    ],
+    "draft_mapping": "unresolved",
+    "new_edges_created": 0
+  }
 }
