@@ -4,7 +4,7 @@
   "coordinate_system": "normalized",
   "map_asset": "mapa-rutas-marcadas.png",
   "source": "User-marked black paths, manually sampled on 1254x1254 image",
-  "coverage": "Central and eastern branches plus separate provisional western blue-castle-to-gold-mine corridor; no verified link between components.",
+  "coverage": "Provisional central/eastern, western and northern black-road corridors; 3 separate components, none verified for gameplay.",
   "nodes": [
     {
       "id": "central-mill-01",
@@ -392,6 +392,132 @@
         129,
         465
       ]
+    },
+    {
+      "id": "north-watchtower-cave-01",
+      "x": 0.58134,
+      "y": 0.23764,
+      "pixel": [
+        729,
+        298
+      ]
+    },
+    {
+      "id": "north-watchtower-cave-02",
+      "x": 0.58134,
+      "y": 0.219298,
+      "pixel": [
+        729,
+        275
+      ]
+    },
+    {
+      "id": "north-watchtower-cave-03",
+      "x": 0.580542,
+      "y": 0.199362,
+      "pixel": [
+        728,
+        250
+      ]
+    },
+    {
+      "id": "north-watchtower-cave-04",
+      "x": 0.559011,
+      "y": 0.189793,
+      "pixel": [
+        701,
+        238
+      ]
+    },
+    {
+      "id": "north-watchtower-cave-05",
+      "x": 0.545455,
+      "y": 0.178628,
+      "pixel": [
+        684,
+        224
+      ]
+    },
+    {
+      "id": "north-watchtower-cave-06",
+      "x": 0.543062,
+      "y": 0.161085,
+      "pixel": [
+        681,
+        202
+      ]
+    },
+    {
+      "id": "north-watchtower-cave-07",
+      "x": 0.548644,
+      "y": 0.142743,
+      "pixel": [
+        688,
+        179
+      ]
+    },
+    {
+      "id": "north-watchtower-cave-08",
+      "x": 0.563796,
+      "y": 0.133971,
+      "pixel": [
+        707,
+        168
+      ]
+    },
+    {
+      "id": "north-watchtower-cave-09",
+      "x": 0.586124,
+      "y": 0.131579,
+      "pixel": [
+        735,
+        165
+      ]
+    },
+    {
+      "id": "north-watchtower-cave-10",
+      "x": 0.611643,
+      "y": 0.131579,
+      "pixel": [
+        767,
+        165
+      ]
+    },
+    {
+      "id": "north-watchtower-cave-11",
+      "x": 0.631579,
+      "y": 0.12201,
+      "pixel": [
+        792,
+        153
+      ]
+    },
+    {
+      "id": "north-watchtower-cave-12",
+      "x": 0.643541,
+      "y": 0.105263,
+      "pixel": [
+        807,
+        132
+      ]
+    },
+    {
+      "id": "north-watchtower-cave-13",
+      "x": 0.649123,
+      "y": 0.086922,
+      "pixel": [
+        814,
+        109
+      ]
+    },
+    {
+      "id": "north-watchtower-cave-14",
+      "x": 0.641946,
+      "y": 0.070973,
+      "pixel": [
+        805,
+        89
+      ]
     }
   ],
   "edges": [
@@ -640,6 +766,84 @@
       "to": "west-castle-mine-17",
       "verified": false,
       "review": "Western blue castle to western gold mine provisional hand trace; independently inspect against black line"
+    },
+    {
+      "from": "north-watchtower-cave-01",
+      "to": "north-watchtower-cave-02",
+      "verified": false,
+      "review": "Northern tower-to-cave provisional visual trace; pixel-level validation required"
+    },
+    {
+      "from": "north-watchtower-cave-02",
+      "to": "north-watchtower-cave-03",
+      "verified": false,
+      "review": "Northern tower-to-cave provisional visual trace; pixel-level validation required"
+    },
+    {
+      "from": "north-watchtower-cave-03",
+      "to": "north-watchtower-cave-04",
+      "verified": false,
+      "review": "Northern tower-to-cave provisional visual trace; pixel-level validation required"
+    },
+    {
+      "from": "north-watchtower-cave-04",
+      "to": "north-watchtower-cave-05",
+      "verified": false,
+      "review": "Northern tower-to-cave provisional visual trace; pixel-level validation required"
+    },
+    {
+      "from": "north-watchtower-cave-05",
+      "to": "north-watchtower-cave-06",
+      "verified": false,
+      "review": "Northern tower-to-cave provisional visual trace; pixel-level validation required"
+    },
+    {
+      "from": "north-watchtower-cave-06",
+      "to": "north-watchtower-cave-07",
+      "verified": false,
+      "review": "Northern tower-to-cave provisional visual trace; pixel-level validation required"
+    },
+    {
+      "from": "north-watchtower-cave-07",
+      "to": "north-watchtower-cave-08",
+      "verified": false,
+      "review": "Northern tower-to-cave provisional visual trace; pixel-level validation required"
+    },
+    {
+      "from": "north-watchtower-cave-08",
+      "to": "north-watchtower-cave-09",
+      "verified": false,
+      "review": "Northern tower-to-cave provisional visual trace; pixel-level validation required"
+    },
+    {
+      "from": "north-watchtower-cave-09",
+      "to": "north-watchtower-cave-10",
+      "verified": false,
+      "review": "Northern tower-to-cave provisional visual trace; pixel-level validation required"
+    },
+    {
+      "from": "north-watchtower-cave-10",
+      "to": "north-watchtower-cave-11",
+      "verified": false,
+      "review": "Northern tower-to-cave provisional visual trace; pixel-level validation required"
+    },
+    {
+      "from": "north-watchtower-cave-11",
+      "to": "north-watchtower-cave-12",
+      "verified": false,
+      "review": "Northern tower-to-cave provisional visual trace; pixel-level validation required"
+    },
+    {
+      "from": "north-watchtower-cave-12",
+      "to": "north-watchtower-cave-13",
+      "verified": false,
+      "review": "Northern tower-to-cave provisional visual trace; pixel-level validation required"
+    },
+    {
+      "from": "north-watchtower-cave-13",
+      "to": "north-watchtower-cave-14",
+      "verified": false,
+      "review": "Northern tower-to-cave provisional visual trace; pixel-level validation required"
     }
   ]
 }
