@@ -2015,3 +2015,12 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Enumerados los seis tramos provisionales en `docs/auditoria-bifurcaciones-torre-central.json` y añadidas pruebas de correspondencia con las aristas reales del grafo y de señalización visual.
 - [ ] Comprobar manualmente el despeje de la torre, la continuidad de la tinta negra en el cruce sur y los tramos hacia el molino; no se ha aprobado ningún segmento.
 - [!] Sin cambios en rutas activas ni partidas guardadas. La ejecución del nuevo commit en GitHub Actions requiere comprobación.
+
+
+### Continuidad hacia la granja y el estanque oriental — 2026-11-15
+- [x] Inspeccionada la ampliación de la imagen original `(770,390)-(1000,600)`: se distinguen **dos candidatos visuales distintos** en la zona oriental de la torre, uno al noreste hacia la granja y otro que sigue el borde sur del estanque hacia un edificio de piedra.
+- [x] Registrados ambos por separado en `docs/auditoria-bifurcaciones-torre-central.json`, sin asignarles aristas existentes, inventar conexiones ni aprobar transitabilidad.
+- [x] Añadido el botón «Examinar estanque y caminos orientales» a la herramienta de revisión; la vista advierte expresamente que la correspondencia con el grafo sigue sin resolver.
+- [x] Ampliadas las pruebas para exigir dos candidatos diferentes, cero aristas nuevas y ausencia de aprobación.
+- [ ] Seguir el trazo negro sobre la imagen original, identificar con precisión cada bifurcación y decidir qué aristas del borrador corresponden realmente a cada ramal antes de modificar el grafo.
+- [!] Sin cambios en el juego activo ni en partidas guardadas. Comprobar el resultado de GitHub Actions del último cambio.
