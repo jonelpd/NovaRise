@@ -1665,3 +1665,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [ ] Revisar a escala los 36 segmentos y completar los senderos de los otros biomas; corregir cualquier paso por objetos o terreno no transitable.
 - [ ] Incorporar la imagen definitiva original al repositorio, comprobar su SHA-256 y validar visualmente cada acceso antes de integrarlo en el motor del juego.
 **Estado:** trazado parcial real disponible para inspección, no se ha sustituido el mapa del juego ni verificado CI.
+
+
+### Ampliación de rutas por biomas — 2026-11-15
+- [x] Ampliado `docs/mapa-original-rutas-trazado-preliminar.json` a **8 recorridos separados, 98 nodos y 90 conexiones**. Añadidos accesos provisionales al castillo del suroeste, pantano, desierto y minas del suroeste.
+- [x] Actualizado `tests/p0-map-road-visual-trace.test.cjs` para comprobar los nuevos recuentos y mantener todas las conexiones `verified:false`.
+- [!] Son polilíneas de referencia; **no están conectadas entre sí ni verificadas frente a obstáculos**. Algunos puntos de los recorridos nuevos pueden necesitar corrección al inspeccionar el mapa a escala.
+- [ ] Inspeccionar visualmente y corregir cada segmento, enlazar rutas solamente mediante senderos/puentes reales, documentar accesos a objetos y probar navegación del jugador y de la IA.
+- [ ] Incorporar el arte definitivo original al repositorio y validar la integridad de imagen y rutas; mantener la edición publicada sin cambios hasta superar pruebas.
