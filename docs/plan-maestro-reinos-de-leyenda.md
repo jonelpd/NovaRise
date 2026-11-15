@@ -2120,3 +2120,12 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [ ] Incorporar físicamente `mapa-caminos-extraidos.json` al repositorio y ejecutar el importador con él; la salida esperada con los datos actuales es 523 nodos y 429 aristas internas (523 - 94), sin conexiones entre fragmentos.
 - [ ] Resolver visualmente extremos, bifurcaciones, accesos y obstáculos; comprobar identidad de `juego/mapa-grande.png` con el original del usuario antes de activar rutas.
 - [!] El código está guardado en GitHub, pero no se ha verificado una ejecución de la nueva suite ni se ha activado la navegación.
+
+
+### Nueva revisión del trazado azul proporcionada por el usuario — 2026-11-15
+- [x] Recibido `mapa-todas-lineas-negras-trazadas(3).png`, 1254×1254, que **sustituye como referencia de navegación** a `mapa-todas-lineas-negras-trazadas(2).png`.
+- [x] Comparación directa de ambas imágenes: **3683 píxeles** presentan diferencia RGB máxima superior a 30. El nuevo mapa contiene trazos añadidos; no reutilizar sin revisión el JSON anterior de 94 fragmentos.
+- [x] Se conserva el mapa limpio original como fondo visual, sin dibujar líneas azules durante el juego; mismo trazado lógico para NovaRise e itch.io.
+- [ ] Regenerar la extracción completa sobre esta última imagen y comprobar la cobertura de las nuevas líneas, continuidad, bifurcaciones y obstáculos.
+- [ ] Incorporar el JSON actualizado al repositorio, crear el grafo seguro y verificar pruebas y guardados antes de activar la navegación.
+- [!] Esta revisión de imagen no equivale a navegación desplegada; no se han aprobado ni activado aristas.
