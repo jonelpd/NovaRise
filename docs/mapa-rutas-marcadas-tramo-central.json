@@ -4,7 +4,7 @@
   "coordinate_system": "normalized",
   "map_asset": "mapa-rutas-marcadas.png",
   "source": "User-marked black paths, manually sampled on 1254x1254 image",
-  "coverage": "Provisional central/eastern, western and northern black-road corridors; 3 separate components, none verified for gameplay.",
+  "coverage": "Provisional central/eastern, western and northern corridors; south-to-ruins branch repositioned after visual review; 3 disconnected components; no segment approved.",
   "nodes": [
     {
       "id": "central-mill-01",
@@ -125,56 +125,56 @@
     },
     {
       "id": "central-ruins-01",
-      "x": 0.658692,
-      "y": 0.380383,
+      "x": 0.692982,
+      "y": 0.433014,
       "pixel": [
-        826,
-        477
+        869,
+        543
       ]
     },
     {
       "id": "central-ruins-02",
-      "x": 0.638756,
-      "y": 0.382775,
+      "x": 0.677033,
+      "y": 0.443381,
       "pixel": [
-        801,
-        480
+        849,
+        556
       ]
     },
     {
       "id": "central-ruins-03",
-      "x": 0.625997,
-      "y": 0.392344,
+      "x": 0.661085,
+      "y": 0.448166,
       "pixel": [
-        785,
-        492
+        829,
+        562
       ]
     },
     {
       "id": "central-ruins-04",
-      "x": 0.627592,
-      "y": 0.413078,
+      "x": 0.645136,
+      "y": 0.447368,
       "pixel": [
-        787,
-        518
+        809,
+        561
       ]
     },
     {
       "id": "central-ruins-05",
-      "x": 0.642743,
-      "y": 0.433812,
+      "x": 0.633971,
+      "y": 0.438596,
       "pixel": [
-        806,
-        544
+        795,
+        550
       ]
     },
     {
       "id": "central-ruins-06",
-      "x": 0.6563,
-      "y": 0.440989,
+      "x": 0.629187,
+      "y": 0.429825,
       "pixel": [
-        823,
-        553
+        789,
+        539
       ]
     },
     {
@@ -197,10 +197,10 @@
     },
     {
       "id": "central-south-03",
-      "x": 0.709729,
+      "x": 0.700957,
       "y": 0.426635,
       "pixel": [
-        890,
+        879,
         535
       ]
     },
@@ -597,37 +597,31 @@
       "from": "central-ruins-01",
       "to": "central-ruins-02",
       "verified": false,
-      "review": "South branch from eastern junction toward classical ruins; visual inspection required"
+      "review": "Repositioned provisional trace along black-marked south-west bend toward classical ruins; pixel-level approval pending"
     },
     {
       "from": "central-ruins-02",
       "to": "central-ruins-03",
       "verified": false,
-      "review": "South branch from eastern junction toward classical ruins; visual inspection required"
+      "review": "Repositioned provisional trace along black-marked south-west bend toward classical ruins; pixel-level approval pending"
     },
     {
       "from": "central-ruins-03",
       "to": "central-ruins-04",
       "verified": false,
-      "review": "South branch from eastern junction toward classical ruins; visual inspection required"
+      "review": "Repositioned provisional trace along black-marked south-west bend toward classical ruins; pixel-level approval pending"
     },
     {
       "from": "central-ruins-04",
       "to": "central-ruins-05",
       "verified": false,
-      "review": "South branch from eastern junction toward classical ruins; visual inspection required"
+      "review": "Repositioned provisional trace along black-marked south-west bend toward classical ruins; pixel-level approval pending"
     },
     {
       "from": "central-ruins-05",
       "to": "central-ruins-06",
       "verified": false,
-      "review": "South branch from eastern junction toward classical ruins; visual inspection required"
-    },
-    {
-      "from": "central-mill-08",
-      "to": "central-ruins-01",
-      "verified": false,
-      "review": "Shared approach to eastern watchtower and southern ruins; needs visual verification"
+      "review": "Repositioned provisional trace along black-marked south-west bend toward classical ruins; pixel-level approval pending"
     },
     {
       "from": "central-mill-09",
@@ -844,6 +838,12 @@
       "to": "north-watchtower-cave-14",
       "verified": false,
       "review": "Northern tower-to-cave provisional visual trace; pixel-level validation required"
+    },
+    {
+      "from": "central-south-03",
+      "to": "central-ruins-01",
+      "verified": false,
+      "review": "Corrected provisional branch: black-marked path splits near southeastern road junction and curves west to ruins; requires pixel-level confirmation"
     }
   ]
 }
