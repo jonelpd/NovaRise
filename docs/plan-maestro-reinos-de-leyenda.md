@@ -2295,3 +2295,10 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Preservados los IDs de las localizaciones y las claves de casillas estratégicas para minimizar impacto sobre guardados y conquistas.
 - [!] **Revisión visual inicial, no certificación de accesibilidad**: deben validarse entradas reales y obstáculos. El mapa nuevo conserva otras localizaciones antiguas (molinos y reliquias), además de las casillas de la cuadrícula 10×10; aún no se han migrado.
 - [ ] Catalogar y georreferenciar molinos, ruinas, refugios, cofres y otros elementos reales del mapa nuevo; actualizar zonas clicables, accesos y eventos; verificar en navegador que héroes llegan a los destinos siguiendo las rutas marcadas.
+
+
+### Sincronización obligatoria de minas NVRA — 2026-11-15
+- [!] La primera reubicación de minas en `juego/index.html` hizo fallar `p0-nvra-authoritative-mines.test.cjs` porque el catálogo de minas del servidor aún contenía coordenadas antiguas.
+- [x] Actualizado `server/nvra-authoritative-mines.cjs` con las mismas coordenadas nuevas que el juego, manteniendo los IDs estables (commit `8116ac45`).
+- [x] Adaptado el estado de prueba de captura de mina a la ubicación nueva (commit `8158036b`).
+- [ ] Confirmar CI de la sincronización completa antes de dar por válida la reubicación; catalogar otros objetos del nuevo mapa y sus accesos.
