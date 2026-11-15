@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "policy": "shared-map-source",
+  "editions": [
+    "novarise",
+    "itch.io"
+  ],
+  "source_of_truth": {
+    "marked_map": "juego/mapa-rutas-marcadas.png",
+    "road_draft": "docs/mapa-rutas-marcadas-tramo-central.json",
+    "review_tool": "tools/revisar-rutas-marcadas.html",
+    "release_gate": "scripts/validate-map-road-release.cjs"
+  },
+  "release_requirements": {
+    "road_status": "approved",
+    "require_all_edges_verified": true,
+    "verify_map_hash": true,
+    "require_access_connectivity": true,
+    "require_both_editions_same_map_and_road_hashes": true
+  },
+  "edition_differences": {
+    "novarise": "NVRA integration may be enabled independently of map",
+    "itch_io": "Guest mode without NVRA; same map and navigation"
+  },
+  "current_state": "draft-unverified; not yet deployed in either edition"
+}
