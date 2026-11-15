@@ -1700,3 +1700,14 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [!] No se ha completado el trazado definitivo ni se ha aprobado ningún recorrido; esta revisión es visual preliminar, no una prueba automática de colisiones.
 - [ ] Corregir manualmente los segmentos problemáticos sobre el mapa a escala, añadir pasos de puentes y puertas, volver a revisar y asignar accesos a destinos visibles.
 - [ ] Subir el arte final propio y el overlay a GitHub cuando se disponga de una vía de subida de imágenes; no activar la sustitución de mapa ni rutas hasta superar revisión y CI.
+
+
+### Mapa con caminos negros marcados por el usuario — 2026-11-15
+- [x] Recibida e inspeccionada imagen PNG 1254 × 1254 con senderos negros dibujados manualmente, incluyendo cruces, bifurcaciones, entradas de castillos y recorridos entre regiones.
+- [x] Registrada referencia exacta en `docs/mapa-rutas-marcadas-usuario.json` con SHA-256 `6f199ca4ce9f20620b19c444e6763bb8d5037f18bfcfa8d323318c297592df9a`.
+- [!] Los trazados preliminares anteriores no deben activarse: el mapa marcado por el usuario es la nueva referencia de navegación y exige volver a trazar los puntos sobre esas líneas negras.
+- [!] Una máscara automática por píxeles oscuros detecta también árboles, sombras y edificios; no es suficientemente fiable para navegación. No convertir automáticamente todo lo negro en caminos transitables.
+- [ ] Subir el PNG marcado al repositorio y vincularlo al editor de rutas; el conector GitHub disponible en esta sesión solo permite crear/editar archivos UTF-8, no imágenes binarias.
+- [ ] Trazar manualmente la red vial completa sobre las líneas negras, validar cruces y puentes, y enlazar accesos a castillos/minas/tesoros.
+- [ ] Integrar los puntos aprobados en movimiento de héroes jugador/IA, revisar colisiones y compatibilidad de guardados y ejecutar pruebas antes de reemplazar el mapa jugable.
+**Estado:** imagen recibida, registrada y validada por huella; rutas aún no integradas en el juego.
