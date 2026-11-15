@@ -2165,3 +2165,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [!] Los 126 pares son **candidatos**, no pasos transitables verificados. El auditor no analiza aún intersecciones entre extremos y puntos interiores ni obstáculos reales.
 - [ ] Completar auditoría geométrica de intersecciones, revisar visualmente los candidatos y accesos, validar el fondo original, ejecutar CI y conectar solo rutas aprobadas al movimiento y guardados.
 - [!] No se ha activado la navegación; tampoco se ha confirmado una ejecución de la suite completa.
+
+
+### Auditoría geométrica de cruces entre segmentos — 2026-11-15
+- [x] Añadido `scripts/audit-bulk-road-crossings.cjs` para detectar intersecciones entre aristas de fragmentos diferentes sin habilitar automáticamente pasos.
+- [x] Añadido `tests/p0-map-bulk-crossings.test.cjs` con casos de cruce interior, paralelas y datos inválidos.
+- [x] Cálculo independiente sobre el grafo actual de 495 aristas: **15 contactos geométricos entre fragmentos**, todos clasificados como contactos en extremos con la tolerancia numérica aplicada; **0 cruces estrictamente interiores**. Estos contactos pueden solaparse con los 126 candidatos por proximidad y no deben sumarse como rutas nuevas.
+- [!] Cruces colineales, proximidad de extremo a segmento, obstáculos, puertas y puentes requieren todavía revisión. Ninguna unión se ha aprobado.
+- [ ] Ejecutar suite Node y CI, comparar fondo del repositorio con el mapa original y verificar conectividad real y partidas antes de habilitar movimiento.
