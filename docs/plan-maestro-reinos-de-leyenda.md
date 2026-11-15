@@ -1607,3 +1607,12 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [!] La superposición visual preliminar evidencia que **varios segmentos rectos del borrador atraviesan agua, árboles o estructuras**: estos segmentos **no son caminos transitables válidos** y no deben activarse en el juego. El prototipo es únicamente una estructura de datos y requiere redibujar las rutas con numerosos puntos de curva, alineados al arte final.
 - [ ] Redibujar la red vial punto a punto, comprobar cada arista sobre senderos/puentes visibles, y añadir validador de obstáculos antes de integrar.
 - [ ] Mantener mapa y navegación actuales intactos hasta aprobación visual y funcional.
+
+
+### Protección de rutas frente a segmentos no verificados — 2026-11-15
+- [x] Ampliado `scripts/map-road-graph.cjs` con `{verifiedOnly:true}`: en este modo únicamente permite aristas explícitamente marcadas `verified:true`.
+- [x] Convertido `docs/mapa-original-rutas-borrador.json` a esquema v2; todas las conexiones aproximadas están marcadas `verified:false` y requieren trazado sobre arte final.
+- [x] Actualizado `tests/p0-map-road-draft.test.cjs`: verifica que ningún camino preliminar es transitable en modo seguro y que una conexión aprobada sí puede recorrerse.
+- [ ] Obtener e integrar el mapa final original en el repositorio y trazar las curvas y puentes con puntos de control; verificar visualmente cada segmento antes de cambiarlo a `verified:true`.
+- [ ] Conectar navegación segura con los héroes y las ubicaciones de interacción solo después de aprobar rutas y validar el nuevo mapa.
+**Estado:** guardas técnicas añadidas; no se ha integrado ni probado en ejecución el nuevo mapa ni se ha modificado la edición publicada.
