@@ -2047,3 +2047,12 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Añadida regresión para `mapa-rutas-marcadas.png`, `juego/mapa-rutas-marcadas.png`, `./juego/mapa-rutas-marcadas.png` y `other-map.png`.
 - [ ] Confirmar el resultado del workflow para la regresión añadida. La revisión visual de la torre y los dos ramales orientales sigue pendiente.
 - [!] No se ha cambiado ningún tramo ni aprobado ningún paso; el juego activo y las partidas guardadas no se han modificado.
+
+
+### Diagnóstico de la bifurcación de torre y estanque — 2026-11-15
+- [x] Contrastada la ampliación original con la cadena `central-mill-09` → `central-mill-13`: su orientación es compatible **solo como candidata** con el ramal noreste hacia la granja; falta confirmar la ubicación de cada nodo.
+- [x] Identificada una **ausencia concreta en el borrador**: el ramal negro que baja desde la zona de la torre, bordea la ribera sur del estanque y llega al edificio oriental no dispone de cadena independiente en el grafo.
+- [x] Registrado el punto de separación de tinta **aproximado** `[865,460]`, con la advertencia de que se solapa con el área de la torre y **no tiene despeje confirmado**. Refinadas las muestras visuales provisionales del ramal del estanque.
+- [x] Ampliado `scripts/audit-east-branches.cjs` y sus pruebas para distinguir coincidencia provisional del ramal noreste, ausencia del ramal del estanque y obstáculo de la torre.
+- [ ] Medir un recorrido accesible y visible alrededor de la torre; si no existe, mantener el paso bloqueado. Solo después incorporar el ramal del estanque a un grafo provisional, comprobar intersecciones y mantener todas las aristas nuevas `verified:false`.
+- [!] No se han creado aristas ni aprobado caminos; no se ha alterado la navegación activa ni el guardado de partidas.
