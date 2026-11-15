@@ -11,6 +11,11 @@ test('original artwork landmarks remain provisional and do not silently migrate 
  assert.ok(data.landmarks.some(x=>x.kind==='castle'));
  assert.ok(data.landmarks.some(x=>x.kind==='mine'));
  assert.ok(data.landmarks.some(x=>x.kind==='mill'));
+ assert.equal(data.crossings.length,1);
+ assert.equal(data.crossings[0].id,'bridge-central-castle-east');
+ assert.equal(data.crossings[0].structureVisuallyConfirmed,true);
+ assert.equal(data.crossings[0].verified,false);
+ assert.deepEqual(data.crossings[0].connectedRoadNodes,[]);
  for(const landmark of data.landmarks){
   assert.ok(['castle','mine','mill'].includes(landmark.kind));
   assert.ok(landmark.pixel.every(n=>Number.isInteger(n)&&n>=0&&n<1254));
