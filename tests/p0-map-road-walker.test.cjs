@@ -12,7 +12,7 @@ test('walker follows bends at fixed speed and reaches destination',()=>{
 });
 test('unapproved or disconnected roads cannot move heroes',()=>{
  assert.throws(()=>createRoadWalker({...base,status:'draft-unverified'},'a','c'),/not approved/);
- assert.throws(()=>createRoadWalker({...base,edges:[{from:'a',to:'b',verified:true}]},'a','c'),/No approved route/);
+ assert.throws(()=>createRoadWalker({...base,edges:[{from:'a',to:'b',verified:true}]},'a','c'),/Required access disconnected/);
  assert.throws(()=>createRoadWalker({...base,edges:[{from:'a',to:'b',verified:false}]},'a','c'),/not approved/);
  assert.throws(()=>createRoadWalker(base,'a','c',{speed:0}),/speed/);
  assert.throws(()=>createRoadWalker(base,'a','c').step(-1),/elapsed/);
