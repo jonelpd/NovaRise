@@ -16,3 +16,8 @@ test('all legacy real map sites are inventoried without mapping to fictional tar
  assert.ok(report.unmapped.every(s=>s.targetRoadNode===null&&s.targetMapPixel===null&&s.verifiedOnOriginalImage===false));
  assert.equal(report.ready,false);
 });
+
+test('legacy inventory recognizes first object ID directly after opening brace',()=>{
+ const sample="const VERIFIED_MAP_SITES=[{id:'home',label:'Castillo del jugador',x:11.8,y:12.1,w:6,h:6,kind:'home',k:'1,1'}];";
+ assert.deepEqual(inventoryLegacySites(sample),[{id:'home',label:'Castillo del jugador',kind:'home',oldMapPercent:{x:11.8,y:12.1}}]);
+});
