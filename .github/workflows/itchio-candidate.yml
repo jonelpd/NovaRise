@@ -22,6 +22,7 @@ jobs:
           mkdir -p dist/itchio
           node scripts/build-itchio-guest.cjs juego dist/itchio
           test -s dist/itchio/index.html
+          node scripts/verify-shared-map-editions.cjs . dist/itchio
           # Detect missing relative asset paths referenced directly in the HTML.
           node scripts/check-itchio-assets.cjs dist/itchio
           ! grep -Eq 'esm.sh/@supabase|spaafpqczvqahhwjxxrz.supabase.co' dist/itchio/index.html
