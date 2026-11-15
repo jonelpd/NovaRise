@@ -1544,3 +1544,15 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [ ] No se ha inspeccionado en esta conversación el resultado concreto de la nueva ejecución de CI; evitar afirmar un recuento de pruebas o estado verde sin evidencia.
 - [ ] Mantener itch.io en borrador hasta auditar lógica residual NVRA, recursos y licencias, red/consola y presentación comercial.
 **Estado:** versión actualizada en itch.io y funcionamiento confirmado por el usuario; lanzamiento público aún pendiente.
+
+
+### Auditoría previa al lanzamiento itch.io — 2026-11-15
+- [x] Revisado `scripts/build-itchio-guest.cjs`: elimina módulo de autenticación Supabase, crea acceso invitado, oculta el Centro NVRA y excluye `nvra-wallet-readonly.js` y `nvra-merit-validation.cjs` del paquete. El código principal NovaRise permanece intacto.
+- [!] `juego/index.html` fuente conserva referencias y lógica de Centro NVRA; ocultar la interfaz no prueba eliminación completa. El informe ahora cuantifica menciones NVRA y presencia de elementos del centro en la edición compilada.
+- [x] Reforzado `scripts/audit-itchio-external.cjs`: informa de marcadores de billetera y bloquea el workflow si detecta llamadas a permisos/conexión de billetera, proveedor Ethereum o funciones de transferencia en el HTML generado. Añadida prueba `tests/p0-itchio-external-audit.test.cjs`.
+- [!] Three.js se importa de `cdn.jsdelivr.net`; debe verificarse carga real, condiciones de uso de dependencias y comportamiento ante falta de red.
+- [ ] Inventariar cada imagen, sprite, mapa, tipografía, música y sonido distribuido y documentar origen, autor, licencia y prueba de autorización; **no se ha acreditado la titularidad de esos recursos**.
+- [ ] Clasificar y eliminar/aislar el Centro NVRA y referencias económicas residuales sin romper el juego; comprobar guardados y combates tras cualquier cambio.
+- [ ] Ejecutar workflow actualizado y comprobar reporte `itchio-external-audit.json`, pruebas y ZIP; comprobar navegador/consola/red y permisos.
+- [ ] Preparar portada y capturas del juego real y configurar donaciones solo después de superar controles de publicación.
+**Estado:** auditoría reforzada en código, **no se ha ejecutado todavía el workflow tras este cambio**. No se autoriza publicación pública ni donaciones. Solo se mantienen NovaRise e itch.io.
