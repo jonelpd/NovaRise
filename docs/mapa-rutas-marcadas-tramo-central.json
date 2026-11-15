@@ -4,7 +4,7 @@
   "coordinate_system": "normalized",
   "map_asset": "mapa-rutas-marcadas.png",
   "source": "User-marked black paths, manually sampled on 1254x1254 image",
-  "coverage": "Only central red-roof castle to eastern windmill corridor. Incomplete; not gameplay-ready.",
+  "coverage": "Central castle to windmill plus eastern junction southward to classical ruins; incomplete and not gameplay-ready",
   "nodes": [
     {
       "id": "central-mill-01",
@@ -122,6 +122,60 @@
         979,
         394
       ]
+    },
+    {
+      "id": "central-ruins-01",
+      "x": 0.681818,
+      "y": 0.383573,
+      "pixel": [
+        855,
+        481
+      ]
+    },
+    {
+      "id": "central-ruins-02",
+      "x": 0.689793,
+      "y": 0.401116,
+      "pixel": [
+        865,
+        503
+      ]
+    },
+    {
+      "id": "central-ruins-03",
+      "x": 0.698565,
+      "y": 0.417863,
+      "pixel": [
+        876,
+        524
+      ]
+    },
+    {
+      "id": "central-ruins-04",
+      "x": 0.683413,
+      "y": 0.42504,
+      "pixel": [
+        857,
+        533
+      ]
+    },
+    {
+      "id": "central-ruins-05",
+      "x": 0.661085,
+      "y": 0.431419,
+      "pixel": [
+        829,
+        541
+      ]
+    },
+    {
+      "id": "central-ruins-06",
+      "x": 0.643541,
+      "y": 0.431419,
+      "pixel": [
+        807,
+        541
+      ]
     }
   ],
   "edges": [
@@ -196,6 +250,42 @@
       "to": "central-mill-13",
       "verified": false,
       "review": "Manually sampled against user-marked central castle-to-windmill road; needs pixel-level visual validation"
+    },
+    {
+      "from": "central-mill-09",
+      "to": "central-ruins-01",
+      "verified": false,
+      "review": "South branch from eastern junction toward classical ruins; visual inspection required"
+    },
+    {
+      "from": "central-ruins-01",
+      "to": "central-ruins-02",
+      "verified": false,
+      "review": "South branch from eastern junction toward classical ruins; visual inspection required"
+    },
+    {
+      "from": "central-ruins-02",
+      "to": "central-ruins-03",
+      "verified": false,
+      "review": "South branch from eastern junction toward classical ruins; visual inspection required"
+    },
+    {
+      "from": "central-ruins-03",
+      "to": "central-ruins-04",
+      "verified": false,
+      "review": "South branch from eastern junction toward classical ruins; visual inspection required"
+    },
+    {
+      "from": "central-ruins-04",
+      "to": "central-ruins-05",
+      "verified": false,
+      "review": "South branch from eastern junction toward classical ruins; visual inspection required"
+    },
+    {
+      "from": "central-ruins-05",
+      "to": "central-ruins-06",
+      "verified": false,
+      "review": "South branch from eastern junction toward classical ruins; visual inspection required"
     }
   ]
 }
