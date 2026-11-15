@@ -3,9 +3,9 @@
  * This module is NOT exposed to the browser and does not award tokens or points.
  */
 const MINES=Object.freeze({
- 'mine-west':Object.freeze({x:18.5,y:46.5}),
- 'mine-center':Object.freeze({x:45,y:36.3}),
- 'mine-east':Object.freeze({x:90.6,y:77.5})
+ 'mine-west':Object.freeze({x:10.5,y:37.2}),
+ 'mine-center':Object.freeze({x:39.1,y:48.1}),
+ 'mine-east':Object.freeze({x:93.3,y:19.6})
 });
 const MAX_INTERACTION_DISTANCE=8;
 const own=(obj,key)=>Object.prototype.hasOwnProperty.call(obj,key);
