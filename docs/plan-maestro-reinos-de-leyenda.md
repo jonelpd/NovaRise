@@ -1760,3 +1760,10 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Añadidas pruebas de reanudación de movimiento y rechazo de estados manipulados en `tests/p0-map-road-walker.test.cjs`.
 - [!] Persistencia disponible en el módulo aislado, **no conectada todavía al guardado real del juego**. Los cambios no alteran las partidas existentes.
 - [ ] Ejecutar pruebas automatizadas y digitalizar/verificar el grafo de caminos negros antes de integrar el movimiento y el guardado en `juego/index.html`.
+
+
+### Protección de la integración con la navegación actual — 2026-11-15
+- [x] Inspeccionado `juego/index.html`: el juego ya dispone de `fineRoute`, `fineStepBetween`, `travelFinePath`, `findRoute` y `walkTo`, con comprobaciones del terreno y animación; se conservarán durante la futura integración de los caminos negros.
+- [x] Creado workflow `.github/workflows/road-navigation-tests.yml` para ejecutar pruebas del editor, topología y guardado/restauración del módulo de rutas en push, PR y manualmente.
+- [!] **No se ha verificado aún el resultado de GitHub Actions** ni conectado el nuevo módulo al juego; el workflow se ha creado pero la ejecución debe comprobarse.
+- [ ] Completar trazado de las rutas negras reales, contrastar sus accesos con las posiciones del juego, validar CI y diseñar adaptación de las rutas aprobadas a la malla fina existente sin alterar guardados.
