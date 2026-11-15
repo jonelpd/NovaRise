@@ -194,31 +194,35 @@
           "id": "pond-southern-bank-to-east-building",
           "pixels": [
             [
-              862,
-              466
+              865,
+              462
             ],
             [
-              878,
-              484
+              877,
+              468
             ],
             [
-              887,
-              498
+              884,
+              479
             ],
             [
-              899,
-              505
+              886,
+              488
             ],
             [
-              919,
+              897,
+              496
+            ],
+            [
+              920,
+              499
+            ],
+            [
+              945,
               500
             ],
             [
-              944,
-              500
-            ],
-            [
-              969,
+              970,
               501
             ],
             [
@@ -229,7 +233,40 @@
           "verified": false
         }
       ],
-      "warning": "These sampled positions are visual review aids, not graph vertices or approved paths. Exact branching location and obstacle clearance remain unresolved."
+      "warning": "Approximate ink positions from original enlarged crop, not passability evidence; the tower-footprint junction and the road at the eastern building require obstacle checks."
+    },
+    "draft_comparison": {
+      "status": "visually-compared-not-approved",
+      "northeast": {
+        "candidate_id": "tower-to-northeast-farm",
+        "draft_nodes": [
+          "central-mill-09",
+          "central-mill-10",
+          "central-mill-11",
+          "central-mill-12",
+          "central-mill-13"
+        ],
+        "mapping": "candidate-overlap-only",
+        "explanation": "The existing eastbound chain trends northeast and visually resembles the line toward fields; individual node placement and obstacle clearance remain unverified."
+      },
+      "pond": {
+        "candidate_id": "pond-southern-bank-to-east-building",
+        "draft_nodes": [],
+        "mapping": "missing-distinct-branch",
+        "explanation": "The original black line bends southeast of the tower, runs along the pond's southern shore and reaches the eastern building; no separate graph branch currently represents it."
+      },
+      "branching": {
+        "approx_pixel": [
+          865,
+          460
+        ],
+        "status": "approximate-ink-fork-obstructed-by-watchtower",
+        "clearance_confirmed": false,
+        "explanation": "The ink splits near the tower footprint; the exact accessible junction cannot be established from this image alone."
+      },
+      "graph_edit_required_after_verification": true,
+      "graph_edited": false,
+      "approved": false
     }
   }
 }
