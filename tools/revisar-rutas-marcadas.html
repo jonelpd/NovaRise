@@ -19,10 +19,12 @@ function draw(){
  if(!data)return;svg.replaceChildren();
  const selected=document.getElementById('route').value,show=id=>selected==='all'||family(id)===selected;
  const byId=new Map(data.nodes.map(n=>[n.id,n]));let shownEdges=0;
+ const pending=new Set((audit?.junction_specs||[]).filter(s=>s.approval!=='approved').map(s=>s.node_id));
  if(document.getElementById('lines').checked)for(const e of data.edges){
   if(!show(e.from))continue;
   const a=byId.get(e.from),b=byId.get(e.to);if(!a||!b)continue;
-  svg.appendChild(el('line',{x1:a.pixel[0],y1:a.pixel[1],x2:b.pixel[0],y2:b.pixel[1],stroke:palette[family(e.from)],'stroke-width':3,'stroke-dasharray':'9 5',opacity:.92}));shownEdges++;
+  const danger=document.getElementById('hazards').checked&&(pending.has(e.from)||pending.has(e.to));
+  svg.appendChild(el('line',{x1:a.pixel[0],y1:a.pixel[1],x2:b.pixel[0],y2:b.pixel[1],stroke:danger?'#ff3030':palette[family(e.from)],'stroke-width':danger?5:3,'stroke-dasharray':danger?'4 5':'9 5',opacity:.92}));shownEdges++;
  }
  if(document.getElementById('nodes').checked)for(const n of data.nodes){
   if(!show(n.id))continue;
