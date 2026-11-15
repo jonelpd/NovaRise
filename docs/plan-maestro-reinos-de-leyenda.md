@@ -1938,3 +1938,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Añadidas comprobaciones al test `p0-map-visible-landmarks.test.cjs` para exigir revisión geométrica pendiente, extremos válidos y conexiones de grafo aún vacías.
 - [ ] Redibujar con precisión los nodos del corredor de entrada/salida y confirmar continuidad de la carretera sobre ambos extremos del puente; solo después autorizar aristas verificadas.
 - [!] El grafo de rutas existente no se ha modificado todavía para evitar introducir coordenadas inexactas; no se han alterado guardados ni el mapa activo. CI verde sin confirmar.
+
+
+### Corrección de siete nodos del camino negro del puente central — 2026-11-15
+- [x] Reexaminada ampliación cuadriculada del PNG original en el tramo x=600–830, y=320–510 y ajustados **siete nodos reales del borrador** `central-mill-01` a `central-mill-07` sobre el trazo negro, sin añadir aristas ni cambiar la topología.
+- [x] Nuevos píxeles provisionales en orden: `[680,372]`, `[700,386]`, `[719,401]`, `[738,420]`, `[752,443]`, `[772,465]`, `[800,484]`; coordenadas normalizadas recalculadas sobre 1254×1254.
+- [x] Sincronizado `docs/mapa-hitos-visibles-original.json` y reforzada prueba de coincidencia exacta entre siete puntos del puente y siete nodos del grafo, manteniendo todas las aristas en `verified:false`.
+- [x] Reconsultados los JSON en GitHub: **57 nodos, 54 aristas**, puntos de puente idénticos al inventario, todas las aristas sin verificar.
+- [ ] Comprobar píxel a píxel los segmentos y la continuidad fuera del puente; ejecutar la suite Node completa y confirmar CI verde. El mapa nuevo y las partidas siguen sin cambios.
