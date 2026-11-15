@@ -1810,3 +1810,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [!] El trazado es aproximado, no validado píxel a píxel. Todos los segmentos siguen sin verificar; no se ha modificado la jugabilidad ni los guardados.
 - [!] No se ha podido ejecutar localmente la suite desde GitHub porque el entorno de ejecución no resuelve `raw.githubusercontent.com`. Comprobar GitHub Actions antes de declarar las pruebas satisfactorias.
 - [ ] Revisar con superposición visual los nodos, validar puentes y accesos reales, completar ramales del sur y enlazar únicamente intersecciones comprobadas.
+
+
+### Auditoría visual contra el trazo negro original — 2026-11-15
+- [x] Añadida herramienta **de solo lectura** `tools/revisar-rutas-marcadas.html`, accesible desde GitHub Pages, que superpone los nodos y segmentos del borrador directamente sobre `juego/mapa-rutas-marcadas.png` a escala 1254×1254.
+- [x] La herramienta permite filtrar por corredor central, occidental o septentrional, mostrar u ocultar conexiones y puntos, y activar etiquetas para localizar desviaciones. **No puede aprobar tramos ni modificar partidas**.
+- [x] Incorporado test estático `tests/p0-map-road-review-overlay.test.cjs` y añadido al workflow de navegación.
+- [!] La superposición revela solo las líneas rectas entre puntos; para que el héroe siga exactamente el negro hay que ajustar los puntos sobre las curvas y comprobar cada segmento antes de marcarlo como verificado.
+- [ ] Revisar el trazado con esta herramienta, corregir discrepancias, completar caminos meridionales y comprobar el resultado de CI. La navegación actual del juego permanece intacta.
