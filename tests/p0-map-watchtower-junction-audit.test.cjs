@@ -74,3 +74,14 @@ test('all six hazard edge warnings match real draft edges and remain unverified'
   for(const n of h.neighbors)assert.ok(keys.has([h.junction,n].sort().join('|')));
  }
 });
+
+test('two eastern black-road candidates remain distinct and unmapped until pixel verification',()=>{
+ const review=audit.east_branch_review;
+ assert.equal(review.status,'visual-candidates-unverified');
+ assert.equal(review.visible_candidates.length,2);
+ assert.equal(new Set(review.visible_candidates.map(c=>c.id)).size,2);
+ assert.ok(review.visible_candidates.every(c=>c.approved===false));
+ assert.equal(review.draft_mapping,'unresolved');
+ assert.equal(review.new_edges_created,0);
+ assert.equal(audit.visual_review.east.route_approval,false);
+});
