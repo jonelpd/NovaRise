@@ -1673,3 +1673,12 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [!] Son polilíneas de referencia; **no están conectadas entre sí ni verificadas frente a obstáculos**. Algunos puntos de los recorridos nuevos pueden necesitar corrección al inspeccionar el mapa a escala.
 - [ ] Inspeccionar visualmente y corregir cada segmento, enlazar rutas solamente mediante senderos/puentes reales, documentar accesos a objetos y probar navegación del jugador y de la IA.
 - [ ] Incorporar el arte definitivo original al repositorio y validar la integridad de imagen y rutas; mantener la edición publicada sin cambios hasta superar pruebas.
+
+
+### Auditoría topológica de rutas provisionales — 2026-11-15
+- [x] Añadido `scripts/audit-map-road-topology.cjs`, que calcula componentes desconectados, extremos de camino y posibles pares de extremos próximos sin crear conexiones nuevas.
+- [x] Añadido `tests/p0-map-road-topology.test.cjs`: comprueba 8 componentes separados, 16 extremos y que las sugerencias de unión no modifican el grafo.
+- [x] CLI: `node scripts/audit-map-road-topology.cjs docs/mapa-original-rutas-trazado-preliminar.json`; devuelve salida JSON y código 1 si hay componentes desconectados (situación esperada en el borrador).
+- [ ] Revisar visualmente en el mapa original cada propuesta de conexión; no inferir transitabilidad de la proximidad de dos extremos.
+- [ ] Conectar únicamente caminos comprobados sobre terreno visible, completar inventario de accesos y comprobar rutas reales antes de integrar la navegación.
+**Estado:** auditoría estructural añadida al repositorio; no se ha ejecutado CI ni se ha modificado la versión jugable.
