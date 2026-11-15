@@ -3,10 +3,11 @@ on:
   push:
     paths:
       - 'scripts/map-road-*.cjs'
+      - 'scripts/inspect-marked-road-geometry.cjs'
       - 'scripts/validate-map-road-release.cjs'
       - 'scripts/audit-map-road-topology.cjs'
       - 'tests/p0-map-road-*.test.cjs'
-      - 'tests/p0-map-editions-parity.test.cjs'
+      - 'tests/p0-map-editions-parity.test.cjs tests/p0-map-road-geometry-inspection.test.cjs'
       - 'tools/editor-caminos.html'
       - 'tools/revisar-rutas-marcadas.html'
       - 'docs/mapa-original-rutas-trazado-preliminar.json'
