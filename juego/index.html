@@ -801,12 +801,24 @@ function previewRoute(tx,ty){
  const map=$('map');if(!map)return;clearAdventureRoute();
  if(battle||walking||s.done||s.moves<=0||!$('adventure-discovery').hidden||!$('castle-screen').hidden)return;
  const route=findRoute(tx,ty);if(!route)return;
- const available=affordableRoute(route);if(!available.length)return;const points=[[s.x,s.y],...available];
+ const available=affordableRoute(route);if(!available.length)return;
+ // Mostrar el trayecto fino REAL, no líneas rectas entre casillas estratégicas.
+ const points=[];
+ let previous=[s.x,s.y];
+ const start=safeHeroPoint(...previous);if(!start)return;
+ points.push(start);
+ for(const next of available){
+  const from=safeHeroPoint(...previous),to=safeHeroPoint(...next);
+  const fine=from&&to?fineRoute(from,to):null;
+  if(!fine)return;
+  points.push(...fine);
+  previous=next;
+ }
  const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
  svg.setAttribute('viewBox','0 0 2048 2048');svg.setAttribute('class','adventure-route-overlay');
  svg.setAttribute('aria-hidden','true');
  const path=document.createElementNS('http://www.w3.org/2000/svg','polyline');
- path.setAttribute('points',points.map(([x,y])=>{const p=HERO_LANDMARK_ANCHORS[key(x,y)]||[(x+.5)*10,(y+.5)*10];return (p[0]*20.48)+','+(p[1]*20.48)}).join(' '));
+ path.setAttribute('points',points.map(([x,y])=>(x*20.48)+','+(y*20.48)).join(' '));
  path.setAttribute('fill','none');path.setAttribute('stroke','#ffe7a1');path.setAttribute('stroke-width','8');path.setAttribute('stroke-dasharray','10 15');path.setAttribute('stroke-linecap','round');
  svg.appendChild(path);map.appendChild(svg);
  available.forEach(([x,y])=>{const el=map.querySelector('[data-x="'+x+'"][data-y="'+y+'"]');if(el)el.classList.add('route-step')});
