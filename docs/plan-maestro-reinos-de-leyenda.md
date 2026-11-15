@@ -2258,3 +2258,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Corregido `fineRoute` en `juego/index.html`, commit `1e3edbec9e14217e3e0ce8fb992e9a07bb42772e`: primero intenta `tracedRoadRoute`, y si el grafo extraído está desconectado utiliza temporalmente `terrainFineRoute` con la máscara de obstáculos existente.
 - [!] **Solución provisional de jugabilidad**, no integración estricta final de las rutas del usuario: la alternativa puede transitar terreno permitido fuera de las líneas dibujadas. Debe reemplazarse por conexiones correctas entre fragmentos.
 - [ ] Confirmar movimiento en navegador y CI; conectar fragmentos reales para retirar la alternativa y mantener el movimiento exclusivamente por las rutas trazadas.
+
+
+### Corrección de prioridad de caminos azules — 2026-11-15
+- [x] Usuario confirma que el héroe se mueve, pero no respeta consistentemente las rutas marcadas.
+- [x] Detectada causa: `fineRoute` utiliza la malla libre cuando `tracedRoadRoute` no conecta los fragmentos; el coste era idéntico dentro y fuera de la ruta.
+- [x] Commit `6e65091c0b33820143b3e72c3014021e72610e7e`: el fallback llama a `terrainFineRoute(a,b,true)` y penaliza x12 los pasos fuera de `tracedRoadMask`; los accesos locales de `tracedRoadRoute` conservan coste original.
+- [!] Esto **prioriza** los trazados, pero todavía no los impone estrictamente: siguen faltando conexiones reales y la malla de 80×80 reduce precisión. No afirmar que la navegación es exclusiva ni que la ruta se ajusta exactamente al trazo.
+- [ ] Validar desplazamientos visuales, resolver conexiones de fragmentos y sustituir por trazado de mayor resolución para seguir curvas sin salir del camino.
