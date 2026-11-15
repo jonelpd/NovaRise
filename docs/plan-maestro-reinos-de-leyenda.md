@@ -1625,3 +1625,14 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [ ] Revisar cada conexión visualmente y en el juego, incluidas las rutas de héroes rivales; la casilla de verificación del editor es una declaración manual, **no una comprobación automática de obstáculos**.
 - [ ] Integrar los datos aprobados en el motor del juego tras validar escala, accesos y migración de guardados.
 **Estado:** herramienta de edición creada en GitHub, aún no se ha realizado el trazado exhaustivo ni se ha alterado la versión jugable.
+
+
+### Endurecimiento del editor de caminos — 2026-11-15
+- [x] El editor ahora crea todas las conexiones nuevas como `verified:false` y no ofrece aprobación directa con una casilla: una ruta dibujada no equivale a una ruta libre de obstáculos.
+- [x] Al importar una red se revocan aprobaciones previas para exigir revisión de las rutas sobre el arte cargado; se rechaza un JSON asociado a una imagen de nombre distinto.
+- [x] Al cambiar la imagen cargada, las conexiones anteriores quedan marcadas como pendientes de nueva revisión.
+- [x] Corregida la asignación de identificadores de nodos para evitar colisiones tras importaciones o deshacer operaciones.
+- [x] Añadidas pruebas de regresión estáticas en `tests/p0-map-road-editor-safety.test.cjs`.
+- [ ] Verificar el editor en navegador y trazar rutas contra una imagen definitiva y aprobada del mapa original; la verificación visual y de obstáculos todavía está pendiente.
+- [ ] No activar el movimiento por caminos en el juego hasta completar el mapa de navegación.
+**Estado:** cambios en repositorio realizados; pruebas de GitHub Actions no verificadas en esta sesión y juego publicado sin cambios.
