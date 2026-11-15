@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "status": "visual-junction-review-pending",
+  "source_map": "juego/mapa-rutas-marcadas.png",
+  "road_graph": "docs/mapa-rutas-marcadas-tramo-central.json",
+  "image_dimensions": [
+    1254,
+    1254
+  ],
+  "inspection_crop": {
+    "x_min": 770,
+    "y_min": 390,
+    "x_max": 1000,
+    "y_max": 600
+  },
+  "observations": [
+    {
+      "id": "watchtower-junction",
+      "approx_pixel": [
+        850,
+        480
+      ],
+      "visible_features": [
+        "Black marked roads converge near wooden watchtower",
+        "Road markings continue east towards mill and south towards ruins"
+      ],
+      "graph_nodes_nearby": [
+        "central-mill-08",
+        "central-mill-09",
+        "central-south-01"
+      ],
+      "issue": "Three visible directions do not prove that current draft branch geometry or node placement is exact",
+      "verified": false
+    },
+    {
+      "id": "southern-ruins-fork",
+      "approx_pixel": [
+        879,
+        535
+      ],
+      "visible_features": [
+        "Black marked route bends west towards ruins and continues south-east"
+      ],
+      "graph_nodes_nearby": [
+        "central-south-02",
+        "central-south-03",
+        "central-ruins-01"
+      ],
+      "issue": "Existing graph branches at central-south-03, but pixel-level ink and walking clearance remain unverified",
+      "verified": false
+    }
+  ],
+  "checks": {
+    "strict_unjoined_crossings": 0,
+    "existing_node_count": 57,
+    "existing_edge_count": 54,
+    "route_edits_made": false,
+    "save_changes_made": false
+  },
+  "next_actions": [
+    "Inspect full-resolution ink and bridge clearances before changing graph topology",
+    "Check watchtower passage does not route through structure",
+    "Keep all road edges unverified until approved"
+  ]
+}
