@@ -821,7 +821,10 @@ async function travelFinePath(path,epoch){
  if(!path)return false;
  let previous=persistentHero?[parseFloat(persistentHero.style.left),parseFloat(persistentHero.style.top)]:null;
  for(let i=0;i<path.length;i++){
-  if(!navBlocked||(!nearestNav(...path[i],1)&&!turquoisePoint(path[i]))||previous&&Number.isFinite(previous[0])&&Number.isFinite(previous[1])&&!navSegmentClear(previous,path[i]))return false;
+  // Los segmentos contiguos de la malla turquesa ya fueron comprobados por
+  // turquoiseRoadRoute. No rechazarlos por obstáculos del mapa anterior.
+  const turquoiseStep=previous&&turquoiseRoadMask&&turquoisePoint(previous)&&turquoisePoint(path[i])&&Math.hypot(path[i][0]-previous[0],path[i][1]-previous[1])<=.9;
+  if(!navBlocked||(!nearestNav(...path[i],1)&&!turquoisePoint(path[i]))||previous&&Number.isFinite(previous[0])&&Number.isFinite(previous[1])&&!turquoiseStep&&!navSegmentClear(previous,path[i]))return false;
   if(epoch!==walkEpoch||battle||!$('adventure-discovery').hidden||!$('castle-screen').hidden)return false;
   if(persistentHero){animateHeroHeading(persistentHero,previous,path[i]);persistentHero.style.left=path[i][0]+'%';persistentHero.style.top=path[i][1]+'%'}
   previous=path[i];
