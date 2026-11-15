@@ -26,6 +26,7 @@ jobs:
           node scripts/check-itchio-assets.cjs dist/itchio
           ! grep -Eq 'esm.sh/@supabase|spaafpqczvqahhwjxxrz.supabase.co' dist/itchio/index.html
           node scripts/audit-itchio-external.cjs dist/itchio dist/itchio-external-audit.json
+          node scripts/inventory-itchio-assets.cjs dist/itchio dist/itchio-assets-inventory.json
           cd dist/itchio
           zip -q -r ../reinos-de-leyenda-itchio-candidate.zip .
       - name: Upload candidate (not published)
@@ -35,4 +36,5 @@ jobs:
           path: |
             dist/reinos-de-leyenda-itchio-candidate.zip
             dist/itchio-external-audit.json
+            dist/itchio-assets-inventory.json
           if-no-files-found: error
