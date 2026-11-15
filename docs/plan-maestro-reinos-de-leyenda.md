@@ -2418,3 +2418,10 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [ ] Ejecutar `node scripts/audit-turquoise-map.cjs --json` en el repositorio, revisar su salida contra el mapa marcado original y validar los posibles cortes de extracción.
 - [ ] Corregir únicamente cortes confirmados visualmente, fijar entradas de los 44 elementos y verificar las mecánicas de interacción.
 - [!] Script publicado, ejecución y pruebas de navegador aún no verificadas; no se declara reparada la topología.
+
+
+### Cierre de brecha de carga de navegación — 2026-11-16
+- [x] Corregida condición de carrera: `fineRoute` no permite usar el algoritmo heredado mientras `tracedRoadLoading` es verdadero (commit `0d2cf594`). La máscara turquesa debe cargarse antes de calcular desplazamientos.
+- [!] La ejecución local de `scripts/audit-turquoise-map.cjs` no se ha podido completar en este entorno: el repositorio remoto no está montado y la descarga de GitHub desde la terminal falló por resolución DNS. El analizador permanece publicado, pero sus resultados **no** se declaran comprobados.
+- [ ] Ejecutar el analizador en GitHub Actions o entorno con acceso al repositorio y contrastar sus seis pares de componentes con la imagen original.
+- [ ] Validar el estado de error si la máscara no carga, las 44 entradas y la equivalencia de las versiones del juego.
