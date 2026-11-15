@@ -1965,3 +1965,12 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Creado `tests/p0-map-watchtower-junction-audit.test.cjs` y añadido a GitHub Actions para conservar las conexiones existentes como provisionales y exigir revisión antes de aprobarlas.
 - [ ] Verificar si el paso dibujado junto a la torre evita la construcción y si las tres direcciones están conectadas físicamente; verificar el ramal sur y continuidad hasta las ruinas.
 - [!] No se han ejecutado pruebas Node completas ni confirmado el resultado de GitHub Actions; el mapa activo y las partidas siguen intactos.
+
+
+### Validación de topología de bifurcaciones (sin aprobar transitabilidad) — 2026-11-15
+- [x] Creado `scripts/inspect-marked-road-junctions.cjs`: inspector **de solo lectura** que calcula vecinos de nodos, detecta desviaciones del grafo y nunca convierte una bifurcación matemática en un camino aprobado.
+- [x] Documentada bifurcación provisional de torre `central-mill-09` con vecinos `central-mill-08`, `central-mill-10`, `central-south-01`.
+- [x] Documentada bifurcación provisional sur `central-south-03` con vecinos `central-south-02`, `central-south-04`, `central-ruins-01`.
+- [x] Ampliado `tests/p0-map-watchtower-junction-audit.test.cjs` para exigir grado 3, vecinos exactos, ausencia de aprobación visual y rechazo de un enlace eliminado; el nuevo inspector también está incluido en disparadores de CI.
+- [ ] Revisar paso real junto a la torre y continuidad exacta sobre la tinta negra en el PNG antes de aprobar ambas bifurcaciones.
+- [!] Cambios guardados en GitHub, pero la ejecución de la suite completa y su estado en GitHub Actions siguen pendientes de confirmación. No se alteraron el mapa activo, el movimiento ni los guardados.
