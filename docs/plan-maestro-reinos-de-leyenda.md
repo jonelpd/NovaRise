@@ -1577,3 +1577,13 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [ ] Preparar migración versionada de partidas guardadas para evitar colocar héroes o estructuras en ubicaciones inválidas del mapa nuevo; validar tanto NovaRise como itch.io.
 - [ ] Ejecutar pruebas y auditoría visual antes de volver a generar y publicar candidatos.
 **Decisión:** mantener itch.io en Draft; no sustituir el mapa por un simple retoque de la imagen original. La sustitución debe ser un recurso visual genuinamente nuevo.
+
+
+### Inicio del mapa original de Reinos de Leyenda — 2026-11-15
+- [x] Creado primer **concepto visual original** de un mundo de fantasía medieval con biomas diferenciados, fortalezas, minas, puentes, ríos, ruinas y rutas. Es una propuesta gráfica, **no un mapa funcional ni aprobado para sustituir el actual**.
+- [x] Inspeccionado el ZIP de la edición itch.io facilitado por el usuario: `mapa-grande.png` mide **1254×1254 px**; `mapa-grande.jpg` mide **3584×3584 px**. El CSS activo contiene `#world-viewport #map.map{background-image:url("./mapa-grande.png")!important;background-size:2048px 2048px!important;...}`. También hay referencias CSS a `mapa-novarise.jpg`. Estas capas y sus prioridades deben revisarse antes de sustituir archivos.
+- [ ] Inventariar y verificar coordenadas y escala real de héroes, castillos, minas, caminos y zonas transitables; distinguir coordenadas de píxel y de casilla.
+- [ ] Crear una versión final de mapa original a resolución suficiente y con hitboxes/registro de elementos visibles; no basta una imagen bonita: las ubicaciones interactivas deben corresponder a objetos representados.
+- [ ] Revisar derechos de cada recurso adicional y los mapas antiguos que pudieran permanecer empaquetados; eliminar de las distribuciones finales los originales de Heroes III.
+- [ ] Integrar el mapa nuevo en una rama o candidato separado, migrar guardados si cambia la topología, probar IA, caminos, castillos y combates, y validar con el usuario antes de sustituir la versión publicada.
+**Estado:** concepto inicial creado y dependencias gráficas identificadas; no se ha modificado el mapa activo del juego ni la edición publicada.
