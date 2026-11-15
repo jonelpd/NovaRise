@@ -60,9 +60,9 @@
     "pixel_route_approvals": 0
   },
   "next_actions": [
-    "Inspect full-resolution ink and bridge clearances before changing graph topology",
-    "Check watchtower passage does not route through structure",
-    "Keep all road edges unverified until approved"
+    "Resolve watchtower base overlap before marking a single edge verified",
+    "Confirm fork topology on exact pixels and check east/pond branch correspondence",
+    "Preserve existing draft graph and save compatibility until geometry is proven"
   ],
   "junction_specs": [
     {
@@ -85,5 +85,26 @@
       ],
       "approval": "topology-only-unverified"
     }
-  ]
+  ],
+  "visual_review": {
+    "source": "Full-resolution user-supplied marked PNG, manually inspected enlarged tower/ruins crop",
+    "reviewed_on": "2026-11-15",
+    "tower": {
+      "observed": "Black ink passes directly across or beneath the watchtower base in the marked image; the apparent three-way junction cannot be treated as obstacle-cleared.",
+      "clearance_confirmed": false,
+      "route_approval": false,
+      "required_fix": "Establish an accessible road trace around the watchtower using visible terrain only; do not extrapolate hidden segments or add a shortcut."
+    },
+    "ruins": {
+      "observed": "A separate black line bends west along the lower road toward the ruined stone columns and joins the southward road.",
+      "clearance_confirmed": false,
+      "route_approval": false,
+      "required_fix": "Validate the southern fork against pixel positions and obstacle clearance before approving."
+    },
+    "east": {
+      "observed": "Black road visibly continues northeast from watchtower toward cultivated buildings, and a second line east past the pond.",
+      "route_approval": false,
+      "required_fix": "Check which of these drawn branches corresponds to central-mill-10 and whether any visible branch is absent from draft."
+    }
+  }
 }
