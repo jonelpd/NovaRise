@@ -1645,8 +1645,8 @@ function drawMountedHero(map){
         for(let p=0;p<n;p++){
           const j=p*4,r=pixels[j],g=pixels[j+1],b=pixels[j+2];
           const bright=Math.min(r,g,b)>185&&Math.max(r,g,b)-Math.min(r,g,b)<48;
-          const dark=Math.max(r,g,b)<75;
-          background[p]=bright||dark?1:0;
+          // Nunca borrar píxeles oscuros: contienen caballo, armadura y contornos.
+          background[p]=bright?1:0;
         }
         let head=0,tail=0;
         function seed(p){if(background[p]&&!seen[p]){seen[p]=1;queue[tail++]=p}}
