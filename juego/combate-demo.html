@@ -256,6 +256,9 @@ body:has(#auth-screen:not([hidden])){min-height:100vh;background:linear-gradient
 #world-viewport .map .mounted-hero-rider .hero-gallop-frames{position:absolute;inset:0;opacity:0}
 #world-viewport .map .mounted-hero-marker.hero-traveling .hero-idle-frame{opacity:0}
 #world-viewport .map .mounted-hero-marker.hero-traveling .hero-gallop-frames{opacity:1}
+/* El fotograma animado contiene blanco incrustado: fundirlo con el terreno en lugar de dibujar un rectángulo opaco. */
+#world-viewport .map .mounted-hero-marker .hero-gallop-frames{mix-blend-mode:multiply!important;background:transparent!important}
+#world-viewport .map .mounted-hero-marker .mounted-hero-rider{background:transparent!important}
 @media(prefers-reduced-motion:reduce){#world-viewport .map .mounted-hero-marker .hero-idle-frame{opacity:1!important}#world-viewport .map .mounted-hero-marker .hero-gallop-frames{opacity:0!important}}
 
 #modal .combat-cell:disabled{cursor:not-allowed}
