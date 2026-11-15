@@ -1,0 +1,201 @@
+{
+  "schema_version": 2,
+  "status": "draft-unverified",
+  "coordinate_system": "normalized",
+  "map_asset": "mapa-rutas-marcadas.png",
+  "source": "User-marked black paths, manually sampled on 1254x1254 image",
+  "coverage": "Only central red-roof castle to eastern windmill corridor. Incomplete; not gameplay-ready.",
+  "nodes": [
+    {
+      "id": "central-mill-01",
+      "x": 0.541467,
+      "y": 0.283094,
+      "pixel": [
+        679,
+        355
+      ]
+    },
+    {
+      "id": "central-mill-02",
+      "x": 0.555821,
+      "y": 0.295056,
+      "pixel": [
+        697,
+        370
+      ]
+    },
+    {
+      "id": "central-mill-03",
+      "x": 0.568581,
+      "y": 0.3126,
+      "pixel": [
+        713,
+        392
+      ]
+    },
+    {
+      "id": "central-mill-04",
+      "x": 0.57815,
+      "y": 0.333333,
+      "pixel": [
+        725,
+        418
+      ]
+    },
+    {
+      "id": "central-mill-05",
+      "x": 0.592504,
+      "y": 0.355662,
+      "pixel": [
+        743,
+        446
+      ]
+    },
+    {
+      "id": "central-mill-06",
+      "x": 0.614833,
+      "y": 0.374801,
+      "pixel": [
+        771,
+        470
+      ]
+    },
+    {
+      "id": "central-mill-07",
+      "x": 0.639553,
+      "y": 0.382775,
+      "pixel": [
+        802,
+        480
+      ]
+    },
+    {
+      "id": "central-mill-08",
+      "x": 0.658692,
+      "y": 0.380383,
+      "pixel": [
+        826,
+        477
+      ]
+    },
+    {
+      "id": "central-mill-09",
+      "x": 0.674641,
+      "y": 0.367624,
+      "pixel": [
+        846,
+        461
+      ]
+    },
+    {
+      "id": "central-mill-10",
+      "x": 0.702552,
+      "y": 0.354067,
+      "pixel": [
+        881,
+        444
+      ]
+    },
+    {
+      "id": "central-mill-11",
+      "x": 0.733652,
+      "y": 0.339713,
+      "pixel": [
+        920,
+        426
+      ]
+    },
+    {
+      "id": "central-mill-12",
+      "x": 0.758373,
+      "y": 0.326954,
+      "pixel": [
+        951,
+        410
+      ]
+    },
+    {
+      "id": "central-mill-13",
+      "x": 0.780702,
+      "y": 0.314195,
+      "pixel": [
+        979,
+        394
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "central-mill-01",
+      "to": "central-mill-02",
+      "verified": false,
+      "review": "Manually sampled against user-marked central castle-to-windmill road; needs pixel-level visual validation"
+    },
+    {
+      "from": "central-mill-02",
+      "to": "central-mill-03",
+      "verified": false,
+      "review": "Manually sampled against user-marked central castle-to-windmill road; needs pixel-level visual validation"
+    },
+    {
+      "from": "central-mill-03",
+      "to": "central-mill-04",
+      "verified": false,
+      "review": "Manually sampled against user-marked central castle-to-windmill road; needs pixel-level visual validation"
+    },
+    {
+      "from": "central-mill-04",
+      "to": "central-mill-05",
+      "verified": false,
+      "review": "Manually sampled against user-marked central castle-to-windmill road; needs pixel-level visual validation"
+    },
+    {
+      "from": "central-mill-05",
+      "to": "central-mill-06",
+      "verified": false,
+      "review": "Manually sampled against user-marked central castle-to-windmill road; needs pixel-level visual validation"
+    },
+    {
+      "from": "central-mill-06",
+      "to": "central-mill-07",
+      "verified": false,
+      "review": "Manually sampled against user-marked central castle-to-windmill road; needs pixel-level visual validation"
+    },
+    {
+      "from": "central-mill-07",
+      "to": "central-mill-08",
+      "verified": false,
+      "review": "Manually sampled against user-marked central castle-to-windmill road; needs pixel-level visual validation"
+    },
+    {
+      "from": "central-mill-08",
+      "to": "central-mill-09",
+      "verified": false,
+      "review": "Manually sampled against user-marked central castle-to-windmill road; needs pixel-level visual validation"
+    },
+    {
+      "from": "central-mill-09",
+      "to": "central-mill-10",
+      "verified": false,
+      "review": "Manually sampled against user-marked central castle-to-windmill road; needs pixel-level visual validation"
+    },
+    {
+      "from": "central-mill-10",
+      "to": "central-mill-11",
+      "verified": false,
+      "review": "Manually sampled against user-marked central castle-to-windmill road; needs pixel-level visual validation"
+    },
+    {
+      "from": "central-mill-11",
+      "to": "central-mill-12",
+      "verified": false,
+      "review": "Manually sampled against user-marked central castle-to-windmill road; needs pixel-level visual validation"
+    },
+    {
+      "from": "central-mill-12",
+      "to": "central-mill-13",
+      "verified": false,
+      "review": "Manually sampled against user-marked central castle-to-windmill road; needs pixel-level visual validation"
+    }
+  ]
+}
