@@ -791,6 +791,9 @@ function navSegmentClear(a,b){
 }
 function fineRoute(a,b){
  if(!navBlocked)return null;
+ // Nunca autorizar desplazamientos con la malla antigua mientras se carga
+ // el trazado oficial. Evita que un clic temprano cruce zonas prohibidas.
+ if(tracedRoadLoading)return null;
  // Preferir siempre las rutas marcadas. La extracción todavía tiene
  // fragmentos desconectados: permitir el paso seguro de la malla original
  // evita inmovilizar al héroe en las casillas existentes/partidas guardadas.
