@@ -1751,3 +1751,12 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Añadidas pruebas `tests/p0-map-road-walker.test.cjs` para movimientos parciales, giros, finalización y bloqueo de caminos no aprobados.
 - [!] El módulo es **independiente** y todavía no está conectado al movimiento del jugador o de la IA en `juego/index.html`; los caminos negros del usuario aún requieren digitalización y revisión completas.
 - [ ] Ejecutar pruebas en CI, convertir rutas negras en waypoints aprobados, conectar motor de movimiento con las coordenadas reales del mapa y validar guardados y navegación enemiga.
+
+
+### Persistencia del movimiento por caminos — 2026-11-15
+- [x] Corregida una expectativa incorrecta de prueba: la validación de accesos desconectados rechaza la ruta antes del cálculo del recorrido.
+- [x] Ampliado `scripts/map-road-walker.cjs` con `save()` y restauración mediante `savedState` para conservar el segmento y la posición exacta del héroe a mitad de una ruta aprobada.
+- [x] La restauración valida versión, origen, destino, velocidad, índice de tramo y que la posición guardada esté sobre el segmento correspondiente; rechaza estados alterados.
+- [x] Añadidas pruebas de reanudación de movimiento y rechazo de estados manipulados en `tests/p0-map-road-walker.test.cjs`.
+- [!] Persistencia disponible en el módulo aislado, **no conectada todavía al guardado real del juego**. Los cambios no alteran las partidas existentes.
+- [ ] Ejecutar pruebas automatizadas y digitalizar/verificar el grafo de caminos negros antes de integrar el movimiento y el guardado en `juego/index.html`.
