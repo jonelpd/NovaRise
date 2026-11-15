@@ -2139,3 +2139,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Actualizada la configuración compartida de NovaRise e itch.io para referirse a esta fuente nueva.
 - [ ] Ejecutar el decodificador y suite Node/CI, comprobar el mapa original del repositorio, unir bifurcaciones por continuidad real, revisar obstáculos y accesos, integrar el grafo aprobado en el motor de movimiento y verificar guardados.
 - [!] **La fuente vectorial está ya en GitHub, pero las rutas aún no están aprobadas ni activas.** No se ha cambiado el escenario visible ni los guardados.
+
+
+### Corrección y comprobación del archivo comprimido — 2026-11-15
+- [x] Detectado un fallo real en `docs/mapa-caminos-actualizados.polyline`: el fragmento 19 tenía una barra invertida perdida durante la transmisión de la codificación.
+- [x] Corregido el archivo en GitHub (commit `808a2857867f8574258b7d1750b6e7b67bea826a`).
+- [x] Recuperado el contenido actualizado de GitHub y decodificados **los 111 fragmentos y los 606 puntos** con cero errores de formato, truncamiento o coordenadas fuera de los límites 1254×1254.
+- [!] Esta comprobación fue realizada mediante decodificación independiente del archivo del repositorio; **no equivale a haber ejecutado la suite Node ni GitHub Actions**, ni aprueba caminos, obstáculos o accesos.
+- [ ] Ejecutar las pruebas Node, generar el grafo JSON, verificar cruces reales y conectividad, comprobar mapa limpio y guardados, activar navegación únicamente tras aprobar las rutas.
