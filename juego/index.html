@@ -669,14 +669,18 @@ fetch('./rutas-turquesa-160.json',{cache:'no-store'})
  .then(mask=>{tracedRoadMask=mask;tracedRoadLoading=false;console.info('Caminos turquesa oficiales cargados (160×160)')})
  .catch(e=>{tracedRoadLoading=false;console.error('No se pudieron cargar los caminos turquesa:',e)});
 function nearestTurquoise(cell,maxRadius=22){
- if(!turquoiseRoadMask)return null;
+ if(!turquoiseRoadMask||!cell)return null;
  const [cx,cy]=cell;
- for(let r=0;r<=maxRadius;r++)for(let dy=-r;dy<=r;dy++)for(let dx=-r;dx<=r;dx++){
-  if(Math.max(Math.abs(dx),Math.abs(dy))!==r)continue;
+ // Elegir el punto más cercano por distancia euclídea real, no el
+ // primer píxel encontrado al recorrer el borde de un cuadrado.
+ let nearest=null,best=Infinity;
+ for(let dy=-maxRadius;dy<=maxRadius;dy++)for(let dx=-maxRadius;dx<=maxRadius;dx++){
   const x=cx+dx,y=cy+dy;
-  if(turquoiseFree(x,y))return [x,y];
+  if(!turquoiseFree(x,y))continue;
+  const distance=dx*dx+dy*dy;
+  if(distance<best){best=distance;nearest=[x,y]}
  }
- return null
+ return nearest
 }
 function turquoiseRoadRoute(a,b){
  if(!turquoiseRoadMask||!a||!b)return null;
@@ -708,7 +712,10 @@ function turquoiseRoadRoute(a,b){
  // sus puntos lógicos pueden estar alejados del camino real. No trazar
  // líneas desde esos centros: proyectar exclusivamente sobre la red.
  // La posición visual del héroe se actualiza en la propia ruta turquesa.
- return [entryPoint,...road,exitPoint]
+ // Evitar fotogramas repetidos al inicio/final del desplazamiento.
+ const result=[entryPoint,...road];
+ if(!road.length||road[road.length-1][0]!==exitPoint[0]||road[road.length-1][1]!==exitPoint[1])result.push(exitPoint);
+ return result
 }
 function nearestTracedRoad(cell,maxRadius=9){
  if(!tracedRoadMask||!cell)return null;
