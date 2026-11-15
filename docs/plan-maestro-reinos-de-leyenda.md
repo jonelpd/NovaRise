@@ -1998,5 +1998,5 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Corregida la expresión regular del inventario de sitios heredados para reconocer el campo `id` después de la llave inicial `{`, sin asignar automáticamente ubicaciones del mapa nuevo.
 - [x] Añadido caso de regresión específico en `tests/p0-map-site-migration-audit.test.cjs`.
 - [x] Confirmado en GitHub Actions que el commit `fc92486d29c77de0f87af9efb48aece600c1ee9c` finalizó con **conclusion: success** en la ejecución `43735070313` del workflow de caminos.
-- [ ] Confirmar también la ejecución `43735085209` del commit posterior que añade la prueba de regresión (estaba en progreso al consultarla).
+- [x] Confirmada también la ejecución `43735085209` del commit `b9eabe321` que añade la prueba de regresión: **completed / success**.
 - [!] Esta validación automatizada **no aprueba visualmente** las bifurcaciones de la torre y las ruinas ni cambia el mapa activo; se mantiene el bloqueo de publicación de rutas sin verificar.
