@@ -783,8 +783,10 @@ function fineRoute(a,b){
  // fragmentos desconectados: permitir el paso seguro de la malla original
  // evita inmovilizar al héroe en las casillas existentes/partidas guardadas.
  if(turquoiseRoadMask){
-  const turquoise=turquoiseRoadRoute(a,b);
-  if(turquoise)return turquoise;
+  // Con la máscara oficial cargada, no atravesar montañas, agua ni
+  // edificios mediante el enrutador antiguo si las rutas están separadas.
+  // Un trayecto desconectado debe comunicarse, no inventarse.
+  return turquoiseRoadRoute(a,b);
  }
  if(tracedRoadMask){
   const traced=tracedRoadRoute(a,b);
