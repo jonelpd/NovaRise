@@ -2339,3 +2339,12 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Añadida `tests/p0-turquoise-roads.test.cjs` para validar 2404 celdas turquesas, los 44 lugares, IDs únicos y la carga de la máscara oficial.
 - [!] La validación automatizada no sustituye una prueba de desplazamiento real: siguen pendientes los 4 componentes desconectados, accesos de los edificios y posibles desviaciones causadas por la cuadrícula estratégica 10×10 y la ruta de respaldo.
 - [ ] Comprobar equivalencia de los elementos y las rutas en la versión itch.io antes de declararla sincronizada.
+
+
+### Fase de jugabilidad: compatibilidad de guardados con los 44 lugares — 2026-11-15
+- [x] El usuario confirma tras jugar que los héroes siguen las rutas turquesas y llegan a los elementos elegidos.
+- [x] Detectado fallo potencial de persistencia: `validGame` validaba las recompensas solo contra una lista fija anterior, rechazando IDs de los lugares verdes incorporados en el nuevo catálogo.
+- [x] Commit `963c3a6a`: validación de `landmarkRewards` contra los 15 lugares verdes actuales, conservando también los IDs anteriores para compatibilidad.
+- [x] Añadida validación opcional de `recruitmentVisits` (IDs de las 11 torres/refugios morados y número de semana); los guardados antiguos sin esta propiedad siguen siendo válidos.
+- [ ] Confirmar pruebas automáticas y comprobar en navegador una partida que haya recogido una recompensa verde y reclutado unidades, guardarla, recargar y verificar que no se duplican premios.
+- [ ] Revisar economía y equilibrio de los 44 elementos, sincronizar la edición itch.io y comprobar todas las conquistas.
