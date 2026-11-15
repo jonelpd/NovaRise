@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Revisión visual de rutas negras · Reinos de Leyenda</title>
+<style>
+:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:#101922;color:#f2eee4;font:15px system-ui,sans-serif}header{padding:16px 22px;background:#1b2a36;border-bottom:1px solid #566573}h1{font-size:21px;margin:0 0 6px}p{margin:5px 0;color:#cdd7dd}.layout{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:16px;padding:16px}.stage{overflow:auto;max-height:80vh;border:1px solid #53636b;background:#071018}.map{position:relative;width:1254px;height:1254px}.map img{width:100%;height:100%;display:block}.map svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}aside{background:#1b2a36;border:1px solid #52616c;padding:16px;border-radius:9px}label{display:block;margin:12px 0}input,select{accent-color:#f8c34d}select{width:100%;background:#17202a;color:white;padding:9px;border:1px solid #74838b;border-radius:5px}button{background:#d8a948;color:#17202a;border:0;padding:9px 12px;border-radius:6px;font-weight:bold;cursor:pointer}output{display:block;white-space:pre-wrap;line-height:1.5;font-size:13px;margin-top:15px;color:#e8e5d6}.warning{color:#ffd77b}a{color:#a7d5ff}@media(max-width:900px){.layout{grid-template-columns:1fr}.stage{max-height:65vh}}
+</style></head><body><header><h1>Auditoría visual de los caminos marcados</h1><p>La imagen original es la referencia. Las líneas de colores son propuestas sin verificar, NO rutas activas del juego.</p></header>
+<div class="layout"><div class="stage" id="stage"><div class="map" id="map"><img src="../juego/mapa-rutas-marcadas.png" alt="Mapa original con caminos negros dibujados por el usuario"><svg viewBox="0 0 1254 1254" id="overlay" aria-label="Superposición de rutas provisionales"></svg></div></div>
+<aside><strong>Inspección de rutas</strong><label>Recorrido <select id="route"><option value="all">Todos los tramos</option><option value="central">Central y oriental</option><option value="west">Occidental</option><option value="north">Septentrional</option></select></label>
+<label><input id="lines" type="checkbox" checked> Mostrar conexiones propuestas</label><label><input id="nodes" type="checkbox" checked> Mostrar puntos</label><label><input id="labels" type="checkbox"> Mostrar identificadores</label>
+<button id="reset">Mostrar todo</button><output id="report" aria-live="polite">Cargando trazados...</output><p class="warning">No se permite aprobar caminos desde esta vista. Cada segmento requiere revisión contra el trazo negro.</p><p><a href="../docs/mapa-rutas-marcadas-tramo-central.json">Abrir datos originales</a></p></aside></div>
+<script>
+'use strict';
+const svg=document.getElementById('overlay'),report=document.getElementById('report'),NS='http://www.w3.org/2000/svg';
+const palette={central:'#ff6b66',west:'#54d5ff',north:'#f6d65c'};
+let data;
+function family(id){return id.startsWith('west-')?'west':id.startsWith('north-')?'north':'central'}
+function el(name,attrs){const n=document.createElementNS(NS,name);for(const [k,v] of Object.entries(attrs))n.setAttribute(k,v);return n}
+function draw(){
+ if(!data)return;svg.replaceChildren();
+ const selected=document.getElementById('route').value,show=id=>selected==='all'||family(id)===selected;
+ const byId=new Map(data.nodes.map(n=>[n.id,n]));let shownEdges=0;
+ if(document.getElementById('lines').checked)for(const e of data.edges){
+  if(!show(e.from))continue;
+  const a=byId.get(e.from),b=byId.get(e.to);if(!a||!b)continue;
+  svg.appendChild(el('line',{x1:a.pixel[0],y1:a.pixel[1],x2:b.pixel[0],y2:b.pixel[1],stroke:palette[family(e.from)],'stroke-width':3,'stroke-dasharray':'9 5',opacity:.92}));shownEdges++;
+ }
+ if(document.getElementById('nodes').checked)for(const n of data.nodes){
+  if(!show(n.id))continue;
+  svg.appendChild(el('circle',{cx:n.pixel[0],cy:n.pixel[1],r:4,fill:'#fff',stroke:palette[family(n.id)],'stroke-width':2}));
+  if(document.getElementById('labels').checked){const t=el('text',{x:n.pixel[0]+6,y:n.pixel[1]-6,fill:'#fff','font-size':11,stroke:'#000','stroke-width':2,'paint-order':'stroke'});t.textContent=n.id;svg.appendChild(t)}
+ }
+ const count=data.nodes.filter(n=>show(n.id)).length;
+ report.textContent=count+' puntos; '+data.edges.filter(e=>show(e.from)).length+' conexiones propuestas.\n'+
+ 'Estado: '+data.status+'.\n'+
+ 'Los trazos son segmentos rectos entre puntos; las curvas necesitan puntos intermedios para coincidir exactamente con el negro.';
+}
+fetch('../docs/mapa-rutas-marcadas-tramo-central.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('HTTP '+r.status);return r.json()}).then(d=>{
+ if(!Array.isArray(d.nodes)||!Array.isArray(d.edges))throw Error('Formato de rutas inválido');
+ data=d;draw();
+}).catch(e=>{report.textContent='No se pudo cargar el borrador: '+e.message});
+for(const id of ['route','lines','nodes','labels'])document.getElementById(id).addEventListener('change',draw);
+document.getElementById('reset').addEventListener('click',()=>{document.getElementById('route').value='all';document.getElementById('lines').checked=true;document.getElementById('nodes').checked=true;document.getElementById('labels').checked=false;draw()});
+</script></body></html>
