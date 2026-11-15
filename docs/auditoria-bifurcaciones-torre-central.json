@@ -57,7 +57,8 @@
     "route_edits_made": false,
     "save_changes_made": false,
     "topology_only_forks": 2,
-    "pixel_route_approvals": 0
+    "pixel_route_approvals": 0,
+    "incident_edge_warnings": 6
   },
   "next_actions": [
     "Resolve watchtower base overlap before marking a single edge verified",
@@ -106,5 +107,27 @@
       "route_approval": false,
       "required_fix": "Check which of these drawn branches corresponds to central-mill-10 and whether any visible branch is absent from draft."
     }
-  }
+  },
+  "hazard_edges": [
+    {
+      "junction": "central-mill-09",
+      "neighbors": [
+        "central-mill-08",
+        "central-mill-10",
+        "central-south-01"
+      ],
+      "reason": "Unconfirmed clearance around watchtower base",
+      "status": "review-required"
+    },
+    {
+      "junction": "central-south-03",
+      "neighbors": [
+        "central-south-02",
+        "central-south-04",
+        "central-ruins-01"
+      ],
+      "reason": "Southern ruins fork requires exact ink and obstacle check",
+      "status": "review-required"
+    }
+  ]
 }
