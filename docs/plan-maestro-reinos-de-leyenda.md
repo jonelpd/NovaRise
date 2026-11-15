@@ -1854,3 +1854,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Creado `tests/p0-shared-map-build-parity.test.cjs` con casos de copia idéntica, modificación y archivo faltante; el workflow manual ejecuta el patrón `tests/p0-*.test.cjs`.
 - [!] Aún no se ha ejecutado ni confirmado el workflow actualizado; los archivos son preparatorios y no activan el mapa negro en ninguna edición.
 - [ ] Confirmar CI y ZIP real; corregir segmentos visualmente, aprobar rutas y preparar migración de partidas antes de activar mapa original en NovaRise e itch.io.
+
+
+### Auditoría geométrica de cruces sin conexiones inventadas — 2026-11-15
+- [x] Creado `scripts/inspect-marked-road-geometry.cjs` para inspeccionar el JSON del mapa negro: detecta cruces estrictos entre segmentos sin nodo compartido, aristas duplicadas y si todos los tramos siguen provisionales.
+- [x] Los cruces detectados se registran únicamente como **advertencias para revisión visual**: una intersección gráfica puede ser un puente, un paso a distinto nivel o un error de trazado, nunca se crea una conexión jugable automáticamente.
+- [x] Añadido `tests/p0-map-road-geometry-inspection.test.cjs` para comprobar cruces y estado no publicable del borrador de 57 nodos y 54 aristas. Integrado en el workflow de navegación.
+- [!] La geometría de líneas rectas no prueba que se siga la tinta negra del PNG. **Ningún tramo se marca `verified:true`** y no se cambia el mapa activo de NovaRise ni itch.io.
+- [ ] Ejecutar CI y el informe de cruces sobre el borrador, cotejar cada advertencia con la imagen negra y corregir puntos desviados; comprobar ZIP de itch.io y los SHA-256 antes de aprobar publicación.
