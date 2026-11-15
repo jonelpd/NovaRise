@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Editor de rutas — Reinos de Leyenda</title>
+<style>
+body{margin:0;background:#101b20;color:#f1e6cb;font:15px system-ui}header,aside{padding:15px;background:#1b2b31}h1{font-size:21px;margin:0 0 8px}main{display:grid;grid-template-columns:minmax(0,1fr) 290px;gap:12px;padding:12px}.stage{position:relative;max-width:1100px;margin:auto;line-height:0}canvas{display:block;width:100%;height:auto;cursor:crosshair;border:2px solid #a8915b;background:#20353a}button,input,select{max-width:100%;padding:8px;margin:4px 0;background:#293e43;color:white;border:1px solid #a8915b;border-radius:5px}button{cursor:pointer}button:focus-visible{outline:3px solid #fff}label{display:block;margin:10px 0}.warn{color:#ffd78a}.ok{color:#a8e4a6}small{line-height:1.4;display:block}#status{min-height:3em}aside{align-self:start}pre{white-space:pre-wrap;overflow-wrap:anywhere}@media(max-width:800px){main{grid-template-columns:1fr}}
+</style></head><body>
+<header><h1>Editor de caminos · Reinos de Leyenda</h1><small>Herramienta de trabajo independiente. Ninguna ruta se incorpora automáticamente al juego.</small></header>
+<main><div><div class="stage"><canvas id="map" width="1024" height="1024" aria-label="Mapa y trazado de caminos"></canvas></div><p id="status" role="status">Carga el arte final del mapa para comenzar. No se admiten rutas verificadas sin una imagen.</p></div>
+<aside><label>Imagen del mapa (archivo local)<input id="image" type="file" accept="image/png,image/jpeg,image/webp"></label>
+<label>Red de rutas JSON<input id="json" type="file" accept=".json,application/json"></label>
+<label>Herramienta<select id="mode"><option value="node">Añadir punto</option><option value="edge">Conectar dos puntos</option><option value="inspect">Inspeccionar</option></select></label>
+<label><input id="approved" type="checkbox"> Marcar conexiones nuevas como revisadas visualmente</label>
+<button id="undo">Deshacer último cambio</button><button id="export">Exportar JSON</button>
+<p class="warn">Verifica que cada tramo sigue el sendero visible y que cruza el agua únicamente por puentes. Un segmento recto no puede atravesar árboles, edificios ni montañas.</p>
+<p>Los puntos son coordenadas normalizadas. Selecciona dos puntos en modo «Conectar» para unirlos.</p>
+<small id="count"></small></aside></main>
+<script>
+'use strict';
+const canvas=document.getElementById('map'),ctx=canvas.getContext('2d'),status=document.getElementById('status'),count=document.getElementById('count');
+let art=null,selected=null,history=[],data={schema_version:2,status:'draft-unverified',coordinate_system:'normalized',map_asset:null,nodes:[],edges:[]};
+function snapshot(){history.push(JSON.stringify(data));if(history.length>100)history.shift()}
+function note(t){status.textContent=t}
+function render(){
+ ctx.clearRect(0,0,canvas.width,canvas.height);
+ if(art)ctx.drawImage(art,0,0,canvas.width,canvas.height);
+ else {ctx.fillStyle='#28424a';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.fillStyle='white';ctx.font='22px system-ui';ctx.fillText('Carga la imagen original del mapa',25,45)}
+ const byId=new Map(data.nodes.map(n=>[n.id,n]));
+ ctx.lineWidth=4;
+ for(const edge of data.edges){const a=byId.get(edge.from),b=byId.get(edge.to);if(!a||!b)continue;ctx.strokeStyle=edge.verified?'#62e68b':'#ffbd4a';ctx.beginPath();ctx.moveTo(a.x*canvas.width,a.y*canvas.height);ctx.lineTo(b.x*canvas.width,b.y*canvas.height);ctx.stroke()}
+ for(const n of data.nodes){ctx.fillStyle=n.id===selected?'#fff':'#49d5ff';ctx.strokeStyle='#132a35';ctx.lineWidth=2;ctx.beginPath();ctx.arc(n.x*canvas.width,n.y*canvas.height,6,0,Math.PI*2);ctx.fill();ctx.stroke()}
+ count.textContent=data.nodes.length+' puntos · '+data.edges.length+' conexiones · '+data.edges.filter(e=>e.verified).length+' revisadas';
+}
+function nearest(x,y){let best=null,dist=Infinity;for(const n of data.nodes){const d=Math.hypot(n.x-x,n.y-y);if(d<dist){dist=d;best=n}}return dist<.025?best:null}
+canvas.addEventListener('click',ev=>{
+ if(!art){note('Primero carga el mapa.');return}
+ const rect=canvas.getBoundingClientRect(),x=(ev.clientX-rect.left)/rect.width,y=(ev.clientY-rect.top)/rect.height;
+ const mode=document.getElementById('mode').value,hit=nearest(x,y);
+ if(mode==='node'){if(hit){note('Punto existente: '+hit.id);return}snapshot();const id='road-'+String(data.nodes.length+1).padStart(3,'0');data.nodes.push({id,x:+x.toFixed(5),y:+y.toFixed(5)});note('Punto añadido: '+id)}
+ else if(mode==='edge'){if(!hit){note('Selecciona un punto existente.');return}if(!selected){selected=hit.id;note('Selecciona el segundo punto');render();return}if(selected!==hit.id&&!data.edges.some(e=>(e.from===selected&&e.to===hit.id)||(e.to===selected&&e.from===hit.id))){snapshot();data.edges.push({from:selected,to:hit.id,verified:document.getElementById('approved').checked,review:'Visual inspection required for every segment'});note('Conexión creada. Comprueba que sigue exactamente el sendero.')}selected=null}
+ else note(hit?'Punto: '+hit.id:'No hay punto cercano');
+ render();
+});
+document.getElementById('image').addEventListener('change',ev=>{const file=ev.target.files[0];if(!file)return;const url=URL.createObjectURL(file),img=new Image();img.onload=()=>{art=img;canvas.width=img.naturalWidth;canvas.height=img.naturalHeight;data.map_asset=file.name;URL.revokeObjectURL(url);note('Mapa cargado: '+file.name+' ('+canvas.width+' × '+canvas.height+')');render()};img.onerror=()=>{URL.revokeObjectURL(url);note('No se pudo abrir la imagen')};img.src=url});
+document.getElementById('json').addEventListener('change',async ev=>{const file=ev.target.files[0];if(!file)return;try{const v=JSON.parse(await file.text());if(!Array.isArray(v.nodes)||!Array.isArray(v.edges))throw Error('Formato inválido');if(v.nodes.some(n=>typeof n.id!=='string'||!Number.isFinite(n.x)||!Number.isFinite(n.y)||n.x<0||n.x>1||n.y<0||n.y>1))throw Error('Coordenadas inválidas');const ids=new Set(v.nodes.map(n=>n.id));if(ids.size!==v.nodes.length||v.edges.some(e=>!ids.has(e.from)||!ids.has(e.to)||typeof e.verified!=='boolean'))throw Error('Conexiones inválidas');snapshot();data={...v};selected=null;note('Red importada; comprueba las rutas sobre la imagen');render()}catch(e){note('Error: '+e.message)}});
+document.getElementById('undo').onclick=()=>{if(!history.length)return;data=JSON.parse(history.pop());selected=null;render();note('Último cambio deshecho')};
+document.getElementById('export').onclick=()=>{if(!art){note('Carga el mapa antes de exportar');return}const blob=new Blob([JSON.stringify(data,null,2)+'\n'],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='mapa-original-rutas-revisadas.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)};
+render();
+</script></body></html>
