@@ -31,7 +31,14 @@ for(const page of ['index.html','combate-demo.html']){
   assert.equal(freshCalls,0);
  });
  test(page+': runtime validator rejects forged level and landmark rewards',()=>{
-  const ctx={};vm.createContext(ctx);vm.runInContext(html.slice(validateStart,validateEnd),ctx);
+  const ctx={};
+  const catalogStart=html.indexOf('const VERIFIED_MAP_SITES=[');
+  const catalogEnd=html.indexOf('\n];',catalogStart)+3;
+  if(catalogStart>=0&&catalogEnd>catalogStart){
+   const catalog=vm.runInNewContext(html.slice(catalogStart,catalogEnd)+'\nVERIFIED_MAP_SITES');
+   ctx.VERIFIED_MAP_SITES=catalog;
+  }
+  vm.createContext(ctx);vm.runInContext(html.slice(validateStart,validateEnd),ctx);
   const game={x:1,y:1,turn:2,moves:4,gold:120,crystals:0,seasonPoints:0,
    soldiers:4,archers:1,griffins:0,dragons:0,experience:0,seen:[],taken:[],
    claimed:[],ownedMines:[],buildings:[],rewardClaims:[],mineLevels:{},miners:{},
