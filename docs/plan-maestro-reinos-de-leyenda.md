@@ -2000,3 +2000,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Confirmado en GitHub Actions que el commit `fc92486d29c77de0f87af9efb48aece600c1ee9c` finalizó con **conclusion: success** en la ejecución `43735070313` del workflow de caminos.
 - [x] Confirmada también la ejecución `43735085209` del commit `b9eabe321` que añade la prueba de regresión: **completed / success**.
 - [!] Esta validación automatizada **no aprueba visualmente** las bifurcaciones de la torre y las ruinas ni cambia el mapa activo; se mantiene el bloqueo de publicación de rutas sin verificar.
+
+
+### Inspección guiada de los cruces originales — 2026-11-15
+- [x] La herramienta `tools/revisar-rutas-marcadas.html` carga la auditoría de bifurcaciones y muestra anillos rojos sobre `central-mill-09` (torre) y `central-south-03` (ruinas), ambos **sin paso confirmado**.
+- [x] Añadidos interruptor para visualizar avisos y botón «Examinar torre y ruinas» para centrar el mapa original en la zona conflictiva.
+- [x] Ampliada prueba `tests/p0-map-road-review-overlay.test.cjs` para comprobar que la herramienta señala cruces sin habilitar rutas ni modificar el juego.
+- [ ] Revisar manualmente el trazo negro y los obstáculos en la herramienta antes de aprobar el recorrido; el molino y la continuidad oriental permanecen sin validar.
+- [!] Los anillos son avisos de revisión, **no prueba de transitabilidad**. No se han alterado los datos de caminos, el juego activo ni las partidas guardadas.
