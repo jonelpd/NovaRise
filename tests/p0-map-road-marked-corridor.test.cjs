@@ -6,8 +6,8 @@ const data=JSON.parse(fs.readFileSync('docs/mapa-rutas-marcadas-tramo-central.js
 test('central marked road corridor is a connected provisional trace',()=>{
  assert.equal(data.status,'draft-unverified');
  assert.equal(data.map_asset,'mapa-rutas-marcadas.png');
- assert.equal(data.nodes.length,26);
- assert.equal(data.edges.length,25);
+ assert.equal(data.nodes.length,43);
+ assert.equal(data.edges.length,41);
  assert.ok(data.nodes.every(n=>n.x>=0&&n.x<=1&&n.y>=0&&n.y<=1));
  const route=createRoadGraph(data.nodes,data.edges).route(data.nodes[0].id,'central-mill-13');
  assert.equal(route.nodes.length,13);
@@ -34,4 +34,11 @@ test('pixel coordinates agree with normalized positions and provisional segments
   assert.ok(Math.hypot(a.pixel[0]-b.pixel[0],a.pixel[1]-b.pixel[1])<55);
   assert.equal(e.verified,false);
  }
+});
+
+test('western mine route is separate until real crossroads are inspected',()=>{
+ const graph=createRoadGraph(data.nodes,data.edges);
+ const west=graph.route('west-castle-mine-01','west-castle-mine-17');
+ assert.equal(west.nodes.length,17);
+ assert.equal(graph.route('west-castle-mine-01','central-mill-01'),null);
 });
