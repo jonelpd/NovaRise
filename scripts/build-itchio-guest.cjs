@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 'use strict';
-const fs=require('node:fs'),path=require('node:path');
+const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto');
 const src=path.resolve(process.argv[2]||'juego'),out=path.resolve(process.argv[3]||'dist/itchio');
 if(src===out)throw Error('Source and output must differ');
 const html=fs.readFileSync(path.join(src,'index.html'),'utf8');
@@ -46,4 +46,21 @@ for(const filename of ['nvra-wallet-readonly.js','nvra-merit-validation.cjs']){
   if(fs.existsSync(path.join(out,filename)))throw Error('NVRA-only file leaked: '+filename);
 }
 fs.writeFileSync(path.join(out,'index.html'),built);
+// Shared original-map source files are staged identically for both editions.
+// This does NOT activate the draft map or its unverified roads in gameplay.
+const sharedRoot=path.resolve(src,'..');
+const sharedFiles=[
+ ['juego/mapa-rutas-marcadas.png','mapa-rutas-marcadas.png'],
+ ['docs/mapa-rutas-marcadas-tramo-central.json','mapa-rutas-marcadas-tramo-central.json']
+];
+const sharedHashes={};
+for(const [relative,destination] of sharedFiles){
+ const source=path.join(sharedRoot,relative),target=path.join(out,destination);
+ if(!fs.existsSync(source))throw Error('Shared map source missing: '+relative);
+ fs.copyFileSync(source,target);
+ const hash=file=>crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex');
+ if(hash(source)!==hash(target))throw Error('Shared map copy mismatch: '+relative);
+ sharedHashes[relative]=hash(target);
+}
+fs.writeFileSync(path.join(out,'shared-map-hashes.json'),JSON.stringify({schema_version:1,status:'draft-not-active',files:sharedHashes},null,2)+'\\n');
 console.log('itch.io guest edition generated; source untouched');
