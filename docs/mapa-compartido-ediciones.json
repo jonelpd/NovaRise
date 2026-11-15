@@ -10,9 +10,10 @@
     "road_draft": "docs/mapa-rutas-marcadas-tramo-central.json",
     "review_tool": "tools/revisar-rutas-marcadas.html",
     "release_gate": "scripts/validate-map-road-release.cjs",
-    "bulk_trace": "docs/mapa-caminos-extraidos.json",
+    "bulk_trace": "docs/mapa-caminos-actualizados.polyline",
     "bulk_trace_overlay": "docs/mapa-caminos-extraidos.svg",
-    "bulk_trace_preview": "juego/mapa-todas-lineas-negras-trazadas.png"
+    "bulk_trace_preview": "juego/mapa-todas-lineas-negras-trazadas.png",
+    "bulk_trace_decoder": "scripts/decode-bulk-road-polylines.cjs"
   },
   "release_requirements": {
     "road_status": "approved",
@@ -25,13 +26,13 @@
     "novarise": "NVRA integration may be enabled independently of map",
     "itch_io": "Guest mode without NVRA; same map and navigation"
   },
-  "current_state": "draft-unverified; bulk extraction outputs referenced but not yet available in repository; neither edition deployed",
+  "current_state": "latest cyan vector source imported; navigation remains draft-unverified and not deployed in either edition",
   "bulk_trace_import": {
-    "status": "local-extraction-awaiting-repository-upload",
+    "status": "source-imported-unverified",
     "expected_source": "1254x1254 comparison of original and user-marked maps",
-    "expected_fragments_reported": 94,
-    "expected_simplified_points_reported": 523,
-    "source_files_present_in_repository": false,
+    "expected_fragments_reported": 111,
+    "expected_simplified_points_reported": 606,
+    "source_files_present_in_repository": true,
     "acceptance": "informational-only; never route from raw extraction",
     "required_checks": [
       "compare traced lines to original black markings",
