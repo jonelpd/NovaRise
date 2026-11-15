@@ -1,13 +1,16 @@
 'use strict';
 // Independent navigation graph for a future original map.
 // Coordinates are normalized (0..1) and must be traced against the final art.
-function createRoadGraph(nodes,edges){
+function createRoadGraph(nodes,edges,options={}){
+ const verifiedOnly=options.verifiedOnly===true;
  const byId=new Map(),neighbors=new Map();
  for(const n of nodes){
   if(!n||typeof n.id!=='string'||!Number.isFinite(n.x)||!Number.isFinite(n.y)||n.x<0||n.x>1||n.y<0||n.y>1||byId.has(n.id))throw Error('Invalid or duplicate road node');
   byId.set(n.id,{...n});neighbors.set(n.id,[]);
  }
- for(const [a,b] of edges){
+ for(const edge of edges){
+  const [a,b]=Array.isArray(edge)?edge:[edge.from,edge.to];
+  if(verifiedOnly && (Array.isArray(edge)||edge.verified!==true))continue;
   if(!byId.has(a)||!byId.has(b)||a===b)throw Error('Invalid road edge');
   const p=byId.get(a),q=byId.get(b),cost=Math.hypot(p.x-q.x,p.y-q.y);
   neighbors.get(a).push({id:b,cost});neighbors.get(b).push({id:a,cost});
