@@ -2274,3 +2274,9 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Adaptada la penalización del fallback para consultar la máscara 160×160.
 - [!] La navegación alternativa todavía permite salir de rutas dibujadas cuando los fragmentos no están conectados; no afirmar fidelidad total hasta cerrar uniones y comprobar movimientos reales.
 - [ ] Esperar CI y probar movimiento, vista previa, castillos, guardados y ediciones en navegador.
+
+
+### Incidencia de validación y reversión segura — 2026-11-15
+- [!] La primera ampliación de resolución a 160×160 (`db5092ff`) falló la prueba de sintaxis JavaScript del navegador en GitHub Actions `43755456312`. **No se considera desplegable ni completada**.
+- [x] Revertido el archivo `juego/index.html` al estado comprobado del commit `0c19b3e1`, manteniendo la nueva previsualización del trayecto fino y el mapa limpio (commit de corrección `3997919fffbf7a080c6c5a3141a491dfe0c76c74`).
+- [ ] Confirmar CI verde de la reversión y reimplementar aumento de precisión solo tras comprobar sintaxis y comportamiento; sigue vigente resolución 80×80.
