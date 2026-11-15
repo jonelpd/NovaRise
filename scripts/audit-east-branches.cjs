@@ -12,12 +12,20 @@ function auditEastBranches(roads,review){
  const towerNeighbors=[...(adj.get(tower)||[])].sort();
  const eastContinuation=edges.filter(e=>e.from==='central-mill-10'||e.to==='central-mill-10');
  const distinctMappedCandidates=candidates.filter(c=>c.approved===true&&c.draft_node_id&&ids.has(c.draft_node_id));
+ const comparison=review.east_branch_review?.draft_comparison||{};
+ const pondMissing=comparison.pond?.mapping==='missing-distinct-branch'&&comparison.pond?.draft_nodes?.length===0;
+ const farmCandidate=comparison.northeast?.mapping==='candidate-overlap-only'&&
+  comparison.northeast?.draft_nodes?.every(id=>ids.has(id));
  return {status:'mapping-unresolved',candidate_count:candidates.length,
   candidate_ids:candidates.map(c=>c.id),tower_node:tower,tower_neighbors:towerNeighbors,
   eastward_draft_entry:east,eastward_entry_present:towerNeighbors.includes(east),
   eastward_entry_degree:adj.get(east)?.size||0,
   separately_mapped_eastern_candidates:distinctMappedCandidates.length,
   missing_candidate_mappings:candidates.filter(c=>!c.draft_node_id).map(c=>c.id),
+  farm_candidate_overlaps_existing_chain:!!farmCandidate,
+  pond_branch_missing_from_draft:!!pondMissing,
+  tower_fork_clearance_confirmed:comparison.branching?.clearance_confirmed===true,
+  comparison_consistent:!!farmCandidate&&!!pondMissing&&comparison.graph_edited===false&&comparison.approved===false,
   release_ready:false,edges_added:0,graph_modified:false};
 }
 module.exports={auditEastBranches};
