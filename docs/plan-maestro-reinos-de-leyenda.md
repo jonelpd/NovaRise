@@ -2448,3 +2448,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [!] Este cambio es preventivo: todavía no confirma visualmente las puertas de los 44 elementos ni arregla los cortes de la máscara. No se ha validado la ejecución en navegador.
 - [ ] Revisar sobre `mapa-rutas-marcadas(2).png` los cortes de 1,41 celdas y los huecos de 7+ celdas; corregir solo uniones respaldadas por el trazo visible.
 - [ ] Volver a generar y ejecutar la auditoría después de cualquier modificación de máscara; comprobar interacción, economía y reclutamiento de cada sitio.
+
+
+### Acceso a edificios condicionado por conectividad — 2026-11-16
+- [x] Modificado `siteAccessPoint` para localizar entradas únicamente dentro de la misma componente turquesa que el héroe; si no existe entrada conectada, devuelve `null` en vez de inventar una aproximación.
+- [x] `interactVerifiedSite` comprueba que la máscara esté cargada, que haya entrada y que origen y entrada pertenezcan a la misma componente antes de permitir la interacción (commit `179bb330`).
+- [!] Esto evita accesos por proximidad a redes desconectadas, pero no arregla la máscara ni demuestra que las entradas visuales de los 44 elementos sean correctas.
+- [ ] Contrastar las nueve componentes detectadas con la última imagen marcada y reconstruir solo las uniones que realmente aparecen dibujadas.
+- [ ] Ejecutar pruebas de navegador para el desplazamiento a las entradas, la conquista, las minas, los reclutamientos y los cofres; comprobar la paridad de versiones.
