@@ -2440,3 +2440,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Corregido workflow (commit `94a3dd0c`): el recuento de componentes divergente no cancela el informe; el resultado se conserva para investigar la causa.
 - [!] Una ejecución verde ahora significa que el diagnóstico se ha generado correctamente, **no** que las cuatro componentes estén conectadas ni que el mapa sea transitable de extremo a extremo.
 - [ ] Consultar el siguiente artefacto `turquoise-map-audit`, determinar componentes calculadas, distancias entre tramos y accesos de los 44 elementos; contrastar visualmente con el mapa aprobado.
+
+
+### Protección contra entradas aisladas — 2026-11-16
+- [x] Revisado el artefacto real de la auditoría: **9 componentes efectivas** con la regla de diagonales del juego frente a 4 declaradas; tamaños **1604, 1, 256, 1, 119, 16, 12, 394, 1**.
+- [x] Corregido `juego/index.html` (commit `1a0953c4`): se indexan componentes de la máscara cargada usando exactamente la misma restricción diagonal que el enrutador; `nearestTurquoise` descarta las componentes de un solo píxel. El castillo costero deja de tomar su acceso del píxel aislado identificado en la auditoría.
+- [!] Este cambio es preventivo: todavía no confirma visualmente las puertas de los 44 elementos ni arregla los cortes de la máscara. No se ha validado la ejecución en navegador.
+- [ ] Revisar sobre `mapa-rutas-marcadas(2).png` los cortes de 1,41 celdas y los huecos de 7+ celdas; corregir solo uniones respaldadas por el trazo visible.
+- [ ] Volver a generar y ejecutar la auditoría después de cualquier modificación de máscara; comprobar interacción, economía y reclutamiento de cada sitio.
