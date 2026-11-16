@@ -2589,3 +2589,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Ampliado el resumen de GitHub Actions para contar edificios sin acceso y edificios con acceso geométrico a varias componentes desconectadas (commit `9c8a3092`).
 - [!] El nuevo diagnóstico aún no se ha confirmado verde en Actions. Un acceso geométrico en el radio no equivale a una puerta visualmente verificada ni demuestra que el héroe pueda llegar desde su posición inicial.
 - [ ] Consultar los resultados reales por componente, verificar visualmente las puertas contra la línea turquesa original, corregir cortes justificados y ejecutar pruebas de navegación en navegador antes de sustituir la máscara.
+
+
+### Conectividad con castillo inicial y píxeles aislados — 2026-11-16
+- [x] Revisado el artefacto de auditoría de la máscara activa (2404 celdas, 9 componentes estrictas). Los puntos más próximos de **castillo-costero**, **templo-norte** y **templo-suroeste** pertenecen a componentes de **una sola celda**; el de **torre-isla** pertenece a un fragmento de **12 celdas**. Son datos de proximidad, no prueba de falta absoluta de entrada.
+- [x] Ampliado `scripts/audit-turquoise-map.cjs` (commit `ff374665`) para marcar `NEAREST_IS_ISOLATED_PIXEL` y calcular, entre las componentes con acceso geométrico a 14 celdas, cuáles se comparten con el castillo inicial (`shared_components_with_home` / `NO_SHARED_COMPONENT_WITH_HOME`). No se inventan conexiones entre redes.
+- [x] Añadidos los recuentos al resumen de GitHub Actions (commit `0df33407`).
+- [!] El informe previo no contiene aún estas métricas nuevas; pendiente validar la ejecución actualizada. Que dos edificios compartan componente tampoco verifica la puerta visual ni el recorrido desde una partida guardada.
+- [ ] Priorizar visualmente la salida del castillo costero, los dos templos con píxel aislado y la torre isla; comprobar accesos antes de cambiar la máscara.
