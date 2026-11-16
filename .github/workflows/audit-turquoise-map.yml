@@ -7,6 +7,7 @@ on:
       - 'scripts/test-turquoise-site-access.cjs'
       - 'scripts/test-turquoise-mask-schema.cjs'
       - 'scripts/test-coastal-castle-staircase.cjs'
+      - 'scripts/audit-seven-castle-access.cjs'
       - 'docs/ramal-castillo-costero-propuesta-2026-11-16.json'
       - 'juego/index.html'
       - 'juego/rutas-turquesa-160.json'
@@ -29,6 +30,7 @@ jobs:
           node scripts/test-turquoise-site-access.cjs
           node scripts/test-turquoise-mask-schema.cjs
           node scripts/test-coastal-castle-staircase.cjs
+          node scripts/audit-seven-castle-access.cjs
       - name: Audit topology and 44 access candidates
         run: |
           node scripts/audit-turquoise-map.cjs --json > turquoise-audit-report.json
@@ -71,6 +73,12 @@ jobs:
           ];
           fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY,lines.join('\n')+'\n');
           NODE
+      - name: Upload seven-castle access report
+        uses: actions/upload-artifact@v4
+        with:
+          name: castle-access-audit
+          path: castle-access-audit.json
+          retention-days: 30
       - name: Upload diagnostic report
         uses: actions/upload-artifact@v4
         with:
