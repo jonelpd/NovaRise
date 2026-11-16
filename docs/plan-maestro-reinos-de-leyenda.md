@@ -2497,3 +2497,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Actualizado `scripts/extract-turquoise-candidate.py` (commit `c26ee73e`) con `--threshold` y `--expand`; ahora calcula y declara el número de componentes **con la misma regla de diagonales que el juego** (antes declaraba conectividad de ocho vecinos).
 - [ ] Comparar visualmente el trazado ensanchado con la imagen original, comprobar que no atraviesa montañas, ríos ni zonas sin pincel y validar los accesos de los 44 elementos.
 - [!] No se reemplaza la máscara activa: 14 componentes siguen requiriendo revisión y una reducción de fragmentos no equivale a fidelidad geométrica.
+
+
+### Auditoría detallada de la candidata mejorada — 2026-11-16
+- [x] Ejecutada localmente la extracción desde `mapa-rutas-marcadas(2).png` con umbral 12 y expansión 2×2; **4.146 celdas y 14 componentes estrictas** (1934, 1237, 606, 106, 80, 31, 24, 22, 17, 16, 14, 11, 11 y 10).
+- [x] Cruzados los centros de los 44 elementos con la candidata; 21 se aproximan a la componente 6, 14 a la 1, seis a la 11, dos a la 10 y uno a la 2. **Castillo costero, torre isla y ruinas isla** tienen como tramo más cercano componentes pequeñas (16 y 22 celdas).
+- [x] Corregido desbordamiento de `uint8` en el extractor (commit `32759a46`) y publicado `docs/auditoria-candidata-turquesa-2026-11-16.md` con resultados y entradas prioritarias.
+- [!] Estas son proximidades geométricas desde centros de edificios, no puertas visualmente verificadas; la máscara activa sigue sin sustituirse.
+- [ ] Auditar uniones introducidas por dilatación, definir puertas sobre el trazo original y verificar navegación de los 44 sitios antes de desplegar.
