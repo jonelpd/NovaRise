@@ -2668,3 +2668,10 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Mejorado `.github/workflows/audit-turquoise-map.yml` (commit `7bb38671`) para publicar directamente en el resumen de GitHub Actions una tabla de **los siete castillos** con estado geométrico, número de redes cercanas y redes compartidas con el castillo inicial, sin depender de descargar el artefacto JSON.
 - [!] La ejecución #19 confirma que pasó el test, pero no contiene todavía esta tabla añadida después. No se han verificado visualmente las puertas de los siete castillos ni su interacción en el navegador.
 - [ ] Leer la tabla de la nueva ejecución, priorizar los castillos con `SEPARATE_NETWORK` o `NO_ENTRANCE_WITHIN_14`, y corregir únicamente enlaces respaldados por el trazado original.
+
+
+### Conectividad de castillos desde la escalinata real — 2026-11-16
+- [x] Corregida una fuente de falsos positivos en `scripts/audit-seven-castle-access.cjs`: anteriormente el informe consideraba como «red del castillo inicial» **cualquier** componente situada a menos de 14 celdas de su centro, incluso fragmentos sin conexión con la escalinata.
+- [x] Ahora la referencia es **exclusivamente la componente que contiene la escalinata (309,177)**, comprobando que está conectada al anclaje (321,196), tiene al menos 10 celdas y aparece entre los accesos geométricos del castillo inicial (commit `272d99c2`).
+- [!] Pendiente comprobar ejecución verde del nuevo diagnóstico y leer su tabla. La conectividad geométrica no demuestra entrada funcional ni camino libre de obstáculos visuales.
+- [ ] Identificar castillos con `SEPARATE_NETWORK` desde la escalinata real, y revisar sus ramales sobre el mapa original antes de editar la máscara.
