@@ -5,6 +5,7 @@ on:
       - 'scripts/audit-turquoise-map.cjs'
       - 'scripts/test-turquoise-navigation.cjs'
       - 'scripts/test-turquoise-site-access.cjs'
+      - 'scripts/test-turquoise-mask-schema.cjs'
       - 'juego/index.html'
       - 'juego/rutas-turquesa-160.json'
       - 'docs/catalogo-elementos-mapa-nuevo.json'
@@ -24,6 +25,7 @@ jobs:
         run: |
           node scripts/test-turquoise-navigation.cjs
           node scripts/test-turquoise-site-access.cjs
+          node scripts/test-turquoise-mask-schema.cjs
       - name: Audit topology and 44 access candidates
         run: |
           node scripts/audit-turquoise-map.cjs --json > turquoise-audit-report.json
