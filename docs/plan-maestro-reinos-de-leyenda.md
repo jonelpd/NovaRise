@@ -2551,3 +2551,10 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Conservado el artefacto JSON detallado, sin cambiar la máscara ni autorizar accesos automáticos.
 - [!] No se ha confirmado una nueva ejecución verde de esta versión del workflow; el resumen aún debe validarse en Actions.
 - [ ] Examinar los riesgos y cortes publicados, contrastar cada posible unión con el mapa original y verificar físicamente las 44 puertas antes de sustituir la máscara.
+
+
+### Protección frente a interacciones remotas — 2026-11-16
+- [x] Detectado en `siteAccessPoint` que la búsqueda de puerta se extendía hasta 32 celdas de máscara desde el centro de un edificio, permitiendo seleccionar caminos lejanos como si fueran su acceso.
+- [x] Limitada la búsqueda a un radio **euclídeo** de 14 celdas (8,75 puntos porcentuales del mapa), conservando la condición de pertenecer a la misma componente transitable que el héroe (commit `ad79adeb`). Si no hay punto dentro del radio, no se permite la interacción.
+- [!] Este radio es un límite de seguridad provisional, no una puerta visualmente aprobada. El comportamiento no se ha comprobado aún en navegador; no se ha modificado la máscara activa.
+- [ ] Sustituir el criterio de proximidad por entradas verificadas sobre la imagen original, comprobar los 44 elementos y probar la navegación y el combate en el navegador.
