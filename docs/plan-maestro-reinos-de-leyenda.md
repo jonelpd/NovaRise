@@ -2629,3 +2629,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [!] La extracción se realizó con umbral 12 y expansión 2×2; la expansión puede crear conexiones adicionales. Las **14 componentes** indican que todavía hay tramos separados: el despliegue **no garantiza** acceso desde el castillo inicial a todos los edificios. La máscara nueva no ha superado aún pruebas de navegador ni se ha confirmado su CI.
 - [ ] Comprobar GitHub Actions para el nuevo commit, recorrer las rutas en el juego publicado, identificar los elementos inaccesibles y corregir únicamente los cortes que se correspondan con el trazo original.
 - [ ] Revisar visualmente las 44 puertas y la interacción del castillo costero en la escalinata.
+
+
+### Incidencia crítica corregida: héroe inmóvil tras desplegar nueva máscara — 2026-11-16
+- [x] El usuario informó que el héroe no se movía. Se comprobó el código real del juego: `decodeTurquoiseRoads` rechaza `data.version!==1`, pero el despliegue anterior publicó `juego/rutas-turquesa-160.json` con `version:2`. Esto impedía cargar la máscara y bloqueaba toda navegación.
+- [x] Corregido el campo a `version:1` (commit `d5bad52c`) conservando las 4.151 celdas del nuevo trazado.
+- [x] Creado `scripts/test-turquoise-mask-schema.cjs` (commit `6c36e8b6`) que compara versión, resolución y codificación con las comprobaciones del decodificador real, descomprime el bitset y verifica el número de celdas.
+- [x] Incorporado al workflow `audit-turquoise-map.yml` (commit `3eecea91`) para evitar regresiones de incompatibilidad.
+- [!] La corrección se ha publicado en GitHub; pendiente verificar GitHub Pages, CI y movimiento del héroe en navegador. La nueva máscara sigue teniendo componentes desconectadas, que pueden impedir ciertos recorridos.
