@@ -2573,3 +2573,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Incorporado el test al workflow `audit-turquoise-map.yml` y a sus rutas de activación (commit `5e5f4d8b`).
 - [!] Pendiente comprobar la ejecución verde en GitHub Actions y probar el comportamiento en navegador. La prueba no verifica por sí sola la geometría del mapa ni las 44 puertas.
 - [ ] Completar verificación visual de accesos y corrección localizada de discontinuidades antes de activar una máscara nueva.
+
+
+### Regresión automática de entradas a edificios — 2026-11-16
+- [x] El usuario ha mostrado una captura de GitHub Actions con la ejecución #8 de `Audit turquoise map` en verde, correspondiente al test anterior de navegación; esto confirma ese workflow, no la validación funcional de los 44 accesos.
+- [x] Añadido `scripts/test-turquoise-site-access.cjs` (commits `2b516b39`, `eb0947dd`): ejecuta la función **real** `siteAccessPoint` del HTML en seis escenarios sintéticos, sin duplicar su lógica: entrada conectada, edificio remoto, red diferente más cercana, componente aislada, máscara no cargada y límite euclídeo.
+- [x] Incorporadas estas seis pruebas al workflow `audit-turquoise-map.yml` (commit `27462b06`), junto a las cinco pruebas existentes de `fineRoute`.
+- [!] Nueva ejecución del workflow y prueba en navegador aún no verificadas. La prueba sintética no confirma la posición visual de ninguna puerta.
+- [ ] Continuar revisión sobre imagen original y validar cada puerta y ruta real antes de reemplazar la máscara.
