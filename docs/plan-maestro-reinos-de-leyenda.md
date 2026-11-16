@@ -2645,3 +2645,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Incorporada la prueba al workflow `audit-turquoise-map.yml` (commit `f6853562`).
 - [!] Pendiente confirmar el resultado de esta nueva ejecución y recorrer en navegador el ramal hasta la escalinata; la prueba comprueba topología, no animación ni interacción.
 - [ ] Continuar verificando los siete castillos y los demás elementos sobre la máscara publicada, corrigiendo accesos concretos sin atajos.
+
+
+### Corrección del fallo de CI en el ramal del castillo costero — 2026-11-16
+- [x] La captura del usuario mostró que las 5 pruebas de navegación, las 6 pruebas de acceso y la prueba de esquema pasaban; fallaba exclusivamente `test-coastal-castle-staircase.cjs` porque el anclaje no existía en la máscara.
+- [x] Reproducido el problema al descomprimir la máscara publicada: `(321,196)` se proyecta a celda `(40,25)`, ausente, y el extremo `(309,177)` a `(39,22)`, también ausente. Los puntos intermedios ya estaban presentes.
+- [x] Añadidas **solo dos celdas** `(40,25)` y `(39,22)` a `juego/rutas-turquesa-160.json` (commit `7fe5ef9a`), elevando el total de **4.151 a 4.153** sin tocar el resto del trazado.
+- [x] Comprobado localmente con BFS y regla antiesquinas: anclaje y escalinata están conectados dentro de una componente de **1.941 celdas**.
+- [!] Pendiente confirmar ejecución verde de GitHub Actions y comprobar el acceso en navegador. No se afirma que los 44 edificios estén verificados.
