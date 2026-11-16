@@ -839,6 +839,9 @@ function fineRoute(a,b){
  // Nunca autorizar desplazamientos con la malla antigua mientras se carga
  // el trazado oficial. Evita que un clic temprano cruce zonas prohibidas.
  if(tracedRoadLoading)return null;
+ // Si falla la descarga/decodificación del trazado oficial, detener el
+ // movimiento: NO reactivar caminos antiguos que cruzan zonas prohibidas.
+ if(!turquoiseRoadMask)return null;
  // Preferir siempre las rutas marcadas. La extracción todavía tiene
  // fragmentos desconectados: permitir el paso seguro de la malla original
  // evita inmovilizar al héroe en las casillas existentes/partidas guardadas.
@@ -848,11 +851,8 @@ function fineRoute(a,b){
   // Un trayecto desconectado debe comunicarse, no inventarse.
   return turquoiseRoadRoute(a,b);
  }
- if(tracedRoadMask){
-  const traced=tracedRoadRoute(a,b);
-  if(traced)return traced;
- }
- return terrainFineRoute(a,b,true);
+ // Nunca recuperar el trazado heredado en caso de error de carga.
+ return null;
 }
 function terrainFineRoute(a,b,preferMarkedRoads=false){
  if(!navBlocked)return null;
