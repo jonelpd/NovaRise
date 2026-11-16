@@ -37,3 +37,10 @@ El usuario ha elegido explícitamente **prolongar el camino turquesa hasta la es
 - Actualizar el mapa y el acceso del juego conjuntamente; verificar que el héroe recorre el ramal y llega hasta la escalinata antes de activar la interacción.
 
 **Estado:** criterio aprobado por el usuario; geometría exacta, implementación y pruebas pendientes.
+
+
+## Corrección de coordenadas tras inspección ampliada — 2026-11-16
+
+Una segunda inspección del recorte original con cuadrícula 20×20 píxeles **corrige la estimación previa de la puerta (275,173)**: esa posición corresponde a una zona de la fachada, no al pie de la escalinata. El pie visible de la escalinata está cerca de **(321,196)** y su extremo superior cerca de **(309,177)**. El trazo turquesa visible ya alcanza la zona próxima a (321,196), con un segmento diagonal oscuro hacia los escalones. La separación de «75 píxeles» del análisis inicial **no debe utilizarse como medida definitiva**.
+
+Propuesta geométrica concreta: `(321,196) → (318,191) → (314,186) → (311,181) → (309,177)`. Se almacena en `docs/ramal-castillo-costero-propuesta-2026-11-16.json`. Es una propuesta de ramal corto siguiendo el acceso visual, **no una modificación de la máscara activa**. Queda pendiente comprobar que el anclaje coincide con una celda oficial transitable, que no se une a una componente equivocada y que el héroe llega a la escalinata en el navegador.
