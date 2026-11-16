@@ -2613,3 +2613,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [ ] Trazar el ramal exacto sobre el mapa original y verificar que no atraviesa obstáculos ni conecta redes que no correspondan.
 - [ ] Incorporar el ramal a la máscara oficial, definir la celda de entrada en la escalinata y probar el desplazamiento completo del héroe.
 - [!] No se ha modificado todavía la máscara activa ni aprobado una geometría píxel a píxel.
+
+
+### Propuesta concreta de ramal a escalinata del castillo costero — 2026-11-16
+- [x] Revisado el recorte original con cuadrícula ampliada. **Corrección de coordenadas:** el pie de la escalinata está aprox. en `(321,196)` y el extremo superior en `(309,177)`; la antigua estimación `(275,173)` no era el pie de la escalinata. El trazo turquesa ya pasa junto al pie de la escalinata.
+- [x] Diseñada polilínea local propuesta `(321,196) → (318,191) → (314,186) → (311,181) → (309,177)` sin alterar el camino principal; registrada en `docs/ramal-castillo-costero-propuesta-2026-11-16.json` (commit `e97c9076`).
+- [x] Actualizada la revisión visual `docs/acceso-castillo-costero-revision-visual-2026-11-16.md` (commit `713f0e7c`) y creado `scripts/propose-coastal-castle-branch.cjs` (commit `22fda920`) para generar una **máscara candidata independiente**, conservando intacta la oficial.
+- [!] La propuesta y el generador están publicados pero aún no se ha comprobado su ejecución, topología ni recorrido en navegador. **No** se ha sustituido `juego/rutas-turquesa-160.json` ni activado la puerta.
+- [ ] Ejecutar el generador y el auditor sobre la candidata, verificar continuidad con la componente correcta y probar el movimiento del héroe hasta la escalinata antes de desplegar.
