@@ -2544,3 +2544,10 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Se conserva explícitamente `ACCESS_NOT_VISUALLY_VERIFIED` en todas las entradas: una alternativa geométrica no equivale a una puerta aprobada.
 - [!] No se ha sustituido la máscara ni cambiado la geometría de los caminos; las entradas siguen pendientes de validación visual y funcional. La nueva ejecución del workflow aún no está verificada.
 - [ ] Consultar el siguiente artefacto de GitHub Actions, contrastar las puertas prioritarias contra el pincel original y ejecutar pruebas de navegación en navegador.
+
+
+### Informe legible en GitHub Actions — 2026-11-16
+- [x] Mejorado el workflow `.github/workflows/audit-turquoise-map.yml` (commits `8ff7bfc1` y `fd1553c8`): añade un resumen Markdown en la propia ejecución con componentes reales/declaradas, celdas de ruta, recuento de 44 elementos, riesgos `SHORT_COMPONENT` y `FAR_FROM_ROAD`, lista de sitios afectados y doce cortes más cercanos.
+- [x] Conservado el artefacto JSON detallado, sin cambiar la máscara ni autorizar accesos automáticos.
+- [!] No se ha confirmado una nueva ejecución verde de esta versión del workflow; el resumen aún debe validarse en Actions.
+- [ ] Examinar los riesgos y cortes publicados, contrastar cada posible unión con el mapa original y verificar físicamente las 44 puertas antes de sustituir la máscara.
