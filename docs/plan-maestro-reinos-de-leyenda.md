@@ -2473,3 +2473,10 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Generada una superposición local de revisión sobre el mapa original y publicado el script reproducible `scripts/extract-turquoise-candidate.py` (commit `66bbdab0`). El script escribe `turquoise-candidate.json` y vista previa; nunca reemplaza `juego/rutas-turquesa-160.json`.
 - [ ] Depurar falsos positivos de agua y discontinuidades de pincel, cotejar cada segmento con las líneas marcadas y las entradas de los 44 elementos.
 - [ ] Ejecutar el analizador sobre la candidata, verificar conectividad con la regla antiesquinas y sustituir la máscara oficial solo tras la validación.
+
+
+### Selección de destino dentro de la misma red — 2026-11-16
+- [x] Corregido `turquoiseRoadRoute` (commit `e0995589`): el extremo de destino se proyecta sobre la **misma componente transitable** que el origen mediante `nearestTurquoiseOnComponent`. Antes la selección independiente de los dos puntos podía escoger componentes distintas aun cuando hubiera otro acceso cercano conectado.
+- [x] Inspeccionada la máscara candidata local derivada de `mapa-rutas-marcadas(2).png`: **2.152 celdas**, **17 componentes de ocho vecinos** con tamaños principales 1007, 619, 315 y 70. Estos datos no acreditan conectividad con la regla antiesquinas ni validación de entradas.
+- [!] La máscara candidata no se ha desplegado: aún contiene múltiples cortes. La máscara activa sigue siendo la anterior.
+- [ ] Reconstruir y comprobar los cortes sobre la imagen original, probar la navegación y los 44 accesos y verificar las ejecuciones de CI antes de cerrar la fase.
