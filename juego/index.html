@@ -835,24 +835,10 @@ function navSegmentClear(a,b){
  return true
 }
 function fineRoute(a,b){
- if(!navBlocked)return null;
- // Nunca autorizar desplazamientos con la malla antigua mientras se carga
- // el trazado oficial. Evita que un clic temprano cruce zonas prohibidas.
- if(tracedRoadLoading)return null;
- // Si falla la descarga/decodificación del trazado oficial, detener el
- // movimiento: NO reactivar caminos antiguos que cruzan zonas prohibidas.
- if(!turquoiseRoadMask)return null;
- // Preferir siempre las rutas marcadas. La extracción todavía tiene
- // fragmentos desconectados: permitir el paso seguro de la malla original
- // evita inmovilizar al héroe en las casillas existentes/partidas guardadas.
- if(turquoiseRoadMask){
-  // Con la máscara oficial cargada, no atravesar montañas, agua ni
-  // edificios mediante el enrutador antiguo si las rutas están separadas.
-  // Un trayecto desconectado debe comunicarse, no inventarse.
-  return turquoiseRoadRoute(a,b);
- }
- // Nunca recuperar el trazado heredado en caso de error de carga.
- return null;
+ // La única fuente válida de movimiento es la máscara turquesa oficial.
+ // Bloquear mientras se carga, cuando falla y cuando no hay conexión.
+ if(!navBlocked||tracedRoadLoading||!turquoiseRoadMask)return null;
+ return turquoiseRoadRoute(a,b);
 }
 function terrainFineRoute(a,b,preferMarkedRoads=false){
  if(!navBlocked)return null;
