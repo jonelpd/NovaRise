@@ -1951,12 +1951,16 @@ function siteAccessPoint(site,heroPoint){
  let best=null,distance=Infinity;
  // La puerta tiene que pertenecer a la misma red que el héroe.
  // Nunca elegir otra isla de camino solo por proximidad visual.
- for(let dy=-32;dy<=32;dy++)for(let dx=-32;dx<=32;dx++){
-  const x=cx+dx,y=cy+dy;
-  if(!turquoiseFree(x,y)||turquoiseComponents[y*160+x]!==component)continue;
-  const d=dx*dx+dy*dy;
-  if(d<distance){distance=d;best=[x,y]}
- }
+ // Un acceso a más de 14 celdas (8,75% del mapa) del edificio
+ // no es una puerta: impedir capturas/recompensas a distancia.
+ const MAX_SITE_ENTRANCE_CELLS=14;
+ for(let dy=-MAX_SITE_ENTRANCE_CELLS;dy<=MAX_SITE_ENTRANCE_CELLS;dy++)
+  for(let dx=-MAX_SITE_ENTRANCE_CELLS;dx<=MAX_SITE_ENTRANCE_CELLS;dx++){
+   const x=cx+dx,y=cy+dy,d=dx*dx+dy*dy;
+   if(d>MAX_SITE_ENTRANCE_CELLS*MAX_SITE_ENTRANCE_CELLS)continue;
+   if(!turquoiseFree(x,y)||turquoiseComponents[y*160+x]!==component)continue;
+   if(d<distance){distance=d;best=[x,y]}
+  }
  return best?[(best[0]+.5)*.625,(best[1]+.5)*.625]:null
 }
 function interactVerifiedSite(site){
