@@ -51,10 +51,26 @@ assert.equal(homeStairComponent,labels[approach[1]*160+approach[0]],'La escalina
 assert.ok(sizes[homeStairComponent]>=10,'El ramal está aislado');
 assert.ok(homeEntries.some(x=>x.component===homeStairComponent),'La escalinata no está dentro del radio de acceso al castillo inicial');
 const homeComponents=new Set([homeStairComponent]);
+// Identificar el corte geométrico mínimo entre redes, sin crear puentes.
+const componentPixels=sizes.map(()=>[]);
+for(let p=0;p<labels.length;p++)if(labels[p]>=0)componentPixels[labels[p]].push([p%160,Math.floor(p/160)]);
+function nearestGapToHome(id){
+ if(id===homeStairComponent)return {distance_cells:0,from:null,to:null};
+ let best=Infinity,from=null,to=null;
+ const origin=componentPixels[homeStairComponent],target=componentPixels[id];
+ for(const [x,y] of origin)for(const [u,v] of target){
+  const d=(x-u)**2+(y-v)**2;
+  if(d<best){best=d;from=[x,y];to=[u,v]}
+ }
+ return {distance_cells:Math.sqrt(best),from,to};
+}
 const report=sites.map(site=>{
  const candidates=entrances(site);
  return {id:site.id,center_px:[site.x,site.y],candidates,
   shared_with_home:candidates.filter(x=>homeComponents.has(x.component)).map(x=>x.component),
+  nearest_separate_network_gap:candidates.filter(x=>!homeComponents.has(x.component))
+    .map(x=>({component:x.component,...nearestGapToHome(x.component)}))
+    .sort((a,b)=>a.distance_cells-b.distance_cells)[0]||null,
   status:candidates.length===0?'NO_ENTRANCE_WITHIN_14':candidates.some(x=>homeComponents.has(x.component))?'GEOMETRICALLY_CONNECTED_TO_HOME':'SEPARATE_NETWORK',
   visual_gate_verified:false};
 });
