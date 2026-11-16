@@ -4,6 +4,7 @@ on:
     paths:
       - 'scripts/audit-turquoise-map.cjs'
       - 'scripts/test-turquoise-navigation.cjs'
+      - 'scripts/test-turquoise-site-access.cjs'
       - 'juego/index.html'
       - 'juego/rutas-turquesa-160.json'
       - 'docs/catalogo-elementos-mapa-nuevo.json'
@@ -20,7 +21,9 @@ jobs:
         with:
           node-version: '22'
       - name: Test turquoise-only movement and failed loading
-        run: node scripts/test-turquoise-navigation.cjs
+        run: |
+          node scripts/test-turquoise-navigation.cjs
+          node scripts/test-turquoise-site-access.cjs
       - name: Audit topology and 44 access candidates
         run: |
           node scripts/audit-turquoise-map.cjs --json > turquoise-audit-report.json
