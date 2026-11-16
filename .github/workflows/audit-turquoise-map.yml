@@ -53,7 +53,7 @@ jobs:
             '|---|---:|',
             ...r.gaps.slice().sort((a,b)=>a.minimum_gap_cells-b.minimum_gap_cells).slice(0,12).map(g=>'| '+g.components.join('–')+' | '+g.minimum_gap_cells.toFixed(2)+' |')
           ];
-          fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY,lines.join('\\n')+'\\n');
+          fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY,lines.join('\n')+'\n');
           NODE
       - name: Upload diagnostic report
         uses: actions/upload-artifact@v4
