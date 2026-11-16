@@ -55,13 +55,30 @@ const sites=catalogue.items.map(site=>{
   }
   return {component:g.id,component_size:g.count,cell:best,distance_cells:Math.sqrt(d2)};
  }).sort((a,b)=>a.distance_cells-b.distance_cells);
+ // Evaluar accesibilidad REAL en la máscara, usando el mismo radio
+ // euclídeo máximo de siteAccessPoint (14 celdas). No presupone que
+ // una componente esté conectada con la posición inicial del héroe.
+ const accessibleByComponent=[];
+ for(const g of groups){
+  if(g.count<2)continue;
+  let best=null,d2=Infinity;
+  for(const [xx,yy] of g.pixels){
+   const d=(xx-x)**2+(yy-y)**2;
+   if(d<=14*14&&d<d2){d2=d;best=[xx,yy]}
+  }
+  if(best)accessibleByComponent.push({component:g.id,component_size:g.count,cell:best,distance_cells:Math.sqrt(d2)});
+ }
+ accessibleByComponent.sort((a,b)=>a.distance_cells-b.distance_cells);
  const risks=[];
+ if(accessibleByComponent.length===0)risks.push('NO_ENTRANCE_WITHIN_14');
+ if(accessibleByComponent.length>1)risks.push('AMBIGUOUS_COMPONENT_ACCESS');
  if(group&&group.count<50)risks.push('SHORT_COMPONENT');
  if(closest&&closest.distance_cells>5)risks.push('FAR_FROM_ROAD');
  if(!closest)risks.push('NO_ROAD');
  return {id:site.id,kind:site.kind,game_id:site.game_id,center:[site.x,site.y],
   nearest:closest,nearest_component_size:group?group.count:0,
-  major_component_candidate:alternatives[0]||null,risks,
+  major_component_candidate:alternatives[0]||null,
+  accessible_components_within_14:accessibleByComponent,risks,
   status:'ACCESS_NOT_VISUALLY_VERIFIED'};
 });
 const gaps=[];
