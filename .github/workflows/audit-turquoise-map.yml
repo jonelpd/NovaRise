@@ -89,6 +89,12 @@ jobs:
           ];
           fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY,lines.join('\n')+'\n');
           NODE
+      - name: Upload map-pixel castle gap review
+        uses: actions/upload-artifact@v4
+        with:
+          name: castle-gaps-visual-review
+          path: castle-gaps-visual-review.json
+          retention-days: 30
       - name: Upload seven-castle access report
         uses: actions/upload-artifact@v4
         with:
