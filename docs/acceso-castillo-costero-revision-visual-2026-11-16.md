@@ -23,3 +23,17 @@ Inspección directa de `mapa-rutas-marcadas(2).png`, mapa original de 1254 × 12
 ## Estado
 
 **Puerta identificada visualmente de forma aproximada; acceso jugable NO verificado.** No se ha modificado `juego/rutas-turquesa-160.json` ni el juego en producción.
+
+
+## Decisión del usuario — 2026-11-16
+
+El usuario ha elegido explícitamente **prolongar el camino turquesa hasta la escalinata** del castillo costero, en lugar de permitir interacción desde el camino situado en la ladera. Este criterio debe guiar las entradas de los demás castillos.
+
+### Condiciones de implementación
+
+- Ramal local desde el camino turquesa de la ladera oriental hacia la escalinata, sin modificar los caminos existentes ni abrir atajos hacia otras zonas.
+- Las coordenadas visuales aproximadas `(335,218)` para la aproximación y `(275,173)` para la escalinata son **referencias de diseño**, no una polilínea aprobada píxel por píxel.
+- Antes de publicar la máscara, trazar y revisar la geometría sobre la imagen original, comprobar que no cruza elementos no transitables y confirmar que conecta con una componente utilizable de la máscara activa.
+- Actualizar el mapa y el acceso del juego conjuntamente; verificar que el héroe recorre el ramal y llega hasta la escalinata antes de activar la interacción.
+
+**Estado:** criterio aprobado por el usuario; geometría exacta, implementación y pruebas pendientes.
