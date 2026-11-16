@@ -2675,3 +2675,10 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Ahora la referencia es **exclusivamente la componente que contiene la escalinata (309,177)**, comprobando que está conectada al anclaje (321,196), tiene al menos 10 celdas y aparece entre los accesos geométricos del castillo inicial (commit `272d99c2`).
 - [!] Pendiente comprobar ejecución verde del nuevo diagnóstico y leer su tabla. La conectividad geométrica no demuestra entrada funcional ni camino libre de obstáculos visuales.
 - [ ] Identificar castillos con `SEPARATE_NETWORK` desde la escalinata real, y revisar sus ramales sobre el mapa original antes de editar la máscara.
+
+
+### Localización de cortes entre redes de castillos — 2026-11-16
+- [x] Ampliado `scripts/audit-seven-castle-access.cjs` (commit `60ead274`) para buscar, en la máscara **publicada**, el par de celdas más próximo entre la red que contiene la escalinata del castillo inicial y cada red distinta con acceso geométrico a un castillo. Guarda `nearest_separate_network_gap` con componentes, distancia y ambos extremos.
+- [x] Añadida al resumen de GitHub Actions la distancia del corte más próximo de cada castillo (commit `ae4541b5`). El artefacto JSON permite localizar las coordenadas exactas para su inspección visual.
+- [!] Una separación mínima entre redes **no autoriza unirlas**: podrían estar separadas por agua, montañas u otro obstáculo. No se ha alterado la máscara ni aprobado ninguna conexión nueva.
+- [ ] Confirmar ejecución del workflow y contrastar los cortes con `mapa-rutas-marcadas(2).png`; corregir exclusivamente discontinuidades que el trazado original permita.
