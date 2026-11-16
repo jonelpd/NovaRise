@@ -3,7 +3,12 @@
 // Auditoría reproducible: no inventa conexiones ni modifica la máscara.
 const fs=require('node:fs'),path=require('node:path'),zlib=require('node:zlib');
 const root=path.resolve(__dirname,'..');
-const roads=JSON.parse(fs.readFileSync(path.join(root,'juego/rutas-turquesa-160.json'),'utf8'));
+// --mask=relative/path.json permite auditar una candidata sin desplegarla.
+const maskArgument=process.argv.find(arg=>arg.startsWith('--mask='));
+const maskPath=maskArgument?maskArgument.slice('--mask='.length):'juego/rutas-turquesa-160.json';
+const absoluteMask=path.resolve(root,maskPath);
+if(!absoluteMask.startsWith(root+path.sep))throw Error('La máscara debe estar dentro del repositorio');
+const roads=JSON.parse(fs.readFileSync(absoluteMask,'utf8'));
 const catalogue=JSON.parse(fs.readFileSync(path.join(root,'docs/catalogo-elementos-mapa-nuevo.json'),'utf8'));
 const size=roads.resolution;
 if(size!==160||roads.encoding!=='zlib-base64-bitset-msb')throw Error('Formato de máscara inesperado');
@@ -51,7 +56,7 @@ for(let a=0;a<groups.length;a++)for(let b=a+1;b<groups.length;b++){
  }
  gaps.push({components:[a,b],minimum_gap_cells:Math.sqrt(d2),endpoints:best,approved_connection:false});
 }
-const result={source:roads.source,resolution:size,road_cells:total,declared_components:roads.connected_components,actual_components:groups.length,components:groups.map(({id,count,bbox})=>({id,count,bbox})),gaps,sites};
+const result={mask_file:maskPath,source:roads.source,resolution:size,road_cells:total,declared_components:roads.connected_components,actual_components:groups.length,components:groups.map(({id,count,bbox})=>({id,count,bbox})),gaps,sites};
 if(sites.length!==44)throw Error('Catálogo incorrecto: se esperaban 44 elementos y hay '+sites.length);
 if(groups.length!==roads.connected_components){
  console.error('AVISO: la máscara declara '+roads.connected_components+' componentes, pero el algoritmo de navegación detecta '+groups.length+'. Revisar topología; no se crean conexiones.');
