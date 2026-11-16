@@ -41,7 +41,16 @@ function entrances(site){
 const home=sites.find(x=>x.game_id==='home');
 assert.ok(home,'No existe castillo inicial');
 const homeEntries=entrances(home);
-const homeComponents=new Set(homeEntries.map(x=>x.component));
+// La posición de referencia del castillo inicial es su escalinata,
+// no todas las componentes que casualmente pasan cerca del círculo rojo.
+const staircase=[Math.floor(309/1254*160),Math.floor(177/1254*160)];
+const approach=[Math.floor(321/1254*160),Math.floor(196/1254*160)];
+assert.ok(free(...staircase)&&free(...approach),'El ramal costero debe estar en la máscara');
+const homeStairComponent=labels[staircase[1]*160+staircase[0]];
+assert.equal(homeStairComponent,labels[approach[1]*160+approach[0]],'La escalinata no está conectada con el anclaje');
+assert.ok(sizes[homeStairComponent]>=10,'El ramal está aislado');
+assert.ok(homeEntries.some(x=>x.component===homeStairComponent),'La escalinata no está dentro del radio de acceso al castillo inicial');
+const homeComponents=new Set([homeStairComponent]);
 const report=sites.map(site=>{
  const candidates=entrances(site);
  return {id:site.id,center_px:[site.x,site.y],candidates,
@@ -49,12 +58,7 @@ const report=sites.map(site=>{
   status:candidates.length===0?'NO_ENTRANCE_WITHIN_14':candidates.some(x=>homeComponents.has(x.component))?'GEOMETRICALLY_CONNECTED_TO_HOME':'SEPARATE_NETWORK',
   visual_gate_verified:false};
 });
-const staircase=[Math.floor(309/1254*160),Math.floor(177/1254*160)];
-const approach=[Math.floor(321/1254*160),Math.floor(196/1254*160)];
-assert.ok(free(...staircase)&&free(...approach),'El ramal costero debe estar en la máscara');
-assert.equal(labels[staircase[1]*160+staircase[0]],labels[approach[1]*160+approach[0]],'La escalinata no está conectada con el anclaje');
-assert.ok(sizes[labels[staircase[1]*160+staircase[0]]]>=10,'El ramal está aislado');
-const result={mask_source:mask.source,road_cells:mask.road_cells,components:sizes.length,home_components:[...homeComponents],coastal_staircase_component:labels[staircase[1]*160+staircase[0]],castles:report};
+const result={mask_source:mask.source,road_cells:mask.road_cells,components:sizes.length,home_components:[...homeComponents],coastal_staircase_component:homeStairComponent,castles:report};
 const output=path.join(root,'castle-access-audit.json');
 fs.writeFileSync(output,JSON.stringify(result,null,2)+'\n');
 console.table(report.map(x=>({castle:x.id,status:x.status,networks:x.candidates.length,shared:x.shared_with_home.join(',')||'none'})));
