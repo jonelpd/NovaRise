@@ -45,7 +45,24 @@ function nearest(x,y){
 }
 const sites=catalogue.items.map(site=>{
  const x=site.x_pct*size/100,y=site.y_pct*size/100;
- return {id:site.id,kind:site.kind,game_id:site.game_id,center:[site.x,site.y],nearest:nearest(x,y),status:'ACCESS_NOT_VISUALLY_VERIFIED'};
+ const closest=nearest(x,y);
+ const group=closest?groups[closest.component]:null;
+ const alternatives=groups.filter(g=>g.count>=50).map(g=>{
+  let best=null,d2=Infinity;
+  for(const [xx,yy] of g.pixels){
+   const d=(xx-x)**2+(yy-y)**2;
+   if(d<d2){d2=d;best=[xx,yy]}
+  }
+  return {component:g.id,component_size:g.count,cell:best,distance_cells:Math.sqrt(d2)};
+ }).sort((a,b)=>a.distance_cells-b.distance_cells);
+ const risks=[];
+ if(group&&group.count<50)risks.push('SHORT_COMPONENT');
+ if(closest&&closest.distance_cells>5)risks.push('FAR_FROM_ROAD');
+ if(!closest)risks.push('NO_ROAD');
+ return {id:site.id,kind:site.kind,game_id:site.game_id,center:[site.x,site.y],
+  nearest:closest,nearest_component_size:group?group.count:0,
+  major_component_candidate:alternatives[0]||null,risks,
+  status:'ACCESS_NOT_VISUALLY_VERIFIED'};
 });
 const gaps=[];
 for(let a=0;a<groups.length;a++)for(let b=a+1;b<groups.length;b++){
