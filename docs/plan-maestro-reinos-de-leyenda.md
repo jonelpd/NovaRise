@@ -2537,3 +2537,10 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Publicado `docs/diagnostico-44-entradas-candidatas-2026-11-16.md` (commit `c2f10dc7`).
 - [!] **0 de 44 puertas verificadas funcionalmente**: los resultados son distancias desde centros, no puertas aprobadas. No se modificó la máscara activa.
 - [ ] Verificar las puertas contra el pincel turquesa original, eliminar puentes falsos y probar las 44 interacciones antes de desplegar.
+
+
+### Diagnóstico automático ampliado de puertas — 2026-11-16
+- [x] Ampliado `scripts/audit-turquoise-map.cjs` (commit `be2eb573`): para cada uno de los 44 elementos registra tamaño de la componente más cercana, alternativa en componente de al menos 50 celdas, distancia a la alternativa y riesgos `SHORT_COMPONENT` / `FAR_FROM_ROAD`.
+- [x] Se conserva explícitamente `ACCESS_NOT_VISUALLY_VERIFIED` en todas las entradas: una alternativa geométrica no equivale a una puerta aprobada.
+- [!] No se ha sustituido la máscara ni cambiado la geometría de los caminos; las entradas siguen pendientes de validación visual y funcional. La nueva ejecución del workflow aún no está verificada.
+- [ ] Consultar el siguiente artefacto de GitHub Actions, contrastar las puertas prioritarias contra el pincel original y ejecutar pruebas de navegación en navegador.
