@@ -2521,3 +2521,10 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Generada imagen anotada `grupos-uniones-turquesas-2026-11-16.png` sobre `mapa-rutas-marcadas(2).png` y publicado el inventario de coordenadas y componentes en `docs/revision-29-zonas-uniones-turquesas-2026-11-16.md` (commit `9fd6efea`).
 - [!] Las 29 zonas **no equivalen a 29 conexiones erróneas**; siguen pendientes de aprobación visual. La máscara activa permanece intacta.
 - [ ] Inspeccionar las 29 zonas, eliminar únicamente expansiones que creen atajos y validar puertas y desplazamientos de los 44 sitios antes de cambiar la máscara activa.
+
+
+### Inspección visual de accesos de seis castillos — 2026-11-16
+- [x] Generado montaje de ampliaciones del mapa anotado para castillos costero, central, isla, suroeste, nevado y volcán, con las zonas de posible unión señaladas.
+- [x] Documentados centros, componentes cercanas, distancias y riesgos de acceso en `docs/revision-accesos-castillos-2026-11-16.md` (commit `f4d5ba48`).
+- [!] Las observaciones visuales son **puntos de revisión**, no puertas verificadas ni pruebas de navegación. No se han cambiado caminos ni máscara activa.
+- [ ] Definir puertas sobre los trazos originales, verificar la conectividad de cada una y completar el inventario de accesos de los 44 elementos.
