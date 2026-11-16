@@ -2653,3 +2653,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Añadidas **solo dos celdas** `(40,25)` y `(39,22)` a `juego/rutas-turquesa-160.json` (commit `7fe5ef9a`), elevando el total de **4.151 a 4.153** sin tocar el resto del trazado.
 - [x] Comprobado localmente con BFS y regla antiesquinas: anclaje y escalinata están conectados dentro de una componente de **1.941 celdas**.
 - [!] Pendiente confirmar ejecución verde de GitHub Actions y comprobar el acceso en navegador. No se afirma que los 44 edificios estén verificados.
+
+
+### Auditoría de accesibilidad de los siete castillos — 2026-11-16
+- [x] Añadido `scripts/audit-seven-castle-access.cjs` (commit `1dc82b3e`), que descomprime la máscara real, calcula las componentes con la regla antiesquinas y revisa los siete castillos del catálogo. Para cada castillo enumera las redes que tienen un camino a menos de 14 celdas y si comparte alguna con el castillo inicial.
+- [x] Incluida comprobación de anclaje y escalinata del castillo costero sobre la máscara activa. El informe `castle-access-audit.json` distingue `GEOMETRICALLY_CONNECTED_TO_HOME`, `SEPARATE_NETWORK` y `NO_ENTRANCE_WITHIN_14`; **ninguna** puerta se marca como verificada visualmente.
+- [x] Incorporado al workflow `audit-turquoise-map.yml` (commit `e402cc69`) con artefacto descargable `castle-access-audit`.
+- [!] La captura anterior de GitHub Actions mostraba un fallo del anclaje; la corrección posterior de dos celdas se publicó, pero **aún no se ha confirmado** una ejecución verde del nuevo workflow ni una prueba de entrada en navegador.
+- [ ] Revisar los siete resultados del artefacto y verificar visualmente las puertas; después pasar a minas, molinos y edificios de reclutamiento.
