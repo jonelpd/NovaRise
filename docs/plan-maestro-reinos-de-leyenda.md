@@ -2558,3 +2558,10 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Limitada la búsqueda a un radio **euclídeo** de 14 celdas (8,75 puntos porcentuales del mapa), conservando la condición de pertenecer a la misma componente transitable que el héroe (commit `ad79adeb`). Si no hay punto dentro del radio, no se permite la interacción.
 - [!] Este radio es un límite de seguridad provisional, no una puerta visualmente aprobada. El comportamiento no se ha comprobado aún en navegador; no se ha modificado la máscara activa.
 - [ ] Sustituir el criterio de proximidad por entradas verificadas sobre la imagen original, comprobar los 44 elementos y probar la navegación y el combate en el navegador.
+
+
+### Corrección de navegación cuando falla la carga — 2026-11-16
+- [x] Detectado que `fineRoute` todavía utilizaba `tracedRoadRoute` o `terrainFineRoute` cuando `rutas-turquesa-160.json` no cargaba, aunque durante la carga ya se bloqueaba la navegación. Esto podía recuperar caminos antiguos fuera de las líneas turquesas.
+- [x] Eliminada la recuperación heredada en caso de fallo: ahora `fineRoute` devuelve `null` si la máscara oficial no está disponible (commit `3d63e7c8`). Es un comportamiento de seguridad: impide rutas inventadas pero deja el movimiento temporalmente bloqueado si falla la descarga.
+- [!] Pendiente comprobar la respuesta visual y los errores de red en navegador, además de ejecutar pruebas automáticas del cambio.
+- [ ] Continuar la revisión de puertas sobre el trazado original, la corrección localizada de cortes y la validación de 44 elementos antes de publicar una máscara nueva.
