@@ -2661,3 +2661,10 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Incorporado al workflow `audit-turquoise-map.yml` (commit `e402cc69`) con artefacto descargable `castle-access-audit`.
 - [!] La captura anterior de GitHub Actions mostraba un fallo del anclaje; la corrección posterior de dos celdas se publicó, pero **aún no se ha confirmado** una ejecución verde del nuevo workflow ni una prueba de entrada en navegador.
 - [ ] Revisar los siete resultados del artefacto y verificar visualmente las puertas; después pasar a minas, molinos y edificios de reclutamiento.
+
+
+### Confirmación CI y resultados visibles de los siete castillos — 2026-11-16
+- [x] Captura aportada por el usuario: ejecución #19 de `Audit turquoise map` en verde, junto con #18 en verde tras corregir las dos celdas del castillo costero.
+- [x] Mejorado `.github/workflows/audit-turquoise-map.yml` (commit `7bb38671`) para publicar directamente en el resumen de GitHub Actions una tabla de **los siete castillos** con estado geométrico, número de redes cercanas y redes compartidas con el castillo inicial, sin depender de descargar el artefacto JSON.
+- [!] La ejecución #19 confirma que pasó el test, pero no contiene todavía esta tabla añadida después. No se han verificado visualmente las puertas de los siete castillos ni su interacción en el navegador.
+- [ ] Leer la tabla de la nueva ejecución, priorizar los castillos con `SEPARATE_NETWORK` o `NO_ENTRANCE_WITHIN_14`, y corregir únicamente enlaces respaldados por el trazado original.
