@@ -2682,3 +2682,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Añadida al resumen de GitHub Actions la distancia del corte más próximo de cada castillo (commit `ae4541b5`). El artefacto JSON permite localizar las coordenadas exactas para su inspección visual.
 - [!] Una separación mínima entre redes **no autoriza unirlas**: podrían estar separadas por agua, montañas u otro obstáculo. No se ha alterado la máscara ni aprobado ninguna conexión nueva.
 - [ ] Confirmar ejecución del workflow y contrastar los cortes con `mapa-rutas-marcadas(2).png`; corregir exclusivamente discontinuidades que el trazado original permita.
+
+
+### Coordenadas de revisión visual de cortes de los siete castillos — 2026-11-16
+- [x] Ampliado `scripts/audit-seven-castle-access.cjs` (commits `702029a4`, `ae3e1613`) para generar `castle-gaps-visual-review.json` con coordenadas de **celda y píxel sobre el mapa original de 1254×1254** de los extremos de cada corte entre la red de la escalinata inicial y las redes próximas a otros castillos.
+- [x] El informe clasifica la tarea pendiente como `REVIEW_ORIGINAL_TURQUOISE_STROKE`, `VERIFY_STAIRCASE_ENTRANCE` o `VERIFY_IN_BROWSER`, y mantiene `visual_validation: PENDING`. Una distancia mínima NO autoriza conectar redes automáticamente.
+- [x] Incorporado artefacto descargable `castle-gaps-visual-review` a GitHub Actions (commit `cd657e25`).
+- [!] Pendiente comprobar la nueva ejecución verde y contrastar los extremos con `mapa-rutas-marcadas(2).png`; no se han modificado las 4.153 celdas activas ni las entradas del juego.
+- [ ] Validar visualmente los cortes, corregir solo los tramos realmente dibujados y probarlos en navegador.
