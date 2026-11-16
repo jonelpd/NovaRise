@@ -61,6 +61,17 @@ jobs:
             '',
             '**ATENCIÓN:** una ejecución verde valida el analizador, no las entradas ni la jugabilidad.',
             '',
+            '## Conectividad desde la escalinata inicial (44 elementos)',
+            '',
+            '| Tipo | Total | Sin acceso cercano | Fuera de la red inicial |',
+            '|---|---:|---:|---:|',
+            ...['castle','mine','mill','reward','recruit'].map(kind=>{
+              const a=r.sites.filter(s=>s.kind===kind);
+              return '| '+kind+' | '+a.length+' | '+a.filter(s=>s.risks.includes('NO_ENTRANCE_WITHIN_14')).length+' | '+a.filter(s=>s.risks.includes('NO_SHARED_COMPONENT_WITH_HOME')).length+' |';
+            }),
+            '',
+            'La referencia es la red de la escalinata costera, no todas las rutas cercanas al castillo.',
+            '',
             '## Entradas que requieren revisión',
             '| Elemento | Riesgo | Distancia (celdas) | Tamaño de red |',
             '|---|---|---:|---:|',
