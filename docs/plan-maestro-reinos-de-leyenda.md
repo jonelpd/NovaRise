@@ -2605,3 +2605,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Documentada la distinción entre centro, puerta y aproximación en `docs/acceso-castillo-costero-revision-visual-2026-11-16.md` (commit `5e6f80b2`).
 - [!] **No** se ha aprobado una puerta jugable ni modificado la máscara. El píxel más próximo al centro del castillo en la máscara activa es aislado; no debe utilizarse como acceso.
 - [ ] Confirmar sobre la máscara activa la celda de aproximación del camino y su componente; después decidir si se permite interacción desde el camino junto a la ladera o se requiere que el usuario marque una extensión turquesa hasta la escalinata.
+
+
+### Decisión de diseño: ramal hasta la escalinata del castillo costero — 2026-11-16
+- [x] El usuario ha elegido prolongar el trazado turquesa **hasta la escalinata**, descartando interactuar desde el camino lejano de la ladera.
+- [x] Registrada la decisión y sus condiciones en `docs/acceso-castillo-costero-revision-visual-2026-11-16.md` (commit `85b39182`). Se conservará el camino principal y se diseñará un ramal local sin atajos.
+- [ ] Trazar el ramal exacto sobre el mapa original y verificar que no atraviesa obstáculos ni conecta redes que no correspondan.
+- [ ] Incorporar el ramal a la máscara oficial, definir la celda de entrada en la escalinata y probar el desplazamiento completo del héroe.
+- [!] No se ha modificado todavía la máscara activa ni aprobado una geometría píxel a píxel.
