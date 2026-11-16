@@ -2690,3 +2690,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Incorporado artefacto descargable `castle-gaps-visual-review` a GitHub Actions (commit `cd657e25`).
 - [!] Pendiente comprobar la nueva ejecución verde y contrastar los extremos con `mapa-rutas-marcadas(2).png`; no se han modificado las 4.153 celdas activas ni las entradas del juego.
 - [ ] Validar visualmente los cortes, corregir solo los tramos realmente dibujados y probarlos en navegador.
+
+
+### Auditoría consolidada de los 44 elementos desde la escalinata — 2026-11-16
+- [x] El usuario confirmó mediante captura que el workflow `Audit turquoise map` n.º **26** terminó en verde, y que el n.º 25 también pasó.
+- [x] Corregido `scripts/audit-turquoise-map.cjs` (commit `446a8675`) para calcular la conectividad de **todos los 44 elementos** desde la componente real de la escalinata del castillo inicial `(309,177)`. Antes consideraba todas las componentes a 14 celdas del centro del castillo, lo que podía dar falsos positivos.
+- [x] Ampliado el resumen de GitHub Actions (commit `737ad8a0`) con una tabla por tipo de elemento (castillos, minas, molino, recompensas, reclutamiento): total, sin acceso cercano y fuera de la red inicial.
+- [!] Esta nueva versión del diagnóstico aún no está confirmada verde. La conexión topológica de la máscara **no equivale** a entrada visual ni interacción jugable comprobada.
+- [ ] Leer los recuentos reales y revisar sobre el mapa original los cortes con mayor impacto; modificar solo las discontinuidades justificadas y comprobarlas en navegador.
