@@ -2480,3 +2480,12 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Inspeccionada la máscara candidata local derivada de `mapa-rutas-marcadas(2).png`: **2.152 celdas**, **17 componentes de ocho vecinos** con tamaños principales 1007, 619, 315 y 70. Estos datos no acreditan conectividad con la regla antiesquinas ni validación de entradas.
 - [!] La máscara candidata no se ha desplegado: aún contiene múltiples cortes. La máscara activa sigue siendo la anterior.
 - [ ] Reconstruir y comprobar los cortes sobre la imagen original, probar la navegación y los 44 accesos y verificar las ejecuciones de CI antes de cerrar la fase.
+
+
+### Validación estricta de la máscara candidata — 2026-11-16
+- [x] Reanalizado localmente `turquoise-candidate.json` generado desde `mapa-rutas-marcadas(2).png` con **la misma regla antiesquinas de `turquoiseRoadRoute`**, no solo con componentes de ocho vecinos.
+- [x] Resultado: **63 componentes transitables** frente a las **17 componentes de ocho vecinos** que declaraba la extracción; **12 componentes de un solo píxel**. Tamaños mayores: 286, 269, 261, 181, 124, 118, 83, 78, 74, 70 celdas.
+- [x] Contrastados los centros de los 44 sitios del artefacto de auditoría con la máscara candidata: el punto más próximo de `castillo-isla` pertenece a una componente aislada de un solo píxel.
+- [x] Actualizado `scripts/audit-turquoise-map.cjs` (commit `f5515db1`) para admitir `--mask=archivo.json` y comparar candidatas sin reemplazar la máscara activa.
+- [!] **Candidata rechazada para despliegue**: la red estricta presenta 63 componentes y no se han verificado las entradas. No unir automáticamente por proximidad ni afirmar que el trazado está terminado.
+- [ ] Mejorar la extracción preservando el grosor y la continuidad del pincel turquesa, inspeccionar sobre el mapa original y repetir la auditoría con `--mask`.
