@@ -47,6 +47,8 @@ jobs:
             '| Elementos examinados | '+r.sites.length+' |',
             '| Accesos próximos a componentes cortas (<50 celdas) | '+short.length+' |',
             '| Elementos a más de 5 celdas de la ruta | '+far.length+' |',
+            '| Elementos sin acceso dentro de 14 celdas | '+r.sites.filter(s=>s.risks.includes('NO_ENTRANCE_WITHIN_14')).length+' |',
+            '| Elementos con acceso a varias redes desconectadas | '+r.sites.filter(s=>s.risks.includes('AMBIGUOUS_COMPONENT_ACCESS')).length+' |',
             '',
             '**ATENCIÓN:** una ejecución verde valida el analizador, no las entradas ni la jugabilidad.',
             '',
