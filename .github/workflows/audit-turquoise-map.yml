@@ -49,6 +49,8 @@ jobs:
             '| Elementos a más de 5 celdas de la ruta | '+far.length+' |',
             '| Elementos sin acceso dentro de 14 celdas | '+r.sites.filter(s=>s.risks.includes('NO_ENTRANCE_WITHIN_14')).length+' |',
             '| Elementos con acceso a varias redes desconectadas | '+r.sites.filter(s=>s.risks.includes('AMBIGUOUS_COMPONENT_ACCESS')).length+' |',
+            '| Elementos sin componente compartida con el castillo inicial | '+r.sites.filter(s=>s.risks.includes('NO_SHARED_COMPONENT_WITH_HOME')).length+' |',
+            '| Elementos cuyo punto más próximo es un píxel aislado | '+r.sites.filter(s=>s.risks.includes('NEAREST_IS_ISOLATED_PIXEL')).length+' |',
             '',
             '**ATENCIÓN:** una ejecución verde valida el analizador, no las entradas ni la jugabilidad.',
             '',
