@@ -75,6 +75,26 @@ const report=sites.map(site=>{
   visual_gate_verified:false};
 });
 const result={mask_source:mask.source,road_cells:mask.road_cells,components:sizes.length,home_components:[...homeComponents],coastal_staircase_component:homeStairComponent,castles:report};
+// Exportar las coordenadas de los cortes en los píxeles de la imagen
+// original para inspección manual, sin convertirlas en puentes jugables.
+const cellToPixel=([x,y])=>[Math.round((x+.5)*1254/160),Math.round((y+.5)*1254/160)];
+const review=report.map(c=>{
+ const gap=c.nearest_separate_network_gap;
+ return {
+  castle:c.id,status:c.status,shared_home_network:c.shared_with_home.length>0,
+  nearest_gap_cells:gap?Number(gap.distance_cells.toFixed(3)):null,
+  from_home_cell:gap?.from||null,to_castle_network_cell:gap?.to||null,
+  from_home_px:gap?.from?cellToPixel(gap.from):null,
+  to_castle_network_px:gap?.to?cellToPixel(gap.to):null,
+  visual_validation:'PENDING',
+  action:c.status==='SEPARATE_NETWORK'?'REVIEW_ORIGINAL_TURQUOISE_STROKE':c.status==='NO_ENTRANCE_WITHIN_14'?'VERIFY_STAIRCASE_ENTRANCE':'VERIFY_IN_BROWSER'
+ };
+});
+fs.writeFileSync(path.join(root,'castle-gaps-visual-review.json'),JSON.stringify({
+ source_image:'mapa-rutas-marcadas(2).png',mask_road_cells:mask.road_cells,
+ warning:'Coordinates identify nearest disconnected cells, NOT approved connections.',
+ castles:review
+},null,2)+'\\n');
 const output=path.join(root,'castle-access-audit.json');
 fs.writeFileSync(output,JSON.stringify(result,null,2)+'\n');
 console.table(report.map(x=>({castle:x.id,status:x.status,networks:x.candidates.length,shared:x.shared_with_home.join(',')||'none'})));
