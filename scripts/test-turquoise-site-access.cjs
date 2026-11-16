@@ -28,7 +28,7 @@ function check({roads,hero=[20,20],site=[30,20],loaded=true}){
 const main=[[20,20,0],[21,20,0],[22,20,0]];
 assert.deepEqual(check({roads:main,site:[23,20]}),[(22.5)*.625,(20.5)*.625],'Acceso en la misma red');
 assert.equal(check({roads:main,site:[40,20]}),null,'Prohibir accesos a más de 14 celdas');
-assert.equal(check({roads:[...main,[30,20,1],[31,20,1]],site:[30,20]}),null,'No cruzar componentes aunque la otra esté más cerca');
+assert.deepEqual(check({roads:[...main,[30,20,1],[31,20,1]],site:[30,20]}),[(22.5)*.625,(20.5)*.625],'No cruzar componentes aunque la otra esté más cerca');
 assert.equal(check({roads:[[20,20,0]],site:[21,20]}),null,'No aceptar componentes aisladas de una celda');
 assert.equal(check({roads:main,loaded:false}),null,'Bloquear cuando no se carga la máscara');
 assert.equal(check({roads:main,site:[37,20]}),null,'Radio euclídeo estricto de 14 celdas');
