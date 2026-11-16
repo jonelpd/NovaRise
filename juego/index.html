@@ -1924,15 +1924,38 @@ function rivalCastleHeroBattle(site){
   selected:'soldiers',sx:0,sy:2,rx:0,ry:3,round:0};
  showBattle();return true
 }
-function siteAccessPoint(site){
- const nearest=turquoiseRoadMask?nearestTurquoise(turquoiseCell(site.x,site.y),32):null;
- return nearest?[(nearest[0]+.5)*.625,(nearest[1]+.5)*.625]:[site.x,site.y]
+function siteAccessPoint(site,heroPoint){
+ if(!turquoiseRoadMask||!turquoiseComponents||!heroPoint)return null;
+ const origin=nearestTurquoise(turquoiseCell(...heroPoint),22);
+ if(!origin)return null;
+ const component=turquoiseComponents[origin[1]*160+origin[0]];
+ if(component<0||turquoiseComponentSizes[component]<2)return null;
+ const [cx,cy]=turquoiseCell(site.x,site.y);
+ let best=null,distance=Infinity;
+ // La puerta tiene que pertenecer a la misma red que el héroe.
+ // Nunca elegir otra isla de camino solo por proximidad visual.
+ for(let dy=-32;dy<=32;dy++)for(let dx=-32;dx<=32;dx++){
+  const x=cx+dx,y=cy+dy;
+  if(!turquoiseFree(x,y)||turquoiseComponents[y*160+x]!==component)continue;
+  const d=dx*dx+dy*dy;
+  if(d<distance){distance=d;best=[x,y]}
+ }
+ return best?[(best[0]+.5)*.625,(best[1]+.5)*.625]:null
 }
 function interactVerifiedSite(site){
  if(s.done||battle||rivalBusy)return;
  if(walking)return message('El héroe está caminando. Espera a que termine el movimiento antes de seleccionar otro lugar.');
  if(s.moves<1)return message('No quedan puntos de movimiento. Termina el turno y vuelve a seleccionar '+site.label+'.');
- const [hx,hy]=heroVisualPosition(),[accessX,accessY]=typeof turquoiseRoadMask!=='undefined'&&turquoiseRoadMask?siteAccessPoint(site):[site.x,site.y];
+ if(!turquoiseRoadMask||tracedRoadLoading)return message('Los caminos del mapa todavía no están disponibles. Espera a que terminen de cargar.');
+ const [hx,hy]=heroVisualPosition(),access=siteAccessPoint(site,[hx,hy]);
+ if(!access)return message('No existe una entrada conectada a los caminos de tu héroe para '+site.label+'.');
+ const [accessX,accessY]=access;
+ // La distancia física por sí sola no autoriza cruzar una pared o un río.
+ // Exigir que la posición actual y la puerta estén en la misma componente.
+ const heroCell=nearestTurquoise(turquoiseCell(hx,hy));
+ const accessCell=turquoiseCell(accessX,accessY);
+ if(!heroCell||turquoiseComponents[heroCell[1]*160+heroCell[0]]!==turquoiseComponents[accessCell[1]*160+accessCell[0]])
+  return message('La entrada de '+site.label+' no está conectada con tu camino actual.');
  if(Math.hypot(hx-accessX,hy-accessY)>8){
   const candidates=[];
   for(let y=0;y<H;y++)for(let x=0;x<W;x++){
