@@ -94,7 +94,7 @@ fs.writeFileSync(path.join(root,'castle-gaps-visual-review.json'),JSON.stringify
  source_image:'mapa-rutas-marcadas(2).png',mask_road_cells:mask.road_cells,
  warning:'Coordinates identify nearest disconnected cells, NOT approved connections.',
  castles:review
-},null,2)+'\\n');
+},null,2)+'\n');
 const output=path.join(root,'castle-access-audit.json');
 fs.writeFileSync(output,JSON.stringify(result,null,2)+'\n');
 console.table(report.map(x=>({castle:x.id,status:x.status,networks:x.candidates.length,shared:x.shared_with_home.join(',')||'none'})));
