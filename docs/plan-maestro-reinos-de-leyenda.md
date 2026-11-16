@@ -2698,3 +2698,13 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Ampliado el resumen de GitHub Actions (commit `737ad8a0`) con una tabla por tipo de elemento (castillos, minas, molino, recompensas, reclutamiento): total, sin acceso cercano y fuera de la red inicial.
 - [!] Esta nueva versión del diagnóstico aún no está confirmada verde. La conexión topológica de la máscara **no equivale** a entrada visual ni interacción jugable comprobada.
 - [ ] Leer los recuentos reales y revisar sobre el mapa original los cortes con mayor impacto; modificar solo las discontinuidades justificadas y comprobarlas en navegador.
+
+
+### FASE CERRADA EN CÓDIGO: ramales a las puertas principales de los siete castillos — 2026-11-16
+- [x] Atendida la instrucción del usuario de **terminar esta fase y dejar de repetir auditorías**. Se revisó la imagen original `mapa-rutas-marcadas(2).png` y se identificó una celda de puerta principal para cada uno de los siete castillos.
+- [x] Publicada `juego/rutas-turquesa-160.json` con los ramales locales faltantes hasta las puertas principales (commit `6ccdf47a`). Se añadieron **18 celdas** (4.153 → **4.171**), sin eliminar caminos existentes. Puertas (coordenadas de la malla 160×160): costero `(39,22)`, central `(83,47)`, nevado `(146,16)`, suroeste `(21,99)`, isla `(91,139)`, desierto `(146,135)`, volcán `(149,83)`.
+- [x] Comprobada localmente la conectividad estricta de cada puerta con su red: tamaños respectivos **1951, 1243, 1243, 1951, 608, 608 y 1951** celdas. Las redes de regiones distintas no se unieron artificialmente.
+- [x] Modificado `siteAccessPoint` en `juego/index.html` (commit `48d93a9a`) para que los castillos utilicen **exclusivamente su celda de puerta principal** y no la ruta más cercana al centro del círculo rojo.
+- [x] Añadida prueba única `scripts/test-seven-castle-main-gates.cjs` (commit `6ca3c1c1`) y conectada al workflow de GitHub Actions (commit `6d35460d`).
+- [!] **Implementación completada, validación final en navegador pendiente.** La comprobación topológica no demuestra por sí sola que el héroe termine la animación exactamente sobre la puerta ni que cada asedio se active correctamente. Confirmar CI y jugar una interacción de castillo antes de dar por validada la fase funcional.
+- [ ] Si se detecta un error en la prueba real, corregir ese caso concreto sin volver a abrir auditorías generales de accesos.
