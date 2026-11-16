@@ -1927,12 +1927,31 @@ function rivalCastleHeroBattle(site){
   selected:'soldiers',sx:0,sy:2,rx:0,ry:3,round:0};
  showBattle();return true
 }
+// Entradas únicas en la puerta principal de los siete castillos.
+// Coordenadas de la máscara 160×160, verificadas contra el trazado publicado.
+// No usar el centro del círculo rojo ni un camino cercano como puerta.
+const CASTLE_MAIN_GATE_CELLS=Object.freeze({
+ 'home':[39,22],
+ 'fort-center':[83,47],
+ 'fort-north':[146,16],
+ 'fort-west':[21,99],
+ 'fort-south':[91,139],
+ 'fort-east':[146,135],
+ 'rival':[149,83]
+});
 function siteAccessPoint(site,heroPoint){
  if(!turquoiseRoadMask||!turquoiseComponents||!heroPoint)return null;
  const origin=nearestTurquoise(turquoiseCell(...heroPoint),22);
  if(!origin)return null;
  const component=turquoiseComponents[origin[1]*160+origin[0]];
  if(component<0||turquoiseComponentSizes[component]<2)return null;
+ // Los castillos solo se visitan por su puerta principal.
+ const castleGate=CASTLE_MAIN_GATE_CELLS[site.id];
+ if(castleGate){
+  const [gx,gy]=castleGate;
+  if(!turquoiseFree(gx,gy)||turquoiseComponents[gy*160+gx]!==component)return null;
+  return [(gx+.5)*.625,(gy+.5)*.625];
+ }
  const [cx,cy]=turquoiseCell(site.x,site.y);
  let best=null,distance=Infinity;
  // La puerta tiene que pertenecer a la misma red que el héroe.
