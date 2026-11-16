@@ -2456,3 +2456,12 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [!] Esto evita accesos por proximidad a redes desconectadas, pero no arregla la máscara ni demuestra que las entradas visuales de los 44 elementos sean correctas.
 - [ ] Contrastar las nueve componentes detectadas con la última imagen marcada y reconstruir solo las uniones que realmente aparecen dibujadas.
 - [ ] Ejecutar pruebas de navegador para el desplazamiento a las entradas, la conquista, las minas, los reclutamientos y los cofres; comprobar la paridad de versiones.
+
+
+### Contraste visual de discontinuidades — 2026-11-16
+- [x] Contrastados el artefacto real `turquoise-audit-report.json` y la imagen más reciente `mapa-rutas-marcadas(2).png` (1254×1254).
+- [x] Generada imagen local de revisión con ocho puntos numerados; se conserva como resultado de la sesión, no se sustituye el mapa oficial.
+- [x] Cortes de 1,414 celdas: componentes 0–2 en (117,12)/(116,11); 0–4 en (29,62)/(28,61); 0–8 en (49,119)/(48,118); 1–2 en (63,8)/(64,9); 3–4 en (41,24)/(42,25).
+- [x] Separaciones mayores: 0–5 (7 celdas), 0–6 (7,28), 0–7 (7,28).
+- [!] Los pares anteriores son proximidades geométricas, **no** uniones autorizadas: no se ha modificado la máscara, que sigue basada en `mapa-rutas-marcadas(1).png`.
+- [ ] Reconstruir la máscara directamente desde la imagen más reciente, validar la continuidad contra el trazo visible y ejecutar la auditoría antes de reemplazar la versión activa.
