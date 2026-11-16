@@ -73,6 +73,22 @@ jobs:
           ];
           fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY,lines.join('\n')+'\n');
           NODE
+      - name: Publish seven-castle access status
+        run: |
+          node - <<'NODE'
+          const fs=require('node:fs');
+          const r=JSON.parse(fs.readFileSync('castle-access-audit.json','utf8'));
+          const lines=[
+            '## Accesos de los siete castillos (máscara activa)',
+            '',
+            '| Castillo | Estado geométrico | Redes cercanas | Comparte red con castillo inicial |',
+            '|---|---|---:|---|',
+            ...r.castles.map(c=>'| '+c.id+' | '+c.status+' | '+c.candidates.length+' | '+(c.shared_with_home.join(', ')||'No')+' |'),
+            '',
+            '**Aviso:** proximidad geométrica y conectividad de máscara no equivalen a puerta visual ni interacción probada en navegador.'
+          ];
+          fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY,lines.join('\n')+'\n');
+          NODE
       - name: Upload seven-castle access report
         uses: actions/upload-artifact@v4
         with:
