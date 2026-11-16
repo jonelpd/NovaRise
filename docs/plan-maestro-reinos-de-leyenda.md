@@ -2565,3 +2565,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Eliminada la recuperación heredada en caso de fallo: ahora `fineRoute` devuelve `null` si la máscara oficial no está disponible (commit `3d63e7c8`). Es un comportamiento de seguridad: impide rutas inventadas pero deja el movimiento temporalmente bloqueado si falla la descarga.
 - [!] Pendiente comprobar la respuesta visual y los errores de red en navegador, además de ejecutar pruebas automáticas del cambio.
 - [ ] Continuar la revisión de puertas sobre el trazado original, la corrección localizada de cortes y la validación de 44 elementos antes de publicar una máscara nueva.
+
+
+### Pruebas de regresión de navegación turquesa — 2026-11-16
+- [x] Simplificada `fineRoute` para delegar únicamente en `turquoiseRoadRoute` cuando la máscara está disponible y la carga ha terminado (commit `7420427b`); eliminadas ramas heredadas inalcanzables.
+- [x] Añadido `scripts/test-turquoise-navigation.cjs` (commit `e388afe3`) que extrae y ejecuta la función real del HTML en un contexto aislado. Cubre cinco estados: navegación no preparada, carga pendiente, descarga fallida, componentes desconectadas y ruta turquesa válida. Los enrutadores antiguos lanzan error si se invocan.
+- [x] Incorporado el test al workflow `audit-turquoise-map.yml` y a sus rutas de activación (commit `5e5f4d8b`).
+- [!] Pendiente comprobar la ejecución verde en GitHub Actions y probar el comportamiento en navegador. La prueba no verifica por sí sola la geometría del mapa ni las 44 puertas.
+- [ ] Completar verificación visual de accesos y corrección localizada de discontinuidades antes de activar una máscara nueva.
