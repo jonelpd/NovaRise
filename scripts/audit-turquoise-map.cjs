@@ -87,7 +87,15 @@ const sites=catalogue.items.map(site=>{
 // conexión que no exista en el dibujo original.
 const home=sites.find(s=>s.game_id==='home');
 if(!home)throw Error('No se encontró el castillo inicial');
-const homeComponents=new Set(home.accessible_components_within_14.map(e=>e.component));
+// El acceso inicial aprobado es la escalinata (309,177) del castillo costero.
+// No incluir otras componentes que simplemente pasen cerca de su centro.
+const stairX=Math.floor(309/1254*size),stairY=Math.floor(177/1254*size);
+const homeStairComponent=component[stairY*size+stairX];
+if(homeStairComponent<0||groups[homeStairComponent].count<10)
+ throw Error('La escalinata del castillo inicial no pertenece a una red transitable');
+if(!home.accessible_components_within_14.some(e=>e.component===homeStairComponent))
+ throw Error('La escalinata del castillo inicial queda fuera de su radio de acceso');
+const homeComponents=new Set([homeStairComponent]);
 for(const site of sites){
  site.shared_components_with_home=site.accessible_components_within_14.filter(e=>homeComponents.has(e.component)).map(e=>e.component);
  if(site.id!==home.id&&site.shared_components_with_home.length===0)
@@ -102,7 +110,7 @@ for(let a=0;a<groups.length;a++)for(let b=a+1;b<groups.length;b++){
  }
  gaps.push({components:[a,b],minimum_gap_cells:Math.sqrt(d2),endpoints:best,approved_connection:false});
 }
-const result={mask_file:maskPath,source:roads.source,resolution:size,road_cells:total,declared_components:roads.connected_components,actual_components:groups.length,components:groups.map(({id,count,bbox})=>({id,count,bbox})),gaps,sites};
+const result={home_staircase_component:homeStairComponent,mask_file:maskPath,source:roads.source,resolution:size,road_cells:total,declared_components:roads.connected_components,actual_components:groups.length,components:groups.map(({id,count,bbox})=>({id,count,bbox})),gaps,sites};
 if(sites.length!==44)throw Error('Catálogo incorrecto: se esperaban 44 elementos y hay '+sites.length);
 if(groups.length!==roads.connected_components){
  console.error('AVISO: la máscara declara '+roads.connected_components+' componentes, pero el algoritmo de navegación detecta '+groups.length+'. Revisar topología; no se crean conexiones.');
