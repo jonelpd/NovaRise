@@ -2621,3 +2621,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Actualizada la revisión visual `docs/acceso-castillo-costero-revision-visual-2026-11-16.md` (commit `713f0e7c`) y creado `scripts/propose-coastal-castle-branch.cjs` (commit `22fda920`) para generar una **máscara candidata independiente**, conservando intacta la oficial.
 - [!] La propuesta y el generador están publicados pero aún no se ha comprobado su ejecución, topología ni recorrido en navegador. **No** se ha sustituido `juego/rutas-turquesa-160.json` ni activado la puerta.
 - [ ] Ejecutar el generador y el auditor sobre la candidata, verificar continuidad con la componente correcta y probar el movimiento del héroe hasta la escalinata antes de desplegar.
+
+
+### Despliegue solicitado: trazado turquesa completo del mapa actualizado — 2026-11-16
+- [x] **Desplegada** una nueva `juego/rutas-turquesa-160.json` desde `mapa-rutas-marcadas(2).png`, sustituyendo la versión basada en `(1).png` (commit `6fd69b36`). La máscara contiene **4.151 celdas**, frente a 2.404 anteriormente, y **14 componentes estrictas** según la regla antiesquinas.
+- [x] Incluido el ramal local de escalinata del castillo costero: celdas aproximadas `(41,25) → (41,24) → (40,24) → (40,23) → (39,23)`. Verificada localmente la presencia de estas celdas y el recuento del bitset comprimido.
+- [!] La extracción se realizó con umbral 12 y expansión 2×2; la expansión puede crear conexiones adicionales. Las **14 componentes** indican que todavía hay tramos separados: el despliegue **no garantiza** acceso desde el castillo inicial a todos los edificios. La máscara nueva no ha superado aún pruebas de navegador ni se ha confirmado su CI.
+- [ ] Comprobar GitHub Actions para el nuevo commit, recorrer las rutas en el juego publicado, identificar los elementos inaccesibles y corregir únicamente los cortes que se correspondan con el trazo original.
+- [ ] Revisar visualmente las 44 puertas y la interacción del castillo costero en la escalinata.
