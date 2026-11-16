@@ -2581,3 +2581,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Incorporadas estas seis pruebas al workflow `audit-turquoise-map.yml` (commit `27462b06`), junto a las cinco pruebas existentes de `fineRoute`.
 - [!] Nueva ejecución del workflow y prueba en navegador aún no verificadas. La prueba sintética no confirma la posición visual de ninguna puerta.
 - [ ] Continuar revisión sobre imagen original y validar cada puerta y ruta real antes de reemplazar la máscara.
+
+
+### Auditoría real de entradas de los 44 edificios — 2026-11-16
+- [x] Confirmada mediante captura del usuario la ejecución **#9 verde** del workflow `Audit turquoise map`, que incluye los 11 escenarios sintéticos de navegación y accesos.
+- [x] Ampliado `scripts/audit-turquoise-map.cjs` (commit `39cfc22b`): calcula, para cada uno de los 44 edificios, las componentes **reales** de la máscara que tienen alguna celda a un máximo euclídeo de 14 celdas del centro, siguiendo el límite del juego. El informe registra `accessible_components_within_14` y marca `NO_ENTRANCE_WITHIN_14` o `AMBIGUOUS_COMPONENT_ACCESS`.
+- [x] Ampliado el resumen de GitHub Actions para contar edificios sin acceso y edificios con acceso geométrico a varias componentes desconectadas (commit `9c8a3092`).
+- [!] El nuevo diagnóstico aún no se ha confirmado verde en Actions. Un acceso geométrico en el radio no equivale a una puerta visualmente verificada ni demuestra que el héroe pueda llegar desde su posición inicial.
+- [ ] Consultar los resultados reales por componente, verificar visualmente las puertas contra la línea turquesa original, corregir cortes justificados y ejecutar pruebas de navegación en navegador antes de sustituir la máscara.
