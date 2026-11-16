@@ -72,6 +72,7 @@ const sites=catalogue.items.map(site=>{
  const risks=[];
  if(accessibleByComponent.length===0)risks.push('NO_ENTRANCE_WITHIN_14');
  if(accessibleByComponent.length>1)risks.push('AMBIGUOUS_COMPONENT_ACCESS');
+ if(group&&group.count===1)risks.push('NEAREST_IS_ISOLATED_PIXEL');
  if(group&&group.count<50)risks.push('SHORT_COMPONENT');
  if(closest&&closest.distance_cells>5)risks.push('FAR_FROM_ROAD');
  if(!closest)risks.push('NO_ROAD');
@@ -81,6 +82,17 @@ const sites=catalogue.items.map(site=>{
   accessible_components_within_14:accessibleByComponent,risks,
   status:'ACCESS_NOT_VISUALLY_VERIFIED'};
 });
+// El castillo inicial es la referencia de conectividad del reino.
+// La máscara puede tener varias entradas candidatas; NO se asume una
+// conexión que no exista en el dibujo original.
+const home=sites.find(s=>s.game_id==='home');
+if(!home)throw Error('No se encontró el castillo inicial');
+const homeComponents=new Set(home.accessible_components_within_14.map(e=>e.component));
+for(const site of sites){
+ site.shared_components_with_home=site.accessible_components_within_14.filter(e=>homeComponents.has(e.component)).map(e=>e.component);
+ if(site.id!==home.id&&site.shared_components_with_home.length===0)
+  site.risks.push('NO_SHARED_COMPONENT_WITH_HOME');
+}
 const gaps=[];
 for(let a=0;a<groups.length;a++)for(let b=a+1;b<groups.length;b++){
  let best=null,d2=Infinity;
