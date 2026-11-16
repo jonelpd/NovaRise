@@ -2505,3 +2505,12 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Corregido desbordamiento de `uint8` en el extractor (commit `32759a46`) y publicado `docs/auditoria-candidata-turquesa-2026-11-16.md` con resultados y entradas prioritarias.
 - [!] Estas son proximidades geométricas desde centros de edificios, no puertas visualmente verificadas; la máscara activa sigue sin sustituirse.
 - [ ] Auditar uniones introducidas por dilatación, definir puertas sobre el trazo original y verificar navegación de los 44 sitios antes de desplegar.
+
+
+### Inspección de uniones introducidas por expansión — 2026-11-16
+- [x] Comparadas pixel a pixel la extracción con umbral 12 sin dilatación y la máscara candidata expandida de 160×160, sobre `mapa-rutas-marcadas(2).png`.
+- [x] Medición reproducida en el entorno local: **2.283 celdas** base, **4.146** celdas en candidata expandida, **1.863 celdas añadidas** por la dilatación. La extracción base tiene **42 componentes estrictas**; la candidata expandida declara **14**.
+- [x] Localizadas **78 celdas añadidas** que tienen en su vecindario píxeles pertenecientes a dos o más componentes estrictas diferentes de la extracción base. Son puntos de revisión, **no 78 conexiones falsas demostradas**.
+- [x] Generada superposición local `revision-uniones-candidata-2026-11-16.png`: turquesa = celdas originales; naranja = celdas añadidas; magenta = posibles uniones entre componentes.
+- [!] La expansión incrementa la cobertura en aproximadamente 81,6% respecto a la base; es demasiado cambio para desplegarlo sin inspección detallada. **No se modifica la máscara activa**.
+- [ ] Agrupar las 78 celdas en zonas, comparar cada una con los trazos originales y verificar el acceso de los 44 elementos. Aceptar solamente uniones respaldadas por el mapa del usuario.
