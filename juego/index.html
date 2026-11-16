@@ -710,10 +710,27 @@ function nearestTurquoise(cell,maxRadius=22){
  }
  return nearest
 }
+function nearestTurquoiseOnComponent(cell,component,maxRadius=22){
+ if(!turquoiseRoadMask||!turquoiseComponents||component<0)return null;
+ const [cx,cy]=cell;
+ let best=null,distance=Infinity;
+ for(let dy=-maxRadius;dy<=maxRadius;dy++)for(let dx=-maxRadius;dx<=maxRadius;dx++){
+  const x=cx+dx,y=cy+dy;
+  if(!turquoiseFree(x,y)||turquoiseComponents[y*160+x]!==component)continue;
+  const d=dx*dx+dy*dy;
+  if(d<distance){distance=d;best=[x,y]}
+ }
+ return best
+}
 function turquoiseRoadRoute(a,b){
- if(!turquoiseRoadMask||!a||!b)return null;
- const entry=nearestTurquoise(turquoiseCell(...a)),exit=nearestTurquoise(turquoiseCell(...b));
- if(!entry||!exit)return null;
+ if(!turquoiseRoadMask||!turquoiseComponents||!a||!b)return null;
+ const entry=nearestTurquoise(turquoiseCell(...a));
+ if(!entry)return null;
+ const component=turquoiseComponents[entry[1]*160+entry[0]];
+ // La salida debe estar en la MISMA red: elegir el tramo más cercano
+ // de esa red, no otro componente que esté ligeramente más próximo.
+ const exit=nearestTurquoiseOnComponent(turquoiseCell(...b),component);
+ if(!exit)return null;
  const src=entry[1]*160+entry[0],dst=exit[1]*160+exit[0];
  const previous=new Int32Array(25600).fill(-1),visited=new Uint8Array(25600),queue=new Int32Array(25600);
  let head=0,tail=1;queue[0]=src;visited[src]=1;
