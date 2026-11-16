@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "site_id": "castillo-costero",
+  "source_image": "mapa-rutas-marcadas(2).png",
+  "source_resolution": [
+    1254,
+    1254
+  ],
+  "status": "PROPOSED_NOT_DEPLOYED",
+  "intent": "Ramal desde el trazado turquesa existente hasta el pie de la escalinata del castillo",
+  "polyline_px": [
+    [
+      321,
+      196
+    ],
+    [
+      318,
+      191
+    ],
+    [
+      314,
+      186
+    ],
+    [
+      311,
+      181
+    ],
+    [
+      309,
+      177
+    ]
+  ],
+  "road_anchor_px": [
+    321,
+    196
+  ],
+  "staircase_endpoint_px": [
+    309,
+    177
+  ],
+  "rules": {
+    "preserve_existing_mask": true,
+    "no_automatic_cross_component_bridges": true,
+    "validate_anchor_on_official_mask": true,
+    "validate_browser_path_before_activation": true
+  },
+  "notes": "La inspección ampliada corrige la estimación anterior (275,173): la escalinata visible está aproximadamente entre x=309 y x=321, y=177..196. La propuesta sigue el tramo diagonal oscuro/turquesa visible. Las coordenadas son una propuesta visual; falta validación de la celda exacta en la máscara activa."
+}
