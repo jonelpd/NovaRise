@@ -2465,3 +2465,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Separaciones mayores: 0–5 (7 celdas), 0–6 (7,28), 0–7 (7,28).
 - [!] Los pares anteriores son proximidades geométricas, **no** uniones autorizadas: no se ha modificado la máscara, que sigue basada en `mapa-rutas-marcadas(1).png`.
 - [ ] Reconstruir la máscara directamente desde la imagen más reciente, validar la continuidad contra el trazo visible y ejecutar la auditoría antes de reemplazar la versión activa.
+
+
+### Reconstrucción de máscara desde la imagen definitiva — 2026-11-16
+- [x] Inspeccionada directamente `mapa-rutas-marcadas(2).png` (1254×1254) y generada una primera máscara **candidata**, sin tocar el archivo activo.
+- [x] Primera extracción por color cian, cierre morfológico y reducción a 160×160: **2.152 celdas**, **17 componentes de ocho vecinos** (aún sin aplicar la restricción antiesquinas del juego, que puede incrementar el número). Por tanto, **no está lista para desplegar**.
+- [x] Generada una superposición local de revisión sobre el mapa original y publicado el script reproducible `scripts/extract-turquoise-candidate.py` (commit `66bbdab0`). El script escribe `turquoise-candidate.json` y vista previa; nunca reemplaza `juego/rutas-turquesa-160.json`.
+- [ ] Depurar falsos positivos de agua y discontinuidades de pincel, cotejar cada segmento con las líneas marcadas y las entradas de los 44 elementos.
+- [ ] Ejecutar el analizador sobre la candidata, verificar conectividad con la regla antiesquinas y sustituir la máscara oficial solo tras la validación.
