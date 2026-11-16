@@ -2597,3 +2597,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Añadidos los recuentos al resumen de GitHub Actions (commit `0df33407`).
 - [!] El informe previo no contiene aún estas métricas nuevas; pendiente validar la ejecución actualizada. Que dos edificios compartan componente tampoco verifica la puerta visual ni el recorrido desde una partida guardada.
 - [ ] Priorizar visualmente la salida del castillo costero, los dos templos con píxel aislado y la torre isla; comprobar accesos antes de cambiar la máscara.
+
+
+### Revisión visual real de la puerta del castillo costero — 2026-11-16
+- [x] Inspeccionada directamente la imagen original marcada por el usuario, con recorte y cuadrícula de coordenadas. El centro del círculo rojo del castillo `(235,124)` no coincide con la escalinata/puerta visual aproximada `(275,173)`.
+- [x] Identificado el tramo turquesa que bordea la ladera este, aproximadamente `(335,218)`; queda separado unos 75 píxeles de la puerta visual. No existe evidencia suficiente para dibujar un conector a la escalinata.
+- [x] Documentada la distinción entre centro, puerta y aproximación en `docs/acceso-castillo-costero-revision-visual-2026-11-16.md` (commit `5e6f80b2`).
+- [!] **No** se ha aprobado una puerta jugable ni modificado la máscara. El píxel más próximo al centro del castillo en la máscara activa es aislado; no debe utilizarse como acceso.
+- [ ] Confirmar sobre la máscara activa la celda de aproximación del camino y su componente; después decidir si se permite interacción desde el camino junto a la ladera o se requiere que el usuario marque una extensión turquesa hasta la escalinata.
