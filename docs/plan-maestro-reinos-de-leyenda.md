@@ -2528,3 +2528,12 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Documentados centros, componentes cercanas, distancias y riesgos de acceso en `docs/revision-accesos-castillos-2026-11-16.md` (commit `f4d5ba48`).
 - [!] Las observaciones visuales son **puntos de revisión**, no puertas verificadas ni pruebas de navegación. No se han cambiado caminos ni máscara activa.
 - [ ] Definir puertas sobre los trazos originales, verificar la conectividad de cada una y completar el inventario de accesos de los 44 elementos.
+
+
+### Diagnóstico de proximidad de los 44 accesos — 2026-11-16
+- [x] Calculados sobre `mapa-rutas-marcadas(2).png` los puntos turquesas más próximos a los **44 elementos** usando la candidata de 4.146 celdas y **14 componentes estrictas**. Se generaron en la sesión `revision-44-entradas-candidatas-2026-11-16.json` y el mapa anotado `revision-44-entradas-candidatas-2026-11-16.png`.
+- [x] Identificados fragmentos pequeños como puntos más próximos de **castillo-costero (16 celdas)**, **torre-isla (22)** y **ruinas-isla (22)**.
+- [x] Siete centros de edificios distan más de cinco celdas del camino más cercano: mina-cueva-oeste 7,77; castillo-isla 7,38; castillo-central 6,00; mina-suroeste 5,87; torre-centro-este 5,82; mina-oeste 5,70; templo-norte 5,27.
+- [x] Publicado `docs/diagnostico-44-entradas-candidatas-2026-11-16.md` (commit `c2f10dc7`).
+- [!] **0 de 44 puertas verificadas funcionalmente**: los resultados son distancias desde centros, no puertas aprobadas. No se modificó la máscara activa.
+- [ ] Verificar las puertas contra el pincel turquesa original, eliminar puentes falsos y probar las 44 interacciones antes de desplegar.
