@@ -2637,3 +2637,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Creado `scripts/test-turquoise-mask-schema.cjs` (commit `6c36e8b6`) que compara versión, resolución y codificación con las comprobaciones del decodificador real, descomprime el bitset y verifica el número de celdas.
 - [x] Incorporado al workflow `audit-turquoise-map.yml` (commit `3eecea91`) para evitar regresiones de incompatibilidad.
 - [!] La corrección se ha publicado en GitHub; pendiente verificar GitHub Pages, CI y movimiento del héroe en navegador. La nueva máscara sigue teniendo componentes desconectadas, que pueden impedir ciertos recorridos.
+
+
+### Validación del ramal costero sobre la máscara publicada — 2026-11-16
+- [x] El usuario confirma en navegador que el héroe vuelve a moverse y sigue las líneas turquesas del mapa actualizado. Esta observación valida el movimiento general, no todos los accesos.
+- [x] Añadido `scripts/test-coastal-castle-staircase.cjs` (commit `ff4c95db`), que descomprime la máscara **publicada**, comprueba que el anclaje y el extremo de la escalinata existen y calcula la conectividad con la misma regla antiesquinas del juego; rechaza ramales conectados solo a fragmentos de menos de 10 celdas.
+- [x] Incorporada la prueba al workflow `audit-turquoise-map.yml` (commit `f6853562`).
+- [!] Pendiente confirmar el resultado de esta nueva ejecución y recorrer en navegador el ramal hasta la escalinata; la prueba comprueba topología, no animación ni interacción.
+- [ ] Continuar verificando los siete castillos y los demás elementos sobre la máscara publicada, corrigiendo accesos concretos sin atajos.
