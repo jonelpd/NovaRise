@@ -8,6 +8,7 @@ on:
       - 'scripts/test-turquoise-mask-schema.cjs'
       - 'scripts/test-coastal-castle-staircase.cjs'
       - 'scripts/audit-seven-castle-access.cjs'
+      - 'scripts/test-seven-castle-main-gates.cjs'
       - 'docs/ramal-castillo-costero-propuesta-2026-11-16.json'
       - 'juego/index.html'
       - 'juego/rutas-turquesa-160.json'
@@ -31,6 +32,7 @@ jobs:
           node scripts/test-turquoise-mask-schema.cjs
           node scripts/test-coastal-castle-staircase.cjs
           node scripts/audit-seven-castle-access.cjs
+          node scripts/test-seven-castle-main-gates.cjs
       - name: Audit topology and 44 access candidates
         run: |
           node scripts/audit-turquoise-map.cjs --json > turquoise-audit-report.json
