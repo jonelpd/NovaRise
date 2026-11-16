@@ -2514,3 +2514,10 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Generada superposición local `revision-uniones-candidata-2026-11-16.png`: turquesa = celdas originales; naranja = celdas añadidas; magenta = posibles uniones entre componentes.
 - [!] La expansión incrementa la cobertura en aproximadamente 81,6% respecto a la base; es demasiado cambio para desplegarlo sin inspección detallada. **No se modifica la máscara activa**.
 - [ ] Agrupar las 78 celdas en zonas, comparar cada una con los trazos originales y verificar el acceso de los 44 elementos. Aceptar solamente uniones respaldadas por el mapa del usuario.
+
+
+### Revisión agrupada de uniones turquesas — 2026-11-16
+- [x] Agrupadas las **78 celdas potencialmente implicadas en uniones** en **29 zonas de inspección** por adyacencia de ocho vecinos (solo agrupación visual; la navegación conserva la regla antiesquinas).
+- [x] Generada imagen anotada `grupos-uniones-turquesas-2026-11-16.png` sobre `mapa-rutas-marcadas(2).png` y publicado el inventario de coordenadas y componentes en `docs/revision-29-zonas-uniones-turquesas-2026-11-16.md` (commit `9fd6efea`).
+- [!] Las 29 zonas **no equivalen a 29 conexiones erróneas**; siguen pendientes de aprobación visual. La máscara activa permanece intacta.
+- [ ] Inspeccionar las 29 zonas, eliminar únicamente expansiones que creen atajos y validar puertas y desplazamientos de los 44 sitios antes de cambiar la máscara activa.
