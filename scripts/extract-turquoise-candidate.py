@@ -20,7 +20,7 @@ args=parser.parse_args()
 image=np.array(Image.open(args.image).convert('RGB'))
 r,g,b=image.transpose(2,0,1)
 # Cyan brush hue/color isolation; the water/background can contain similar pixels.
-mask=((r<80)&(g>115)&(g<225)&(b>170)&(b>g+20)).astype('uint8')*255
+mask=((r<80)&(g>115)&(g<225)&(b>170)&(b.astype(np.int16)>g.astype(np.int16)+20)).astype('uint8')*255
 mask=cv2.morphologyEx(mask,cv2.MORPH_CLOSE,np.ones((3,3),np.uint8))
 count,labels,stats,_=cv2.connectedComponentsWithStats(mask,8)
 clean=np.zeros_like(mask)
