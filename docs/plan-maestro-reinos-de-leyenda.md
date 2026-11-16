@@ -2489,3 +2489,11 @@ Se añadió una guarda de idempotencia al inicio de `completeCampaignIfReady()`:
 - [x] Actualizado `scripts/audit-turquoise-map.cjs` (commit `f5515db1`) para admitir `--mask=archivo.json` y comparar candidatas sin reemplazar la máscara activa.
 - [!] **Candidata rechazada para despliegue**: la red estricta presenta 63 componentes y no se han verificado las entradas. No unir automáticamente por proximidad ni afirmar que el trazado está terminado.
 - [ ] Mejorar la extracción preservando el grosor y la continuidad del pincel turquesa, inspeccionar sobre el mapa original y repetir la auditoría con `--mask`.
+
+
+### Experimentos controlados de continuidad — 2026-11-16
+- [x] Ejecutadas pruebas locales sobre `mapa-rutas-marcadas(2).png` comparando umbrales de cobertura cian 4, 8, 12, 18, 24 y 32, con/sin dilatación 2×2; siempre calculando componentes mediante la regla antiesquinas del juego.
+- [x] Resultado base (umbral 18, sin expansión): **2.152 celdas, 63 componentes estrictas**. Resultado experimental (umbral 12, expansión 2×2): **4.146 celdas, 14 componentes estrictas**, tamaños mayores 1934, 1237, 606, 106 y 80. La expansión puede crear conexiones falsas, por lo que no se considera aprobada.
+- [x] Actualizado `scripts/extract-turquoise-candidate.py` (commit `c26ee73e`) con `--threshold` y `--expand`; ahora calcula y declara el número de componentes **con la misma regla de diagonales que el juego** (antes declaraba conectividad de ocho vecinos).
+- [ ] Comparar visualmente el trazado ensanchado con la imagen original, comprobar que no atraviesa montañas, ríos ni zonas sin pincel y validar los accesos de los 44 elementos.
+- [!] No se reemplaza la máscara activa: 14 componentes siguen requiriendo revisión y una reducción de fragmentos no equivale a fidelidad geométrica.
