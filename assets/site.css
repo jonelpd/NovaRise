@@ -1075,3 +1075,20 @@ body.interest-modal-open{overflow:hidden}
 .nvra-simple :is(.simple-button,.btn):focus-visible{outline:3px solid #b4ffdc;outline-offset:3px}
 @media(max-width:650px){.nvra-simple #vision-nvra .simple-heading{text-align:left}.nvra-simple #vision-nvra .simple-cards article{padding:24px}.nvra-simple #vision-nvra>.simple-footnote{padding:16px}}
 @media(prefers-reduced-motion:reduce){.nvra-simple :is(.simple-button,.btn){transition:none}.nvra-simple :is(.simple-button,.btn):hover{transform:none}}
+
+/* Hero emblem: blend square PNG edges into the page without cropping the circular mark. */
+.nvra-simple .nr-hero-refresh .nr-hero-visual{
+  background:transparent;
+  border-color:transparent;
+  box-shadow:none;
+  overflow:visible;
+}
+.nvra-simple .nr-hero-refresh .nr-hero-visual img{
+  border-radius:0;
+  -webkit-mask-image:radial-gradient(circle at center,#000 0%,#000 46%,transparent 69%);
+  mask-image:radial-gradient(circle at center,#000 0%,#000 46%,transparent 69%);
+  -webkit-mask-repeat:no-repeat;
+  mask-repeat:no-repeat;
+  -webkit-mask-size:100% 100%;
+  mask-size:100% 100%;
+}
