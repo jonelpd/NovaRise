@@ -1111,3 +1111,17 @@ body.interest-modal-open{overflow:hidden}
   border-radius:0;
   object-fit:contain;
 }
+
+/* Restore the original logo and constrain its visible pixels to a circular silhouette.
+   No external SVG image references: they were not rendered in the browser. */
+.nvra-simple .nr-hero-refresh .nr-hero-visual{background:none!important;border:0!important;box-shadow:none!important;overflow:visible!important}
+.nvra-simple .nr-hero-refresh .nr-hero-visual img[src*="Logotipo"]{
+  display:block!important;
+  opacity:1!important;
+  visibility:visible!important;
+  clip-path:circle(47% at 50% 50%)!important;
+  -webkit-mask-image:none!important;
+  mask-image:none!important;
+  border-radius:0!important;
+  object-fit:contain!important;
+}
