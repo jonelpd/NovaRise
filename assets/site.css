@@ -1092,3 +1092,13 @@ body.interest-modal-open{overflow:hidden}
   -webkit-mask-size:100% 100%;
   mask-size:100% 100%;
 }
+
+/* 2026-11-17: remove embedded square backdrop from official circular PNG.
+   Earlier fade ended at 69% radius, outside the image's 50% visible radius. */
+.nvra-simple .nr-hero-refresh .nr-hero-visual img{
+  -webkit-mask-image:radial-gradient(circle closest-side at 50% 50%,#000 0%,#000 85%,rgba(0,0,0,.96) 89%,transparent 99%);
+  mask-image:radial-gradient(circle closest-side at 50% 50%,#000 0%,#000 85%,rgba(0,0,0,.96) 89%,transparent 99%);
+  -webkit-mask-size:100% 100%;
+  mask-size:100% 100%;
+  clip-path:circle(49.5% at 50% 50%);
+}
