@@ -1102,3 +1102,12 @@ body.interest-modal-open{overflow:hidden}
   mask-size:100% 100%;
   clip-path:circle(49.5% at 50% 50%);
 }
+
+/* Transparent SVG emblem replaces the rectangular PNG in both homepages. */
+.nvra-simple .nr-hero-refresh .nr-hero-visual img[src$="nvra-emblema-circular.svg"]{
+  -webkit-mask-image:none;
+  mask-image:none;
+  clip-path:none;
+  border-radius:0;
+  object-fit:contain;
+}
